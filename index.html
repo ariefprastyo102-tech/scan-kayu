@@ -13,16 +13,20 @@
 
 <style>
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #f5f5f5;
   margin: 0;
   padding: 15px;
-  text-align: center;
 }
 
 h2 {
-  margin-bottom: 15px;
+  text-align: center;
+  margin: 5px 0 15px;
 }
 
 #reader {
@@ -34,11 +38,12 @@ h2 {
   overflow: hidden;
 }
 
-button {
+#btnScan {
+  display: block;
   width: 100%;
   max-width: 500px;
-  padding: 16px;
-  margin-top: 15px;
+  margin: 15px auto;
+  padding: 15px;
   font-size: 18px;
   font-weight: bold;
   border: none;
@@ -47,74 +52,176 @@ button {
   color: white;
 }
 
-#hasil {
-  margin-top: 20px;
-  font-size: 22px;
-  font-weight: bold;
-}
-
 #status {
-  margin-top: 10px;
-  font-size: 17px;
+  max-width: 500px;
+  margin: 10px auto;
+  text-align: center;
   font-weight: bold;
 }
 
 #jumlah {
-  margin-top: 15px;
+  max-width: 500px;
+  margin: 10px auto;
+  text-align: center;
   font-weight: bold;
 }
 
-#dataKayu {
+
+/* ==========================================
+   DAFTAR HASIL SCAN
+   ========================================== */
+
+#daftar {
+  width: 100%;
   max-width: 500px;
-  margin: 20px auto;
+  margin: 15px auto;
+}
+
+
+/* ==========================================
+   SATU BARIS SCAN
+   ========================================== */
+
+.item {
   background: white;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: left;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+
+/* ==========================================
+   BARIS NOMOR
+   ========================================== */
+
+.baris {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+
+/* ==========================================
+   NOMOR REGISTER
+   ========================================== */
+
+.nomor {
+  font-size: 20px;
+  font-weight: bold;
+  word-break: break-all;
+}
+
+
+/* ==========================================
+   TOMBOL DETAIL
+   ========================================== */
+
+.detailBtn {
+  width: auto;
+  min-width: 80px;
+  padding: 8px 12px;
+  margin: 0;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+/* ==========================================
+   DETAIL DATA
+   ========================================== */
+
+.detail {
   display: none;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-.data {
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-}
 
-.berhasil {
+/* ==========================================
+   WARNA STATUS
+   ========================================== */
+
+.success {
   color: green;
 }
 
-.gagal {
+.duplicate {
   color: red;
+}
+
+.notfound {
+  color: darkorange;
+}
+
+.error {
+  color: red;
+}
+
+
+/* ==========================================
+   TOMBOL DETAIL DUPLIKAT
+   ========================================== */
+
+.detailBtn.duplicateBtn {
+  background: #c62828;
+}
+
+
+/* ==========================================
+   DETAIL LABEL
+   ========================================== */
+
+.label {
+  display: inline-block;
+  width: 115px;
+  font-weight: bold;
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <h2>SCAN REGISTER KAYU</h2>
 
+
 <div id="reader"></div>
 
-<button id="btnScan" onclick="mulaiKamera()">
-📷 BUKA KAMERA
+
+<button
+  id="btnScan"
+  onclick="mulaiKamera()"
+>
+  📷 BUKA KAMERA
 </button>
 
-<div id="hasil"></div>
 
 <div id="status">
-Tekan Buka Kamera
+  Tekan Buka Kamera
 </div>
+
 
 <div id="jumlah">
-Jumlah berhasil: 0
+  Jumlah berhasil: 0
 </div>
 
-<div id="dataKayu"></div>
+
+<div id="daftar"></div>
 
 
 <script>
+
 
 // ==========================================
 // URL APPS SCRIPT
@@ -149,11 +256,13 @@ function mulaiKamera() {
 
   kameraAktif = true;
 
+
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
 
 
-  scanner = new Html5Qrcode("reader");
+  scanner =
+    new Html5Qrcode("reader");
 
 
   scanner.start(
@@ -183,8 +292,8 @@ function mulaiKamera() {
       }
 
 
-      // Jangan proses scan berikutnya
-      // sebelum server selesai
+      // Jangan scan berikutnya
+      // sebelum proses sebelumnya selesai
 
       if (sedangProses) {
         return;
@@ -194,12 +303,10 @@ function mulaiKamera() {
       sedangProses = true;
 
 
-      document.getElementById("hasil").innerHTML =
-        "Register: " + register;
-
-
       document.getElementById("status").innerHTML =
-        "⏳ Mengecek DATABASE...";
+        "⏳ Mengecek " +
+        register +
+        "...";
 
 
       cekRegister(register);
@@ -229,6 +336,7 @@ function mulaiKamera() {
 
     kameraAktif = false;
 
+
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
       error;
@@ -239,14 +347,15 @@ function mulaiKamera() {
 
 
 // ==========================================
-// CEK REGISTER KE APPS SCRIPT
+// CEK REGISTER
 // ==========================================
 
 function cekRegister(register) {
 
 
   const callbackName =
-    "scan_" + Date.now();
+    "scan_" +
+    Date.now();
 
 
   window[callbackName] =
@@ -257,7 +366,9 @@ function cekRegister(register) {
       // BERHASIL
       // ====================================
 
-      if (hasil.status === "success") {
+      if (
+        hasil.status === "success"
+      ) {
 
 
         jumlahBerhasil++;
@@ -269,20 +380,48 @@ function cekRegister(register) {
 
 
         document.getElementById("status").innerHTML =
-          "✅ " + hasil.message;
+          "✅ Berhasil: " +
+          register;
 
 
-        document.getElementById("status")
-          .className = "berhasil";
-
-
-        tampilkanData(
+        tambahHasil(
 
           hasil.data,
 
           hasil.tanggalScan,
 
-          hasil.jamScan
+          hasil.jamScan,
+
+          "success"
+
+        );
+
+      }
+
+
+      // ====================================
+      // DUPLIKAT
+      // ====================================
+
+      else if (
+        hasil.status === "duplicate"
+      ) {
+
+
+        document.getElementById("status").innerHTML =
+          "❌ " +
+          hasil.message;
+
+
+        tambahHasil(
+
+          hasil.data,
+
+          "",
+
+          "",
+
+          "duplicate"
 
         );
 
@@ -299,50 +438,13 @@ function cekRegister(register) {
 
 
         document.getElementById("status").innerHTML =
-          "❌ " + hasil.message;
+          "⚠️ " +
+          hasil.message;
 
 
-        document.getElementById("status")
-          .className = "gagal";
-
-
-        sembunyikanData();
-
-      }
-
-
-      // ====================================
-      // SUDAH PERNAH SCAN
-      // ====================================
-
-      else if (
-        hasil.status === "duplicate"
-      ) {
-
-
-        document.getElementById("status").innerHTML =
-          "❌ " + hasil.message;
-
-
-        document.getElementById("status")
-          .className = "gagal";
-
-
-        // Data tetap ditampilkan
-
-        if (hasil.data) {
-
-          tampilkanData(
-
-            hasil.data,
-
-            "",
-
-            ""
-
-          );
-
-        }
+        tambahHasilTidakDitemukan(
+          register
+        );
 
       }
 
@@ -355,17 +457,14 @@ function cekRegister(register) {
 
 
         document.getElementById("status").innerHTML =
-          "⚠️ " + hasil.message;
-
-
-        document.getElementById("status")
-          .className = "gagal";
+          "⚠️ " +
+          hasil.message;
 
       }
 
 
       // ====================================
-      // SIAP SCAN BARCODE BERIKUTNYA
+      // SIAP SCAN BERIKUTNYA
       // ====================================
 
       setTimeout(function() {
@@ -392,7 +491,7 @@ function cekRegister(register) {
 
 
   // ======================================
-  // KIRIM KE APPS SCRIPT
+  // JSONP
   // ======================================
 
   const script =
@@ -414,18 +513,16 @@ function cekRegister(register) {
   script.onerror =
     function() {
 
+
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
-
-
-      document.getElementById("status")
-        .className = "gagal";
 
 
       sedangProses = false;
 
 
       delete window[callbackName];
+
 
       script.remove();
 
@@ -438,89 +535,241 @@ function cekRegister(register) {
 
 
 // ==========================================
-// TAMPILKAN DATA KAYU
+// HASIL BERHASIL / DUPLIKAT
 // ==========================================
 
-function tampilkanData(
+function tambahHasil(
+
   data,
   tanggalScan,
-  jamScan
+  jamScan,
+  tipe
+
 ) {
 
-  const box =
-    document.getElementById("dataKayu");
+
+  const register =
+    data[0];
 
 
-  box.style.display = "block";
+  const item =
+    document.createElement("div");
 
 
-  box.innerHTML = `
+  item.className =
+    "item";
 
-    <div class="data">
-      <b>REGISTER:</b> ${data[0]}
-    </div>
 
-    <div class="data">
-      <b>PANJANG:</b> ${data[1]}
-    </div>
+  const id =
+    "detail_" +
+    Date.now();
 
-    <div class="data">
-      <b>DIAMETER:</b> ${data[2]}
-    </div>
 
-    <div class="data">
-      <b>TPK:</b> ${data[3]}
-    </div>
+  let warna =
+    tipe === "success"
+    ?
+    "success"
+    :
+    "duplicate";
 
-    <div class="data">
-      <b>TUMPUK:</b> ${data[4]}
-    </div>
 
-    <div class="data">
-      <b>MUTU:</b> ${data[5]}
-    </div>
+  let tulisan =
+    tipe === "success"
+    ?
+    "✅ " + register
+    :
+    "❌ " + register;
 
-    <div class="data">
-      <b>STATUS:</b> ${data[6]}
-    </div>
 
-    <div class="data">
-      <b>M3:</b> ${data[7]}
-    </div>
+  let tombol =
+    tipe === "success"
+    ?
+    "DETAIL"
+    :
+    "DETAIL";
 
-    ${
-      tanggalScan
-      ?
-      `
-      <div class="data">
-        <b>TANGGAL SCAN:</b> ${tanggalScan}
+
+  item.innerHTML = `
+
+    <div class="baris">
+
+      <div class="nomor ${warna}">
+        ${tulisan}
       </div>
 
-      <div class="data">
-        <b>JAM SCAN:</b> ${jamScan}
+      <button
+        class="detailBtn ${tipe === "duplicate" ? "duplicateBtn" : ""}"
+        onclick="toggleDetail('${id}', this)"
+      >
+        ${tombol}
+      </button>
+
+    </div>
+
+
+    <div
+      id="${id}"
+      class="detail"
+    >
+
+      <div>
+        <span class="label">REGISTER</span>
+        : ${data[0]}
       </div>
-      `
-      :
-      ""
-    }
+
+      <div>
+        <span class="label">PANJANG</span>
+        : ${data[1]}
+      </div>
+
+      <div>
+        <span class="label">DIAMETER</span>
+        : ${data[2]}
+      </div>
+
+      <div>
+        <span class="label">TPK</span>
+        : ${data[3]}
+      </div>
+
+      <div>
+        <span class="label">TUMPUK</span>
+        : ${data[4]}
+      </div>
+
+      <div>
+        <span class="label">MUTU</span>
+        : ${data[5]}
+      </div>
+
+      <div>
+        <span class="label">STATUS</span>
+        : ${data[6]}
+      </div>
+
+      <div>
+        <span class="label">M3</span>
+        : ${data[7]}
+      </div>
+
+      ${
+        tanggalScan
+        ?
+        `
+        <div>
+          <span class="label">TANGGAL SCAN</span>
+          : ${tanggalScan}
+        </div>
+
+        <div>
+          <span class="label">JAM SCAN</span>
+          : ${jamScan}
+        </div>
+        `
+        :
+        ""
+      }
+
+    </div>
 
   `;
 
+
+  document
+    .getElementById("daftar")
+    .prepend(item);
+
 }
 
 
 // ==========================================
-// SEMBUNYIKAN DATA
+// REGISTER TIDAK DITEMUKAN
 // ==========================================
 
-function sembunyikanData() {
+function tambahHasilTidakDitemukan(
+  register
+) {
 
-  document.getElementById("dataKayu")
-    .style.display = "none";
+
+  const item =
+    document.createElement("div");
+
+
+  item.className =
+    "item";
+
+
+  item.innerHTML = `
+
+    <div class="baris">
+
+      <div class="nomor notfound">
+        ⚠️ ${register}
+      </div>
+
+      <div class="notfound">
+        TIDAK ADA
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById("daftar")
+    .prepend(item);
 
 }
+
+
+// ==========================================
+// BUKA / TUTUP DETAIL
+// ==========================================
+
+function toggleDetail(
+  id,
+  tombol
+) {
+
+
+  const detail =
+    document.getElementById(id);
+
+
+  if (
+    detail.style.display === "block"
+  ) {
+
+
+    detail.style.display =
+      "none";
+
+
+    tombol.innerHTML =
+      "DETAIL";
+
+
+  }
+
+  else {
+
+
+    detail.style.display =
+      "block";
+
+
+    tombol.innerHTML =
+      "TUTUP";
+
+
+  }
+
+}
+
 
 </script>
+
 
 </body>
 
