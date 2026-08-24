@@ -1,110 +1,213 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Scan Register Kayu</title>
 
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <script
+    src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+  </script>
+
 
   <style>
+
     body {
+
       font-family: Arial, sans-serif;
+
       text-align: center;
+
       background: #f5f5f5;
+
       margin: 0;
+
       padding: 15px;
+
     }
+
 
     h2 {
+
       margin-bottom: 15px;
+
     }
+
 
     #reader {
+
       width: 100%;
+
       max-width: 500px;
+
       margin: auto;
+
       background: white;
+
       border-radius: 10px;
+
       overflow: hidden;
+
     }
+
 
     button {
+
       width: 100%;
+
       max-width: 500px;
+
       padding: 16px;
+
       margin-top: 15px;
+
       font-size: 18px;
+
       font-weight: bold;
+
       border: none;
+
       border-radius: 8px;
+
       background: #1976d2;
+
       color: white;
+
     }
+
 
     #hasil {
+
       margin-top: 20px;
+
       font-size: 22px;
+
       font-weight: bold;
+
     }
+
 
     #status {
+
       margin-top: 10px;
+
       font-size: 16px;
+
     }
+
 
     #jumlah {
+
       margin-top: 10px;
+
       font-size: 18px;
+
       font-weight: bold;
+
     }
+
 
     #daftar {
+
       max-width: 500px;
+
       margin: 20px auto;
+
       background: white;
+
       border-radius: 8px;
+
       text-align: left;
+
     }
 
+
     .item {
+
       padding: 10px;
+
       border-bottom: 1px solid #ddd;
+
       font-size: 17px;
+
     }
+
+
+    .berhasil {
+
+      color: green;
+
+    }
+
+
+    .duplikat {
+
+      color: red;
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <h2>SCAN REGISTER KAYU</h2>
+
 
   <div id="reader"></div>
 
-  <button onclick="mulaiKamera()">
+
+  <button
+    id="btnScan"
+    onclick="mulaiKamera()"
+  >
+
     📷 BUKA KAMERA
+
   </button>
+
 
   <div id="hasil"></div>
 
+
   <div id="status">
+
     Tekan Buka Kamera
+
   </div>
 
+
   <div id="jumlah">
+
     Jumlah scan: 0
+
   </div>
+
 
   <div id="daftar"></div>
 
 
 <script>
 
-let scanner;
+
+let scanner = null;
+
 let kameraAktif = false;
-let scanLock = false;
-let jumlah = 0;
+
+let sedangProses = false;
+
+let jumlahScan = 0;
 
 
 // ==========================================
@@ -113,14 +216,21 @@ let jumlah = 0;
 
 function mulaiKamera() {
 
+
   if (kameraAktif) {
+
     return;
+
   }
+
 
   kameraAktif = true;
 
+
   document.getElementById("status").innerHTML =
+
     "⏳ Membuka kamera...";
+
 
   scanner = new Html5Qrcode("reader");
 
@@ -131,99 +241,162 @@ function mulaiKamera() {
       facingMode: "environment"
     },
 
+
     {
+
       fps: 10,
 
       qrbox: {
+
         width: 280,
+
         height: 160
+
       }
+
     },
 
 
     // ======================================
-    // BARCODE BERHASIL DIBACA
+    // BARCODE TERBACA
     // ======================================
 
     function(register) {
 
-      // Jangan proses barcode yang sama
-      // beberapa kali dalam waktu bersamaan
-      if (scanLock) {
+
+      register =
+        String(register).trim();
+
+
+      // Jangan proses saat masih
+      // menyimpan barcode sebelumnya
+
+      if (sedangProses) {
+
         return;
+
       }
 
-      scanLock = true;
+
+      sedangProses = true;
 
 
       document.getElementById("hasil").innerHTML =
+
         "Register: " + register;
 
+
       document.getElementById("status").innerHTML =
-        "⏳ Menyimpan " + register + "...";
+
+        "⏳ Mengecek " + register + "...";
 
 
       // ====================================
-      // KIRIM KE GOOGLE APPS SCRIPT
+      // KIRIM KE APPS SCRIPT
       // ====================================
 
       fetch(
+
         "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec",
+
         {
+
           method: "POST",
+
           mode: "no-cors",
+
           headers: {
+
             "Content-Type": "text/plain"
+
           },
+
           body: register
+
         }
-      );
+
+      )
 
 
-      // ====================================
-      // TAMPILKAN HASIL
-      // ====================================
-
-      jumlah++;
-
-      document.getElementById("jumlah").innerHTML =
-        "Jumlah scan: " + jumlah;
+      .then(function() {
 
 
-      let item = document.createElement("div");
+        // Karena no-cors,
+        // kita tidak bisa membaca
+        // status dari Apps Script.
 
-      item.className = "item";
+        // Untuk sementara tampilkan
+        // sebagai terkirim.
 
-      item.innerHTML =
-        "✅ " + register;
-
-
-      document.getElementById("daftar")
-        .prepend(item);
+        jumlahScan++;
 
 
-      document.getElementById("status").innerHTML =
-        "✅ " + register + " tersimpan<br>" +
-        "📷 Siap scan berikutnya";
+        document.getElementById("jumlah").innerHTML =
+
+          "Jumlah scan: " + jumlahScan;
 
 
-      // ====================================
-      // BUKA KUNCI LAGI
-      // ====================================
+        document.getElementById("status").innerHTML =
 
-      setTimeout(function() {
+          "✅ " + register +
+          " dikirim";
 
-        scanLock = false;
 
-      }, 1500);
+        let item =
+          document.createElement("div");
+
+
+        item.className = "item";
+
+
+        item.innerHTML =
+
+          "✅ " + register;
+
+
+        document
+          .getElementById("daftar")
+          .prepend(item);
+
+
+        // Tunggu sebentar sebelum
+        // membaca barcode berikutnya
+
+        setTimeout(function() {
+
+          sedangProses = false;
+
+        }, 1500);
+
+
+      })
+
+
+      .catch(function(error) {
+
+
+        document.getElementById("status").innerHTML =
+
+          "❌ Gagal mengirim " + register;
+
+
+        console.log(error);
+
+
+        sedangProses = false;
+
+      });
 
     },
 
 
-    // Error pembacaan sementara
-    function(error) {
+    // ======================================
+    // ERROR SCAN SEMENTARA
+    // ======================================
 
-      // Jangan tampilkan error terus-menerus
+    function(errorMessage) {
+
+      // Jangan tampilkan error scanner
 
     }
 
@@ -232,26 +405,38 @@ function mulaiKamera() {
 
   .then(function() {
 
+
     document.getElementById("status").innerHTML =
+
       "📷 KAMERA AKTIF<br>" +
+
       "Arahkan ke barcode";
+
 
   })
 
 
   .catch(function(error) {
 
+
     kameraAktif = false;
 
+
     document.getElementById("status").innerHTML =
+
       "❌ Kamera gagal dibuka<br>" +
+
       error;
+
 
   });
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
