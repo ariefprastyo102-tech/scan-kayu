@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 
@@ -22,80 +21,155 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+
+  font-family:
+    Arial,
+    sans-serif;
+
   margin: 0;
+
   padding: 20px;
+
   background: #f5f5f5;
+
 }
 
 
 /* ==========================================
-   KONTROL
+   PANEL KONTROL
    ========================================== */
 
 .kontrol {
+
   max-width: 700px;
-  margin: 0 auto 20px;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+
+  margin:
+    0 auto 20px;
+
+  background:
+    white;
+
+  padding:
+    20px;
+
+  border-radius:
+    10px;
+
 }
+
 
 h2 {
-  text-align: center;
-  margin: 0 0 15px;
+
+  text-align:
+    center;
+
+  margin:
+    0 0 15px;
+
 }
+
 
 button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+
+  width:
+    100%;
+
+  padding:
+    14px;
+
+  margin-top:
+    10px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  font-size:
+    16px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
 }
+
 
 #btnAmbil {
-  background: #1976d2;
-  color: white;
+
+  background:
+    #1976d2;
+
+  color:
+    white;
+
 }
+
 
 #btnPrint {
-  background: #388e3c;
-  color: white;
+
+  background:
+    #388e3c;
+
+  color:
+    white;
+
 }
+
 
 #status {
-  text-align: center;
-  margin-top: 15px;
-  font-weight: bold;
+
+  text-align:
+    center;
+
+  margin-top:
+    15px;
+
+  font-weight:
+    bold;
+
 }
 
+
 #jumlah {
-  text-align: center;
-  margin-top: 8px;
+
+  text-align:
+    center;
+
+  margin-top:
+    8px;
+
 }
 
 
 /* ==========================================
-   HASIL BARCODE
+   HASIL
    ========================================== */
 
 #hasil {
-  max-width: 900px;
-  margin: auto;
+
+  max-width:
+    900px;
+
+  margin:
+    auto;
+
 }
+
 
 .grid {
 
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
     repeat(3, 1fr);
 
-  gap: 8px;
+  gap:
+    8px;
 
 }
 
@@ -106,153 +180,201 @@ button {
 
 .barcodeItem {
 
-  background: white;
+  background:
+    white;
 
-  border: 1px solid #ccc;
+  border:
+    1px solid #ccc;
 
-  padding: 5px;
+  padding:
+    5px;
 
-  text-align: center;
+  text-align:
+    center;
 
-  page-break-inside: avoid;
+  page-break-inside:
+    avoid;
 
 }
 
 
 /* ==========================================
-   GAMBAR BARCODE
+   BARCODE
    ========================================== */
 
 .barcodeItem svg {
 
-  width: 100%;
+  width:
+    100%;
 
-  max-width: 250px;
+  max-width:
+    250px;
 
-  height: 65px;
+  height:
+    65px;
 
-  display: block;
+  display:
+    block;
 
-  margin: auto;
+  margin:
+    auto;
 
 }
 
 
 /* ==========================================
-   BARIS REGISTER + TUMPUK
+   REGISTER + TUMPUK
    ========================================== */
 
 .info {
 
-  display: flex;
+  display:
+    flex;
 
-  justify-content: center;
+  justify-content:
+    center;
 
-  align-items: center;
+  align-items:
+    center;
 
-  gap: 15px;
+  gap:
+    15px;
 
-  margin-top: 2px;
+  margin-top:
+    2px;
 
-  font-size: 15px;
+  font-size:
+    15px;
 
-  font-weight: bold;
-
-}
-
-
-/* REGISTER */
-
-.register {
-
-  text-align: right;
-
-}
-
-
-/* TUMPUK */
-
-.tumpuk {
-
-  text-align: left;
+  font-weight:
+    bold;
 
 }
 
 
 /* ==========================================
-   MODE CETAK
+   REGISTER
+   ========================================== */
+
+.register {
+
+  text-align:
+    right;
+
+}
+
+
+/* ==========================================
+   TUMPUK
+   ========================================== */
+
+.tumpuk {
+
+  text-align:
+    left;
+
+}
+
+
+/* ==========================================
+   CETAK
    ========================================== */
 
 @media print {
 
   @page {
 
-    size: A4;
+    size:
+      A4;
 
-    margin: 8mm;
+    margin:
+      8mm;
 
   }
+
 
   body {
 
-    background: white;
+    background:
+      white;
 
-    padding: 0;
+    padding:
+      0;
 
   }
+
 
   .kontrol {
 
-    display: none;
+    display:
+      none;
 
   }
+
 
   #hasil {
 
-    width: 100%;
+    width:
+      100%;
 
-    max-width: none;
+    max-width:
+      none;
 
   }
 
+
   .grid {
 
-    display: grid;
+    display:
+      grid;
 
     grid-template-columns:
       repeat(3, 1fr);
 
-    gap: 5px;
+    gap:
+      5px;
 
   }
+
 
   .barcodeItem {
 
-    border: 1px solid #000;
+    border:
+      1px solid #000;
 
-    padding: 3px;
+    padding:
+      3px;
 
-    break-inside: avoid;
+    break-inside:
+      avoid;
 
-    page-break-inside: avoid;
+    page-break-inside:
+      avoid;
 
   }
+
 
   .barcodeItem svg {
 
-    max-width: 100%;
+    max-width:
+      100%;
 
-    height: 55px;
+    height:
+      55px;
 
   }
 
+
   .info {
 
-    font-size: 13px;
+    font-size:
+      13px;
 
-    gap: 10px;
+    gap:
+      10px;
 
-    margin-top: 1px;
+    margin-top:
+      1px;
 
   }
 
@@ -260,7 +382,7 @@ button {
 
 
 /* ==========================================
-   HP
+   TAMPILAN HP
    ========================================== */
 
 @media screen and (max-width: 600px) {
@@ -292,33 +414,45 @@ button {
     🖨️ CETAK BARCODE KAYU
   </h2>
 
+
   <button
     id="btnAmbil"
     onclick="ambilDatabase()"
   >
+
     🔄 AMBIL DATA REGISTER
+
   </button>
+
 
   <button
     id="btnPrint"
     onclick="window.print()"
   >
+
     🖨️ CETAK BARCODE
+
   </button>
 
+
   <div id="status">
+
     Tekan "Ambil Data Register"
+
   </div>
 
+
   <div id="jumlah">
+
     Jumlah barcode: 0
+
   </div>
 
 </div>
 
 
 <!-- ========================================
-     HASIL
+     HASIL BARCODE
      ======================================== -->
 
 <div id="hasil">
@@ -348,18 +482,22 @@ const API_URL =
 
 function ambilDatabase() {
 
+
   const status =
     document.getElementById(
       "status"
     );
+
 
   const grid =
     document.getElementById(
       "grid"
     );
 
+
   status.innerHTML =
     "⏳ Mengambil data DATABASE...";
+
 
   grid.innerHTML =
     "";
@@ -375,12 +513,13 @@ function ambilDatabase() {
 
 
       // ====================================
-      // ERROR
+      // CEK HASIL
       // ====================================
 
       if (
         !hasil ||
-        hasil.status !== "success"
+        hasil.status !==
+        "success"
       ) {
 
         status.innerHTML =
@@ -394,11 +533,13 @@ function ambilDatabase() {
 
 
       const data =
-        hasil.data || [];
+        hasil.data ||
+        [];
 
 
       if (
-        data.length === 0
+        data.length ===
+        0
       ) {
 
         status.innerHTML =
@@ -416,7 +557,7 @@ function ambilDatabase() {
 
 
       // ====================================
-      // BUAT BARCODE
+      // BUAT SEMUA BARCODE
       // ====================================
 
       for (
@@ -426,40 +567,35 @@ function ambilDatabase() {
       ) {
 
 
-        /*
-          DATA DARI CODE.GS
-          
-          Sekarang hanya mengirim
-          REGISTER saja.
-
-          Jadi untuk mendapatkan
-          TUMPUK, kita sementara
-          mengambil data lengkap
-          langsung dari DATABASE
-          pada tahap berikutnya.
-        */
-
-
         const register =
           String(
-            data[i]
+            data[i].register ||
+            ""
           ).trim();
 
 
-        if (!register) {
+        const tumpuk =
+          String(
+            data[i].tumpuk ||
+            ""
+          ).trim();
+
+
+        if (
+          !register
+        ) {
+
           continue;
+
         }
 
 
-        /*
-          Karena endpoint saat ini
-          mengirim REGISTER saja,
-          barcode tetap dibuat.
-        */
-
         buatBarcode(
+
           register,
-          ""
+
+          tumpuk
+
         );
 
 
@@ -468,9 +604,14 @@ function ambilDatabase() {
       }
 
 
+      // ====================================
+      // JUMLAH
+      // ====================================
+
       document.getElementById(
         "jumlah"
       ).innerHTML =
+
         "Jumlah barcode: " +
         jumlah;
 
@@ -508,8 +649,10 @@ function ambilDatabase() {
   script.onerror =
     function() {
 
+
       status.innerHTML =
         "❌ Gagal menghubungi DATABASE";
+
 
       cleanup();
 
@@ -527,12 +670,15 @@ function ambilDatabase() {
 
   function cleanup() {
 
+
     delete window[
       callbackName
     ];
 
 
-    if (script) {
+    if (
+      script
+    ) {
 
       script.remove();
 
@@ -548,8 +694,11 @@ function ambilDatabase() {
 // ==========================================
 
 function buatBarcode(
+
   register,
+
   tumpuk
+
 ) {
 
 
@@ -570,18 +719,21 @@ function buatBarcode(
 
 
   // ========================================
-  // SVG BARCODE
+  // SVG
   // ========================================
 
   const svg =
     document.createElementNS(
+
       "http://www.w3.org/2000/svg",
+
       "svg"
+
     );
 
 
   // ========================================
-  // BARIS INFORMASI
+  // BARIS REGISTER + TUMPUK
   // ========================================
 
   const info =
@@ -604,7 +756,7 @@ function buatBarcode(
     "register";
 
 
-  nomor.innerHTML =
+  nomor.textContent =
     register;
 
 
@@ -618,7 +770,7 @@ function buatBarcode(
     "tumpuk";
 
 
-  angkaTumpuk.innerHTML =
+  angkaTumpuk.textContent =
     tumpuk;
 
 
@@ -648,7 +800,7 @@ function buatBarcode(
 
 
   // ========================================
-  // GENERATE CODE 128
+  // CODE 128
   // ========================================
 
   JsBarcode(
@@ -687,4 +839,3 @@ function buatBarcode(
 </body>
 
 </html>
-```
