@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Cetak Barcode Kayu</title>
+
+<!-- Library Barcode -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.kontrol {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#btnAmbil {
+  background: #1976d2;
+  color: white;
+}
+
+#btnPrint {
+  background: #388e3c;
+  color: white;
+}
+
+#status {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+#jumlah {
+  text-align: center;
+  margin-top: 8px;
+}
+
+#hasil {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+
+}
+
+.barcodeItem {
+
+  background: white;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+
+  padding: 10px;
+
+  text-align: center;
+
+  page-break-inside: avoid;
+
+}
+
+.barcodeItem svg {
+
+  width: 100%;
+
+  max-width: 300px;
+
+  height: 90px;
+
+}
+
+.nomor {
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  margin-top: 5px;
+
+}
+
+
+/* ==========================================
+   MODE CETAK
+   ========================================== */
+
+@media print {
+
+  body {
+
+    background: white;
+
+    padding: 0;
+
+  }
+
+  .kontrol {
+
+    display: none;
+
+  }
+
+  #hasil {
+
+    width: 100%;
+
+  }
+
+  .grid {
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 8px;
+
+  }
+
+  .barcodeItem {
+
+    border: 1px solid #000;
+
+    border-radius: 0;
+
+    break-inside: avoid;
+
+    page-break-inside: avoid;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="kontrol">
+
+  <h2>
+    🖨️ CETAK BARCODE KAYU
+  </h2>
+
+  <button
+    id="btnAmbil"
+    onclick="ambilDatabase()"
+  >
+    🔄 AMBIL DATA REGISTER
+  </button>
+
+  <button
+    id="btnPrint"
+    onclick="window.print()"
+  >
+    🖨️ CETAK BARCODE
+  </button>
+
+  <div id="status">
+    Tekan "Ambil Data Register"
+  </div>
+
+  <div id="jumlah">
+    Jumlah barcode: 0
+  </div>
+
+</div>
+
+
+<div id="hasil">
+
+  <div
+    id="grid"
+    class="grid"
+  ></div>
+
+</div>
+
+
+<script>
+
+
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
+
+// ==========================================
+// AMBIL DATABASE
+// ==========================================
+
+function ambilDatabase() {
+
+  const status =
+    document.getElementById("status");
+
+  const grid =
+    document.getElementById("grid");
+
+  status.innerHTML =
+    "⏳ Mengambil data DATABASE...";
+
+  grid.innerHTML =
+    "";
+
+  const callbackName =
+    "database_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(hasil) {
+
+      if (
+        !hasil ||
+        hasil.status !== "success"
+      ) {
+
+        status.innerHTML =
+          "❌ Gagal mengambil DATABASE";
+
+        cleanup();
+
+        return;
+
+      }
+
+
+      const data =
+        hasil.data || [];
+
+
+      if (
+        data.length === 0
+      ) {
+
+        status.innerHTML =
+          "⚠️ DATABASE kosong";
+
+        cleanup();
+
+        return;
+
+      }
+
+
+      let jumlah =
+        0;
+
+
+      for (
+        let i = 0;
+        i < data.length;
+        i++
+      ) {
+
+        const register =
+          String(
+            data[i]
+          ).trim();
+
+
+        if (!register) {
+          continue;
+        }
+
+
+        buatBarcode(
+          register
+        );
+
+
+        jumlah++;
+
+      }
+
+
+      document.getElementById(
+        "jumlah"
+      ).innerHTML =
+        "Jumlah barcode: " +
+        jumlah;
+
+
+      status.innerHTML =
+        "✅ Semua barcode berhasil dibuat";
+
+
+      cleanup();
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.id =
+    callbackName;
+
+
+  script.src =
+    API_URL +
+    "?getDatabase=1" +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      status.innerHTML =
+        "❌ Gagal menghubungi DATABASE";
+
+      cleanup();
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+
+  function cleanup() {
+
+    delete window[
+      callbackName
+    ];
+
+    if (script) {
+      script.remove();
+    }
+
+  }
+
+}
+
+
+// ==========================================
+// BUAT BARCODE
+// ==========================================
+
+function buatBarcode(
+  register
+) {
+
+  const grid =
+    document.getElementById(
+      "grid"
+    );
+
+
+  const item =
+    document.createElement(
+      "div"
+    );
+
+
+  item.className =
+    "barcodeItem";
+
+
+  const svg =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+
+
+  const nomor =
+    document.createElement(
+      "div"
+    );
+
+
+  nomor.className =
+    "nomor";
+
+
+  nomor.innerHTML =
+    register;
+
+
+  item.appendChild(
+    svg
+  );
+
+  item.appendChild(
+    nomor
+  );
+
+
+  grid.appendChild(
+    item
+  );
+
+
+  JsBarcode(
+    svg,
+    register,
+    {
+
+      format:
+        "CODE128",
+
+      width:
+        2,
+
+      height:
+        70,
+
+      displayValue:
+        false,
+
+      margin:
+        5
+
+    }
+  );
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
