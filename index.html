@@ -66,21 +66,11 @@ h2 {
   font-weight: bold;
 }
 
-
-/* ==========================================
-   DAFTAR HASIL SCAN
-   ========================================== */
-
 #daftar {
   width: 100%;
   max-width: 500px;
   margin: 15px auto;
 }
-
-
-/* ==========================================
-   SATU BARIS SCAN
-   ========================================== */
 
 .item {
   background: white;
@@ -89,11 +79,6 @@ h2 {
   padding: 12px;
 }
 
-
-/* ==========================================
-   BARIS NOMOR
-   ========================================== */
-
 .baris {
   display: flex;
   align-items: center;
@@ -101,21 +86,11 @@ h2 {
   gap: 10px;
 }
 
-
-/* ==========================================
-   NOMOR REGISTER
-   ========================================== */
-
 .nomor {
   font-size: 20px;
   font-weight: bold;
   word-break: break-all;
 }
-
-
-/* ==========================================
-   TOMBOL DETAIL
-   ========================================== */
 
 .detailBtn {
   width: auto;
@@ -130,11 +105,6 @@ h2 {
   font-weight: bold;
 }
 
-
-/* ==========================================
-   DETAIL DATA
-   ========================================== */
-
 .detail {
   display: none;
   margin-top: 12px;
@@ -143,11 +113,6 @@ h2 {
   font-size: 15px;
   line-height: 1.7;
 }
-
-
-/* ==========================================
-   WARNA STATUS
-   ========================================== */
 
 .success {
   color: green;
@@ -165,19 +130,9 @@ h2 {
   color: red;
 }
 
-
-/* ==========================================
-   TOMBOL DETAIL DUPLIKAT
-   ========================================== */
-
 .detailBtn.duplicateBtn {
   background: #c62828;
 }
-
-
-/* ==========================================
-   DETAIL LABEL
-   ========================================== */
 
 .label {
   display: inline-block;
@@ -291,9 +246,6 @@ function mulaiKamera() {
         return;
       }
 
-
-      // Jangan scan berikutnya
-      // sebelum proses sebelumnya selesai
 
       if (sedangProses) {
         return;
@@ -582,10 +534,6 @@ function tambahHasil(
 
 
   let tombol =
-    tipe === "success"
-    ?
-    "DETAIL"
-    :
     "DETAIL";
 
 
@@ -652,23 +600,25 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
+
       ${
         tanggalScan
         ?
         `
         <div>
-          <span class="label">TANGGAL SCAN</span>
+          <span class="label">TANGGAL</span>
           : ${tanggalScan}
         </div>
 
         <div>
-          <span class="label">JAM SCAN</span>
+          <span class="label">JAM</span>
           : ${jamScan}
         </div>
         `
         :
         ""
       }
+
 
     </div>
 
