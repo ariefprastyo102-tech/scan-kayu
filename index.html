@@ -1,3 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scan Kayu</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 15px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+#reader {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+button {
+  width: 100%;
+  max-width: 500px;
+  padding: 16px;
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: #1976d2;
+  color: white;
+}
+
+#hasil {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#status {
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+#jumlah {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+#dataKayu {
+  max-width: 500px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: left;
+  display: none;
+}
+
+.data {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.berhasil {
+  color: green;
+}
+
+.gagal {
+  color: red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>SCAN REGISTER KAYU</h2>
+
+<div id="reader"></div>
+
+<button id="btnScan" onclick="mulaiKamera()">
+📷 BUKA KAMERA
+</button>
+
+<div id="hasil"></div>
+
+<div id="status">
+Tekan Buka Kamera
+</div>
+
+<div id="jumlah">
+Jumlah berhasil: 0
+</div>
+
+<div id="dataKayu"></div>
+
+
+<script>
+
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
+
+// ==========================================
+// VARIABEL
+// ==========================================
+
+let scanner = null;
+
+let kameraAktif = false;
+
+let sedangProses = false;
+
+let jumlahBerhasil = 0;
+
+
+// ==========================================
+// BUKA KAMERA
+// ==========================================
+
+function mulaiKamera() {
+
+  if (kameraAktif) {
+    return;
+  }
+
+  kameraAktif = true;
+
+  document.getElementById("status").innerHTML =
+    "⏳ Membuka kamera...";
+
+
+  scanner = new Html5Qrcode("reader");
+
+
+  scanner.start(
+
+    {
+      facingMode: "environment"
+    },
+
+    {
+      fps: 10,
+
+      qrbox: {
+        width: 280,
+        height: 160
+      }
+    },
+
+
+    function(register) {
+
+      register =
+        String(register).trim();
+
+
+      if (!register) {
+        return;
+      }
+
+
+      // Jangan proses scan berikutnya
+      // sebelum server selesai
+
+      if (sedangProses) {
+        return;
+      }
+
+
+      sedangProses = true;
+
+
+      document.getElementById("hasil").innerHTML =
+        "Register: " + register;
+
+
+      document.getElementById("status").innerHTML =
+        "⏳ Mengecek DATABASE...";
+
+
+      cekRegister(register);
+
+    },
+
+
+    function(errorMessage) {
+
+      // Error pembacaan sementara diabaikan
+
+    }
+
+  )
+
+
+  .then(function() {
+
+    document.getElementById("status").innerHTML =
+      "📷 KAMERA AKTIF<br>" +
+      "Arahkan ke barcode";
+
+  })
+
+
+  .catch(function(error) {
+
+    kameraAktif = false;
+
+    document.getElementById("status").innerHTML =
+      "❌ Kamera gagal dibuka<br>" +
+      error;
+
+  });
+
+}
+
+
+// ==========================================
+// CEK REGISTER KE APPS SCRIPT
+// ==========================================
+
+function cekRegister(register) {
+
+
+  const callbackName =
+    "scan_" + Date.now();
+
+
+  window[callbackName] =
+    function(hasil) {
+
+
+      // ====================================
+      // BERHASIL
+      // ====================================
+
+      if (hasil.status === "success") {
+
+
+        jumlahBerhasil++;
+
+
+        document.getElementById("jumlah").innerHTML =
+          "Jumlah berhasil: " +
+          jumlahBerhasil;
+
+
+        document.getElementById("status").innerHTML =
+          "✅ " + hasil.message;
+
+
+        document.getElementById("status")
+          .className = "berhasil";
+
+
+        tampilkanData(
+
+          hasil.data,
+
+          hasil.tanggalScan,
+
+          hasil.jamScan
+
+        );
+
+      }
+
+
+      // ====================================
+      // TIDAK ADA DI DATABASE
+      // ====================================
+
+      else if (
+        hasil.status === "not_found"
+      ) {
+
+
+        document.getElementById("status").innerHTML =
+          "❌ " + hasil.message;
+
+
+        document.getElementById("status")
+          .className = "gagal";
+
+
+        sembunyikanData();
+
+      }
+
+
+      // ====================================
+      // SUDAH PERNAH SCAN
+      // ====================================
+
+      else if (
+        hasil.status === "duplicate"
+      ) {
+
+
+        document.getElementById("status").innerHTML =
+          "❌ " + hasil.message;
+
+
+        document.getElementById("status")
+          .className = "gagal";
+
+
+        // Data tetap ditampilkan
+
+        if (hasil.data) {
+
+          tampilkanData(
+
+            hasil.data,
+
+            "",
+
+            ""
+
+          );
+
+        }
+
+      }
+
+
+      // ====================================
+      // ERROR
+      // ====================================
+
+      else {
+
+
+        document.getElementById("status").innerHTML =
+          "⚠️ " + hasil.message;
+
+
+        document.getElementById("status")
+          .className = "gagal";
+
+      }
+
+
+      // ====================================
+      // SIAP SCAN BARCODE BERIKUTNYA
+      // ====================================
+
+      setTimeout(function() {
+
+        sedangProses = false;
+
+      }, 1200);
+
+
+      delete window[callbackName];
+
+
+      const script =
+        document.getElementById(
+          callbackName
+        );
+
+
+      if (script) {
+        script.remove();
+      }
+
+    };
+
+
+  // ======================================
+  // KIRIM KE APPS SCRIPT
+  // ======================================
+
+  const script =
+    document.createElement("script");
+
+
+  script.id =
+    callbackName;
+
+
+  script.src =
+    API_URL +
+    "?register=" +
+    encodeURIComponent(register) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      document.getElementById("status").innerHTML =
+        "❌ Gagal menghubungi DATABASE";
+
+
+      document.getElementById("status")
+        .className = "gagal";
+
+
+      sedangProses = false;
+
+
+      delete window[callbackName];
+
+      script.remove();
+
+    };
+
+
+  document.body.appendChild(script);
+
+}
+
+
+// ==========================================
+// TAMPILKAN DATA KAYU
+// ==========================================
+
 function tampilkanData(
   data,
   tanggalScan,
@@ -7,7 +450,9 @@ function tampilkanData(
   const box =
     document.getElementById("dataKayu");
 
+
   box.style.display = "block";
+
 
   box.innerHTML = `
 
@@ -60,4 +505,23 @@ function tampilkanData(
     }
 
   `;
+
 }
+
+
+// ==========================================
+// SEMBUNYIKAN DATA
+// ==========================================
+
+function sembunyikanData() {
+
+  document.getElementById("dataKayu")
+    .style.display = "none";
+
+}
+
+</script>
+
+</body>
+
+</html>
