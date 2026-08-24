@@ -1,550 +1,63 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Scan Register Kayu</title>
-
-
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-
-  <style>
-
-    body {
-
-      font-family: Arial, sans-serif;
-
-      text-align: center;
-
-      background: #f5f5f5;
-
-      margin: 0;
-
-      padding: 15px;
-
-    }
-
-
-    h2 {
-
-      margin-bottom: 15px;
-
-    }
-
-
-    #reader {
-
-      width: 100%;
-
-      max-width: 500px;
-
-      margin: auto;
-
-      background: white;
-
-      border-radius: 10px;
-
-      overflow: hidden;
-
-    }
-
-
-    button {
-
-      width: 100%;
-
-      max-width: 500px;
-
-      padding: 16px;
-
-      margin-top: 15px;
-
-      font-size: 18px;
-
-      font-weight: bold;
-
-      border: none;
-
-      border-radius: 8px;
-
-      background: #1976d2;
-
-      color: white;
-
-    }
-
-
-    #hasil {
-
-      margin-top: 20px;
-
-      font-size: 22px;
-
-      font-weight: bold;
-
-    }
-
-
-    #status {
-
-      margin-top: 10px;
-
-      font-size: 17px;
-
-      font-weight: bold;
-
-    }
-
-
-    #jumlah {
-
-      margin-top: 10px;
-
-      font-size: 18px;
-
-    }
-
-
-    #daftar {
-
-      max-width: 500px;
-
-      margin: 20px auto;
-
-      background: white;
-
-      border-radius: 8px;
-
-      text-align: left;
-
-    }
-
-
-    .item {
-
-      padding: 12px;
-
-      border-bottom: 1px solid #ddd;
-
-      font-size: 17px;
-
-    }
-
-
-    .success {
-
-      color: green;
-
-    }
-
-
-    .duplicate {
-
-      color: red;
-
-    }
-
-
-    .error {
-
-      color: darkred;
-
-    }
-
-  </style>
-
-</head>
-
-
-<body>
-
-
-  <h2>SCAN REGISTER KAYU</h2>
-
-
-  <div id="reader"></div>
-
-
-  <button
-    id="btnScan"
-    onclick="mulaiKamera()"
-  >
-
-    📷 BUKA KAMERA
-
-  </button>
-
-
-  <div id="hasil"></div>
-
-
-  <div id="status">
-
-    Tekan Buka Kamera
-
-  </div>
-
-
-  <div id="jumlah">
-
-    Jumlah scan berhasil: 0
-
-  </div>
-
-
-  <div id="daftar"></div>
-
-
-<script>
-
-
-// ==========================================
-// URL APPS SCRIPT
-// ==========================================
-
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
-
-
-let scanner = null;
-
-let kameraAktif = false;
-
-let sedangProses = false;
-
-let jumlahBerhasil = 0;
-
-
-// ==========================================
-// BUKA KAMERA
-// ==========================================
-
-function mulaiKamera() {
-
-
-  if (kameraAktif) {
-
-    return;
-
-  }
-
-
-  kameraAktif = true;
-
-
-  document.getElementById("status").innerHTML =
-    "⏳ Membuka kamera...";
-
-
-  scanner =
-    new Html5Qrcode("reader");
-
-
-  scanner.start(
-
-    {
-      facingMode: "environment"
-    },
-
-
-    {
-      fps: 10,
-
-      qrbox: {
-        width: 280,
-        height: 160
-      }
-    },
-
-
-    function(register) {
-
-
-      register =
-        String(register).trim();
-
-
-      if (!register) {
-        return;
-      }
-
-
-      // ====================================
-      // JANGAN PROSES KETIKA MASIH
-      // MENUNGGU JAWABAN DARI SERVER
-      // ====================================
-
-      if (sedangProses) {
-        return;
-      }
-
-
-      sedangProses = true;
-
-
-      document.getElementById("hasil").innerHTML =
-        "Register: " + register;
-
-
-      document.getElementById("status").innerHTML =
-        "⏳ Mengecek " + register + "...";
-
-
-      kirimKeServer(register);
-
-    },
-
-
-    function(errorMessage) {
-
-      // Error pembacaan sementara diabaikan
-
-    }
-
-  )
-
-
-  .then(function() {
-
-    document.getElementById("status").innerHTML =
-      "📷 KAMERA AKTIF<br>" +
-      "Arahkan ke barcode";
-
-  })
-
-
-  .catch(function(error) {
-
-    kameraAktif = false;
-
-    document.getElementById("status").innerHTML =
-      "❌ Kamera gagal dibuka<br>" +
-      error;
-
-  });
-
-}
-
-
-// ==========================================
-// KIRIM BARCODE KE APPS SCRIPT
-// ==========================================
-
-function kirimKeServer(register) {
-
-
-  const callbackName =
-    "hasilScan_" +
-    Date.now();
-
-
-  window[callbackName] =
-    function(hasil) {
-
-
-      // ====================================
-      // BERHASIL
-      // ====================================
-
-      if (hasil.status === "success") {
-
-
-        jumlahBerhasil++;
-
-
-        document.getElementById("jumlah").innerHTML =
-          "Jumlah scan berhasil: " +
-          jumlahBerhasil;
-
-
-        document.getElementById("status").innerHTML =
-          "✅ " +
-          hasil.message;
-
-
-        tambahDaftar(
-          register,
-          "success"
-        );
-
-
-      }
-
-
-      // ====================================
-      // DUPLIKAT
-      // ====================================
-
-      else if (
-        hasil.status === "duplicate"
-      ) {
-
-
-        document.getElementById("status").innerHTML =
-          "❌ " +
-          hasil.message;
-
-
-        tambahDaftar(
-          register,
-          "duplicate"
-        );
-
-      }
-
-
-      // ====================================
-      // ERROR
-      // ====================================
-
-      else {
-
-
-        document.getElementById("status").innerHTML =
-          "⚠️ " +
-          hasil.message;
-
-
-        tambahDaftar(
-          register,
-          "error"
-        );
-
-      }
-
-
-      // ====================================
-      // SIAP SCAN BARCODE BERIKUTNYA
-      // ====================================
-
-      setTimeout(function() {
-
-        sedangProses = false;
-
-      }, 1200);
-
-
-      // Hapus callback
-
-      delete window[callbackName];
-
-      const script =
-        document.getElementById(
-          callbackName
-        );
-
-      if (script) {
-        script.remove();
-      }
-
-    };
-
-
-  // ======================================
-  // BUAT REQUEST JSONP
-  // ======================================
-
-  const script =
-    document.createElement("script");
-
-
-  script.id = callbackName;
-
-
-  script.src =
-    API_URL +
-    "?register=" +
-    encodeURIComponent(register) +
-    "&callback=" +
-    callbackName;
-
-
-  script.onerror =
-    function() {
-
-
-      document.getElementById("status").innerHTML =
-        "❌ Gagal menghubungi server";
-
-
-      sedangProses = false;
-
-
-      delete window[callbackName];
-
-      script.remove();
-
-    };
-
-
-  document.body.appendChild(script);
-
-}
-
-
-// ==========================================
-// TAMPILKAN HASIL DI LAYAR
-// ==========================================
-
-function tambahDaftar(
-  register,
-  tipe
+function tampilkanData(
+  data,
+  tanggalScan,
+  jamScan
 ) {
 
+  const box =
+    document.getElementById("dataKayu");
 
-  const item =
-    document.createElement("div");
+  box.style.display = "block";
 
+  box.innerHTML = `
 
-  item.className =
-    "item " + tipe;
+    <div class="data">
+      <b>REGISTER:</b> ${data[0]}
+    </div>
 
+    <div class="data">
+      <b>PANJANG:</b> ${data[1]}
+    </div>
 
-  if (tipe === "success") {
+    <div class="data">
+      <b>DIAMETER:</b> ${data[2]}
+    </div>
 
-    item.innerHTML =
-      "✅ " + register +
-      " — TERSIMPAN";
+    <div class="data">
+      <b>TPK:</b> ${data[3]}
+    </div>
 
-  }
+    <div class="data">
+      <b>TUMPUK:</b> ${data[4]}
+    </div>
 
+    <div class="data">
+      <b>MUTU:</b> ${data[5]}
+    </div>
 
-  else if (tipe === "duplicate") {
+    <div class="data">
+      <b>STATUS:</b> ${data[6]}
+    </div>
 
-    item.innerHTML =
-      "❌ " + register +
-      " — SUDAH PERNAH DISCAN";
+    <div class="data">
+      <b>M3:</b> ${data[7]}
+    </div>
 
-  }
+    ${
+      tanggalScan
+      ?
+      `
+      <div class="data">
+        <b>TANGGAL SCAN:</b> ${tanggalScan}
+      </div>
 
+      <div class="data">
+        <b>JAM SCAN:</b> ${jamScan}
+      </div>
+      `
+      :
+      ""
+    }
 
-  else {
-
-    item.innerHTML =
-      "⚠️ " + register +
-      " — ERROR";
-
-  }
-
-
-  document
-    .getElementById("daftar")
-    .prepend(item);
-
+  `;
 }
-
-
-</script>
-
-
-</body>
-
-</html>
