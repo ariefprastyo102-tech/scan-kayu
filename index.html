@@ -13,12 +13,12 @@
       font-family: Arial, sans-serif;
       text-align: center;
       background: #f5f5f5;
-      padding: 20px;
+      padding: 15px;
       margin: 0;
     }
 
     h2 {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     #reader {
@@ -33,8 +33,8 @@
     button {
       width: 100%;
       max-width: 500px;
-      padding: 16px;
-      margin-top: 20px;
+      padding: 15px;
+      margin-top: 15px;
       font-size: 18px;
       font-weight: bold;
       border: none;
@@ -43,15 +43,40 @@
       color: white;
     }
 
+    button:disabled {
+      background: #999;
+    }
+
     #hasil {
       margin-top: 20px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
     }
 
     #status {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 16px;
+    }
+
+    #jumlah {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #daftar {
+      max-width: 500px;
+      margin: 20px auto;
+      text-align: left;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .item {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      font-size: 17px;
     }
   </style>
 </head>
@@ -62,7 +87,7 @@
 
   <div id="reader"></div>
 
-  <button onclick="mulaiScan()">
+  <button id="btnScan" onclick="mulaiScan()">
     📷 BUKA KAMERA
   </button>
 
@@ -72,22 +97,42 @@
     Tekan tombol untuk mulai scan
   </div>
 
+  <div id="jumlah">
+    Jumlah scan: 0
+  </div>
+
+  <div id="daftar"></div>
+
 
   <script>
 
     let scanner = null;
-    let sudahScan = false;
+    let sedangScan = false;
+
+    // Menyimpan barcode yang sudah diproses
+    let barcodeTerakhir = "";
+    let waktuScanTerakhir = 0;
+
+    // Jumlah scan
+    let jumlahScan = 0;
+
 
     function mulaiScan() {
 
-      if (scanner) {
+      if (sedangScan) {
         return;
       }
+
+      sedangScan = true;
+
+      document.getElementById("btnScan").disabled = true;
 
       document.getElementById("status").innerHTML =
         "⏳ Membuka kamera...";
 
+
       scanner = new Html5Qrcode("reader");
+
 
       scanner.start(
 
@@ -95,74 +140,132 @@
 
         {
           fps: 10,
+
           qrbox: {
-            width: 250,
-            height: 150
+            width: 280,
+            height: 160
           }
         },
 
+
         function(decodedText) {
 
-          if (sudahScan) return;
+          const sekarang = Date.now();
 
-          sudahScan = true;
+
+          // Jangan membaca barcode yang sama
+          // berulang-ulang dalam waktu 2 detik
+          if (
+            decodedText === barcodeTerakhir &&
+            sekarang - waktuScanTerakhir < 2000
+          ) {
+            return;
+          }
+
+
+          barcodeTerakhir = decodedText;
+          waktuScanTerakhir = sekarang;
+
 
           document.getElementById("hasil").innerHTML =
             "Register: " + decodedText;
 
+
           document.getElementById("status").innerHTML =
-            "⏳ Menyimpan data...";
+            "⏳ Menyimpan " + decodedText + "...";
 
 
+          // Kirim ke Apps Script
           fetch(
+
             "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec",
+
             {
               method: "POST",
+
               mode: "no-cors",
+
               headers: {
                 "Content-Type": "text/plain"
               },
+
               body: decodedText
+
             }
+
           )
+
+
           .then(function() {
 
-            document.getElementById("status").innerHTML =
-              "✅ Data dikirim";
+            jumlahScan++;
 
-            scanner.stop();
+            document.getElementById("jumlah").innerHTML =
+              "Jumlah scan: " + jumlahScan;
+
+
+            document.getElementById("status").innerHTML =
+              "✅ " + decodedText + " tersimpan";
+
+
+            // Tambahkan ke daftar tampilan
+            const item = document.createElement("div");
+
+            item.className = "item";
+
+            item.innerHTML =
+              "✅ " + decodedText;
+
+
+            document
+              .getElementById("daftar")
+              .prepend(item);
+
+
+            // PENTING:
+            // Kamera TIDAK dihentikan.
+            // Scanner langsung siap membaca barcode berikutnya.
 
           })
+
+
           .catch(function(error) {
 
             document.getElementById("status").innerHTML =
-              "❌ Gagal mengirim data";
+              "❌ Gagal mengirim " + decodedText;
 
-            sudahScan = false;
+            console.log(error);
 
           });
 
         },
 
+
         function(errorMessage) {
-          // Abaikan error scan sementara
+
+          // Error pembacaan sementara diabaikan
+
         }
 
       )
 
+
       .then(function() {
 
         document.getElementById("status").innerHTML =
-          "📷 Kamera aktif — arahkan ke barcode";
+          "📷 KAMERA AKTIF — ARAHKAN KE BARCODE";
 
       })
 
+
       .catch(function(error) {
+
+        sedangScan = false;
+
+        document.getElementById("btnScan").disabled = false;
 
         document.getElementById("status").innerHTML =
           "❌ Kamera gagal dibuka<br>" + error;
-
-        scanner = null;
 
       });
 
