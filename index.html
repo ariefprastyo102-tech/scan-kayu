@@ -13,9 +13,7 @@
   <title>Scan Register Kayu</title>
 
 
-  <script
-    src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
-  </script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 
   <style>
@@ -99,7 +97,9 @@
 
       margin-top: 10px;
 
-      font-size: 16px;
+      font-size: 17px;
+
+      font-weight: bold;
 
     }
 
@@ -109,8 +109,6 @@
       margin-top: 10px;
 
       font-size: 18px;
-
-      font-weight: bold;
 
     }
 
@@ -132,7 +130,7 @@
 
     .item {
 
-      padding: 10px;
+      padding: 12px;
 
       border-bottom: 1px solid #ddd;
 
@@ -141,16 +139,23 @@
     }
 
 
-    .berhasil {
+    .success {
 
       color: green;
 
     }
 
 
-    .duplikat {
+    .duplicate {
 
       color: red;
+
+    }
+
+
+    .error {
+
+      color: darkred;
 
     }
 
@@ -190,7 +195,7 @@
 
   <div id="jumlah">
 
-    Jumlah scan: 0
+    Jumlah scan berhasil: 0
 
   </div>
 
@@ -201,13 +206,21 @@
 <script>
 
 
+// ==========================================
+// URL APPS SCRIPT
+// ==========================================
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
+
 let scanner = null;
 
 let kameraAktif = false;
 
 let sedangProses = false;
 
-let jumlahScan = 0;
+let jumlahBerhasil = 0;
 
 
 // ==========================================
@@ -228,11 +241,11 @@ function mulaiKamera() {
 
 
   document.getElementById("status").innerHTML =
-
     "⏳ Membuka kamera...";
 
 
-  scanner = new Html5Qrcode("reader");
+  scanner =
+    new Html5Qrcode("reader");
 
 
   scanner.start(
@@ -243,23 +256,14 @@ function mulaiKamera() {
 
 
     {
-
       fps: 10,
 
       qrbox: {
-
         width: 280,
-
         height: 160
-
       }
-
     },
 
-
-    // ======================================
-    // BARCODE TERBACA
-    // ======================================
 
     function(register) {
 
@@ -268,13 +272,18 @@ function mulaiKamera() {
         String(register).trim();
 
 
-      // Jangan proses saat masih
-      // menyimpan barcode sebelumnya
+      if (!register) {
+        return;
+      }
+
+
+      // ====================================
+      // JANGAN PROSES KETIKA MASIH
+      // MENUNGGU JAWABAN DARI SERVER
+      // ====================================
 
       if (sedangProses) {
-
         return;
-
       }
 
 
@@ -282,121 +291,21 @@ function mulaiKamera() {
 
 
       document.getElementById("hasil").innerHTML =
-
         "Register: " + register;
 
 
       document.getElementById("status").innerHTML =
-
         "⏳ Mengecek " + register + "...";
 
 
-      // ====================================
-      // KIRIM KE APPS SCRIPT
-      // ====================================
-
-      fetch(
-
-        "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec",
-
-        {
-
-          method: "POST",
-
-          mode: "no-cors",
-
-          headers: {
-
-            "Content-Type": "text/plain"
-
-          },
-
-          body: register
-
-        }
-
-      )
-
-
-      .then(function() {
-
-
-        // Karena no-cors,
-        // kita tidak bisa membaca
-        // status dari Apps Script.
-
-        // Untuk sementara tampilkan
-        // sebagai terkirim.
-
-        jumlahScan++;
-
-
-        document.getElementById("jumlah").innerHTML =
-
-          "Jumlah scan: " + jumlahScan;
-
-
-        document.getElementById("status").innerHTML =
-
-          "✅ " + register +
-          " dikirim";
-
-
-        let item =
-          document.createElement("div");
-
-
-        item.className = "item";
-
-
-        item.innerHTML =
-
-          "✅ " + register;
-
-
-        document
-          .getElementById("daftar")
-          .prepend(item);
-
-
-        // Tunggu sebentar sebelum
-        // membaca barcode berikutnya
-
-        setTimeout(function() {
-
-          sedangProses = false;
-
-        }, 1500);
-
-
-      })
-
-
-      .catch(function(error) {
-
-
-        document.getElementById("status").innerHTML =
-
-          "❌ Gagal mengirim " + register;
-
-
-        console.log(error);
-
-
-        sedangProses = false;
-
-      });
+      kirimKeServer(register);
 
     },
 
 
-    // ======================================
-    // ERROR SCAN SEMENTARA
-    // ======================================
-
     function(errorMessage) {
 
-      // Jangan tampilkan error scanner
+      // Error pembacaan sementara diabaikan
 
     }
 
@@ -405,31 +314,230 @@ function mulaiKamera() {
 
   .then(function() {
 
-
     document.getElementById("status").innerHTML =
-
       "📷 KAMERA AKTIF<br>" +
-
       "Arahkan ke barcode";
-
 
   })
 
 
   .catch(function(error) {
 
-
     kameraAktif = false;
 
-
     document.getElementById("status").innerHTML =
-
       "❌ Kamera gagal dibuka<br>" +
-
       error;
 
-
   });
+
+}
+
+
+// ==========================================
+// KIRIM BARCODE KE APPS SCRIPT
+// ==========================================
+
+function kirimKeServer(register) {
+
+
+  const callbackName =
+    "hasilScan_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(hasil) {
+
+
+      // ====================================
+      // BERHASIL
+      // ====================================
+
+      if (hasil.status === "success") {
+
+
+        jumlahBerhasil++;
+
+
+        document.getElementById("jumlah").innerHTML =
+          "Jumlah scan berhasil: " +
+          jumlahBerhasil;
+
+
+        document.getElementById("status").innerHTML =
+          "✅ " +
+          hasil.message;
+
+
+        tambahDaftar(
+          register,
+          "success"
+        );
+
+
+      }
+
+
+      // ====================================
+      // DUPLIKAT
+      // ====================================
+
+      else if (
+        hasil.status === "duplicate"
+      ) {
+
+
+        document.getElementById("status").innerHTML =
+          "❌ " +
+          hasil.message;
+
+
+        tambahDaftar(
+          register,
+          "duplicate"
+        );
+
+      }
+
+
+      // ====================================
+      // ERROR
+      // ====================================
+
+      else {
+
+
+        document.getElementById("status").innerHTML =
+          "⚠️ " +
+          hasil.message;
+
+
+        tambahDaftar(
+          register,
+          "error"
+        );
+
+      }
+
+
+      // ====================================
+      // SIAP SCAN BARCODE BERIKUTNYA
+      // ====================================
+
+      setTimeout(function() {
+
+        sedangProses = false;
+
+      }, 1200);
+
+
+      // Hapus callback
+
+      delete window[callbackName];
+
+      const script =
+        document.getElementById(
+          callbackName
+        );
+
+      if (script) {
+        script.remove();
+      }
+
+    };
+
+
+  // ======================================
+  // BUAT REQUEST JSONP
+  // ======================================
+
+  const script =
+    document.createElement("script");
+
+
+  script.id = callbackName;
+
+
+  script.src =
+    API_URL +
+    "?register=" +
+    encodeURIComponent(register) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+
+      document.getElementById("status").innerHTML =
+        "❌ Gagal menghubungi server";
+
+
+      sedangProses = false;
+
+
+      delete window[callbackName];
+
+      script.remove();
+
+    };
+
+
+  document.body.appendChild(script);
+
+}
+
+
+// ==========================================
+// TAMPILKAN HASIL DI LAYAR
+// ==========================================
+
+function tambahDaftar(
+  register,
+  tipe
+) {
+
+
+  const item =
+    document.createElement("div");
+
+
+  item.className =
+    "item " + tipe;
+
+
+  if (tipe === "success") {
+
+    item.innerHTML =
+      "✅ " + register +
+      " — TERSIMPAN";
+
+  }
+
+
+  else if (tipe === "duplicate") {
+
+    item.innerHTML =
+      "❌ " + register +
+      " — SUDAH PERNAH DISCAN";
+
+  }
+
+
+  else {
+
+    item.innerHTML =
+      "⚠️ " + register +
+      " — ERROR";
+
+  }
+
+
+  document
+    .getElementById("daftar")
+    .prepend(item);
 
 }
 
