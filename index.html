@@ -202,57 +202,142 @@ let jumlahBerhasil = 0;
 
 
 // ==========================================
-// BUNYI BERHASIL
+// SUARA CEKLING
 // ==========================================
 
-function bunyiBerhasil(){
+function bunyiBerhasil() {
 
-  try{
+  try {
 
     const AudioContext =
       window.AudioContext ||
       window.webkitAudioContext;
 
-    if(!AudioContext){
+    if (!AudioContext) {
       return;
     }
 
     const audio =
       new AudioContext();
 
-    const oscillator =
+
+    // Nada pertama
+    const oscillator1 =
       audio.createOscillator();
 
-    const gain =
+    const gain1 =
       audio.createGain();
 
-    oscillator.type =
+
+    oscillator1.type =
       "sine";
 
-    oscillator.frequency.value =
-      1200;
-
-    gain.gain.value =
-      0.25;
-
-    oscillator.connect(
-      gain
+    oscillator1.frequency.setValueAtTime(
+      1300,
+      audio.currentTime
     );
 
-    gain.connect(
+
+    gain1.gain.setValueAtTime(
+      0.001,
+      audio.currentTime
+    );
+
+    gain1.gain.exponentialRampToValueAtTime(
+      0.35,
+      audio.currentTime + 0.01
+    );
+
+    gain1.gain.exponentialRampToValueAtTime(
+      0.001,
+      audio.currentTime + 0.12
+    );
+
+
+    oscillator1.connect(
+      gain1
+    );
+
+    gain1.connect(
       audio.destination
     );
 
-    oscillator.start();
 
-    oscillator.stop(
-      audio.currentTime + 0.2
+    oscillator1.start(
+      audio.currentTime
     );
 
-  }catch(e){
+    oscillator1.stop(
+      audio.currentTime + 0.13
+    );
+
+
+    // Nada kedua supaya terdengar "cekling"
+    const oscillator2 =
+      audio.createOscillator();
+
+    const gain2 =
+      audio.createGain();
+
+
+    oscillator2.type =
+      "sine";
+
+    oscillator2.frequency.setValueAtTime(
+      1850,
+      audio.currentTime + 0.08
+    );
+
+
+    gain2.gain.setValueAtTime(
+      0.001,
+      audio.currentTime + 0.08
+    );
+
+    gain2.gain.exponentialRampToValueAtTime(
+      0.28,
+      audio.currentTime + 0.09
+    );
+
+    gain2.gain.exponentialRampToValueAtTime(
+      0.001,
+      audio.currentTime + 0.22
+    );
+
+
+    oscillator2.connect(
+      gain2
+    );
+
+    gain2.connect(
+      audio.destination
+    );
+
+
+    oscillator2.start(
+      audio.currentTime + 0.08
+    );
+
+    oscillator2.stop(
+      audio.currentTime + 0.23
+    );
+
+
+    setTimeout(
+      function() {
+
+        audio.close();
+
+      },
+      400
+    );
+
+
+  } catch (e) {
 
     console.log(
-      "Audio tidak tersedia"
+      "Audio tidak tersedia",
+      e
     );
 
   }
@@ -264,17 +349,17 @@ function bunyiBerhasil(){
 // GETAR
 // ==========================================
 
-function getarBerhasil(){
+function getarBerhasil() {
 
-  if(
+  if (
     navigator.vibrate
-  ){
+  ) {
 
     navigator.vibrate(
       [
-        120,
-        60,
-        120
+        100,
+        50,
+        100
       ]
     );
 
@@ -312,42 +397,20 @@ function mulaiKamera() {
 
     {
 
-      /*
-       * FPS dinaikkan supaya
-       * pembacaan lebih cepat.
-       */
+      // =====================================
+      // FPS DITINGKATKAN
+      // =====================================
 
-      fps: 20,
+      fps: 30,
 
 
-      /*
-       * Kotak scanner diperbesar sedikit
-       * tetapi tetap mempertahankan
-       * bentuk kotaknya.
-       */
+      // =====================================
+      // KOTAK TETAP SEPERTI AWAL
+      // =====================================
 
       qrbox: {
-        width: 340,
-        height: 180
-      },
-
-
-      /*
-       * Minta kamera resolusi tinggi
-       * agar barcode lebih mudah dibaca
-       * dari jarak agak jauh.
-       */
-
-      videoConstraints: {
-        facingMode: "environment",
-
-        width: {
-          ideal: 1920
-        },
-
-        height: {
-          ideal: 1080
-        }
+        width: 280,
+        height: 160
       }
 
     },
@@ -372,10 +435,9 @@ function mulaiKamera() {
       sedangProses = true;
 
 
-      /*
-       * INI TETAP ADA
-       * seperti kode asli.
-       */
+      // ====================================
+      // KETERANGAN MENGECEK TETAP ADA
+      // ====================================
 
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
@@ -453,21 +515,25 @@ function cekRegister(register) {
           jumlahBerhasil;
 
 
+        // =================================
+        // HASIL CUKUP NOMOR + CENTANG
+        // =================================
+
         document.getElementById("status").innerHTML =
           "✅ " +
           register;
 
 
-        /*
-         * BUNYI
-         */
+        // =================================
+        // SUARA CEKLING
+        // =================================
 
         bunyiBerhasil();
 
 
-        /*
-         * GETAR
-         */
+        // =================================
+        // GETAR
+        // =================================
 
         getarBerhasil();
 
