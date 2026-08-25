@@ -344,6 +344,7 @@ function ambilDatabase(){
     const status =
         document.getElementById("status");
 
+
     status.innerHTML =
         "⏳ Mengambil DATABASE...";
 
@@ -1384,126 +1385,83 @@ function downloadSVG(){
 
 
             /* =================================================
-               REGISTER
+               ANGKA REGISTER + TUMPUK
+               
+               SATU TEKS
+               TETAP DI TENGAH LABEL
             ================================================= */
 
-            const register =
+            const angka =
                 document.createElementNS(
                     NS,
                     "text"
                 );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "x",
-                "22"
+                LABEL_W / 2
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "y",
                 "21.5"
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "text-anchor",
-                "end"
+                "middle"
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "font-family",
                 "Arial"
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "font-size",
                 "4"
             );
 
 
-            register.setAttribute(
+            angka.setAttribute(
                 "font-weight",
                 "bold"
             );
 
 
-            register.textContent =
-                registerText;
+            /*
+             * JARAK REGISTER DAN TUMPUK
+             *
+             * Tetap satu teks sehingga
+             * keseluruhan angka selalu
+             * berada di tengah label.
+             */
 
-
-            group.appendChild(
-                register
+            angka.setAttribute(
+                "word-spacing",
+                "2px"
             );
 
 
-            /* =================================================
-               TUMPUK
-            ================================================= */
-
-            const tumpuk =
-                document.createElementNS(
-                    NS,
-                    "text"
-                );
-
-
-            tumpuk.setAttribute(
-                "x",
-                "28"
-            );
-
-
-            tumpuk.setAttribute(
-                "y",
-                "21.5"
-            );
-
-
-            tumpuk.setAttribute(
-                "text-anchor",
-                "start"
-            );
-
-
-            tumpuk.setAttribute(
-                "dominant-baseline",
-                "middle"
-            );
-
-
-            tumpuk.setAttribute(
-                "font-family",
-                "Arial"
-            );
-
-
-            tumpuk.setAttribute(
-                "font-size",
-                "4"
-            );
-
-
-            tumpuk.setAttribute(
-                "font-weight",
-                "bold"
-            );
-
-
-            tumpuk.textContent =
+            angka.textContent =
+                registerText +
+                " " +
                 tumpukText;
 
 
             group.appendChild(
-                tumpuk
+                angka
             );
 
 
