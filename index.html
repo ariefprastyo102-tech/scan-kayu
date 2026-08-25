@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 
@@ -5,7 +6,8 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Scan Kayu</title>
 
@@ -29,6 +31,11 @@ h2 {
   margin: 5px 0 15px;
 }
 
+
+/* =====================================================
+   AREA SCANNER
+===================================================== */
+
 #reader {
   width: 100%;
   max-width: 500px;
@@ -36,7 +43,33 @@ h2 {
   background: white;
   border-radius: 10px;
   overflow: hidden;
+  border: 3px solid transparent;
+  transition: border-color 0.15s ease,
+              box-shadow 0.15s ease;
 }
+
+
+/* TANDA BERHASIL */
+
+#reader.scan-success {
+  border-color: #00c853;
+  box-shadow:
+    0 0 0 5px rgba(0, 200, 83, 0.25);
+}
+
+
+/* TANDA DUPLIKAT */
+
+#reader.scan-duplicate {
+  border-color: #e53935;
+  box-shadow:
+    0 0 0 5px rgba(229, 57, 53, 0.25);
+}
+
+
+/* =====================================================
+   TOMBOL
+===================================================== */
 
 #btnScan {
   display: block;
@@ -52,11 +85,17 @@ h2 {
   color: white;
 }
 
+
+/* =====================================================
+   STATUS
+===================================================== */
+
 #status {
   max-width: 500px;
   margin: 10px auto;
   text-align: center;
   font-weight: bold;
+  line-height: 1.5;
 }
 
 #jumlah {
@@ -65,6 +104,11 @@ h2 {
   text-align: center;
   font-weight: bold;
 }
+
+
+/* =====================================================
+   DAFTAR HASIL
+===================================================== */
 
 #daftar {
   width: 100%;
@@ -114,6 +158,11 @@ h2 {
   line-height: 1.7;
 }
 
+
+/* =====================================================
+   WARNA STATUS
+===================================================== */
+
 .success {
   color: green;
 }
@@ -140,6 +189,33 @@ h2 {
   font-weight: bold;
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+  body {
+    padding: 10px;
+  }
+
+  #reader {
+    max-width: 100%;
+  }
+
+  #btnScan {
+    max-width: 100%;
+  }
+
+  #status,
+  #jumlah,
+  #daftar {
+    max-width: 100%;
+  }
+
+}
+
 </style>
 
 </head>
@@ -148,7 +224,9 @@ h2 {
 <body>
 
 
-<h2>SCAN REGISTER KAYU</h2>
+<h2>
+SCAN REGISTER KAYU
+</h2>
 
 
 <div id="reader"></div>
@@ -178,17 +256,17 @@ h2 {
 <script>
 
 
-// ==========================================
+// =====================================================
 // URL APPS SCRIPT
-// ==========================================
+// =====================================================
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 
-// ==========================================
+// =====================================================
 // VARIABEL
-// ==========================================
+// =====================================================
 
 let scanner = null;
 
@@ -199,9 +277,185 @@ let sedangProses = false;
 let jumlahBerhasil = 0;
 
 
-// ==========================================
+// =====================================================
+// SUARA BEEP
+// =====================================================
+
+let audioContext = null;
+
+
+function bunyiBeep(
+  frekuensi,
+  durasi
+) {
+
+  try {
+
+    if (!audioContext) {
+
+      audioContext =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
+
+
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+
+      audioContext.resume();
+
+    }
+
+
+    const oscillator =
+      audioContext.createOscillator();
+
+
+    const gain =
+      audioContext.createGain();
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+
+    oscillator.frequency.value =
+      frekuensi;
+
+
+    oscillator.type =
+      "sine";
+
+
+    gain.gain.setValueAtTime(
+      0.15,
+      audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime +
+      durasi
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+      audioContext.currentTime +
+      durasi
+    );
+
+  }
+
+  catch(error) {
+
+    console.log(
+      "Audio tidak tersedia"
+    );
+
+  }
+
+}
+
+
+// =====================================================
+// TANDA SCAN BERHASIL
+// =====================================================
+
+function tandaBerhasil() {
+
+  const reader =
+    document.getElementById(
+      "reader"
+    );
+
+
+  reader.classList.remove(
+    "scan-duplicate"
+  );
+
+
+  reader.classList.add(
+    "scan-success"
+  );
+
+
+  bunyiBeep(
+    1200,
+    0.15
+  );
+
+
+  setTimeout(
+    function(){
+
+      reader.classList.remove(
+        "scan-success"
+      );
+
+    },
+    500
+  );
+
+}
+
+
+// =====================================================
+// TANDA DUPLIKAT
+// =====================================================
+
+function tandaDuplikat() {
+
+  const reader =
+    document.getElementById(
+      "reader"
+    );
+
+
+  reader.classList.remove(
+    "scan-success"
+  );
+
+
+  reader.classList.add(
+    "scan-duplicate"
+  );
+
+
+  bunyiBeep(
+    450,
+    0.25
+  );
+
+
+  setTimeout(
+    function(){
+
+      reader.classList.remove(
+        "scan-duplicate"
+      );
+
+    },
+    700
+  );
+
+}
+
+
+// =====================================================
 // BUKA KAMERA
-// ==========================================
+// =====================================================
 
 function mulaiKamera() {
 
@@ -209,66 +463,132 @@ function mulaiKamera() {
     return;
   }
 
+
   kameraAktif = true;
 
 
-  document.getElementById("status").innerHTML =
+  document.getElementById(
+    "status"
+  ).innerHTML =
     "⏳ Membuka kamera...";
 
 
-  scanner =
-    new Html5Qrcode("reader");
+  /*
+   * Buat scanner
+   */
 
+  scanner =
+    new Html5Qrcode(
+      "reader"
+    );
+
+
+  /*
+   * Konfigurasi kamera
+   *
+   * CODE_128 karena barcode
+   * kita menggunakan CODE128.
+   */
+
+  const konfigurasi = {
+
+    fps: 15,
+
+    qrbox: {
+
+      width: 350,
+
+      height: 190
+
+    },
+
+    aspectRatio: 1.7777778,
+
+    disableFlip: true,
+
+    formatsToSupport: [
+
+      Html5QrcodeSupportedFormats.CODE_128
+
+    ]
+
+  };
+
+
+  /*
+   * Mulai kamera belakang
+   */
 
   scanner.start(
 
     {
-      facingMode: "environment"
+      facingMode:
+        "environment"
     },
 
-    {
-      fps: 10,
-
-      qrbox: {
-        width: 280,
-        height: 160
-      }
-    },
+    konfigurasi,
 
 
     function(register) {
 
+
       register =
-        String(register).trim();
+        String(
+          register
+        ).trim();
 
 
       if (!register) {
+
         return;
+
       }
 
 
+      /*
+       * Kalau masih memproses
+       * jangan baca lagi.
+       */
+
       if (sedangProses) {
+
         return;
+
       }
 
 
       sedangProses = true;
 
 
-      document.getElementById("status").innerHTML =
-        "⏳ Mengecek " +
+      /*
+       * Tanda sedang mengecek
+       */
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "⏳ Mengecek <b>" +
         register +
-        "...";
+        "</b>...";
 
 
-      cekRegister(register);
+      /*
+       * Cek ke database
+       */
+
+      cekRegister(
+        register
+      );
 
     },
 
 
     function(errorMessage) {
 
-      // Error pembacaan sementara diabaikan
+      /*
+       * Error pembacaan sementara
+       * sengaja tidak ditampilkan.
+       */
 
     }
 
@@ -277,19 +597,53 @@ function mulaiKamera() {
 
   .then(function() {
 
-    document.getElementById("status").innerHTML =
-      "📷 KAMERA AKTIF<br>" +
-      "Arahkan ke barcode";
+
+    /*
+     * Kamera aktif
+     */
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "📷 <b>KAMERA AKTIF</b><br>" +
+      "Arahkan barcode ke kamera";
+
+
+    /*
+     * Aktifkan audio setelah
+     * user menekan tombol kamera.
+     */
+
+    try {
+
+      audioContext =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
+
+    catch(error) {
+
+      console.log(
+        "Audio tidak tersedia"
+      );
+
+    }
 
   })
 
 
   .catch(function(error) {
 
+
     kameraAktif = false;
 
 
-    document.getElementById("status").innerHTML =
+    document.getElementById(
+      "status"
+    ).innerHTML =
       "❌ Kamera gagal dibuka<br>" +
       error;
 
@@ -298,11 +652,13 @@ function mulaiKamera() {
 }
 
 
-// ==========================================
+// =====================================================
 // CEK REGISTER
-// ==========================================
+// =====================================================
 
-function cekRegister(register) {
+function cekRegister(
+  register
+) {
 
 
   const callbackName =
@@ -314,25 +670,37 @@ function cekRegister(register) {
     function(hasil) {
 
 
-      // ====================================
-      // BERHASIL
-      // ====================================
+      /*
+       * BERHASIL
+       */
 
       if (
-        hasil.status === "success"
+        hasil.status ===
+        "success"
       ) {
+
+
+        /*
+         * TANDA HIJAU
+         */
+
+        tandaBerhasil();
 
 
         jumlahBerhasil++;
 
 
-        document.getElementById("jumlah").innerHTML =
+        document.getElementById(
+          "jumlah"
+        ).innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
 
 
-        document.getElementById("status").innerHTML =
-          "✅ Berhasil: " +
+        document.getElementById(
+          "status"
+        ).innerHTML =
+          "✅ <b>BERHASIL SCAN</b><br>" +
           register;
 
 
@@ -351,17 +719,27 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // DUPLIKAT
-      // ====================================
+      /*
+       * DUPLIKAT
+       */
 
       else if (
-        hasil.status === "duplicate"
+        hasil.status ===
+        "duplicate"
       ) {
 
 
-        document.getElementById("status").innerHTML =
-          "❌ " +
+        /*
+         * TANDA MERAH
+         */
+
+        tandaDuplikat();
+
+
+        document.getElementById(
+          "status"
+        ).innerHTML =
+          "❌ <b>SUDAH PERNAH DISCAN</b><br>" +
           hasil.message;
 
 
@@ -380,17 +758,27 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // TIDAK ADA DI DATABASE
-      // ====================================
+      /*
+       * TIDAK DITEMUKAN
+       */
 
       else if (
-        hasil.status === "not_found"
+        hasil.status ===
+        "not_found"
       ) {
 
 
-        document.getElementById("status").innerHTML =
-          "⚠️ " +
+        /*
+         * Tanda merah/oranye
+         */
+
+        tandaDuplikat();
+
+
+        document.getElementById(
+          "status"
+        ).innerHTML =
+          "⚠️ <b>REGISTER TIDAK DITEMUKAN</b><br>" +
           hasil.message;
 
 
@@ -401,32 +789,62 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // ERROR
-      // ====================================
+      /*
+       * ERROR
+       */
 
       else {
 
 
-        document.getElementById("status").innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "⚠️ " +
           hasil.message;
 
       }
 
 
-      // ====================================
-      // SIAP SCAN BERIKUTNYA
-      // ====================================
+      /*
+       * Tunggu sebentar sebelum
+       * scan berikutnya.
+       */
 
-      setTimeout(function() {
+      setTimeout(
+        function(){
 
-        sedangProses = false;
+          sedangProses =
+            false;
 
-      }, 1200);
+
+          /*
+           * Status kembali siap scan
+           */
+
+          if (
+            kameraAktif
+          ) {
+
+            document.getElementById(
+              "status"
+            ).innerHTML =
+              "📷 <b>SIAP SCAN</b><br>" +
+              "Arahkan ke barcode";
+
+          }
+
+        },
+        1200
+      );
 
 
-      delete window[callbackName];
+      /*
+       * Bersihkan JSONP
+       */
+
+      delete window[
+        callbackName
+      ];
 
 
       const script =
@@ -436,18 +854,22 @@ function cekRegister(register) {
 
 
       if (script) {
+
         script.remove();
+
       }
 
     };
 
 
-  // ======================================
-  // JSONP
-  // ======================================
+  /*
+   * JSONP
+   */
 
   const script =
-    document.createElement("script");
+    document.createElement(
+      "script"
+    );
 
 
   script.id =
@@ -457,7 +879,9 @@ function cekRegister(register) {
   script.src =
     API_URL +
     "?register=" +
-    encodeURIComponent(register) +
+    encodeURIComponent(
+      register
+    ) +
     "&callback=" +
     callbackName;
 
@@ -466,14 +890,19 @@ function cekRegister(register) {
     function() {
 
 
-      document.getElementById("status").innerHTML =
+      document.getElementById(
+        "status"
+      ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
 
-      sedangProses = false;
+      sedangProses =
+        false;
 
 
-      delete window[callbackName];
+      delete window[
+        callbackName
+      ];
 
 
       script.remove();
@@ -481,20 +910,25 @@ function cekRegister(register) {
     };
 
 
-  document.body.appendChild(script);
+  document.body.appendChild(
+    script
+  );
 
 }
 
 
-// ==========================================
+// =====================================================
 // HASIL BERHASIL / DUPLIKAT
-// ==========================================
+// =====================================================
 
 function tambahHasil(
 
   data,
+
   tanggalScan,
+
   jamScan,
+
   tipe
 
 ) {
@@ -505,7 +939,9 @@ function tambahHasil(
 
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   item.className =
@@ -546,8 +982,17 @@ function tambahHasil(
       </div>
 
       <button
-        class="detailBtn ${tipe === "duplicate" ? "duplicateBtn" : ""}"
-        onclick="toggleDetail('${id}', this)"
+        class="detailBtn ${
+          tipe === "duplicate"
+          ?
+          "duplicateBtn"
+          :
+          ""
+        }"
+        onclick="toggleDetail(
+          '${id}',
+          this
+        )"
       >
         ${tombol}
       </button>
@@ -619,22 +1064,23 @@ function tambahHasil(
         ""
       }
 
-
     </div>
 
   `;
 
 
   document
-    .getElementById("daftar")
+    .getElementById(
+      "daftar"
+    )
     .prepend(item);
 
 }
 
 
-// ==========================================
+// =====================================================
 // REGISTER TIDAK DITEMUKAN
-// ==========================================
+// =====================================================
 
 function tambahHasilTidakDitemukan(
   register
@@ -642,7 +1088,9 @@ function tambahHasilTidakDitemukan(
 
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   item.className =
@@ -667,15 +1115,17 @@ function tambahHasilTidakDitemukan(
 
 
   document
-    .getElementById("daftar")
+    .getElementById(
+      "daftar"
+    )
     .prepend(item);
 
 }
 
 
-// ==========================================
+// =====================================================
 // BUKA / TUTUP DETAIL
-// ==========================================
+// =====================================================
 
 function toggleDetail(
   id,
@@ -684,11 +1134,14 @@ function toggleDetail(
 
 
   const detail =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
 
   if (
-    detail.style.display === "block"
+    detail.style.display ===
+    "block"
   ) {
 
 
@@ -712,11 +1165,9 @@ function toggleDetail(
     tombol.innerHTML =
       "TUTUP";
 
-
   }
 
 }
-
 
 </script>
 
@@ -724,3 +1175,4 @@ function toggleDetail(
 </body>
 
 </html>
+```
