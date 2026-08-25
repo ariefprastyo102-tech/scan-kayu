@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 
 <html lang="id">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Scan Register BBI - IK Saradan</title>
-
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
@@ -27,9 +22,9 @@ body {
 }
 
 
-/* ==========================================
+/* ==============================
    HEADER
-========================================== */
+============================== */
 
 .header {
   width: 100%;
@@ -45,30 +40,20 @@ body {
 .headerIsi {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
+  gap: 10px;
 }
 
-
-/* ==========================================
-   LOGO
-========================================== */
-
 .logo {
-  width: 110px;
+  width: 100px;
   height: 90px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-
-/* ==========================================
-   JUDUL
-========================================== */
-
 .judulBox {
-  text-align: left;
   flex: 1;
+  min-width: 0;
+  text-align: left;
 }
 
 .judul {
@@ -76,6 +61,7 @@ body {
   font-weight: 800;
   color: #176b38;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .subjudul {
@@ -84,12 +70,13 @@ body {
   color: #555;
   letter-spacing: 1.5px;
   margin-top: 6px;
+  white-space: nowrap;
 }
 
 
-/* ==========================================
+/* ==============================
    CAMERA
-========================================== */
+============================== */
 
 .camera-card {
   width: 100%;
@@ -118,9 +105,9 @@ body {
 }
 
 
-/* ==========================================
+/* ==============================
    BUTTON
-========================================== */
+============================== */
 
 #btnScan {
   display: block;
@@ -143,9 +130,9 @@ body {
 }
 
 
-/* ==========================================
+/* ==============================
    STATUS
-========================================== */
+============================== */
 
 .status-card {
   width: 100%;
@@ -170,9 +157,9 @@ body {
 }
 
 
-/* ==========================================
-   DAFTAR HASIL
-========================================== */
+/* ==============================
+   HASIL SCAN
+============================== */
 
 #daftar {
   width: 100%;
@@ -236,10 +223,6 @@ body {
   color: #e67e00;
 }
 
-.error {
-  color: red;
-}
-
 .detailBtn.duplicateBtn {
   background: #c62828;
 }
@@ -251,9 +234,9 @@ body {
 }
 
 
-/* ==========================================
+/* ==============================
    HP
-========================================== */
+============================== */
 
 @media(max-width:500px) {
 
@@ -262,24 +245,26 @@ body {
   }
 
   .header {
-    padding: 10px;
+    padding: 10px 8px;
   }
 
   .headerIsi {
-    gap: 10px;
+    gap: 8px;
   }
 
   .logo {
-    width: 100px;
+    width: 95px;
     height: 85px;
   }
 
   .judul {
-    font-size: 19px;
+    font-size: 22px;
+    white-space: nowrap;
   }
 
   .subjudul {
-    font-size: 15px;
+    font-size: 17px;
+    white-space: nowrap;
   }
 
   #reader {
@@ -294,23 +279,25 @@ body {
 }
 
 
-/* ==========================================
-   HP KECIL
-========================================== */
+/* ==============================
+   HP SANGAT KECIL
+============================== */
 
 @media(max-width:380px) {
 
   .logo {
-    width: 90px;
+    width: 85px;
     height: 75px;
   }
 
   .judul {
-    font-size: 17px;
+    font-size: 20px;
+    white-space: nowrap;
   }
 
   .subjudul {
-    font-size: 14px;
+    font-size: 16px;
+    white-space: nowrap;
   }
 
   #reader {
@@ -330,9 +317,7 @@ body {
 
 <body>
 
-<!-- ==========================================
-     HEADER
-========================================== -->
+<!-- HEADER -->
 
 <div class="header">
 
@@ -362,9 +347,7 @@ body {
 
 </div>
 
-<!-- ==========================================
-     CAMERA
-========================================== -->
+<!-- CAMERA -->
 
 <div class="camera-card">
 
@@ -380,9 +363,7 @@ onclick="mulaiKamera()"
 
 📷 BUKA KAMERA </button>
 
-<!-- ==========================================
-     STATUS
-========================================== -->
+<!-- STATUS -->
 
 <div class="status-card">
 
@@ -401,17 +382,13 @@ onclick="mulaiKamera()"
 <script>
 
 
-// ==========================================
-// URL APPS SCRIPT
-// ==========================================
+/* ==============================
+   DATABASE
+============================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
-
-// ==========================================
-// VARIABEL
-// ==========================================
 
 let scanner = null;
 
@@ -422,9 +399,9 @@ let sedangProses = false;
 let jumlahBerhasil = 0;
 
 
-// ==========================================
-// SUARA CEKLING
-// ==========================================
+/* ==============================
+   SUARA CEKLING
+============================== */
 
 function bunyiBerhasil() {
 
@@ -434,9 +411,7 @@ function bunyiBerhasil() {
       window.AudioContext ||
       window.webkitAudioContext;
 
-    if (!AudioContext) {
-      return;
-    }
+    if (!AudioContext) return;
 
     const audio =
       new AudioContext();
@@ -484,10 +459,7 @@ function bunyiBerhasil() {
     );
 
 
-    oscillator1.start(
-      audio.currentTime
-    );
-
+    oscillator1.start();
 
     oscillator1.stop(
       audio.currentTime + 0.13
@@ -565,38 +537,32 @@ function bunyiBerhasil() {
 }
 
 
-// ==========================================
-// GETAR
-// ==========================================
+/* ==============================
+   GETAR
+============================== */
 
 function getarBerhasil() {
 
-  if (
-    navigator.vibrate
-  ) {
+  if (navigator.vibrate) {
 
-    navigator.vibrate(
-      [
-        100,
-        50,
-        100
-      ]
-    );
+    navigator.vibrate([
+      100,
+      50,
+      100
+    ]);
 
   }
 
 }
 
 
-// ==========================================
-// BUKA KAMERA
-// ==========================================
+/* ==============================
+   MULAI KAMERA
+============================== */
 
 function mulaiKamera() {
 
-  if (kameraAktif) {
-    return;
-  }
+  if (kameraAktif) return;
 
   kameraAktif = true;
 
@@ -629,18 +595,15 @@ function mulaiKamera() {
 
     function(register) {
 
+
       register =
         String(register).trim();
 
 
-      if (!register) {
-        return;
-      }
+      if (!register) return;
 
 
-      if (sedangProses) {
-        return;
-      }
+      if (sedangProses) return;
 
 
       sedangProses = true;
@@ -659,7 +622,7 @@ function mulaiKamera() {
 
     function(errorMessage) {
 
-      // Error pembacaan sementara diabaikan
+      // pembacaan yang belum berhasil diabaikan
 
     }
 
@@ -668,14 +631,17 @@ function mulaiKamera() {
 
   .then(function() {
 
+
     document.getElementById("status").innerHTML =
       "📷 KAMERA AKTIF<br>" +
       "Arahkan ke barcode";
+
 
   })
 
 
   .catch(function(error) {
+
 
     kameraAktif = false;
 
@@ -684,14 +650,15 @@ function mulaiKamera() {
       "❌ Kamera gagal dibuka<br>" +
       error;
 
+
   });
 
 }
 
 
-// ==========================================
-// CEK REGISTER
-// ==========================================
+/* ==============================
+   CEK REGISTER
+============================== */
 
 function cekRegister(register) {
 
@@ -704,10 +671,6 @@ function cekRegister(register) {
   window[callbackName] =
     function(hasil) {
 
-
-      // ====================================
-      // BERHASIL
-      // ====================================
 
       if (
         hasil.status === "success"
@@ -748,10 +711,6 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // DUPLIKAT
-      // ====================================
-
       else if (
         hasil.status === "duplicate"
       ) {
@@ -777,10 +736,6 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // TIDAK DITEMUKAN
-      // ====================================
-
       else if (
         hasil.status === "not_found"
       ) {
@@ -798,10 +753,6 @@ function cekRegister(register) {
       }
 
 
-      // ====================================
-      // ERROR
-      // ====================================
-
       else {
 
 
@@ -811,10 +762,6 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // SIAP SCAN BERIKUTNYA
-      // ====================================
 
       setTimeout(function() {
 
@@ -833,15 +780,13 @@ function cekRegister(register) {
 
 
       if (script) {
+
         script.remove();
+
       }
 
     };
 
-
-  // ======================================
-  // JSONP
-  // ======================================
 
   const script =
     document.createElement("script");
@@ -883,9 +828,9 @@ function cekRegister(register) {
 }
 
 
-// ==========================================
-// HASIL BERHASIL / DUPLIKAT
-// ==========================================
+/* ==============================
+   HASIL SCAN
+============================== */
 
 function tambahHasil(
 
@@ -914,7 +859,7 @@ function tambahHasil(
     Date.now();
 
 
-  let warna =
+  const warna =
     tipe === "success"
     ?
     "success"
@@ -922,7 +867,7 @@ function tambahHasil(
     "duplicate";
 
 
-  let tulisan =
+  const tulisan =
     tipe === "success"
     ?
     "✅ " + register
@@ -939,7 +884,11 @@ function tambahHasil(
       </div>
 
       <button
-        class="detailBtn ${tipe === "duplicate" ? "duplicateBtn" : ""}"
+        class="detailBtn ${
+          tipe === "duplicate"
+          ? "duplicateBtn"
+          : ""
+        }"
         onclick="toggleDetail('${id}', this)"
       >
         DETAIL
@@ -1025,9 +974,9 @@ function tambahHasil(
 }
 
 
-// ==========================================
-// REGISTER TIDAK DITEMUKAN
-// ==========================================
+/* ==============================
+   TIDAK DITEMUKAN
+============================== */
 
 function tambahHasilTidakDitemukan(
   register
@@ -1066,9 +1015,9 @@ function tambahHasilTidakDitemukan(
 }
 
 
-// ==========================================
-// BUKA / TUTUP DETAIL
-// ==========================================
+/* ==============================
+   DETAIL
+============================== */
 
 function toggleDetail(
   id,
@@ -1113,5 +1062,4 @@ function toggleDetail(
 </script>
 
 </body>
-
 </html>
