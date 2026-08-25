@@ -21,10 +21,15 @@
 }
 
 body {
+
   margin: 0;
+
   padding: 20px;
+
   font-family: Arial, sans-serif;
+
   background: #f3f3f3;
+
 }
 
 
@@ -160,42 +165,58 @@ button {
 
 
 .btnFilter {
+
   background: #1976d2;
+
 }
 
 
 #semua {
+
   background: #607d8b;
+
 }
 
 
 #pilihFilter {
+
   background: #388e3c;
+
 }
 
 
 #batalFilter {
+
   background: #d32f2f;
+
 }
 
 
 #pilihSemua {
+
   background: #455a64;
+
 }
 
 
 #batalSemua {
+
   background: #757575;
+
 }
 
 
 #downloadPilihan {
+
   background: #ef6c00;
+
 }
 
 
 #downloadSemua {
+
   background: #6a1b9a;
+
 }
 
 
@@ -261,6 +282,46 @@ button {
 
 
 /* =====================================================
+   JUMLAH KOLOM
+   ===================================================== */
+
+.kolomBox {
+
+  margin-top: 10px;
+
+}
+
+
+.kolomBox label {
+
+  display: block;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  margin-bottom: 5px;
+
+}
+
+
+.kolomBox input {
+
+  width: 100%;
+
+  padding: 9px;
+
+  border:
+    1px solid #bbb;
+
+  border-radius: 6px;
+
+  font-size: 15px;
+
+}
+
+
+/* =====================================================
    STATUS
    ===================================================== */
 
@@ -280,17 +341,23 @@ button {
 
 
 #status {
+
   font-weight: bold;
+
 }
 
 
 #jumlah {
+
   margin-top: 5px;
+
 }
 
 
 #hasilFilter {
+
   margin-top: 5px;
+
 }
 
 
@@ -330,7 +397,7 @@ button {
 
 
 /* =====================================================
-   HASIL
+   PREVIEW
    ===================================================== */
 
 #hasil {
@@ -446,12 +513,14 @@ button {
 
   }
 
+
   .ukuran {
 
     grid-template-columns:
       1fr;
 
   }
+
 
   .grid {
 
@@ -478,7 +547,9 @@ button {
 
 
 <h2>
+
 🪵 MASTER BARCODE KAYU
+
 </h2>
 
 
@@ -624,7 +695,7 @@ button {
 
 
 <!-- =====================================================
-     UKURAN
+     UKURAN BARCODE
      ===================================================== -->
 
 <div class="ukuran">
@@ -633,7 +704,7 @@ button {
 <div class="kotak">
 
 <label>
-Lebar barcode
+Lebar barcode (cm)
 </label>
 
 <input
@@ -651,7 +722,7 @@ Lebar barcode
 <div class="kotak">
 
 <label>
-Tinggi barcode
+Tinggi barcode (cm)
 </label>
 
 <input
@@ -664,6 +735,28 @@ Tinggi barcode
 
 
 </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     JUMLAH KOLOM
+     ===================================================== -->
+
+<div class="kolomBox">
+
+<label>
+Jumlah barcode per baris
+</label>
+
+<input
+  id="jumlahKolom"
+  type="number"
+  value="5"
+  min="1"
+  max="20"
+>
 
 
 </div>
@@ -709,7 +802,7 @@ Dipilih: 0
 
 <div class="masterInfo">
 
-📐 Ukuran dasar:
+📐 Ukuran barcode:
 <b>5 × 2 cm</b>
 
 <br>
@@ -719,13 +812,13 @@ Dipilih: 0
 
 <br>
 
-📦 Output:
+📦 Format:
 <b>SVG</b>
 
 <br>
 
-🏭 Layout banner:
-<b>Bebas diatur tukang cetak</b>
+🏭 Layout:
+<b>Bisa diatur lagi oleh tukang cetak</b>
 
 </div>
 
@@ -734,7 +827,7 @@ Dipilih: 0
 
 
 <!-- =====================================================
-     HASIL
+     PREVIEW
      ===================================================== -->
 
 <div id="hasil">
@@ -771,10 +864,12 @@ let dataBarcode = [];
 
 function ambilDatabase() {
 
+
   const status =
     document.getElementById(
       "status"
     );
+
 
   const grid =
     document.getElementById(
@@ -856,7 +951,9 @@ function ambilDatabase() {
 
 
           if (!register) {
+
             return;
+
           }
 
 
@@ -939,6 +1036,7 @@ function ambilDatabase() {
    ===================================================== */
 
 function tampilkanPreview() {
+
 
   const grid =
     document.getElementById(
@@ -1128,6 +1226,7 @@ function tampilkanPreview() {
 
 function jalankanFilter() {
 
+
   const filterRegister =
     document
       .getElementById(
@@ -1179,15 +1278,10 @@ function jalankanFilter() {
         .toLowerCase();
 
 
-      /* =============================================
+      /* ==========================================
          REGISTER
-         Pencarian sebagian.
-         
-         Ketik 261
-         → 26143
-         → 26144
-         → 26145
-         ============================================= */
+         BOLEH SEBAGIAN
+         ========================================== */
 
       const cocokRegister =
         filterRegister === "" ||
@@ -1196,19 +1290,15 @@ function jalankanFilter() {
         );
 
 
-      /* =============================================
+      /* ==========================================
          TUMPUK
-         HARUS PERSIS SAMA
+         HARUS PERSIS
          
-         Ketik 1
-         → 1
-
-         Tidak ikut:
-         → 11
-         → 12
-         → 13
-         → 14
-         ============================================= */
+         1 = hanya 1
+         11 tidak ikut
+         12 tidak ikut
+         13 tidak ikut
+         ========================================== */
 
       const cocokTumpuk =
         filterTumpuk === "" ||
@@ -1253,6 +1343,7 @@ function jalankanFilter() {
 
 function tampilkanSemua() {
 
+
   document.getElementById(
     "filterRegister"
   ).value =
@@ -1265,20 +1356,20 @@ function tampilkanSemua() {
     "";
 
 
-  const items =
-    document.querySelectorAll(
+  document
+    .querySelectorAll(
       ".item"
+    )
+    .forEach(
+
+      function(item) {
+
+        item.style.display =
+          "";
+
+      }
+
     );
-
-
-  items.forEach(
-    function(item) {
-
-      item.style.display =
-        "";
-
-    }
-  );
 
 
   document.getElementById(
@@ -1295,6 +1386,7 @@ function tampilkanSemua() {
    ===================================================== */
 
 function pilihHasilFilter() {
+
 
   document
     .querySelectorAll(
@@ -1353,6 +1445,7 @@ function pilihHasilFilter() {
 
 function batalHasilFilter() {
 
+
   document
     .querySelectorAll(
       ".item"
@@ -1405,10 +1498,11 @@ function batalHasilFilter() {
 
 
 /* =====================================================
-   PILIH SEMUA DATA
+   PILIH SEMUA
    ===================================================== */
 
 function pilihSemuaData() {
+
 
   dataBarcode.forEach(
     function(data) {
@@ -1450,10 +1544,11 @@ function pilihSemuaData() {
 
 
 /* =====================================================
-   BATAL SEMUA DATA
+   BATAL SEMUA
    ===================================================== */
 
 function batalSemuaData() {
+
 
   dataBarcode.forEach(
     function(data) {
@@ -1495,10 +1590,11 @@ function batalSemuaData() {
 
 
 /* =====================================================
-   UPDATE STATUS
+   STATUS
    ===================================================== */
 
 function updateStatus() {
+
 
   const jumlah =
     dataBarcode.length;
@@ -1550,260 +1646,65 @@ function getDipilih() {
 
 
 /* =====================================================
-   BUAT MASTER SVG
+   BUAT SATU LABEL DALAM GROUP
    ===================================================== */
 
-function buatMasterSVG(daftar) {
-
-  const lebar =
-    parseFloat(
-      document.getElementById(
-        "lebarBarcode"
-      ).value
-    );
-
-
-  const tinggi =
-    parseFloat(
-      document.getElementById(
-        "tinggiBarcode"
-      ).value
-    );
-
-
-  const jarak =
-    0.2;
-
-
-  const margin =
-    0.2;
-
-
-  const tinggiTotal =
-    margin +
-    (daftar.length * tinggi) +
-    ((daftar.length - 1) * jarak) +
-    margin;
-
-
-  const lebarTotal =
-    lebar +
-    (margin * 2);
-
-
-  /* =================================================
-     SVG UTAMA
-     ================================================= */
-
-  const svg =
-    document.createElementNS(
-
-      "http://www.w3.org/2000/svg",
-
-      "svg"
-
-    );
-
-
-  svg.setAttribute(
-    "xmlns",
-    "http://www.w3.org/2000/svg"
-  );
-
-
-  svg.setAttribute(
-    "width",
-    lebarTotal + "cm"
-  );
-
-
-  svg.setAttribute(
-    "height",
-    tinggiTotal + "cm"
-  );
-
-
-  svg.setAttribute(
-
-    "viewBox",
-
-    "0 0 " +
-    lebarTotal +
-    " " +
-    tinggiTotal
-
-  );
-
-
-  /* =================================================
-     BACKGROUND
-     ================================================= */
-
-  const bg =
-    document.createElementNS(
-
-      "http://www.w3.org/2000/svg",
-
-      "rect"
-
-    );
-
-
-  bg.setAttribute(
-    "x",
-    "0"
-  );
-
-
-  bg.setAttribute(
-    "y",
-    "0"
-  );
-
-
-  bg.setAttribute(
-    "width",
-    lebarTotal
-  );
-
-
-  bg.setAttribute(
-    "height",
-    tinggiTotal
-  );
-
-
-  bg.setAttribute(
-    "fill",
-    "white"
-  );
-
-
-  svg.appendChild(
-    bg
-  );
-
-
-  /* =================================================
-     BARCODE SATU PER SATU
-     ================================================= */
-
-  daftar.forEach(
-
-    function(data, index) {
-
-
-      const y =
-        margin +
-        index *
-        (
-          tinggi +
-          jarak
-        );
-
-
-      const item =
-        buatBarcodeSVG(
-
-          data.register,
-
-          data.tumpuk,
-
-          lebar,
-
-          tinggi
-
-        );
-
-
-      item.setAttribute(
-        "x",
-        margin
-      );
-
-
-      item.setAttribute(
-        "y",
-        y
-      );
-
-
-      svg.appendChild(
-        item
-      );
-
-    }
-
-  );
-
-
-  return svg;
-
-}
-
-
-/* =====================================================
-   BUAT SATU BARCODE SVG
-   ===================================================== */
-
-function buatBarcodeSVG(
-
+function buatLabelGroup(
+  parent,
   register,
-
   tumpuk,
-
+  x,
+  y,
   lebar,
-
   tinggi
-
 ) {
 
 
-  const svg =
+  const group =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
-      "svg"
-
+      "g"
     );
 
 
-  svg.setAttribute(
-    "xmlns",
-    "http://www.w3.org/2000/svg"
+  /*
+   * Skala dasar:
+   * 1000 x 400
+   */
+
+
+  const scaleX =
+    (lebar * 100) /
+    1000;
+
+
+  const scaleY =
+    (tinggi * 100) /
+    400;
+
+
+  group.setAttribute(
+    "transform",
+    "translate(" +
+    x +
+    "," +
+    y +
+    ") scale(" +
+    scaleX +
+    "," +
+    scaleY +
+    ")"
   );
 
 
-  svg.setAttribute(
-    "width",
-    lebar + "cm"
-  );
-
-
-  svg.setAttribute(
-    "height",
-    tinggi + "cm"
-  );
-
-
-  svg.setAttribute(
-    "viewBox",
-    "0 0 1000 400"
-  );
-
-
-  /* =================================================
+  /* ==================================================
      BACKGROUND
-     ================================================= */
+     ================================================== */
 
   const bg =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
       "rect"
-
     );
 
 
@@ -1837,22 +1738,17 @@ function buatBarcodeSVG(
   );
 
 
-  svg.appendChild(
-    bg
-  );
+  group.appendChild(bg);
 
 
-  /* =================================================
+  /* ==================================================
      GARIS POTONG
-     ================================================= */
+     ================================================== */
 
   const border =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
       "rect"
-
     );
 
 
@@ -1898,57 +1794,58 @@ function buatBarcodeSVG(
   );
 
 
-  svg.appendChild(
-    border
-  );
+  group.appendChild(border);
 
 
-  /* =================================================
+  /* ==================================================
      BARCODE
-     ================================================= */
+     ================================================== */
 
-  const barcode =
+  const barcodeSVG =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
       "svg"
-
     );
 
 
-  barcode.setAttribute(
+  barcodeSVG.setAttribute(
     "x",
     "30"
   );
 
 
-  barcode.setAttribute(
+  barcodeSVG.setAttribute(
     "y",
     "20"
   );
 
 
-  barcode.setAttribute(
+  barcodeSVG.setAttribute(
     "width",
     "940"
   );
 
 
-  barcode.setAttribute(
+  barcodeSVG.setAttribute(
     "height",
     "240"
   );
 
 
-  svg.appendChild(
-    barcode
+  barcodeSVG.setAttribute(
+    "viewBox",
+    "0 0 940 240"
+  );
+
+
+  group.appendChild(
+    barcodeSVG
   );
 
 
   JsBarcode(
 
-    barcode,
+    barcodeSVG,
 
     register,
 
@@ -1974,17 +1871,14 @@ function buatBarcodeSVG(
   );
 
 
-  /* =================================================
-     NOMOR REGISTER
-     ================================================= */
+  /* ==================================================
+     REGISTER
+     ================================================== */
 
   const reg =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
       "text"
-
     );
 
 
@@ -2026,7 +1920,7 @@ function buatBarcodeSVG(
 
   reg.setAttribute(
     "fill",
-    "black"
+    "#000000"
   );
 
 
@@ -2034,22 +1928,17 @@ function buatBarcodeSVG(
     register;
 
 
-  svg.appendChild(
-    reg
-  );
+  group.appendChild(reg);
 
 
-  /* =================================================
-     NOMOR TUMPUK
-     ================================================= */
+  /* ==================================================
+     TUMPUK
+     ================================================== */
 
   const tup =
     document.createElementNS(
-
       "http://www.w3.org/2000/svg",
-
       "text"
-
     );
 
 
@@ -2085,7 +1974,7 @@ function buatBarcodeSVG(
 
   tup.setAttribute(
     "fill",
-    "black"
+    "#000000"
   );
 
 
@@ -2093,12 +1982,264 @@ function buatBarcodeSVG(
     tumpuk;
 
 
-  svg.appendChild(
-    tup
+  group.appendChild(tup);
+
+
+  parent.appendChild(
+    group
+  );
+
+}
+
+
+/* =====================================================
+   BUAT MASTER SVG
+   ===================================================== */
+
+function buatMasterSVG(
+  daftar
+) {
+
+
+  if (
+    daftar.length === 0
+  ) {
+
+    return null;
+
+  }
+
+
+  const lebar =
+    parseFloat(
+      document.getElementById(
+        "lebarBarcode"
+      ).value
+    );
+
+
+  const tinggi =
+    parseFloat(
+      document.getElementById(
+        "tinggiBarcode"
+      ).value
+    );
+
+
+  let kolom =
+    parseInt(
+      document.getElementById(
+        "jumlahKolom"
+      ).value
+    );
+
+
+  if (
+    !kolom ||
+    kolom < 1
+  ) {
+
+    kolom = 5;
+
+  }
+
+
+  /*
+   * Jarak antar barcode
+   */
+
+  const jarak =
+    0.2;
+
+
+  const margin =
+    0.2;
+
+
+  /*
+   * Jumlah baris otomatis
+   */
+
+  const baris =
+    Math.ceil(
+      daftar.length /
+      kolom
+    );
+
+
+  /*
+   * Ukuran total dalam cm
+   */
+
+  const totalLebar =
+    (kolom * lebar) +
+    ((kolom - 1) * jarak) +
+    (margin * 2);
+
+
+  const totalTinggi =
+    (baris * tinggi) +
+    ((baris - 1) * jarak) +
+    (margin * 2);
+
+
+  /*
+   * Gunakan satuan cm
+   * tetapi viewBox memakai
+   * 100 unit per cm.
+   */
+
+  const viewLebar =
+    totalLebar * 100;
+
+
+  const viewTinggi =
+    totalTinggi * 100;
+
+
+  /* ==================================================
+     SVG MASTER
+     ================================================== */
+
+  const master =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+
+
+  master.setAttribute(
+    "xmlns",
+    "http://www.w3.org/2000/svg"
   );
 
 
-  return svg;
+  master.setAttribute(
+    "width",
+    totalLebar + "cm"
+  );
+
+
+  master.setAttribute(
+    "height",
+    totalTinggi + "cm"
+  );
+
+
+  master.setAttribute(
+    "viewBox",
+    "0 0 " +
+    viewLebar +
+    " " +
+    viewTinggi
+  );
+
+
+  /* ==================================================
+     BACKGROUND MASTER
+     ================================================== */
+
+  const background =
+    document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect"
+    );
+
+
+  background.setAttribute(
+    "x",
+    "0"
+  );
+
+
+  background.setAttribute(
+    "y",
+    "0"
+  );
+
+
+  background.setAttribute(
+    "width",
+    viewLebar
+  );
+
+
+  background.setAttribute(
+    "height",
+    viewTinggi
+  );
+
+
+  background.setAttribute(
+    "fill",
+    "white"
+  );
+
+
+  master.appendChild(
+    background
+  );
+
+
+  /* ==================================================
+     MASUKKAN BARCODE
+     ================================================== */
+
+  daftar.forEach(
+
+    function(data, index) {
+
+
+      const col =
+        index % kolom;
+
+
+      const row =
+        Math.floor(
+          index / kolom
+        );
+
+
+      const x =
+        (
+          margin +
+          col *
+          (lebar + jarak)
+        ) * 100;
+
+
+      const y =
+        (
+          margin +
+          row *
+          (tinggi + jarak)
+        ) * 100;
+
+
+      buatLabelGroup(
+
+        master,
+
+        data.register,
+
+        data.tumpuk,
+
+        x,
+
+        y,
+
+        lebar,
+
+        tinggi
+
+      );
+
+    }
+
+  );
+
+
+  return master;
 
 }
 
@@ -2123,18 +2264,52 @@ function downloadSemua() {
   }
 
 
-  const svg =
-    buatMasterSVG(
-      dataBarcode
+  const status =
+    document.getElementById(
+      "status"
     );
 
 
-  downloadFile(
+  status.innerHTML =
+    "⏳ Membuat file semua barcode...";
 
-    svg,
 
-    "MASTER-BARCODE-SEMUA.svg"
+  /*
+   * Beri waktu browser
+   * supaya tidak langsung freeze.
+   */
 
+  setTimeout(
+    function() {
+
+
+      const svg =
+        buatMasterSVG(
+          dataBarcode
+        );
+
+
+      if (!svg) {
+
+        status.innerHTML =
+          "❌ Gagal membuat file.";
+
+        return;
+
+      }
+
+
+      downloadFile(
+
+        svg,
+
+        "MASTER-BARCODE-SEMUA.svg"
+
+      );
+
+
+    },
+    100
   );
 
 }
@@ -2164,25 +2339,54 @@ function downloadPilihan() {
   }
 
 
-  const svg =
-    buatMasterSVG(
-      daftar
+  const status =
+    document.getElementById(
+      "status"
     );
 
 
-  downloadFile(
+  status.innerHTML =
+    "⏳ Membuat file barcode pilihan...";
 
-    svg,
 
-    "MASTER-BARCODE-PILIHAN.svg"
+  setTimeout(
+    function() {
 
+
+      const svg =
+        buatMasterSVG(
+          daftar
+        );
+
+
+      if (!svg) {
+
+        status.innerHTML =
+          "❌ Gagal membuat file.";
+
+        return;
+
+      }
+
+
+      downloadFile(
+
+        svg,
+
+        "MASTER-BARCODE-PILIHAN.svg"
+
+      );
+
+
+    },
+    100
   );
 
 }
 
 
 /* =====================================================
-   DOWNLOAD FILE
+   DOWNLOAD FILE SVG
    ===================================================== */
 
 function downloadFile(
@@ -2194,6 +2398,10 @@ function downloadFile(
 ) {
 
 
+  /*
+   * XML SERIALIZER
+   */
+
   const serializer =
     new XMLSerializer();
 
@@ -2204,10 +2412,37 @@ function downloadFile(
     );
 
 
+  /*
+   * Pastikan namespace SVG benar.
+   */
+
+  if (
+    !source.includes(
+      'xmlns="http://www.w3.org/2000/svg"'
+    )
+  ) {
+
+    source =
+      source.replace(
+        "<svg",
+        '<svg xmlns="http://www.w3.org/2000/svg"'
+      );
+
+  }
+
+
+  /*
+   * Header XML
+   */
+
   source =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
     source;
 
+
+  /*
+   * Blob
+   */
 
   const blob =
     new Blob(
@@ -2221,6 +2456,10 @@ function downloadFile(
 
     );
 
+
+  /*
+   * Download
+   */
 
   const url =
     URL.createObjectURL(
@@ -2261,7 +2500,7 @@ function downloadFile(
       );
 
     },
-    1000
+    3000
   );
 
 
