@@ -1,4 +1,4 @@
-```html
+```html id="k8m2qp"
 <!DOCTYPE html>
 <html lang="id">
 
@@ -38,7 +38,7 @@ body {
   margin: 0 auto 15px;
   background: white;
   border-radius: 14px;
-  padding: 15px;
+  padding: 12px 15px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
 }
@@ -47,20 +47,35 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 12px;
 }
 
 
 /* ==========================================
-   LOGO BESAR
+   AREA LOGO
 ========================================== */
 
-.logo {
-  width: 130px;
-  height: 100px;
-  object-fit: contain;
+.logoBox {
+  width: 135px;
+  height: 95px;
+  position: relative;
+  overflow: hidden;
   flex-shrink: 0;
-  transform: scale(1.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Logo dibuat lebih besar */
+
+.logo {
+  width: 180px;
+  height: 180px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  transform: scale(1.35);
 }
 
 
@@ -70,6 +85,7 @@ body {
 
 .judulBox {
   text-align: left;
+  flex: 1;
 }
 
 .judul {
@@ -255,52 +271,58 @@ body {
   }
 
   .header {
-    padding: 13px 10px;
+    padding: 10px;
   }
 
   .headerIsi {
-    gap: 12px;
+    gap: 8px;
+  }
+
+  .logoBox {
+    width: 120px;
+    height: 90px;
   }
 
   .logo {
-    width: 120px;
-    height: 95px;
-    transform: scale(1.6);
+    width: 170px;
+    height: 170px;
+    transform: scale(1.35);
   }
 
   .judul {
-    font-size: 19px;
+    font-size: 18px;
   }
 
   .subjudul {
-    font-size: 15px;
+    font-size: 14px;
   }
 
 }
 
 
 /* ==========================================
-   CEGAH LOGO MENGGANGGU TULISAN
+   HP KECIL
 ========================================== */
 
 @media(max-width:380px) {
 
-  .headerIsi {
-    gap: 8px;
+  .logoBox {
+    width: 105px;
+    height: 80px;
   }
 
   .logo {
-    width: 105px;
-    height: 85px;
-    transform: scale(1.45);
+    width: 155px;
+    height: 155px;
+    transform: scale(1.3);
   }
 
   .judul {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .subjudul {
-    font-size: 14px;
+    font-size: 13px;
   }
 
 }
@@ -321,11 +343,16 @@ body {
 
   <div class="headerIsi">
 
-    <img
-      class="logo"
-      src="KL22_Perum%20Perhutani%20-%20Koleksilogo.com.svg"
-      alt="Logo Perhutani"
-    >
+    <div class="logoBox">
+
+      <img
+        class="logo"
+        src="KL22_Perum%20Perhutani%20-%20Koleksilogo.com.svg"
+        alt="Logo Perhutani"
+      >
+
+    </div>
+
 
     <div class="judulBox">
 
@@ -426,41 +453,53 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
+
     const oscillator1 =
       audio.createOscillator();
 
     const gain1 =
       audio.createGain();
 
+
     oscillator1.type =
       "sine";
+
 
     oscillator1.frequency.setValueAtTime(
       1300,
       audio.currentTime
     );
 
+
     gain1.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
+
 
     gain1.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
+
     gain1.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.12
     );
 
+
     oscillator1.connect(gain1);
-    gain1.connect(audio.destination);
+
+    gain1.connect(
+      audio.destination
+    );
+
 
     oscillator1.start(
       audio.currentTime
     );
+
 
     oscillator1.stop(
       audio.currentTime + 0.13
@@ -473,45 +512,58 @@ function bunyiBerhasil() {
     const gain2 =
       audio.createGain();
 
+
     oscillator2.type =
       "sine";
+
 
     oscillator2.frequency.setValueAtTime(
       1850,
       audio.currentTime + 0.08
     );
 
+
     gain2.gain.setValueAtTime(
       0.001,
       audio.currentTime + 0.08
     );
+
 
     gain2.gain.exponentialRampToValueAtTime(
       0.28,
       audio.currentTime + 0.09
     );
 
+
     gain2.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.22
     );
 
+
     oscillator2.connect(gain2);
-    gain2.connect(audio.destination);
+
+    gain2.connect(
+      audio.destination
+    );
+
 
     oscillator2.start(
       audio.currentTime + 0.08
     );
 
+
     oscillator2.stop(
       audio.currentTime + 0.23
     );
+
 
     setTimeout(function() {
 
       audio.close();
 
     }, 400);
+
 
   } catch (e) {
 
@@ -558,13 +610,17 @@ function mulaiKamera() {
     return;
   }
 
+
   kameraAktif = true;
+
 
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
 
+
   scanner =
     new Html5Qrcode("reader");
+
 
   scanner.start(
 
@@ -583,29 +639,37 @@ function mulaiKamera() {
 
     },
 
+
     function(register) {
+
 
       register =
         String(register).trim();
+
 
       if (!register) {
         return;
       }
 
+
       if (sedangProses) {
         return;
       }
 
+
       sedangProses = true;
+
 
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
         register +
         "...";
 
+
       cekRegister(register);
 
     },
+
 
     function(errorMessage) {
 
@@ -615,6 +679,7 @@ function mulaiKamera() {
 
   )
 
+
   .then(function() {
 
     document.getElementById("status").innerHTML =
@@ -623,9 +688,11 @@ function mulaiKamera() {
 
   })
 
+
   .catch(function(error) {
 
     kameraAktif = false;
+
 
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
@@ -642,9 +709,11 @@ function mulaiKamera() {
 
 function cekRegister(register) {
 
+
   const callbackName =
     "scan_" +
     Date.now();
+
 
   window[callbackName] =
     function(hasil) {
@@ -658,19 +727,25 @@ function cekRegister(register) {
         hasil.status === "success"
       ) {
 
+
         jumlahBerhasil++;
+
 
         document.getElementById("jumlah").innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
 
+
         document.getElementById("status").innerHTML =
           "✅ " +
           register;
 
+
         bunyiBerhasil();
 
+
         getarBerhasil();
+
 
         tambahHasil(
 
@@ -695,9 +770,11 @@ function cekRegister(register) {
         hasil.status === "duplicate"
       ) {
 
+
         document.getElementById("status").innerHTML =
           "❌ " +
           hasil.message;
+
 
         tambahHasil(
 
@@ -722,9 +799,11 @@ function cekRegister(register) {
         hasil.status === "not_found"
       ) {
 
+
         document.getElementById("status").innerHTML =
           "⚠️ " +
           hasil.message;
+
 
         tambahHasilTidakDitemukan(
           register
@@ -738,6 +817,7 @@ function cekRegister(register) {
       // ====================================
 
       else {
+
 
         document.getElementById("status").innerHTML =
           "⚠️ " +
@@ -796,6 +876,7 @@ function cekRegister(register) {
   script.onerror =
     function() {
 
+
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
@@ -828,6 +909,7 @@ function tambahHasil(
   tipe
 
 ) {
+
 
   const register =
     data[0];
@@ -969,6 +1051,7 @@ function tambahHasilTidakDitemukan(
   register
 ) {
 
+
   const item =
     document.createElement("div");
 
@@ -1010,6 +1093,7 @@ function toggleDetail(
   tombol
 ) {
 
+
   const detail =
     document.getElementById(id);
 
@@ -1018,18 +1102,24 @@ function toggleDetail(
     detail.style.display === "block"
   ) {
 
+
     detail.style.display =
       "none";
+
 
     tombol.innerHTML =
       "DETAIL";
 
+
   }
+
 
   else {
 
+
     detail.style.display =
       "block";
+
 
     tombol.innerHTML =
       "TUTUP";
