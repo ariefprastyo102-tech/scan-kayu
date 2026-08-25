@@ -126,7 +126,7 @@ button{
 
 
 /* =====================================================
-   PREVIEW
+   PREVIEW WEB
 ===================================================== */
 
 #grid{
@@ -219,7 +219,6 @@ button{
     id="filterRegister"
     type="text"
     placeholder="Cari nomor register">
-
 
 <input
     id="filterTumpuk"
@@ -474,7 +473,7 @@ function ambilDatabase(){
 
 
 /* =====================================================
-   TAMPILKAN
+   TAMPILKAN DATABASE
 ===================================================== */
 
 function tampilkan(){
@@ -546,7 +545,9 @@ function tampilkan(){
             );
 
 
-            /* BARCODE */
+            /* =================================================
+               SVG BARCODE WEB
+            ================================================= */
 
             const svg =
                 document.createElementNS(
@@ -689,6 +690,15 @@ function filterData(){
                 register
             );
 
+
+        /*
+         * TUMPUK HARUS SAMA PERSIS
+         *
+         * 1  = masuk
+         * 11 = tidak
+         * 12 = tidak
+         * 13 = tidak
+         */
 
         const cocokTumpuk =
             tumpuk === "" ||
@@ -934,14 +944,43 @@ function updateJumlah(){
 
 function downloadSVG(){
 
-    const daftar =
-        database.filter(
-            function(data){
+    const semuaItem =
+        document.querySelectorAll(
+            ".item"
+        );
 
-                return data.dipilih;
+
+    const daftar=[];
+
+
+    /*
+     * Ambil barcode yang dicentang.
+     *
+     * SVG BARCODE DIAMBIL LANGSUNG
+     * DARI BARCODE YANG SUDAH TAMPIL
+     * DI WEB.
+     */
+
+    semuaItem.forEach(
+        function(item){
+
+            const index =
+                Number(
+                    item.dataset.index
+                );
+
+
+            if(
+                database[index] &&
+                database[index].dipilih
+            ){
+
+                daftar.push(item);
 
             }
-        );
+
+        }
+    );
 
 
     if(
@@ -959,11 +998,13 @@ function downloadSVG(){
 
     /* =================================================
        UKURAN LABEL
-       50 x 25 MM
+
+       50 x 25 mm
     ================================================= */
 
     const LABEL_W =
         50;
+
 
     const LABEL_H =
         25;
@@ -1000,19 +1041,31 @@ function downloadSVG(){
 
 
     /* =================================================
-       UKURAN MASTER
+       KANVAS
     ================================================= */
 
     const CANVAS_W =
         MARGIN * 2 +
-        COL * LABEL_W +
-        (COL - 1) * GAP;
+        (
+            COL *
+            LABEL_W
+        ) +
+        (
+            (COL - 1) *
+            GAP
+        );
 
 
     const CANVAS_H =
         MARGIN * 2 +
-        ROW * LABEL_H +
-        (ROW - 1) * GAP;
+        (
+            ROW *
+            LABEL_H
+        ) +
+        (
+            (ROW - 1) *
+            GAP
+        );
 
 
     const NS =
@@ -1020,7 +1073,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SVG UTAMA
+       SVG MASTER
     ================================================= */
 
     const root =
@@ -1069,6 +1122,18 @@ function downloadSVG(){
 
 
     background.setAttribute(
+        "x",
+        0
+    );
+
+
+    background.setAttribute(
+        "y",
+        0
+    );
+
+
+    background.setAttribute(
         "width",
         CANVAS_W
     );
@@ -1092,11 +1157,11 @@ function downloadSVG(){
 
 
     /* =================================================
-       SETIAP LABEL
+       BUAT LABEL
     ================================================= */
 
     daftar.forEach(
-        function(data,index){
+        function(item,index){
 
             const col =
                 index % COL;
@@ -1126,6 +1191,10 @@ function downloadSVG(){
                 );
 
 
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
+
             const group =
                 document.createElementNS(
                     NS,
@@ -1144,250 +1213,356 @@ function downloadSVG(){
 
 
             /* =================================================
-               KOTAK
+               KOTAK / GARIS POTONG
             ================================================= */
 
-            const box =
+            const border =
                 document.createElementNS(
                     NS,
                     "rect"
                 );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "x",
                 0
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "y",
                 0
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "width",
                 LABEL_W
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "height",
                 LABEL_H
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "fill",
                 "white"
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "stroke",
                 "black"
             );
 
 
-            box.setAttribute(
+            border.setAttribute(
                 "stroke-width",
                 "0.25"
             );
 
 
             group.appendChild(
-                box
+                border
             );
 
 
             /* =================================================
-               BARCODE
-               
-               BESAR
+               AMBIL SVG BARCODE ASLI DARI WEB
             ================================================= */
 
-            const barcode =
-                document.createElementNS(
-                    NS,
+            const svgWeb =
+                item.querySelector(
                     "svg"
                 );
 
 
-            const BARCODE_W =
-                47;
+            if(svgWeb){
+
+                /*
+                 * CLONE SVG ASLI WEB
+                 */
+
+                const clone =
+                    svgWeb.cloneNode(
+                        true
+                    );
 
 
-            const BARCODE_H =
-                17;
+                /* =================================================
+                   BARCODE DIPERBESAR
+                ================================================= */
+
+                const BARCODE_W =
+                    47;
 
 
-            const barcodeX =
-                (
-                    LABEL_W -
+                const BARCODE_H =
+                    17;
+
+
+                /*
+                 * POSISI TENGAH HORIZONTAL
+                 */
+
+                const barcodeX =
+                    (
+                        LABEL_W -
+                        BARCODE_W
+                    ) / 2;
+
+
+                /*
+                 * POSISI ATAS
+                 */
+
+                const barcodeY =
+                    1;
+
+
+                clone.setAttribute(
+                    "x",
+                    barcodeX
+                );
+
+
+                clone.setAttribute(
+                    "y",
+                    barcodeY
+                );
+
+
+                clone.setAttribute(
+                    "width",
                     BARCODE_W
-                ) / 2;
+                );
 
 
-            const barcodeY =
-                1;
+                clone.setAttribute(
+                    "height",
+                    BARCODE_H
+                );
 
 
-            barcode.setAttribute(
-                "x",
-                barcodeX
-            );
+                clone.setAttribute(
+                    "preserveAspectRatio",
+                    "none"
+                );
 
 
-            barcode.setAttribute(
-                "y",
-                barcodeY
-            );
+                clone.removeAttribute(
+                    "style"
+                );
 
 
-            barcode.setAttribute(
-                "width",
-                BARCODE_W
-            );
+                group.appendChild(
+                    clone
+                );
+
+            }
 
 
-            barcode.setAttribute(
-                "height",
-                BARCODE_H
-            );
+            /* =================================================
+               AMBIL ANGKA DARI WEB
+            ================================================= */
+
+            const info =
+                item.querySelector(
+                    ".info"
+                );
 
 
-            barcode.setAttribute(
-                "viewBox",
-                "0 0 400 130"
-            );
+            let registerText =
+                "";
 
 
-            barcode.setAttribute(
-                "preserveAspectRatio",
-                "none"
-            );
+            let tumpukText =
+                "";
 
 
-            JsBarcode(
-                barcode,
-                data.register,
-                {
+            if(info){
 
-                    format:
-                        "CODE128",
+                const teks =
+                    info.querySelectorAll(
+                        "span"
+                    );
 
-                    width:
-                        2,
 
-                    height:
-                        120,
+                if(teks[0]){
 
-                    displayValue:
-                        false,
-
-                    margin:
-                        0
+                    registerText =
+                        teks[0].textContent;
 
                 }
-            );
 
 
-            group.appendChild(
-                barcode
+                if(teks[1]){
+
+                    tumpukText =
+                        teks[1].textContent;
+
+                }
+
+            }
+
+
+            /* =================================================
+               GROUP ANGKA
+               
+               TENGAH LABEL
+            ================================================= */
+
+            const textGroup =
+                document.createElementNS(
+                    NS,
+                    "g"
+                );
+
+
+            textGroup.setAttribute(
+                "transform",
+                "translate(25 21.5)"
             );
 
 
             /* =================================================
-               REGISTER + TUMPUK
-               
-               SATU TEXT
-               
-               BENAR-BENAR CENTER
+               REGISTER
             ================================================= */
 
-            const labelText =
+            const register =
                 document.createElementNS(
                     NS,
                     "text"
                 );
 
 
-            /*
-             * X = 25
-             *
-             * Label lebar 50 mm.
-             * 25 mm = tepat tengah.
-             */
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "x",
-                "25"
+                "-2"
             );
 
 
-            /*
-             * Posisi vertikal angka.
-             */
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "y",
-                "22.5"
+                "0"
             );
 
 
-            labelText.setAttribute(
+            register.setAttribute(
                 "text-anchor",
-                "middle"
+                "end"
             );
 
 
-            labelText.setAttribute(
+            register.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
 
 
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-family",
-                "Arial, sans-serif"
+                "Arial"
             );
 
 
-            /*
-             * UKURAN ANGKA DIKEMBALIKAN BESAR
-             */
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-size",
-                "4"
+                "3.5"
             );
 
 
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-weight",
                 "bold"
             );
 
 
-            /*
-             * REGISTER + TUMPUK
-             * SATU OBJEK TEKS
-             */
-
-            labelText.textContent =
-                data.register +
-                "   " +
-                data.tumpuk;
+            register.textContent =
+                registerText;
 
 
-            group.appendChild(
-                labelText
+            textGroup.appendChild(
+                register
             );
 
 
             /* =================================================
-               MASUKKAN LABEL
+               TUMPUK
+            ================================================= */
+
+            const tumpuk =
+                document.createElementNS(
+                    NS,
+                    "text"
+                );
+
+
+            tumpuk.setAttribute(
+                "x",
+                "2"
+            );
+
+
+            tumpuk.setAttribute(
+                "y",
+                "0"
+            );
+
+
+            tumpuk.setAttribute(
+                "text-anchor",
+                "start"
+            );
+
+
+            tumpuk.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-family",
+                "Arial"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-size",
+                "3.5"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-weight",
+                "bold"
+            );
+
+
+            tumpuk.textContent =
+                tumpukText;
+
+
+            textGroup.appendChild(
+                tumpuk
+            );
+
+
+            /* =================================================
+               MASUKKAN ANGKA
+            ================================================= */
+
+            group.appendChild(
+                textGroup
+            );
+
+
+            /* =================================================
+               MASUKKAN LABEL KE MASTER
             ================================================= */
 
             root.appendChild(
@@ -1399,7 +1574,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALIZE
+       SERIALIZE SVG
     ================================================= */
 
     const serializer =
