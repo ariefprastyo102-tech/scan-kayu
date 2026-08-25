@@ -9,7 +9,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Scan Kayu</title>
+<title>Scan Register Kayu - IK Saradan</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
@@ -21,24 +21,76 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  background: #f3f6f4;
   margin: 0;
   padding: 15px;
+  color: #222;
 }
 
-h2 {
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.header {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 15px;
+  background: white;
+  border-radius: 14px;
+  padding: 16px 15px;
   text-align: center;
-  margin: 5px 0 15px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+.judul {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 3px 0;
+  color: #176b38;
+}
+
+.subjudul {
+  font-size: 15px;
+  font-weight: bold;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+
+/* ==========================================
+   CAMERA CARD
+========================================== */
+
+.camera-card {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 
 #reader {
   width: 100%;
-  max-width: 500px;
   margin: auto;
   background: white;
   border-radius: 10px;
   overflow: hidden;
 }
+
+
+/* ==========================================
+   BUTTON
+========================================== */
 
 #btnScan {
   display: block;
@@ -49,24 +101,47 @@ h2 {
   font-size: 18px;
   font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #1976d2;
   color: white;
+  box-shadow: 0 3px 8px rgba(25,118,210,0.25);
+}
+
+#btnScan:active {
+  transform: scale(0.98);
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  background: white;
+  border-radius: 12px;
+  padding: 13px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
 }
 
 #status {
-  max-width: 500px;
-  margin: 10px auto;
-  text-align: center;
   font-weight: bold;
+  line-height: 1.6;
 }
 
 #jumlah {
-  max-width: 500px;
-  margin: 10px auto;
-  text-align: center;
+  margin-top: 5px;
   font-weight: bold;
+  color: #555;
 }
+
+
+/* ==========================================
+   DAFTAR
+========================================== */
 
 #daftar {
   width: 100%;
@@ -76,9 +151,10 @@ h2 {
 
 .item {
   background: white;
-  margin-bottom: 8px;
-  border-radius: 8px;
+  margin-bottom: 9px;
+  border-radius: 10px;
   padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 
 .baris {
@@ -142,6 +218,36 @@ h2 {
   font-weight: bold;
 }
 
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:500px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 14px 10px;
+  }
+
+  .logo {
+    width: 65px;
+    height: 65px;
+  }
+
+  .judul {
+    font-size: 21px;
+  }
+
+  .subjudul {
+    font-size: 14px;
+  }
+
+}
+
 </style>
 
 </head>
@@ -150,10 +256,40 @@ h2 {
 <body>
 
 
-<h2>SCAN REGISTER KAYU</h2>
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<div class="header">
+
+  <!-- Logo Perhutani -->
+  <img
+    class="logo"
+    src="https://www.perhutani.co.id/wp-content/uploads/2023/11/logo-perhutani.png"
+    alt="Logo Perhutani"
+    onerror="this.style.display='none';"
+  >
+
+  <div class="judul">
+    SCAN REGISTER KAYU
+  </div>
+
+  <div class="subjudul">
+    IK SARADAN
+  </div>
+
+</div>
 
 
-<div id="reader"></div>
+<!-- ==========================================
+     CAMERA
+========================================== -->
+
+<div class="camera-card">
+
+  <div id="reader"></div>
+
+</div>
 
 
 <button
@@ -164,13 +300,20 @@ h2 {
 </button>
 
 
-<div id="status">
-  Tekan Buka Kamera
-</div>
+<!-- ==========================================
+     STATUS
+========================================== -->
 
+<div class="status-card">
 
-<div id="jumlah">
-  Jumlah berhasil: 0
+  <div id="status">
+    Tekan Buka Kamera
+  </div>
+
+  <div id="jumlah">
+    Jumlah berhasil: 0
+  </div>
+
 </div>
 
 
@@ -220,14 +363,11 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
-
-    // Nada pertama
     const oscillator1 =
       audio.createOscillator();
 
     const gain1 =
       audio.createGain();
-
 
     oscillator1.type =
       "sine";
@@ -236,7 +376,6 @@ function bunyiBerhasil() {
       1300,
       audio.currentTime
     );
-
 
     gain1.gain.setValueAtTime(
       0.001,
@@ -253,15 +392,8 @@ function bunyiBerhasil() {
       audio.currentTime + 0.12
     );
 
-
-    oscillator1.connect(
-      gain1
-    );
-
-    gain1.connect(
-      audio.destination
-    );
-
+    oscillator1.connect(gain1);
+    gain1.connect(audio.destination);
 
     oscillator1.start(
       audio.currentTime
@@ -272,13 +404,11 @@ function bunyiBerhasil() {
     );
 
 
-    // Nada kedua supaya terdengar "cekling"
     const oscillator2 =
       audio.createOscillator();
 
     const gain2 =
       audio.createGain();
-
 
     oscillator2.type =
       "sine";
@@ -287,7 +417,6 @@ function bunyiBerhasil() {
       1850,
       audio.currentTime + 0.08
     );
-
 
     gain2.gain.setValueAtTime(
       0.001,
@@ -304,15 +433,8 @@ function bunyiBerhasil() {
       audio.currentTime + 0.22
     );
 
-
-    oscillator2.connect(
-      gain2
-    );
-
-    gain2.connect(
-      audio.destination
-    );
-
+    oscillator2.connect(gain2);
+    gain2.connect(audio.destination);
 
     oscillator2.start(
       audio.currentTime + 0.08
@@ -322,16 +444,11 @@ function bunyiBerhasil() {
       audio.currentTime + 0.23
     );
 
+    setTimeout(function() {
 
-    setTimeout(
-      function() {
+      audio.close();
 
-        audio.close();
-
-      },
-      400
-    );
-
+    }, 400);
 
   } catch (e) {
 
@@ -380,14 +497,11 @@ function mulaiKamera() {
 
   kameraAktif = true;
 
-
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
 
-
   scanner =
     new Html5Qrcode("reader");
-
 
   scanner.start(
 
@@ -397,16 +511,7 @@ function mulaiKamera() {
 
     {
 
-      // =====================================
-      // FPS DITINGKATKAN
-      // =====================================
-
       fps: 30,
-
-
-      // =====================================
-      // KOTAK TETAP SEPERTI AWAL
-      // =====================================
 
       qrbox: {
         width: 280,
@@ -415,40 +520,29 @@ function mulaiKamera() {
 
     },
 
-
     function(register) {
 
       register =
         String(register).trim();
 
-
       if (!register) {
         return;
       }
-
 
       if (sedangProses) {
         return;
       }
 
-
       sedangProses = true;
-
-
-      // ====================================
-      // KETERANGAN MENGECEK TETAP ADA
-      // ====================================
 
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
         register +
         "...";
 
-
       cekRegister(register);
 
     },
-
 
     function(errorMessage) {
 
@@ -458,7 +552,6 @@ function mulaiKamera() {
 
   )
 
-
   .then(function() {
 
     document.getElementById("status").innerHTML =
@@ -467,11 +560,9 @@ function mulaiKamera() {
 
   })
 
-
   .catch(function(error) {
 
     kameraAktif = false;
-
 
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
@@ -488,113 +579,64 @@ function mulaiKamera() {
 
 function cekRegister(register) {
 
-
   const callbackName =
     "scan_" +
     Date.now();
 
-
   window[callbackName] =
     function(hasil) {
-
-
-      // ====================================
-      // BERHASIL
-      // ====================================
 
       if (
         hasil.status === "success"
       ) {
 
-
         jumlahBerhasil++;
-
 
         document.getElementById("jumlah").innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
 
-
-        // =================================
-        // HASIL CUKUP NOMOR + CENTANG
-        // =================================
-
         document.getElementById("status").innerHTML =
           "✅ " +
           register;
 
-
-        // =================================
-        // SUARA CEKLING
-        // =================================
-
         bunyiBerhasil();
-
-
-        // =================================
-        // GETAR
-        // =================================
 
         getarBerhasil();
 
-
         tambahHasil(
-
           hasil.data,
-
           hasil.tanggalScan,
-
           hasil.jamScan,
-
           "success"
-
         );
 
       }
-
-
-      // ====================================
-      // DUPLIKAT
-      // ====================================
 
       else if (
         hasil.status === "duplicate"
       ) {
 
-
         document.getElementById("status").innerHTML =
           "❌ " +
           hasil.message;
 
-
         tambahHasil(
-
           hasil.data,
-
           "",
-
           "",
-
           "duplicate"
-
         );
 
       }
-
-
-      // ====================================
-      // TIDAK ADA DI DATABASE
-      // ====================================
 
       else if (
         hasil.status === "not_found"
       ) {
 
-
         document.getElementById("status").innerHTML =
           "⚠️ " +
           hasil.message;
-
 
         tambahHasilTidakDitemukan(
           register
@@ -602,13 +644,7 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // ERROR
-      // ====================================
-
       else {
-
 
         document.getElementById("status").innerHTML =
           "⚠️ " +
@@ -616,26 +652,18 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // SIAP SCAN BERIKUTNYA
-      // ====================================
-
       setTimeout(function() {
 
         sedangProses = false;
 
       }, 500);
 
-
       delete window[callbackName];
-
 
       const script =
         document.getElementById(
           callbackName
         );
-
 
       if (script) {
         script.remove();
@@ -644,17 +672,11 @@ function cekRegister(register) {
     };
 
 
-  // ======================================
-  // JSONP
-  // ======================================
-
   const script =
     document.createElement("script");
 
-
   script.id =
     callbackName;
-
 
   script.src =
     API_URL +
@@ -663,25 +685,19 @@ function cekRegister(register) {
     "&callback=" +
     callbackName;
 
-
   script.onerror =
     function() {
-
 
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-
       sedangProses = false;
 
-
       delete window[callbackName];
-
 
       script.remove();
 
     };
-
 
   document.body.appendChild(script);
 
@@ -701,23 +717,18 @@ function tambahHasil(
 
 ) {
 
-
   const register =
     data[0];
-
 
   const item =
     document.createElement("div");
 
-
   item.className =
     "item";
-
 
   const id =
     "detail_" +
     Date.now();
-
 
   let warna =
     tipe === "success"
@@ -726,7 +737,6 @@ function tambahHasil(
     :
     "duplicate";
 
-
   let tulisan =
     tipe === "success"
     ?
@@ -734,10 +744,8 @@ function tambahHasil(
     :
     "❌ " + register;
 
-
   let tombol =
     "DETAIL";
-
 
   item.innerHTML = `
 
@@ -755,7 +763,6 @@ function tambahHasil(
       </button>
 
     </div>
-
 
     <div
       id="${id}"
@@ -802,7 +809,6 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
-
       ${
         tanggalScan
         ?
@@ -821,11 +827,9 @@ function tambahHasil(
         ""
       }
 
-
     </div>
 
   `;
-
 
   document
     .getElementById("daftar")
@@ -842,14 +846,11 @@ function tambahHasilTidakDitemukan(
   register
 ) {
 
-
   const item =
     document.createElement("div");
 
-
   item.className =
     "item";
-
 
   item.innerHTML = `
 
@@ -867,7 +868,6 @@ function tambahHasilTidakDitemukan(
 
   `;
 
-
   document
     .getElementById("daftar")
     .prepend(item);
@@ -884,44 +884,34 @@ function toggleDetail(
   tombol
 ) {
 
-
   const detail =
     document.getElementById(id);
-
 
   if (
     detail.style.display === "block"
   ) {
 
-
     detail.style.display =
       "none";
 
-
     tombol.innerHTML =
       "DETAIL";
-
 
   }
 
   else {
 
-
     detail.style.display =
       "block";
 
-
     tombol.innerHTML =
       "TUTUP";
-
 
   }
 
 }
 
-
 </script>
-
 
 </body>
 
