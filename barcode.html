@@ -867,24 +867,19 @@ function downloadSVG(){
     const LABEL_H =
         25;
 
-
     const GAP =
         2;
-
 
     const MARGIN =
         10;
 
-
     const COL =
         4;
-
 
     const ROW =
         Math.ceil(
             daftar.length / COL
         );
-
 
     const CANVAS_W =
         MARGIN * 2 +
@@ -897,7 +892,6 @@ function downloadSVG(){
             GAP
         );
 
-
     const CANVAS_H =
         MARGIN * 2 +
         (
@@ -909,10 +903,8 @@ function downloadSVG(){
             GAP
         );
 
-
     const NS =
         "http://www.w3.org/2000/svg";
-
 
     const root =
         document.createElementNS(
@@ -920,24 +912,20 @@ function downloadSVG(){
             "svg"
         );
 
-
     root.setAttribute(
         "xmlns",
         NS
     );
-
 
     root.setAttribute(
         "width",
         CANVAS_W + "mm"
     );
 
-
     root.setAttribute(
         "height",
         CANVAS_H + "mm"
     );
-
 
     root.setAttribute(
         "viewBox",
@@ -989,7 +977,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       LABEL
+       BUAT LABEL
     ================================================= */
 
     daftar.forEach(
@@ -1019,13 +1007,11 @@ function downloadSVG(){
                     GAP
                 );
 
-
             const group =
                 document.createElementNS(
                     NS,
                     "g"
                 );
-
 
             group.setAttribute(
                 "transform",
@@ -1089,14 +1075,12 @@ function downloadSVG(){
 
             /* =================================================
                BARCODE
-               TETAP SAMA
             ================================================= */
 
             const svgWeb =
                 item.querySelector(
                     "svg"
                 );
-
 
             if(svgWeb){
 
@@ -1105,13 +1089,11 @@ function downloadSVG(){
                         true
                     );
 
-
                 const BARCODE_W =
                     47;
 
                 const BARCODE_H =
                     17;
-
 
                 const barcodeX =
                     (
@@ -1119,10 +1101,8 @@ function downloadSVG(){
                         BARCODE_W
                     ) / 2;
 
-
                 const barcodeY =
                     1;
-
 
                 clone.setAttribute(
                     "x",
@@ -1153,7 +1133,6 @@ function downloadSVG(){
                     "style"
                 );
 
-
                 group.appendChild(
                     clone
                 );
@@ -1162,7 +1141,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               AMBIL ANGKA WEB
+               AMBIL ANGKA
             ================================================= */
 
             const info =
@@ -1170,13 +1149,11 @@ function downloadSVG(){
                     ".info"
                 );
 
-
             let registerText =
                 "";
 
             let tumpukText =
                 "";
-
 
             if(info){
 
@@ -1185,14 +1162,12 @@ function downloadSVG(){
                         "span"
                     );
 
-
                 if(teks[0]){
 
                     registerText =
                         teks[0].textContent;
 
                 }
-
 
                 if(teks[1]){
 
@@ -1205,86 +1180,139 @@ function downloadSVG(){
 
 
             /* =================================================
-               ANGKA
-               
-               PERUBAHAN HANYA DI SINI
-               
-               REGISTER + TUMPUK DIBUAT SEBAGAI
-               SATU TEKS AGAR CENTER BENAR-BENAR
-               BERDASARKAN TOTAL PANJANG TULISAN.
+               GROUP ANGKA
             ================================================= */
 
-            const labelText =
+            const textGroup =
+                document.createElementNS(
+                    NS,
+                    "g"
+                );
+
+            textGroup.setAttribute(
+                "transform",
+                "translate(25 21.5)"
+            );
+
+
+            /* =================================================
+               REGISTER
+            ================================================= */
+
+            const register =
                 document.createElementNS(
                     NS,
                     "text"
                 );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "x",
-                "25"
+                "-2"
             );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "y",
-                "21.5"
+                "0"
             );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "text-anchor",
-                "middle"
+                "end"
             );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-family",
                 "Arial"
             );
 
+            /*
+             * UKURAN ANGKA DIBESARKAN
+             */
 
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-size",
-                "3.5"
+                "4"
             );
 
-
-            labelText.setAttribute(
+            register.setAttribute(
                 "font-weight",
                 "bold"
             );
 
+            register.textContent =
+                registerText;
 
-            /*
-             * SATU BARIS
-             *
-             * REGISTER     TUMPUK
-             *
-             * SELURUHNYA DICENTER DI x=25
-             */
-
-            labelText.textContent =
-                registerText +
-                "     " +
-                tumpukText;
-
-
-            group.appendChild(
-                labelText
+            textGroup.appendChild(
+                register
             );
 
 
             /* =================================================
-               MASUKKAN LABEL
+               TUMPUK
             ================================================= */
+
+            const tumpuk =
+                document.createElementNS(
+                    NS,
+                    "text"
+                );
+
+            tumpuk.setAttribute(
+                "x",
+                "2"
+            );
+
+            tumpuk.setAttribute(
+                "y",
+                "0"
+            );
+
+            tumpuk.setAttribute(
+                "text-anchor",
+                "start"
+            );
+
+            tumpuk.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+            tumpuk.setAttribute(
+                "font-family",
+                "Arial"
+            );
+
+            /*
+             * UKURAN ANGKA DIBESARKAN
+             */
+
+            tumpuk.setAttribute(
+                "font-size",
+                "4"
+            );
+
+            tumpuk.setAttribute(
+                "font-weight",
+                "bold"
+            );
+
+            tumpuk.textContent =
+                tumpukText;
+
+            textGroup.appendChild(
+                tumpuk
+            );
+
+
+            group.appendChild(
+                textGroup
+            );
+
 
             root.appendChild(
                 group
@@ -1301,12 +1329,10 @@ function downloadSVG(){
     const serializer =
         new XMLSerializer();
 
-
     let source =
         serializer.serializeToString(
             root
         );
-
 
     source =
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -1326,37 +1352,29 @@ function downloadSVG(){
             }
         );
 
-
     const url =
         URL.createObjectURL(
             blob
         );
-
 
     const link =
         document.createElement(
             "a"
         );
 
-
     link.href =
         url;
 
-
     link.download =
         "MASTER-BARCODE-KAYU.svg";
-
 
     document.body.appendChild(
         link
     );
 
-
     link.click();
 
-
     link.remove();
-
 
     setTimeout(
         function(){
@@ -1368,7 +1386,6 @@ function downloadSVG(){
         },
         1000
     );
-
 
     document.getElementById(
         "status"
