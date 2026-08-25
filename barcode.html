@@ -546,7 +546,7 @@ function tampilkan(){
 
 
             /* =================================================
-               SVG BARCODE WEB
+               BARCODE WEB
             ================================================= */
 
             const svg =
@@ -589,7 +589,9 @@ function tampilkan(){
             );
 
 
-            /* INFO */
+            /* =================================================
+               INFO
+            ================================================= */
 
             const info =
                 document.createElement(
@@ -684,6 +686,8 @@ function filterData(){
             item.dataset.tumpuk;
 
 
+        /* REGISTER BOLEH SEBAGIAN */
+
         const cocokRegister =
             register === "" ||
             nilaiRegister.includes(
@@ -691,14 +695,7 @@ function filterData(){
             );
 
 
-        /*
-         * TUMPUK HARUS SAMA PERSIS
-         *
-         * 1  = masuk
-         * 11 = tidak
-         * 12 = tidak
-         * 13 = tidak
-         */
+        /* TUMPUK HARUS PERSIS */
 
         const cocokTumpuk =
             tumpuk === "" ||
@@ -953,13 +950,9 @@ function downloadSVG(){
     const daftar=[];
 
 
-    /*
-     * Ambil barcode yang dicentang.
-     *
-     * SVG BARCODE DIAMBIL LANGSUNG
-     * DARI BARCODE YANG SUDAH TAMPIL
-     * DI WEB.
-     */
+    /* =================================================
+       AMBIL BARCODE YANG DIPILIH
+    ================================================= */
 
     semuaItem.forEach(
         function(item){
@@ -998,7 +991,7 @@ function downloadSVG(){
 
     /* =================================================
        UKURAN LABEL
-
+       
        50 x 25 mm
     ================================================= */
 
@@ -1011,7 +1004,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       JARAK ANTAR LABEL
+       JARAK LABEL
     ================================================= */
 
     const GAP =
@@ -1027,7 +1020,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       KOLOM
+       JUMLAH KOLOM
     ================================================= */
 
     const COL =
@@ -1157,7 +1150,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       BUAT LABEL
+       BUAT SETIAP LABEL
     ================================================= */
 
     daftar.forEach(
@@ -1213,7 +1206,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               KOTAK / GARIS POTONG
+               KOTAK LABEL
             ================================================= */
 
             const border =
@@ -1271,7 +1264,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               AMBIL SVG BARCODE ASLI DARI WEB
+               AMBIL SVG BARCODE DARI WEB
             ================================================= */
 
             const svgWeb =
@@ -1281,10 +1274,6 @@ function downloadSVG(){
 
 
             if(svgWeb){
-
-                /*
-                 * CLONE SVG ASLI WEB
-                 */
 
                 const clone =
                     svgWeb.cloneNode(
@@ -1304,9 +1293,7 @@ function downloadSVG(){
                     17;
 
 
-                /*
-                 * POSISI TENGAH HORIZONTAL
-                 */
+                /* TENGAH HORIZONTAL */
 
                 const barcodeX =
                     (
@@ -1315,9 +1302,7 @@ function downloadSVG(){
                     ) / 2;
 
 
-                /*
-                 * POSISI ATAS
-                 */
+                /* POSISI ATAS */
 
                 const barcodeY =
                     1;
@@ -1353,6 +1338,12 @@ function downloadSVG(){
                 );
 
 
+                /*
+                 * Hilangkan ukuran CSS bawaan
+                 * agar ukuran SVG hasil download
+                 * mengikuti ukuran di atas.
+                 */
+
                 clone.removeAttribute(
                     "style"
                 );
@@ -1366,7 +1357,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               AMBIL ANGKA DARI WEB
+               AMBIL REGISTER + TUMPUK
             ================================================= */
 
             const info =
@@ -1394,7 +1385,7 @@ function downloadSVG(){
                 if(teks[0]){
 
                     registerText =
-                        teks[0].textContent;
+                        teks[0].textContent.trim();
 
                 }
 
@@ -1402,7 +1393,7 @@ function downloadSVG(){
                 if(teks[1]){
 
                     tumpukText =
-                        teks[1].textContent;
+                        teks[1].textContent.trim();
 
                 }
 
@@ -1412,7 +1403,8 @@ function downloadSVG(){
             /* =================================================
                GROUP ANGKA
                
-               TENGAH LABEL
+               SATU KELOMPOK
+               DIPUSATKAN DI LABEL
             ================================================= */
 
             const textGroup =
@@ -1422,9 +1414,18 @@ function downloadSVG(){
                 );
 
 
+            /*
+             * X = 25
+             *
+             * Karena lebar label 50 mm,
+             * maka 25 mm adalah titik tengah.
+             *
+             * Y = 21 mm
+             */
+
             textGroup.setAttribute(
                 "transform",
-                "translate(25 21.5)"
+                "translate(25 21)"
             );
 
 
@@ -1441,7 +1442,7 @@ function downloadSVG(){
 
             register.setAttribute(
                 "x",
-                "-2"
+                "-1.5"
             );
 
 
@@ -1465,7 +1466,7 @@ function downloadSVG(){
 
             register.setAttribute(
                 "font-family",
-                "Arial"
+                "Arial, sans-serif"
             );
 
 
@@ -1503,7 +1504,7 @@ function downloadSVG(){
 
             tumpuk.setAttribute(
                 "x",
-                "2"
+                "1.5"
             );
 
 
@@ -1527,7 +1528,7 @@ function downloadSVG(){
 
             tumpuk.setAttribute(
                 "font-family",
-                "Arial"
+                "Arial, sans-serif"
             );
 
 
@@ -1574,7 +1575,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALIZE SVG
+       SERIALIZE
     ================================================= */
 
     const serializer =
