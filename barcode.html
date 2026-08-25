@@ -691,15 +691,6 @@ function filterData(){
             );
 
 
-        /*
-         * TUMPUK HARUS SAMA PERSIS
-         *
-         * 1  = masuk
-         * 11 = tidak
-         * 12 = tidak
-         * 13 = tidak
-         */
-
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
@@ -1002,7 +993,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       JARAK LABEL
+       JARAK ANTAR LABEL
     ================================================= */
 
     const GAP =
@@ -1393,75 +1384,126 @@ function downloadSVG(){
 
 
             /* =================================================
-               REGISTER + TUMPUK
-               
-               SATU TEKS
-               POSISI BENAR-BENAR TENGAH
+               REGISTER
             ================================================= */
 
-            const angka =
+            const register =
                 document.createElementNS(
                     NS,
                     "text"
                 );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "x",
-                LABEL_W / 2
+                "22"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "y",
                 "21.5"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "text-anchor",
-                "middle"
+                "end"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "font-family",
                 "Arial"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "font-size",
                 "4"
             );
 
 
-            angka.setAttribute(
+            register.setAttribute(
                 "font-weight",
                 "bold"
             );
 
 
+            register.textContent =
+                registerText;
+
+
+            group.appendChild(
+                register
+            );
+
+
             /* =================================================
-               JARAK REGISTER DAN TUMPUK
-               
-               5 SPASI
+               TUMPUK
             ================================================= */
 
-            angka.textContent =
-                registerText +
-                "     " +
+            const tumpuk =
+                document.createElementNS(
+                    NS,
+                    "text"
+                );
+
+
+            tumpuk.setAttribute(
+                "x",
+                "28"
+            );
+
+
+            tumpuk.setAttribute(
+                "y",
+                "21.5"
+            );
+
+
+            tumpuk.setAttribute(
+                "text-anchor",
+                "start"
+            );
+
+
+            tumpuk.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-family",
+                "Arial"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-size",
+                "4"
+            );
+
+
+            tumpuk.setAttribute(
+                "font-weight",
+                "bold"
+            );
+
+
+            tumpuk.textContent =
                 tumpukText;
 
 
             group.appendChild(
-                angka
+                tumpuk
             );
 
 
