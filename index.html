@@ -62,7 +62,6 @@ h2{
   font-weight:bold;
   border-radius:8px;
   background:white;
-  transition:0.2s;
 }
 
 #jumlah{
@@ -171,7 +170,7 @@ h2{
 
 
 /* =====================================================
-   STATUS BERHASIL
+   STATUS HASIL SCAN
 ===================================================== */
 
 .statusBerhasil{
@@ -212,10 +211,6 @@ h2{
 
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media(max-width:700px){
 
@@ -291,10 +286,17 @@ let jumlahBerhasil = 0;
 
 
 // =====================================================
-// SUARA BEEP
+// AUDIO
 // =====================================================
 
-function bunyiBerhasil(){
+let audioContext = null;
+
+
+// =====================================================
+// SIAPKAN AUDIO
+// =====================================================
+
+function siapkanAudio(){
 
   try{
 
@@ -302,44 +304,120 @@ function bunyiBerhasil(){
       window.AudioContext ||
       window.webkitAudioContext;
 
+
     if(!AudioContext){
+
       return;
+
     }
 
-    const audio =
-      new AudioContext();
+
+    if(!audioContext){
+
+      audioContext =
+        new AudioContext();
+
+    }
+
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+
+      audioContext.resume();
+
+    }
+
+  }catch(e){
+
+    console.log(
+      "Audio tidak tersedia",
+      e
+    );
+
+  }
+
+}
+
+
+// =====================================================
+// BUNYI BERHASIL
+// =====================================================
+
+function bunyiBerhasil(){
+
+  try{
+
+    if(!audioContext){
+
+      return;
+
+    }
+
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+
+      audioContext.resume();
+
+    }
+
 
     const oscillator =
-      audio.createOscillator();
+      audioContext.createOscillator();
+
 
     const gain =
-      audio.createGain();
+      audioContext.createGain();
+
 
     oscillator.type =
       "sine";
 
-    oscillator.frequency.value =
-      1000;
 
-    gain.gain.value =
-      0.15;
+    oscillator.frequency.setValueAtTime(
+      1200,
+      audioContext.currentTime
+    );
 
-    oscillator.connect(gain);
+
+    gain.gain.setValueAtTime(
+      0.3,
+      audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.25
+    );
+
+
+    oscillator.connect(
+      gain
+    );
+
 
     gain.connect(
-      audio.destination
+      audioContext.destination
     );
+
 
     oscillator.start();
 
+
     oscillator.stop(
-      audio.currentTime + 0.15
+      audioContext.currentTime + 0.25
     );
 
   }catch(e){
 
     console.log(
-      "Audio tidak tersedia"
+      "Gagal bunyi",
+      e
     );
 
   }
@@ -358,7 +436,11 @@ function getarBerhasil(){
   ){
 
     navigator.vibrate(
-      [120,60,120]
+      [
+        120,
+        60,
+        120
+      ]
     );
 
   }
@@ -371,6 +453,11 @@ function getarBerhasil(){
 // =====================================================
 
 function mulaiKamera(){
+
+  // PENTING:
+  // Audio disiapkan saat tombol ditekan
+  siapkanAudio();
+
 
   if(kameraAktif){
 
@@ -417,7 +504,8 @@ function mulaiKamera(){
         height:180
       },
 
-      aspectRatio:1.7777778
+      aspectRatio:
+        1.7777778
 
     },
 
@@ -492,7 +580,6 @@ function mulaiKamera(){
       "📷 KAMERA AKTIF<br>" +
       "Arahkan ke barcode";
 
-
   })
 
 
@@ -535,9 +622,11 @@ function cekRegister(
   window[callbackName] =
     function(hasil){
 
+
       if(!hasil){
 
-        selesaiProses();
+        sedangProses =
+          false;
 
         return;
 
@@ -578,8 +667,11 @@ function cekRegister(
           register;
 
 
+        // BUNYI
         bunyiBerhasil();
 
+
+        // GETAR
         getarBerhasil();
 
 
@@ -706,32 +798,16 @@ function cekRegister(
             false;
 
 
-          /*
-           * Jangan langsung menghapus
-           * tanda berhasil.
-           *
-           * Kamera tetap aktif,
-           * tetapi status akan kembali
-           * ke siap scan setelah 2 detik.
-           */
-
-          if(
-            hasil.status ===
-            "success"
-          ){
-
-            document.getElementById(
-              "status"
-            ).className =
-              "";
+          document.getElementById(
+            "status"
+          ).className =
+            "";
 
 
-            document.getElementById(
-              "status"
-            ).innerHTML =
-              "📷 SIAP SCAN BERIKUTNYA";
-
-          }
+          document.getElementById(
+            "status"
+          ).innerHTML =
+            "📷 SIAP SCAN BERIKUTNYA";
 
         },
         2000
@@ -814,18 +890,6 @@ function cekRegister(
   document.body.appendChild(
     script
   );
-
-}
-
-
-// =====================================================
-// SELESAI PROSES
-// =====================================================
-
-function selesaiProses(){
-
-  sedangProses =
-    false;
 
 }
 
