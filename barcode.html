@@ -1,2407 +1,1096 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Cetak Barcode Kayu</title>
 
-
-<!-- =====================================================
-     JsBarcode
-     ===================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
-
-<!-- =====================================================
-     jsPDF
-     ===================================================== -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
-<!-- =====================================================
-     svg2pdf
-     ===================================================== -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.5.0/svg2pdf.umd.min.js"></script>
-
-
 <style>
+*{box-sizing:border-box}
 
-/* =====================================================
-   DASAR
-   ===================================================== */
-
-* {
-  box-sizing: border-box;
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
 }
 
-body {
-
-  margin: 0;
-
-  padding: 20px;
-
-  font-family: Arial, sans-serif;
-
-  background: #f3f3f3;
-
+.kontrol{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
 }
 
-
-/* =====================================================
-   PANEL KONTROL
-   ===================================================== */
-
-.kontrol {
-
-  max-width: 1100px;
-
-  margin: auto;
-
-  background: white;
-
-  padding: 20px;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 2px 10px rgba(0,0,0,.08);
-
+h2{
+    text-align:center;
+    margin-top:0;
 }
 
-
-h2 {
-
-  text-align: center;
-
-  margin:
-    0 0 20px;
-
+button{
+    border:0;
+    border-radius:7px;
+    padding:11px 15px;
+    margin:4px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
+.btnAmbil{background:#1976d2;color:#fff;width:100%}
+.btnFilter{background:#1976d2;color:#fff}
+.btnSemua{background:#607d8b;color:#fff}
+.btnPilih{background:#388e3c;color:#fff}
+.btnBatal{background:#d32f2f;color:#fff}
+.btnDownload{background:#6a1b9a;color:#fff;width:100%;margin-top:15px}
 
-/* =====================================================
-   BUTTON UTAMA
-   ===================================================== */
-
-.btnAmbil {
-
-  width: 100%;
-
-  padding: 14px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #1976d2;
-
-  color: white;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
+.filter{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
 }
 
-
-/* =====================================================
-   FILTER
-   ===================================================== */
-
-.judul {
-
-  margin-top: 18px;
-
-  margin-bottom: 8px;
-
-  font-weight: bold;
-
+input{
+    padding:11px;
+    border:1px solid #aaa;
+    border-radius:7px;
+    font-size:15px;
+    width:100%;
 }
 
-
-.filter {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 10px;
-
+.status{
+    margin-top:15px;
+    padding:12px;
+    background:#f5f5f5;
+    border-radius:7px;
+    text-align:center;
+    line-height:1.7;
 }
 
-
-.filter input {
-
-  width: 100%;
-
-  padding: 12px;
-
-  border:
-    1px solid #aaa;
-
-  border-radius: 8px;
-
-  font-size: 15px;
-
+#grid{
+    max-width:1100px;
+    margin:20px auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
 }
 
-
-/* =====================================================
-   TOMBOL
-   ===================================================== */
-
-.tombol {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 8px;
-
-  margin-top: 10px;
-
+.item{
+    background:white;
+    border:1px solid #999;
+    padding:5px;
+    text-align:center;
+    position:relative;
 }
 
-
-.tombol button {
-
-  border: none;
-
-  border-radius: 8px;
-
-  padding: 11px 14px;
-
-  color: white;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
+.item.hide{
+    display:none;
 }
 
-
-.btnFilter {
-
-  background: #1976d2;
-
+.item input{
+    position:absolute;
+    top:5px;
+    left:5px;
+    width:18px;
+    height:18px;
 }
 
-
-.btnSemua {
-
-  background: #607d8b;
-
+.item svg{
+    width:100%;
+    height:65px;
+    margin-top:15px;
 }
 
-
-.btnPilih {
-
-  background: #388e3c;
-
+.info{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    font-weight:bold;
+    font-size:14px;
 }
 
+@media(max-width:700px){
+    .filter{
+        grid-template-columns:1fr;
+    }
 
-.btnBatal {
-
-  background: #d32f2f;
-
+    #grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
-
-
-.btnPDF {
-
-  background: #6a1b9a;
-
-}
-
-
-.btnPDFPilihan {
-
-  background: #ef6c00;
-
-}
-
-
-/* =====================================================
-   PENGATURAN UKURAN
-   ===================================================== */
-
-.pengaturan {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr 1fr;
-
-  gap: 10px;
-
-  margin-top: 15px;
-
-}
-
-
-.kotak {
-
-  padding: 12px;
-
-  background: #f7f7f7;
-
-  border:
-    1px solid #ddd;
-
-  border-radius: 8px;
-
-}
-
-
-.kotak label {
-
-  display: block;
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-  margin-bottom: 6px;
-
-}
-
-
-.kotak input,
-.kotak select {
-
-  width: 100%;
-
-  padding: 9px;
-
-  border:
-    1px solid #aaa;
-
-  border-radius: 6px;
-
-  font-size: 15px;
-
-}
-
-
-/* =====================================================
-   STATUS
-   ===================================================== */
-
-.status {
-
-  margin-top: 15px;
-
-  padding: 12px;
-
-  text-align: center;
-
-  background: #f7f7f7;
-
-  border-radius: 8px;
-
-  line-height: 1.7;
-
-}
-
-
-#status {
-
-  font-weight: bold;
-
-}
-
-
-/* =====================================================
-   PREVIEW
-   ===================================================== */
-
-#hasil {
-
-  max-width: 1200px;
-
-  margin:
-    20px auto;
-
-}
-
-
-.grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 10px;
-
-}
-
-
-.item {
-
-  position: relative;
-
-  background: white;
-
-  border:
-    1px solid #aaa;
-
-  padding: 6px;
-
-  text-align: center;
-
-}
-
-
-.item.tidakDipilih {
-
-  opacity: .35;
-
-}
-
-
-.item input {
-
-  position: absolute;
-
-  top: 5px;
-
-  left: 5px;
-
-  width: 18px;
-
-  height: 18px;
-
-}
-
-
-.item svg {
-
-  width: 100%;
-
-  height: 65px;
-
-  margin-top: 18px;
-
-}
-
-
-.info {
-
-  display: flex;
-
-  justify-content: center;
-
-  gap: 15px;
-
-  font-weight: bold;
-
-  font-size: 14px;
-
-}
-
-
-/* =====================================================
-   MOBILE
-   ===================================================== */
-
-@media(max-width:700px) {
-
-  .filter {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .pengaturan {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .grid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
-  }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     PANEL
-     ===================================================== -->
-
 <div class="kontrol">
 
-
-<h2>
-🪵 CETAK BARCODE KAYU
-</h2>
-
-
-<!-- =====================================================
-     AMBIL DATABASE
-     ===================================================== -->
+<h2>🪵 CETAK BARCODE KAYU</h2>
 
 <button
-  class="btnAmbil"
-  onclick="ambilDatabase()"
->
-
-🔄 AMBIL DATA REGISTER
-
+    class="btnAmbil"
+    onclick="ambilDatabase()">
+    🔄 AMBIL DATA REGISTER
 </button>
-
-
-<!-- =====================================================
-     FILTER
-     ===================================================== -->
-
-<div class="judul">
-
-🔎 FILTER BARCODE
-
-</div>
-
 
 <div class="filter">
 
+<input
+    id="filterRegister"
+    placeholder="Cari nomor register">
 
 <input
-  id="filterRegister"
-  type="text"
-  placeholder="Nomor register..."
->
-
-
-<input
-  id="filterTumpuk"
-  type="text"
-  placeholder="Nomor tumpuk..."
->
-
+    id="filterTumpuk"
+    placeholder="Cari nomor tumpuk">
 
 </div>
 
-
-<div class="tombol">
-
+<div>
 
 <button
-  class="btnFilter"
-  onclick="filterData()"
->
-
-🔎 FILTER
-
+    class="btnFilter"
+    onclick="filterData()">
+    🔎 FILTER
 </button>
-
 
 <button
-  class="btnSemua"
-  onclick="tampilkanSemua()"
->
-
-🔄 TAMPILKAN SEMUA
-
+    class="btnSemua"
+    onclick="tampilkanSemua()">
+    🔄 SEMUA
 </button>
-
 
 <button
-  class="btnPilih"
-  onclick="pilihHasilFilter()"
->
-
-☑️ PILIH HASIL FILTER
-
+    class="btnPilih"
+    onclick="pilihFilter()">
+    ☑️ PILIH HASIL FILTER
 </button>
-
 
 <button
-  class="btnBatal"
-  onclick="batalHasilFilter()"
->
-
-❌ BATAL HASIL FILTER
-
+    class="btnBatal"
+    onclick="batalFilter()">
+    ❌ BATAL HASIL FILTER
 </button>
-
 
 <button
-  class="btnPilih"
-  onclick="pilihSemua()"
->
-
-☑️ PILIH SEMUA
-
+    class="btnPilih"
+    onclick="pilihSemua()">
+    ☑️ PILIH SEMUA
 </button>
-
 
 <button
-  class="btnBatal"
-  onclick="batalSemua()"
->
-
-❌ BATAL SEMUA
-
+    class="btnBatal"
+    onclick="batalSemua()">
+    ❌ BATAL SEMUA
 </button>
-
 
 </div>
 
-
-<!-- =====================================================
-     PENGATURAN
-     ===================================================== -->
-
-<div class="judul">
-
-⚙️ PENGATURAN CETAK
-
-</div>
-
-
-<div class="pengaturan">
-
-
-<div class="kotak">
-
-<label>
-Lebar barcode (cm)
-</label>
-
-<input
-  id="lebar"
-  type="number"
-  value="5"
-  min="1"
-  step="0.1"
->
-
-</div>
-
-
-<div class="kotak">
-
-<label>
-Tinggi barcode (cm)
-</label>
-
-<input
-  id="tinggi"
-  type="number"
-  value="2"
-  min="1"
-  step="0.1"
-
->
-
-</div>
-
-
-<div class="kotak">
-
-<label>
-Kertas PDF
-</label>
-
-<select id="kertas">
-
-<option value="a4">
-A4
-</option>
-
-<option value="a3">
-A3
-</option>
-
-<option value="letter">
-Letter
-</option>
-
-</select>
-
-</div>
-
-
-</div>
-
-
-<!-- =====================================================
-     TOMBOL PDF
-     ===================================================== -->
-
-<div class="tombol">
-
-
 <button
-  class="btnPDFPilihan"
-  onclick="downloadPDFPilihan()"
->
-
-📄 DOWNLOAD PDF PILIHAN
-
+    class="btnDownload"
+    onclick="downloadSVG()">
+    📥 DOWNLOAD MASTER SVG
 </button>
-
-
-<button
-  class="btnPDF"
-  onclick="downloadPDFSemua()"
->
-
-📦 DOWNLOAD PDF SEMUA
-
-</button>
-
-
-</div>
-
-
-<!-- =====================================================
-     STATUS
-     ===================================================== -->
 
 <div class="status">
 
-
 <div id="status">
-
 Belum mengambil database
-
 </div>
-
 
 <div id="jumlah">
-
-Jumlah database: 0
-
+Jumlah barcode: 0
 </div>
 
-
-<div id="hasilFilter">
-
-Hasil filter: 0
-
-</div>
-
-
-<div id="jumlahDipilih">
-
+<div id="dipilih">
 Dipilih: 0
+</div>
+
+</div>
 
 </div>
 
 
-</div>
-
-
-</div>
-
-
-<!-- =====================================================
-     PREVIEW
-     ===================================================== -->
-
-<div id="hasil">
-
-<div
-  id="grid"
-  class="grid"
-></div>
-
-</div>
+<div id="grid"></div>
 
 
 <script>
 
-
 /* =====================================================
-   URL APPS SCRIPT
-   ===================================================== */
+   API
+===================================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 
 /* =====================================================
-   DATA
-   ===================================================== */
+   DATABASE
+===================================================== */
 
-let database = [];
+let database=[];
 
 
 /* =====================================================
    AMBIL DATABASE
-   ===================================================== */
+===================================================== */
 
-function ambilDatabase() {
+function ambilDatabase(){
 
+    const status=
+        document.getElementById("status");
 
-  const status =
-    document.getElementById(
-      "status"
-    );
+    status.innerHTML=
+        "⏳ Mengambil DATABASE...";
 
+    const callback=
+        "db_"+Date.now();
 
-  const grid =
-    document.getElementById(
-      "grid"
-    );
+    window[callback]=function(hasil){
 
+        if(!hasil || hasil.status!=="success"){
 
-  status.innerHTML =
-    "⏳ Mengambil DATABASE...";
+            status.innerHTML=
+                "❌ Gagal mengambil DATABASE";
 
-
-  grid.innerHTML =
-    "";
-
-
-  database = [];
-
-
-  const callbackName =
-    "database_" +
-    Date.now();
-
-
-  window[callbackName] =
-    function(hasil) {
-
-
-      if (
-        !hasil ||
-        hasil.status !== "success"
-      ) {
-
-        status.innerHTML =
-          "❌ Gagal mengambil DATABASE";
-
-        bersihkan();
-
-        return;
-
-      }
-
-
-      const data =
-        hasil.data || [];
-
-
-      if (
-        !Array.isArray(data)
-      ) {
-
-        status.innerHTML =
-          "❌ Format DATABASE tidak sesuai";
-
-        bersihkan();
-
-        return;
-
-      }
-
-
-      data.forEach(
-
-        function(item) {
-
-
-          const register =
-            String(
-              item.register || ""
-            ).trim();
-
-
-          const tumpuk =
-            String(
-              item.tumpuk || ""
-            ).trim();
-
-
-          if (!register) {
-
+            bersihkan();
             return;
-
-          }
-
-
-          database.push({
-
-            register:
-              register,
-
-            tumpuk:
-              tumpuk,
-
-            dipilih:
-              true
-
-          });
-
         }
 
-      );
+        database=[];
+
+        (hasil.data||[]).forEach(item=>{
+
+            const register=
+                String(item.register||"").trim();
+
+            const tumpuk=
+                String(item.tumpuk||"").trim();
+
+            if(!register)return;
+
+            database.push({
+
+                register:register,
+
+                tumpuk:tumpuk,
+
+                dipilih:true
+
+            });
+
+        });
 
 
-      tampilkanPreview();
+        tampilkan();
 
+        status.innerHTML=
+            "✅ DATABASE berhasil diambil";
 
-      status.innerHTML =
-        "✅ DATABASE berhasil diambil";
+        updateJumlah();
 
-
-      updateJumlah();
-
-
-      bersihkan();
-
+        bersihkan();
     };
 
 
-  const script =
-    document.createElement(
-      "script"
-    );
+    const script=
+        document.createElement("script");
 
+    script.src=
+        API_URL+
+        "?getDatabase=1"+
+        "&callback="+callback;
 
-  script.src =
-    API_URL +
-    "?getDatabase=1" +
-    "&callback=" +
-    callbackName;
+    script.onerror=function(){
 
+        status.innerHTML=
+            "❌ Gagal menghubungi DATABASE";
 
-  script.onerror =
-    function() {
-
-      status.innerHTML =
-        "❌ Gagal menghubungi DATABASE";
-
-      bersihkan();
-
+        bersihkan();
     };
 
-
-  document.body.appendChild(
-    script
-  );
+    document.body.appendChild(script);
 
 
-  function bersihkan() {
+    function bersihkan(){
 
-    delete window[
-      callbackName
-    ];
+        delete window[callback];
 
-    if (script) {
-
-      script.remove();
+        script.remove();
 
     }
-
-  }
-
 }
 
 
 /* =====================================================
-   TAMPILKAN PREVIEW
-   ===================================================== */
+   TAMPILKAN
+===================================================== */
 
-function tampilkanPreview() {
+function tampilkan(){
 
+    const grid=
+        document.getElementById("grid");
 
-  const grid =
-    document.getElementById(
-      "grid"
-    );
-
-
-  grid.innerHTML =
-    "";
+    grid.innerHTML="";
 
 
-  database.forEach(
+    database.forEach((data,index)=>{
 
-    function(data, index) {
+        const item=
+            document.createElement("div");
+
+        item.className="item";
+
+        item.dataset.index=index;
+
+        item.dataset.register=
+            data.register.toLowerCase();
+
+        item.dataset.tumpuk=
+            data.tumpuk.toLowerCase();
 
 
-      const item =
-        document.createElement(
-          "div"
+        const check=
+            document.createElement("input");
+
+        check.type="checkbox";
+
+        check.checked=data.dipilih;
+
+        check.onchange=function(){
+
+            data.dipilih=
+                this.checked;
+
+            updateJumlah();
+
+        };
+
+
+        item.appendChild(check);
+
+
+        const svg=
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "svg"
+            );
+
+
+        item.appendChild(svg);
+
+
+        JsBarcode(
+            svg,
+            data.register,
+            {
+                format:"CODE128",
+                width:2,
+                height:55,
+                displayValue:false,
+                margin:3
+            }
         );
 
 
-      item.className =
-        "item";
+        const info=
+            document.createElement("div");
 
+        info.className="info";
 
-      item.dataset.index =
-        index;
 
+        const reg=
+            document.createElement("span");
 
-      item.dataset.register =
-        data.register
-          .toLowerCase();
+        reg.textContent=
+            data.register;
 
 
-      item.dataset.tumpuk =
-        data.tumpuk
-          .toLowerCase();
+        const tup=
+            document.createElement("span");
 
+        tup.textContent=
+            data.tumpuk;
 
-      const checkbox =
-        document.createElement(
-          "input"
-        );
 
+        info.appendChild(reg);
+        info.appendChild(tup);
 
-      checkbox.type =
-        "checkbox";
+        item.appendChild(info);
 
+        grid.appendChild(item);
 
-      checkbox.checked =
-        data.dipilih;
-
-
-      checkbox.addEventListener(
-
-        "change",
-
-        function() {
-
-          data.dipilih =
-            this.checked;
-
-
-          item.classList.toggle(
-            "tidakDipilih",
-            !this.checked
-          );
-
-
-          updateJumlah();
-
-        }
-
-      );
-
-
-      item.appendChild(
-        checkbox
-      );
-
-
-      const svg =
-        document.createElementNS(
-
-          "http://www.w3.org/2000/svg",
-
-          "svg"
-
-        );
-
-
-      item.appendChild(
-        svg
-      );
-
-
-      JsBarcode(
-
-        svg,
-
-        data.register,
-
-        {
-
-          format:
-            "CODE128",
-
-          width:
-            2,
-
-          height:
-            55,
-
-          displayValue:
-            false,
-
-          margin:
-            3
-
-        }
-
-      );
-
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-
-      info.className =
-        "info";
-
-
-      const reg =
-        document.createElement(
-          "span"
-        );
-
-
-      reg.textContent =
-        data.register;
-
-
-      const tup =
-        document.createElement(
-          "span"
-        );
-
-
-      tup.textContent =
-        data.tumpuk;
-
-
-      info.appendChild(
-        reg
-      );
-
-
-      info.appendChild(
-        tup
-      );
-
-
-      item.appendChild(
-        info
-      );
-
-
-      grid.appendChild(
-        item
-      );
-
-    }
-
-  );
-
-
-  updateJumlah();
+    });
 
 }
 
 
 /* =====================================================
    FILTER
-   ===================================================== */
+===================================================== */
 
-function filterData() {
+function filterData(){
+
+    const register=
+        document
+        .getElementById("filterRegister")
+        .value
+        .trim()
+        .toLowerCase();
 
 
-  const register =
+    const tumpuk=
+        document
+        .getElementById("filterTumpuk")
+        .value
+        .trim()
+        .toLowerCase();
+
+
     document
-      .getElementById(
-        "filterRegister"
-      )
-      .value
-      .trim()
-      .toLowerCase();
+    .querySelectorAll(".item")
+    .forEach(item=>{
+
+        const cocokRegister=
+            !register ||
+            item.dataset.register.includes(register);
 
 
-  const tumpuk =
-    document
-      .getElementById(
-        "filterTumpuk"
-      )
-      .value
-      .trim()
-      .toLowerCase();
+        /*
+         * PENTING:
+         *
+         * TUMPUK HARUS SAMA PERSIS
+         *
+         * 1  -> tampil
+         * 11 -> tidak
+         * 12 -> tidak
+         * 13 -> tidak
+         */
+
+        const cocokTumpuk=
+            !tumpuk ||
+            item.dataset.tumpuk===tumpuk;
 
 
-  const items =
-    document.querySelectorAll(
-      ".item"
-    );
+        if(
+            cocokRegister &&
+            cocokTumpuk
+        ){
 
+            item.classList.remove("hide");
 
-  let jumlah =
-    0;
+        }else{
 
+            item.classList.add("hide");
 
-  items.forEach(
+        }
 
-    function(item) {
-
-
-      const nilaiRegister =
-        item.dataset.register;
-
-
-      const nilaiTumpuk =
-        item.dataset.tumpuk;
-
-
-      /*
-       * REGISTER:
-       * boleh mengandung teks
-       */
-
-      const cocokRegister =
-        register === "" ||
-        nilaiRegister.includes(
-          register
-        );
-
-
-      /*
-       * TUMPUK:
-       * HARUS SAMA PERSIS
-       *
-       * Jadi:
-       *
-       * 1  = masuk
-       * 11 = tidak
-       * 12 = tidak
-       * 13 = tidak
-       */
-
-      const cocokTumpuk =
-        tumpuk === "" ||
-        nilaiTumpuk === tumpuk;
-
-
-      const cocok =
-        cocokRegister &&
-        cocokTumpuk;
-
-
-      if (cocok) {
-
-        item.style.display =
-          "";
-
-        jumlah++;
-
-      } else {
-
-        item.style.display =
-          "none";
-
-      }
-
-    }
-
-  );
-
-
-  document.getElementById(
-    "hasilFilter"
-  ).innerHTML =
-    "Hasil filter: " +
-    jumlah;
+    });
 
 }
 
 
 /* =====================================================
-   TAMPILKAN SEMUA
-   ===================================================== */
+   SEMUA
+===================================================== */
 
-function tampilkanSemua() {
+function tampilkanSemua(){
 
+    document.getElementById(
+        "filterRegister"
+    ).value="";
 
-  document.getElementById(
-    "filterRegister"
-  ).value =
-    "";
-
-
-  document.getElementById(
-    "filterTumpuk"
-  ).value =
-    "";
+    document.getElementById(
+        "filterTumpuk"
+    ).value="";
 
 
-  document
-    .querySelectorAll(
-      ".item"
-    )
-    .forEach(
+    document
+    .querySelectorAll(".item")
+    .forEach(item=>{
 
-      function(item) {
+        item.classList.remove("hide");
 
-        item.style.display =
-          "";
-
-      }
-
-    );
-
-
-  document.getElementById(
-    "hasilFilter"
-  ).innerHTML =
-    "Hasil filter: " +
-    database.length;
+    });
 
 }
 
 
 /* =====================================================
    PILIH HASIL FILTER
-   ===================================================== */
+===================================================== */
 
-function pilihHasilFilter() {
+function pilihFilter(){
 
+    document
+    .querySelectorAll(".item")
+    .forEach(item=>{
 
-  document
-    .querySelectorAll(
-      ".item"
-    )
-    .forEach(
-
-      function(item) {
-
-
-        if (
-          item.style.display ===
-          "none"
-        ) {
-
-          return;
-
-        }
+        if(
+            item.classList.contains("hide")
+        )return;
 
 
-        const index =
-          Number(
-            item.dataset.index
-          );
+        const index=
+            Number(item.dataset.index);
 
 
-        database[index]
-          .dipilih =
-          true;
-
+        database[index].dipilih=true;
 
         item.querySelector(
-          "input"
-        ).checked =
-          true;
+            "input"
+        ).checked=true;
 
+    });
 
-        item.classList.remove(
-          "tidakDipilih"
-        );
-
-      }
-
-    );
-
-
-  updateJumlah();
-
+    updateJumlah();
 }
 
 
 /* =====================================================
    BATAL HASIL FILTER
-   ===================================================== */
+===================================================== */
 
-function batalHasilFilter() {
+function batalFilter(){
 
+    document
+    .querySelectorAll(".item")
+    .forEach(item=>{
 
-  document
-    .querySelectorAll(
-      ".item"
-    )
-    .forEach(
-
-      function(item) {
-
-
-        if (
-          item.style.display ===
-          "none"
-        ) {
-
-          return;
-
-        }
+        if(
+            item.classList.contains("hide")
+        )return;
 
 
-        const index =
-          Number(
-            item.dataset.index
-          );
+        const index=
+            Number(item.dataset.index);
 
 
-        database[index]
-          .dipilih =
-          false;
-
+        database[index].dipilih=false;
 
         item.querySelector(
-          "input"
-        ).checked =
-          false;
+            "input"
+        ).checked=false;
 
+    });
 
-        item.classList.add(
-          "tidakDipilih"
-        );
-
-      }
-
-    );
-
-
-  updateJumlah();
-
+    updateJumlah();
 }
 
 
 /* =====================================================
    PILIH SEMUA
-   ===================================================== */
+===================================================== */
 
-function pilihSemua() {
+function pilihSemua(){
 
-
-  database.forEach(
-
-    function(data) {
-
-      data.dipilih =
-        true;
-
-    }
-
-  );
+    database.forEach(data=>{
+        data.dipilih=true;
+    });
 
 
-  document
-    .querySelectorAll(
-      ".item"
-    )
-    .forEach(
-
-      function(item) {
+    document
+    .querySelectorAll(".item")
+    .forEach(item=>{
 
         item.querySelector(
-          "input"
-        ).checked =
-          true;
+            "input"
+        ).checked=true;
+
+    });
 
 
-        item.classList.remove(
-          "tidakDipilih"
-        );
-
-      }
-
-    );
-
-
-  updateJumlah();
-
+    updateJumlah();
 }
 
 
 /* =====================================================
    BATAL SEMUA
-   ===================================================== */
+===================================================== */
 
-function batalSemua() {
+function batalSemua(){
 
-
-  database.forEach(
-
-    function(data) {
-
-      data.dipilih =
-        false;
-
-    }
-
-  );
+    database.forEach(data=>{
+        data.dipilih=false;
+    });
 
 
-  document
-    .querySelectorAll(
-      ".item"
-    )
-    .forEach(
-
-      function(item) {
+    document
+    .querySelectorAll(".item")
+    .forEach(item=>{
 
         item.querySelector(
-          "input"
-        ).checked =
-          false;
+            "input"
+        ).checked=false;
+
+    });
 
 
-        item.classList.add(
-          "tidakDipilih"
-        );
-
-      }
-
-    );
-
-
-  updateJumlah();
-
+    updateJumlah();
 }
 
 
 /* =====================================================
    JUMLAH
-   ===================================================== */
+===================================================== */
 
-function updateJumlah() {
+function updateJumlah(){
 
-
-  const jumlah =
-    database.length;
-
-
-  const dipilih =
-    database.filter(
-
-      function(data) {
-
-        return data.dipilih;
-
-      }
-
-    ).length;
-
-
-  document.getElementById(
-    "jumlah"
-  ).innerHTML =
-    "Jumlah database: " +
-    jumlah;
-
-
-  document.getElementById(
-    "jumlahDipilih"
-  ).innerHTML =
-    "Dipilih: " +
-    dipilih;
-
-}
-
-
-/* =====================================================
-   DATA DIPILIH
-   ===================================================== */
-
-function dataDipilih() {
-
-  return database.filter(
-
-    function(data) {
-
-      return data.dipilih;
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   BUAT SVG BARCODE
-   ===================================================== */
-
-function buatSVGBarcode(
-  register
-) {
-
-
-  const svg =
-    document.createElementNS(
-
-      "http://www.w3.org/2000/svg",
-
-      "svg"
-
-    );
-
-
-  /*
-   * Ukuran dasar
-   */
-
-  svg.setAttribute(
-    "width",
-    "1000"
-  );
-
-
-  svg.setAttribute(
-    "height",
-    "500"
-  );
-
-
-  svg.setAttribute(
-    "viewBox",
-    "0 0 1000 500"
-  );
-
-
-  /*
-   * Barcode
-   */
-
-  JsBarcode(
-
-    svg,
-
-    register,
-
-    {
-
-      format:
-        "CODE128",
-
-      width:
-        2,
-
-      height:
-        300,
-
-      displayValue:
-        false,
-
-      margin:
-        0
-
-    }
-
-  );
-
-
-  return svg;
-
-}
-
-
-/* =====================================================
-   BUAT LABEL PDF
-   ===================================================== */
-
-async function buatLabelPDF(
-
-  doc,
-
-  data,
-
-  x,
-
-  y,
-
-  lebar,
-
-  tinggi
-
-) {
-
-
-  /*
-   * BORDER / GARIS POTONG
-   */
-
-  doc.setDrawColor(
-    0,
-    0,
-    0
-  );
-
-
-  doc.setLineWidth(
-    0.25
-  );
-
-
-  doc.rect(
-
-    x,
-
-    y,
-
-    lebar,
-
-    tinggi
-
-  );
-
-
-  /*
-   * SVG BARCODE
-   */
-
-  const barcodeSVG =
-    buatSVGBarcode(
-      data.register
-    );
-
-
-  /*
-   * Ukuran barcode
-   * diberi ruang kiri kanan
-   */
-
-  const marginX =
-    1.5;
-
-
-  const marginTop =
-    1;
-
-
-  const barcodeWidth =
-    lebar -
-    (marginX * 2);
-
-
-  const barcodeHeight =
-    tinggi * 0.62;
-
-
-  /*
-   * Konversi SVG ke PDF
-   */
-
-  await doc.svg(
-
-    barcodeSVG,
-
-    {
-
-      x:
-        x + marginX,
-
-      y:
-        y + marginTop,
-
-      width:
-        barcodeWidth,
-
-      height:
-        barcodeHeight,
-
-      preserveAspectRatio:
-        "xMidYMid meet"
-
-    }
-
-  );
-
-
-  /*
-   * REGISTER
-   */
-
-  doc.setFont(
-    "helvetica",
-    "bold"
-  );
-
-
-  doc.setFontSize(
-    Math.max(
-      7,
-      Math.min(
-        11,
-        tinggi * 0.30
-      )
-    )
-  );
-
-
-  doc.text(
-
-    String(
-      data.register
-    ),
-
-    x +
-      (lebar / 2),
-
-    y +
-      (tinggi * 0.82),
-
-    {
-
-      align:
-        "center"
-
-    }
-
-  );
-
-
-  /*
-   * TUMPUK
-   */
-
-  doc.setFont(
-    "helvetica",
-    "normal"
-  );
-
-
-  doc.setFontSize(
-    Math.max(
-      6,
-      Math.min(
-        9,
-        tinggi * 0.22
-      )
-    )
-  );
-
-
-  doc.text(
-
-    String(
-      data.tumpuk
-    ),
-
-    x +
-      (lebar / 2),
-
-    y +
-      (tinggi * 0.96),
-
-    {
-
-      align:
-        "center"
-
-    }
-
-  );
-
-}
-
-
-/* =====================================================
-   UKURAN KERTAS
-   ===================================================== */
-
-function ukuranKertas() {
-
-
-  const jenis =
     document.getElementById(
-      "kertas"
-    ).value;
+        "jumlah"
+    ).innerHTML=
+        "Jumlah barcode: "+
+        database.length;
 
 
-  if (
-    jenis === "a3"
-  ) {
-
-    return {
-
-      nama:
-        "a3",
-
-      lebar:
-        297,
-
-      tinggi:
-        420
-
-    };
-
-  }
-
-
-  if (
-    jenis === "letter"
-  ) {
-
-    return {
-
-      nama:
-        "letter",
-
-      lebar:
-        215.9,
-
-      tinggi:
-        279.4
-
-    };
-
-  }
-
-
-  return {
-
-    nama:
-      "a4",
-
-    lebar:
-      210,
-
-    tinggi:
-      297
-
-  };
+    document.getElementById(
+        "dipilih"
+    ).innerHTML=
+        "Dipilih: "+
+        database.filter(
+            x=>x.dipilih
+        ).length;
 
 }
 
 
 /* =====================================================
-   BUAT PDF
-   ===================================================== */
+   BUAT MASTER SVG
+===================================================== */
 
-async function buatPDF(
-  daftar,
-  namaFile
-) {
+function downloadSVG(){
+
+    const daftar=
+        database.filter(
+            x=>x.dipilih
+        );
 
 
-  if (
-    daftar.length === 0
-  ) {
+    if(!daftar.length){
 
-    alert(
-      "Tidak ada barcode yang dipilih."
+        alert(
+            "Belum ada barcode yang dipilih."
+        );
+
+        return;
+    }
+
+
+    /*
+     * UKURAN SETIAP BARCODE
+     *
+     * 5 x 2 cm
+     */
+
+    const W=500;
+    const H=200;
+
+
+    /*
+     * JARAK ANTAR BARCODE
+     */
+
+    const GAP=10;
+
+
+    /*
+     * JUMLAH KOLOM
+     *
+     * Dibuat 4 supaya
+     * tidak terlalu kecil.
+     */
+
+    const COL=4;
+
+
+    /*
+     * HITUNG BARIS
+     */
+
+    const ROW=
+        Math.ceil(
+            daftar.length/COL
+        );
+
+
+    /*
+     * UKURAN KANVAS
+     */
+
+    const canvasW=
+        COL*W+
+        (COL-1)*GAP;
+
+
+    const canvasH=
+        ROW*H+
+        (ROW-1)*GAP;
+
+
+    /*
+     * SVG MASTER
+     */
+
+    const ns=
+        "http://www.w3.org/2000/svg";
+
+
+    const root=
+        document.createElementNS(
+            ns,
+            "svg"
+        );
+
+
+    root.setAttribute(
+        "xmlns",
+        ns
     );
 
-    return;
 
-  }
-
-
-  /*
-   * UKURAN BARCODE
-   */
-
-  let lebar =
-    parseFloat(
-      document.getElementById(
-        "lebar"
-      ).value
+    root.setAttribute(
+        "width",
+        canvasW
     );
 
 
-  let tinggi =
-    parseFloat(
-      document.getElementById(
-        "tinggi"
-      ).value
+    root.setAttribute(
+        "height",
+        canvasH
     );
 
 
-  if (
-    !lebar ||
-    lebar <= 0
-  ) {
-
-    lebar = 5;
-
-  }
+    root.setAttribute(
+        "viewBox",
+        `0 0 ${canvasW} ${canvasH}`
+    );
 
 
-  if (
-    !tinggi ||
-    tinggi <= 0
-  ) {
+    /*
+     * BACKGROUND PUTIH
+     */
 
-    tinggi = 2;
-
-  }
-
-
-  /*
-   * KONVERSI CM KE MM
-   */
-
-  lebar *= 10;
-
-  tinggi *= 10;
+    const bg=
+        document.createElementNS(
+            ns,
+            "rect"
+        );
 
 
-  /*
-   * KERTAS
-   */
+    bg.setAttribute("x",0);
+    bg.setAttribute("y",0);
+    bg.setAttribute("width",canvasW);
+    bg.setAttribute("height",canvasH);
+    bg.setAttribute("fill","white");
 
-  const kertas =
-    ukuranKertas();
-
-
-  /*
-   * MARGIN KERTAS
-   */
-
-  const marginKertas =
-    8;
+    root.appendChild(bg);
 
 
-  /*
-   * JARAK ANTAR LABEL
-   */
+    /*
+     * BUAT SEMUA BARCODE
+     */
 
-  const jarak =
-    1;
-
-
-  /*
-   * BUAT PDF
-   */
-
-  const {
-    jsPDF
-  } = window.jspdf;
+    daftar.forEach((data,index)=>{
 
 
-  const doc =
-    new jsPDF({
+        const col=
+            index%COL;
 
-      orientation:
-        "portrait",
 
-      unit:
-        "mm",
+        const row=
+            Math.floor(index/COL);
 
-      format:
-        [
-          kertas.lebar,
-          kertas.tinggi
-        ],
 
-      compress:
-        true
+        const x=
+            col*(W+GAP);
+
+
+        const y=
+            row*(H+GAP);
+
+
+        /*
+         * GROUP
+         */
+
+        const group=
+            document.createElementNS(
+                ns,
+                "g"
+            );
+
+
+        group.setAttribute(
+            "transform",
+            `translate(${x},${y})`
+        );
+
+
+        /*
+         * GARIS POTONG
+         */
+
+        const border=
+            document.createElementNS(
+                ns,
+                "rect"
+            );
+
+
+        border.setAttribute(
+            "x",
+            0
+        );
+
+        border.setAttribute(
+            "y",
+            0
+        );
+
+        border.setAttribute(
+            "width",
+            W
+        );
+
+        border.setAttribute(
+            "height",
+            H
+        );
+
+        border.setAttribute(
+            "fill",
+            "white"
+        );
+
+        border.setAttribute(
+            "stroke",
+            "black"
+        );
+
+        border.setAttribute(
+            "stroke-width",
+            2
+        );
+
+
+        group.appendChild(border);
+
+
+        /*
+         * BUAT SVG BARCODE SEMENTARA
+         */
+
+        const barcode=
+            document.createElementNS(
+                ns,
+                "svg"
+            );
+
+
+        barcode.setAttribute(
+            "x",
+            25
+        );
+
+        barcode.setAttribute(
+            "y",
+            15
+        );
+
+        barcode.setAttribute(
+            "width",
+            450
+        );
+
+        barcode.setAttribute(
+            "height",
+            115
+        );
+
+
+        JsBarcode(
+            barcode,
+            data.register,
+            {
+                format:"CODE128",
+                width:2,
+                height:100,
+                displayValue:false,
+                margin:0
+            }
+        );
+
+
+        group.appendChild(barcode);
+
+
+        /*
+         * REGISTER
+         */
+
+        const reg=
+            document.createElementNS(
+                ns,
+                "text"
+            );
+
+
+        reg.setAttribute(
+            "x",
+            W/2
+        );
+
+        reg.setAttribute(
+            "y",
+            155
+        );
+
+        reg.setAttribute(
+            "text-anchor",
+            "middle"
+        );
+
+        reg.setAttribute(
+            "font-family",
+            "Arial"
+        );
+
+        reg.setAttribute(
+            "font-size",
+            25
+        );
+
+        reg.setAttribute(
+            "font-weight",
+            "bold"
+        );
+
+        reg.textContent=
+            data.register;
+
+
+        group.appendChild(reg);
+
+
+        /*
+         * TUMPUK
+         */
+
+        const tup=
+            document.createElementNS(
+                ns,
+                "text"
+            );
+
+
+        tup.setAttribute(
+            "x",
+            W/2
+        );
+
+        tup.setAttribute(
+            "y",
+            187
+        );
+
+        tup.setAttribute(
+            "text-anchor",
+            "middle"
+        );
+
+        tup.setAttribute(
+            "font-family",
+            "Arial"
+        );
+
+        tup.setAttribute(
+            "font-size",
+            20
+        );
+
+        tup.textContent=
+            data.tumpuk;
+
+
+        group.appendChild(tup);
+
+
+        root.appendChild(group);
 
     });
 
 
-  /*
-   * HITUNG KOLOM
-   */
+    /*
+     * SERIALIZE
+     */
 
-  const areaLebar =
-    kertas.lebar -
-    (marginKertas * 2);
-
-
-  const kolom =
-    Math.max(
-
-      1,
-
-      Math.floor(
-
-        (
-          areaLebar +
-          jarak
-        ) /
-
-        (
-          lebar +
-          jarak
-        )
-
-      )
-
-    );
+    const serializer=
+        new XMLSerializer();
 
 
-  /*
-   * HITUNG BARIS
-   */
-
-  const areaTinggi =
-    kertas.tinggi -
-    (marginKertas * 2);
-
-
-  const baris =
-    Math.max(
-
-      1,
-
-      Math.floor(
-
-        (
-          areaTinggi +
-          jarak
-        ) /
-
-        (
-          tinggi +
-          jarak
-        )
-
-      )
-
-    );
-
-
-  /*
-   * JUMLAH LABEL PER HALAMAN
-   */
-
-  const perHalaman =
-    kolom *
-    baris;
-
-
-  /*
-   * TENGAHKAN GRID
-   */
-
-  const gridLebar =
-    (
-      kolom * lebar
-    ) +
-
-    (
-      (kolom - 1) *
-      jarak
-    );
-
-
-  const gridTinggi =
-    (
-      baris * tinggi
-    ) +
-
-    (
-      (baris - 1) *
-      jarak
-    );
-
-
-  const offsetX =
-    (
-      kertas.lebar -
-      gridLebar
-    ) / 2;
-
-
-  const offsetY =
-    (
-      kertas.tinggi -
-      gridTinggi
-    ) / 2;
-
-
-  /*
-   * PROSES BARCODE
-   */
-
-  for (
-    let i = 0;
-    i < daftar.length;
-    i++
-  ) {
+    let source=
+        serializer.serializeToString(root);
 
 
     /*
-     * Halaman baru
+     * HEADER XML
      */
 
-    if (
-      i > 0 &&
-      i % perHalaman === 0
-    ) {
-
-      doc.addPage();
-
-    }
-
-
-    const posisi =
-      i %
-      perHalaman;
-
-
-    const kolomKe =
-      posisi %
-      kolom;
-
-
-    const barisKe =
-      Math.floor(
-        posisi /
-        kolom
-      );
-
-
-    const x =
-      offsetX +
-
-      kolomKe *
-      (
-        lebar +
-        jarak
-      );
-
-
-    const y =
-      offsetY +
-
-      barisKe *
-      (
-        tinggi +
-        jarak
-      );
+    source=
+        '<?xml version="1.0" encoding="UTF-8"?>\n'+
+        source;
 
 
     /*
-     * Status
+     * DOWNLOAD
      */
+
+    const blob=
+        new Blob(
+            [source],
+            {
+                type:"image/svg+xml"
+            }
+        );
+
+
+    const url=
+        URL.createObjectURL(blob);
+
+
+    const a=
+        document.createElement("a");
+
+
+    a.href=url;
+
+    a.download=
+        "MASTER-BARCODE-KAYU.svg";
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+    URL.revokeObjectURL(url);
+
 
     document.getElementById(
-      "status"
-    ).innerHTML =
-
-      "⏳ Membuat PDF... " +
-
-      (
-        i + 1
-      ) +
-
-      " / " +
-
-      daftar.length;
-
-
-    /*
-     * Buat label
-     */
-
-    await buatLabelPDF(
-
-      doc,
-
-      daftar[i],
-
-      x,
-
-      y,
-
-      lebar,
-
-      tinggi
-
-    );
-
-
-    /*
-     * Beri kesempatan
-     * browser bernapas
-     */
-
-    if (
-      i % 20 === 0
-    ) {
-
-      await new Promise(
-
-        function(resolve) {
-
-          setTimeout(
-            resolve,
-            0
-          );
-
-        }
-
-      );
-
-    }
-
-  }
-
-
-  /*
-   * DOWNLOAD
-   */
-
-  doc.save(
-    namaFile
-  );
-
-
-  document.getElementById(
-    "status"
-  ).innerHTML =
-
-    "✅ PDF berhasil dibuat";
-
+        "status"
+    ).innerHTML=
+        "✅ MASTER SVG berhasil dibuat — "+
+        daftar.length+
+        " barcode";
 
 }
-
-
-/* =====================================================
-   DOWNLOAD PDF SEMUA
-   ===================================================== */
-
-async function downloadPDFSemua() {
-
-
-  if (
-    database.length === 0
-  ) {
-
-    alert(
-      "DATABASE belum diambil."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * SEMUA DATABASE
-   */
-
-  const daftar =
-    database.slice();
-
-
-  await buatPDF(
-
-    daftar,
-
-    "BARCODE-KAYU-SEMUA.pdf"
-
-  );
-
-}
-
-
-/* =====================================================
-   DOWNLOAD PDF PILIHAN
-   ===================================================== */
-
-async function downloadPDFPilihan() {
-
-
-  const daftar =
-    dataDipilih();
-
-
-  if (
-    daftar.length === 0
-  ) {
-
-    alert(
-      "Belum ada barcode yang dipilih."
-    );
-
-    return;
-
-  }
-
-
-  await buatPDF(
-
-    daftar,
-
-    "BARCODE-KAYU-PILIHAN.pdf"
-
-  );
-
-}
-
-
-/* =====================================================
-   FILTER OTOMATIS SAAT ENTER
-   ===================================================== */
-
-document
-  .getElementById(
-    "filterTumpuk"
-  )
-  .addEventListener(
-
-    "keydown",
-
-    function(event) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        filterData();
-
-      }
-
-    }
-
-  );
-
-
-document
-  .getElementById(
-    "filterRegister"
-  )
-  .addEventListener(
-
-    "keydown",
-
-    function(event) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        filterData();
-
-      }
-
-    }
-
-  );
 
 </script>
 
-
 </body>
-
 </html>
