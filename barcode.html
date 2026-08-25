@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
@@ -24,6 +25,7 @@ body{
     background:#f2f2f2;
 }
 
+
 /* =====================================================
    PANEL
 ===================================================== */
@@ -40,6 +42,7 @@ h2{
     text-align:center;
     margin-top:0;
 }
+
 
 /* =====================================================
    BUTTON
@@ -87,6 +90,7 @@ button{
     color:white;
 }
 
+
 /* =====================================================
    FILTER
 ===================================================== */
@@ -106,6 +110,7 @@ button{
     font-size:15px;
 }
 
+
 /* =====================================================
    STATUS
 ===================================================== */
@@ -118,6 +123,7 @@ button{
     text-align:center;
     line-height:1.8;
 }
+
 
 /* =====================================================
    PREVIEW WEB
@@ -166,6 +172,7 @@ button{
     font-size:14px;
 }
 
+
 /* =====================================================
    MOBILE
 ===================================================== */
@@ -186,13 +193,16 @@ button{
 
 </head>
 
+
 <body>
+
 
 <div class="kontrol">
 
 <h2>
 🪵 CETAK BARCODE KAYU
 </h2>
+
 
 <button
     class="btnAmbil"
@@ -201,6 +211,7 @@ button{
 🔄 AMBIL DATA REGISTER
 
 </button>
+
 
 <div class="filter">
 
@@ -216,6 +227,7 @@ button{
 
 </div>
 
+
 <div>
 
 <button
@@ -226,6 +238,7 @@ button{
 
 </button>
 
+
 <button
     class="btnSemua"
     onclick="tampilkanSemua()">
@@ -233,6 +246,7 @@ button{
 🔄 TAMPILKAN SEMUA
 
 </button>
+
 
 <button
     class="btnPilih"
@@ -242,6 +256,7 @@ button{
 
 </button>
 
+
 <button
     class="btnBatal"
     onclick="batalHasilFilter()">
@@ -250,6 +265,7 @@ button{
 
 </button>
 
+
 <button
     class="btnPilih"
     onclick="pilihSemua()">
@@ -257,6 +273,7 @@ button{
 ☑️ PILIH SEMUA
 
 </button>
+
 
 <button
     class="btnBatal"
@@ -268,6 +285,7 @@ button{
 
 </div>
 
+
 <button
     class="btnDownload"
     onclick="downloadSVG()">
@@ -275,6 +293,7 @@ button{
 📥 DOWNLOAD MASTER SVG
 
 </button>
+
 
 <div class="status">
 
@@ -294,10 +313,12 @@ Dipilih: 0
 
 </div>
 
+
 <div id="grid"></div>
 
 
 <script>
+
 
 /* =====================================================
    API DATABASE
@@ -323,6 +344,7 @@ function ambilDatabase(){
     const status =
         document.getElementById("status");
 
+
     status.innerHTML =
         "⏳ Mengambil DATABASE...";
 
@@ -345,6 +367,7 @@ function ambilDatabase(){
                 bersihkan();
 
                 return;
+
             }
 
 
@@ -370,7 +393,9 @@ function ambilDatabase(){
 
 
                 if(!register){
+
                     return;
+
                 }
 
 
@@ -418,6 +443,7 @@ function ambilDatabase(){
             status.innerHTML =
                 "❌ Gagal menghubungi DATABASE";
 
+
             bersihkan();
 
         };
@@ -436,7 +462,9 @@ function ambilDatabase(){
 
 
         if(script){
+
             script.remove();
+
         }
 
     }
@@ -506,6 +534,7 @@ function tampilkan(){
                     data.dipilih =
                         this.checked;
 
+
                     updateJumlah();
 
                 };
@@ -517,7 +546,7 @@ function tampilkan(){
 
 
             /* =================================================
-               SVG ASLI WEB
+               SVG BARCODE WEB
             ================================================= */
 
             const svg =
@@ -742,7 +771,9 @@ function pilihHasilFilter(){
                 "hide"
             )
         ){
+
             return;
+
         }
 
 
@@ -782,7 +813,9 @@ function batalHasilFilter(){
                 "hide"
             )
         ){
+
             return;
+
         }
 
 
@@ -906,7 +939,7 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD SVG DARI SVG WEB
+   DOWNLOAD MASTER SVG
 ===================================================== */
 
 function downloadSVG(){
@@ -921,10 +954,11 @@ function downloadSVG(){
 
 
     /*
-     * Ambil HANYA barcode yang dicentang.
+     * Ambil barcode yang dicentang.
      *
-     * SVG yang dipakai adalah SVG
-     * yang sudah tampil di WEB.
+     * SVG BARCODE DIAMBIL LANGSUNG
+     * DARI BARCODE YANG SUDAH TAMPIL
+     * DI WEB.
      */
 
     semuaItem.forEach(
@@ -964,33 +998,40 @@ function downloadSVG(){
 
     /* =================================================
        UKURAN LABEL
-       
+
        50 x 25 mm
     ================================================= */
 
-    const LABEL_W = 50;
-    const LABEL_H = 25;
+    const LABEL_W =
+        50;
 
 
-    /*
-       Jarak antar label
-    */
-
-    const GAP = 2;
+    const LABEL_H =
+        25;
 
 
-    /*
-       Margin master
-    */
+    /* =================================================
+       JARAK ANTAR LABEL
+    ================================================= */
 
-    const MARGIN = 10;
+    const GAP =
+        2;
 
 
-    /*
-       4 kolom
-    */
+    /* =================================================
+       MARGIN
+    ================================================= */
 
-    const COL = 4;
+    const MARGIN =
+        10;
+
+
+    /* =================================================
+       KOLOM
+    ================================================= */
+
+    const COL =
+        4;
 
 
     const ROW =
@@ -999,23 +1040,31 @@ function downloadSVG(){
         );
 
 
+    /* =================================================
+       KANVAS
+    ================================================= */
+
     const CANVAS_W =
         MARGIN * 2 +
         (
-            COL * LABEL_W
+            COL *
+            LABEL_W
         ) +
         (
-            (COL - 1) * GAP
+            (COL - 1) *
+            GAP
         );
 
 
     const CANVAS_H =
         MARGIN * 2 +
         (
-            ROW * LABEL_H
+            ROW *
+            LABEL_H
         ) +
         (
-            (ROW - 1) * GAP
+            (ROW - 1) *
+            GAP
         );
 
 
@@ -1023,9 +1072,9 @@ function downloadSVG(){
         "http://www.w3.org/2000/svg";
 
 
-    /*
+    /* =================================================
        SVG MASTER
-    */
+    ================================================= */
 
     const root =
         document.createElementNS(
@@ -1061,9 +1110,9 @@ function downloadSVG(){
     );
 
 
-    /*
+    /* =================================================
        BACKGROUND
-    */
+    ================================================= */
 
     const background =
         document.createElementNS(
@@ -1074,13 +1123,13 @@ function downloadSVG(){
 
     background.setAttribute(
         "x",
-        "0"
+        0
     );
 
 
     background.setAttribute(
         "y",
-        "0"
+        0
     );
 
 
@@ -1108,7 +1157,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SALIN SETIAP BARCODE WEB
+       BUAT LABEL
     ================================================= */
 
     daftar.forEach(
@@ -1142,9 +1191,9 @@ function downloadSVG(){
                 );
 
 
-            /*
-             * GROUP LABEL
-             */
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
 
             const group =
                 document.createElementNS(
@@ -1163,9 +1212,9 @@ function downloadSVG(){
             );
 
 
-            /*
-             * GARIS POTONG
-             */
+            /* =================================================
+               KOTAK / GARIS POTONG
+            ================================================= */
 
             const border =
                 document.createElementNS(
@@ -1176,13 +1225,13 @@ function downloadSVG(){
 
             border.setAttribute(
                 "x",
-                "0"
+                0
             );
 
 
             border.setAttribute(
                 "y",
-                "0"
+                0
             );
 
 
@@ -1221,11 +1270,9 @@ function downloadSVG(){
             );
 
 
-            /*
-             * =================================================
-             * AMBIL SVG BARCODE ASLI DARI WEB
-             * =================================================
-             */
+            /* =================================================
+               AMBIL SVG BARCODE ASLI DARI WEB
+            ================================================= */
 
             const svgWeb =
                 item.querySelector(
@@ -1235,22 +1282,30 @@ function downloadSVG(){
 
             if(svgWeb){
 
+                /*
+                 * CLONE SVG ASLI WEB
+                 */
+
                 const clone =
                     svgWeb.cloneNode(
                         true
                     );
 
 
+                /* =================================================
+                   BARCODE DIPERBESAR
+                ================================================= */
+
+                const BARCODE_W =
+                    47;
+
+
+                const BARCODE_H =
+                    17;
+
+
                 /*
-                 * Ukuran area barcode
-                 */
-
-                const BARCODE_W = 44;
-                const BARCODE_H = 14;
-
-
-                /*
-                 * TENGAH HORIZONTAL
+                 * POSISI TENGAH HORIZONTAL
                  */
 
                 const barcodeX =
@@ -1261,19 +1316,12 @@ function downloadSVG(){
 
 
                 /*
-                 * Posisi atas
+                 * POSISI ATAS
                  */
 
                 const barcodeY =
-                    2;
+                    1;
 
-
-                /*
-                 * Karena SVG asli dari web
-                 * sudah memiliki viewBox,
-                 * kita tinggal masukkan sebagai
-                 * elemen SVG.
-                 */
 
                 clone.setAttribute(
                     "x",
@@ -1305,12 +1353,6 @@ function downloadSVG(){
                 );
 
 
-                /*
-                 * Hilangkan style CSS web
-                 * agar ukuran master tidak
-                 * dipengaruhi halaman web.
-                 */
-
                 clone.removeAttribute(
                     "style"
                 );
@@ -1323,11 +1365,9 @@ function downloadSVG(){
             }
 
 
-            /*
-             * =================================================
-             * INFO REGISTER + TUMPUK
-             * =================================================
-             */
+            /* =================================================
+               AMBIL ANGKA DARI WEB
+            ================================================= */
 
             const info =
                 item.querySelector(
@@ -1337,6 +1377,7 @@ function downloadSVG(){
 
             let registerText =
                 "";
+
 
             let tumpukText =
                 "";
@@ -1351,22 +1392,28 @@ function downloadSVG(){
 
 
                 if(teks[0]){
+
                     registerText =
                         teks[0].textContent;
+
                 }
 
 
                 if(teks[1]){
+
                     tumpukText =
                         teks[1].textContent;
+
                 }
 
             }
 
 
-            /*
-             * GROUP TEKS
-             */
+            /* =================================================
+               GROUP ANGKA
+               
+               TENGAH LABEL
+            ================================================= */
 
             const textGroup =
                 document.createElementNS(
@@ -1381,9 +1428,9 @@ function downloadSVG(){
             );
 
 
-            /*
-             * REGISTER
-             */
+            /* =================================================
+               REGISTER
+            ================================================= */
 
             const register =
                 document.createElementNS(
@@ -1394,7 +1441,7 @@ function downloadSVG(){
 
             register.setAttribute(
                 "x",
-                "-1.5"
+                "-2"
             );
 
 
@@ -1443,9 +1490,9 @@ function downloadSVG(){
             );
 
 
-            /*
-             * TUMPUK
-             */
+            /* =================================================
+               TUMPUK
+            ================================================= */
 
             const tumpuk =
                 document.createElementNS(
@@ -1456,7 +1503,7 @@ function downloadSVG(){
 
             tumpuk.setAttribute(
                 "x",
-                "1.5"
+                "2"
             );
 
 
@@ -1505,14 +1552,18 @@ function downloadSVG(){
             );
 
 
+            /* =================================================
+               MASUKKAN ANGKA
+            ================================================= */
+
             group.appendChild(
                 textGroup
             );
 
 
-            /*
-             * MASUKKAN KE MASTER
-             */
+            /* =================================================
+               MASUKKAN LABEL KE MASTER
+            ================================================= */
 
             root.appendChild(
                 group
@@ -1523,7 +1574,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALIZE
+       SERIALIZE SVG
     ================================================= */
 
     const serializer =
