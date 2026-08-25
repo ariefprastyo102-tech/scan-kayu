@@ -130,7 +130,7 @@ button {
 
   width: 100%;
 
-  padding: 12px 38px 12px 12px;
+  padding: 12px;
 
   border:
     1px solid #aaa;
@@ -138,29 +138,6 @@ button {
   border-radius: 8px;
 
   font-size: 15px;
-
-}
-
-
-.clearFilter {
-
-  position: absolute;
-
-  right: 5px;
-
-  top: 5px;
-
-  width: 30px;
-
-  height: 30px;
-
-  padding: 0;
-
-  border-radius: 6px;
-
-  background: #eee;
-
-  color: #555;
 
 }
 
@@ -182,11 +159,23 @@ button {
 }
 
 
+.tombolFilter button {
+
+  color: white;
+
+}
+
+
+.btnFilter {
+
+  background: #1976d2;
+
+}
+
+
 #semua {
 
   background: #607d8b;
-
-  color: white;
 
 }
 
@@ -195,16 +184,12 @@ button {
 
   background: #388e3c;
 
-  color: white;
-
 }
 
 
 #batalFilter {
 
   background: #d32f2f;
-
-  color: white;
 
 }
 
@@ -213,16 +198,12 @@ button {
 
   background: #455a64;
 
-  color: white;
-
 }
 
 
 #batalSemua {
 
   background: #757575;
-
-  color: white;
 
 }
 
@@ -231,16 +212,12 @@ button {
 
   background: #ef6c00;
 
-  color: white;
-
 }
 
 
 #downloadSemua {
 
   background: #6a1b9a;
-
-  color: white;
 
 }
 
@@ -422,13 +399,6 @@ button {
 }
 
 
-.item.hidden {
-
-  display: none;
-
-}
-
-
 .item.tidak {
 
   opacity: .35;
@@ -443,6 +413,10 @@ button {
   top: 5px;
 
   left: 5px;
+
+  width: 18px;
+
+  height: 18px;
 
 }
 
@@ -551,7 +525,9 @@ button {
      =================================================== -->
 
 <div class="judulFilter">
+
 🔎 FILTER DATA
+
 </div>
 
 
@@ -567,15 +543,6 @@ button {
   autocomplete="off"
 >
 
-
-<button
-  class="clearFilter"
-  onclick="hapusRegister()"
->
-
-×
-</button>
-
 </div>
 
 
@@ -588,15 +555,6 @@ button {
   autocomplete="off"
 >
 
-
-<button
-  class="clearFilter"
-  onclick="hapusTumpuk()"
->
-
-×
-</button>
-
 </div>
 
 
@@ -604,6 +562,16 @@ button {
 
 
 <div class="tombolFilter">
+
+
+<button
+  class="btnFilter"
+  onclick="jalankanFilter()"
+>
+
+🔎 FILTER
+
+</button>
 
 
 <button
@@ -767,14 +735,17 @@ Dipilih: 0
 
 📐 Ukuran dasar:
 <b>5 × 2 cm</b>
+
 <br>
 
 ✂️ Garis potong:
 <b>Aktif</b>
+
 <br>
 
 📦 Output:
 <b>1 file SVG berisi barcode</b>
+
 <br>
 
 🏭 Layout banner:
@@ -816,30 +787,6 @@ const API_URL =
    ===================================================== */
 
 let dataBarcode = [];
-
-
-/* =====================================================
-   EVENT FILTER
-   ===================================================== */
-
-document
-  .getElementById(
-    "filterRegister"
-  )
-  .addEventListener(
-    "input",
-    jalankanFilter
-  );
-
-
-document
-  .getElementById(
-    "filterTumpuk"
-  )
-  .addEventListener(
-    "input",
-    jalankanFilter
-  );
 
 
 /* =====================================================
@@ -1212,22 +1159,24 @@ function tampilkanPreview() {
 function jalankanFilter() {
 
 
-  const register =
-    document.getElementById(
-      "filterRegister"
-    )
-    .value
-    .toLowerCase()
-    .trim();
+  const filterRegister =
+    document
+      .getElementById(
+        "filterRegister"
+      )
+      .value
+      .trim()
+      .toLowerCase();
 
 
-  const tumpuk =
-    document.getElementById(
-      "filterTumpuk"
-    )
-    .value
-    .toLowerCase()
-    .trim();
+  const filterTumpuk =
+    document
+      .getElementById(
+        "filterTumpuk"
+      )
+      .value
+      .trim()
+      .toLowerCase();
 
 
   const items =
@@ -1236,7 +1185,7 @@ function jalankanFilter() {
     );
 
 
-  let jumlahHasil =
+  let jumlah =
     0;
 
 
@@ -1245,26 +1194,59 @@ function jalankanFilter() {
     function(item) {
 
 
-      const reg =
-        item.dataset.register;
+      const register =
+        String(
+          item.dataset.register || ""
+        )
+        .trim()
+        .toLowerCase();
 
 
-      const tup =
-        item.dataset.tumpuk;
+      const tumpuk =
+        String(
+          item.dataset.tumpuk || ""
+        )
+        .trim()
+        .toLowerCase();
 
+
+      /* =========================================
+         REGISTER
+
+         Register boleh dicari sebagian.
+
+         Contoh:
+         ketik 261
+         → 26143
+         → 26144
+         → 26145
+         ========================================= */
 
       const cocokRegister =
-        register === "" ||
-        reg.includes(
-          register
+        filterRegister === "" ||
+        register.includes(
+          filterRegister
         );
 
+
+      /* =========================================
+         TUMPUK
+
+         HARUS SAMA PERSIS.
+
+         Ketik 1:
+         → 1
+
+         Tidak:
+         → 11
+         → 12
+         → 13
+         → 14
+         ========================================= */
 
       const cocokTumpuk =
-        tumpuk === "" ||
-        tup.includes(
-          tumpuk
-        );
+        filterTumpuk === "" ||
+        tumpuk === filterTumpuk;
 
 
       const cocok =
@@ -1276,17 +1258,15 @@ function jalankanFilter() {
         cocok
       ) {
 
-        item.classList.remove(
-          "hidden"
-        );
+        item.style.display =
+          "";
 
-        jumlahHasil++;
+        jumlah++;
 
       } else {
 
-        item.classList.add(
-          "hidden"
-        );
+        item.style.display =
+          "none";
 
       }
 
@@ -1298,44 +1278,7 @@ function jalankanFilter() {
     "hasilFilter"
   ).innerHTML =
     "Hasil filter: " +
-    jumlahHasil;
-
-
-}
-
-
-/* =====================================================
-   HAPUS FILTER REGISTER
-   ===================================================== */
-
-function hapusRegister() {
-
-
-  document.getElementById(
-    "filterRegister"
-  ).value =
-    "";
-
-
-  jalankanFilter();
-
-}
-
-
-/* =====================================================
-   HAPUS FILTER TUMPUK
-   ===================================================== */
-
-function hapusTumpuk() {
-
-
-  document.getElementById(
-    "filterTumpuk"
-  ).value =
-    "";
-
-
-  jalankanFilter();
+    jumlah;
 
 }
 
@@ -1359,7 +1302,27 @@ function tampilkanSemua() {
     "";
 
 
-  jalankanFilter();
+  const items =
+    document.querySelectorAll(
+      ".item"
+    );
+
+
+  items.forEach(
+    function(item) {
+
+      item.style.display =
+        "";
+
+    }
+  );
+
+
+  document.getElementById(
+    "hasilFilter"
+  ).innerHTML =
+    "Hasil filter: " +
+    dataBarcode.length;
 
 }
 
@@ -1373,11 +1336,21 @@ function pilihHasilFilter() {
 
   document
     .querySelectorAll(
-      ".item:not(.hidden)"
+      ".item"
     )
     .forEach(
 
       function(item) {
+
+
+        if (
+          item.style.display ===
+          "none"
+        ) {
+
+          return;
+
+        }
 
 
         const index =
@@ -1421,11 +1394,21 @@ function batalHasilFilter() {
 
   document
     .querySelectorAll(
-      ".item:not(.hidden)"
+      ".item"
     )
     .forEach(
 
       function(item) {
+
+
+        if (
+          item.style.display ===
+          "none"
+        ) {
+
+          return;
+
+        }
 
 
         const index =
@@ -1589,7 +1572,12 @@ function updateStatus() {
     dipilih;
 
 
-  jalankanFilter();
+  /*
+     Jangan menjalankan filter
+     saat updateStatus dipanggil.
+     Supaya checkbox tidak
+     mengganggu hasil filter.
+  */
 
 }
 
@@ -1639,14 +1627,6 @@ function buatMasterSVG(
         "tinggiBarcode"
       ).value
     );
-
-
-  /*
-     Setiap barcode tetap mempunyai
-     ukuran dasar masing-masing.
-
-     Tidak ada ukuran banner.
-  */
 
 
   const jarak =
@@ -1879,7 +1859,7 @@ function buatBarcodeSVG(
 
 
   /* =================================================
-     PUTIH
+     BACKGROUND
      ================================================= */
 
   const bg =
