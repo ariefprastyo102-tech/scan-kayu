@@ -25,6 +25,11 @@ body{
     background:#f2f2f2;
 }
 
+
+/* =====================================================
+   PANEL
+===================================================== */
+
 .kontrol{
     max-width:900px;
     margin:auto;
@@ -37,6 +42,11 @@ h2{
     text-align:center;
     margin-top:0;
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 button{
     border:none;
@@ -80,6 +90,11 @@ button{
     color:white;
 }
 
+
+/* =====================================================
+   FILTER
+===================================================== */
+
 .filter{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -95,6 +110,11 @@ button{
     font-size:15px;
 }
 
+
+/* =====================================================
+   STATUS
+===================================================== */
+
 .status{
     margin-top:15px;
     padding:12px;
@@ -103,6 +123,11 @@ button{
     text-align:center;
     line-height:1.8;
 }
+
+
+/* =====================================================
+   PREVIEW WEB
+===================================================== */
 
 #grid{
     max-width:1100px;
@@ -147,6 +172,11 @@ button{
     font-size:14px;
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
 @media(max-width:700px){
 
     .filter{
@@ -163,13 +193,16 @@ button{
 
 </head>
 
+
 <body>
+
 
 <div class="kontrol">
 
 <h2>
 🪵 CETAK BARCODE KAYU
 </h2>
+
 
 <button
     class="btnAmbil"
@@ -178,6 +211,7 @@ button{
 🔄 AMBIL DATA REGISTER
 
 </button>
+
 
 <div class="filter">
 
@@ -193,6 +227,7 @@ button{
 
 </div>
 
+
 <div>
 
 <button
@@ -203,6 +238,7 @@ button{
 
 </button>
 
+
 <button
     class="btnSemua"
     onclick="tampilkanSemua()">
@@ -210,6 +246,7 @@ button{
 🔄 TAMPILKAN SEMUA
 
 </button>
+
 
 <button
     class="btnPilih"
@@ -219,6 +256,7 @@ button{
 
 </button>
 
+
 <button
     class="btnBatal"
     onclick="batalHasilFilter()">
@@ -227,6 +265,7 @@ button{
 
 </button>
 
+
 <button
     class="btnPilih"
     onclick="pilihSemua()">
@@ -234,6 +273,7 @@ button{
 ☑️ PILIH SEMUA
 
 </button>
+
 
 <button
     class="btnBatal"
@@ -245,6 +285,7 @@ button{
 
 </div>
 
+
 <button
     class="btnDownload"
     onclick="downloadSVG()">
@@ -252,6 +293,7 @@ button{
 📥 DOWNLOAD MASTER SVG
 
 </button>
+
 
 <div class="status">
 
@@ -271,9 +313,12 @@ Dipilih: 0
 
 </div>
 
+
 <div id="grid"></div>
 
+
 <script>
+
 
 /* =====================================================
    API DATABASE
@@ -302,8 +347,10 @@ function ambilDatabase(){
     status.innerHTML =
         "⏳ Mengambil DATABASE...";
 
+
     const callback =
         "database_"+Date.now();
+
 
     window[callback] =
         function(hasil){
@@ -322,10 +369,13 @@ function ambilDatabase(){
 
             }
 
+
             database=[];
+
 
             const data =
                 hasil.data || [];
+
 
             data.forEach(function(item){
 
@@ -334,16 +384,19 @@ function ambilDatabase(){
                         item.register || ""
                     ).trim();
 
+
                 const tumpuk =
                     String(
                         item.tumpuk || ""
                     ).trim();
+
 
                 if(!register){
 
                     return;
 
                 }
+
 
                 database.push({
 
@@ -357,19 +410,25 @@ function ambilDatabase(){
 
             });
 
+
             tampilkan();
+
 
             updateJumlah();
 
+
             status.innerHTML =
                 "✅ DATABASE berhasil diambil";
+
 
             bersihkan();
 
         };
 
+
     const script =
         document.createElement("script");
+
 
     script.src =
         API_URL +
@@ -377,25 +436,30 @@ function ambilDatabase(){
         "&callback=" +
         callback;
 
+
     script.onerror =
         function(){
 
             status.innerHTML =
                 "❌ Gagal menghubungi DATABASE";
 
+
             bersihkan();
 
         };
 
+
     document.body.appendChild(
         script
     );
+
 
     function bersihkan(){
 
         delete window[
             callback
         ];
+
 
         if(script){
 
@@ -419,7 +483,9 @@ function tampilkan(){
             "grid"
         );
 
+
     grid.innerHTML="";
+
 
     database.forEach(
         function(data,index){
@@ -429,28 +495,38 @@ function tampilkan(){
                     "div"
                 );
 
+
             item.className =
                 "item";
+
 
             item.dataset.index =
                 index;
 
+
             item.dataset.register =
                 data.register.toLowerCase();
 
+
             item.dataset.tumpuk =
                 data.tumpuk.toLowerCase();
+
+
+            /* CHECKBOX */
 
             const check =
                 document.createElement(
                     "input"
                 );
 
+
             check.type =
                 "checkbox";
 
+
             check.checked =
                 data.dipilih;
+
 
             check.onchange =
                 function(){
@@ -458,13 +534,20 @@ function tampilkan(){
                     data.dipilih =
                         this.checked;
 
+
                     updateJumlah();
 
                 };
 
+
             item.appendChild(
                 check
             );
+
+
+            /* =================================================
+               SVG BARCODE WEB
+            ================================================= */
 
             const svg =
                 document.createElementNS(
@@ -472,9 +555,11 @@ function tampilkan(){
                     "svg"
                 );
 
+
             item.appendChild(
                 svg
             );
+
 
             JsBarcode(
 
@@ -503,41 +588,53 @@ function tampilkan(){
 
             );
 
+
+            /* INFO */
+
             const info =
                 document.createElement(
                     "div"
                 );
 
+
             info.className =
                 "info";
+
 
             const register =
                 document.createElement(
                     "span"
                 );
 
+
             register.textContent =
                 data.register;
+
 
             const tumpuk =
                 document.createElement(
                     "span"
                 );
 
+
             tumpuk.textContent =
                 data.tumpuk;
+
 
             info.appendChild(
                 register
             );
 
+
             info.appendChild(
                 tumpuk
             );
 
+
             item.appendChild(
                 info
             );
+
 
             grid.appendChild(
                 item
@@ -564,6 +661,7 @@ function filterData(){
         .trim()
         .toLowerCase();
 
+
     const tumpuk =
         document
         .getElementById(
@@ -573,6 +671,7 @@ function filterData(){
         .trim()
         .toLowerCase();
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -580,14 +679,17 @@ function filterData(){
         const nilaiRegister =
             item.dataset.register;
 
+
         const nilaiTumpuk =
             item.dataset.tumpuk;
+
 
         const cocokRegister =
             register === "" ||
             nilaiRegister.includes(
                 register
             );
+
 
         /*
          * TUMPUK HARUS SAMA PERSIS
@@ -601,6 +703,7 @@ function filterData(){
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
+
 
         if(
             cocokRegister &&
@@ -634,9 +737,11 @@ function tampilkanSemua(){
         "filterRegister"
     ).value="";
 
+
     document.getElementById(
         "filterTumpuk"
     ).value="";
+
 
     document
     .querySelectorAll(".item")
@@ -671,18 +776,22 @@ function pilihHasilFilter(){
 
         }
 
+
         const index =
             Number(
                 item.dataset.index
             );
 
+
         database[index].dipilih=true;
+
 
         item.querySelector(
             "input"
         ).checked=true;
 
     });
+
 
     updateJumlah();
 
@@ -709,18 +818,22 @@ function batalHasilFilter(){
 
         }
 
+
         const index =
             Number(
                 item.dataset.index
             );
 
+
         database[index].dipilih=false;
+
 
         item.querySelector(
             "input"
         ).checked=false;
 
     });
+
 
     updateJumlah();
 
@@ -741,6 +854,7 @@ function pilihSemua(){
         }
     );
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -750,6 +864,7 @@ function pilihSemua(){
         ).checked=true;
 
     });
+
 
     updateJumlah();
 
@@ -770,6 +885,7 @@ function batalSemua(){
         }
     );
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -779,6 +895,7 @@ function batalSemua(){
         ).checked=false;
 
     });
+
 
     updateJumlah();
 
@@ -794,6 +911,7 @@ function updateJumlah(){
     const jumlah =
         database.length;
 
+
     const dipilih =
         database.filter(
             function(data){
@@ -803,11 +921,13 @@ function updateJumlah(){
             }
         ).length;
 
+
     document.getElementById(
         "jumlah"
     ).innerHTML =
         "Jumlah barcode: " +
         jumlah;
+
 
     document.getElementById(
         "dipilih"
@@ -829,7 +949,9 @@ function downloadSVG(){
             ".item"
         );
 
+
     const daftar=[];
+
 
     semuaItem.forEach(
         function(item){
@@ -838,6 +960,7 @@ function downloadSVG(){
                 Number(
                     item.dataset.index
                 );
+
 
             if(
                 database[index] &&
@@ -850,6 +973,7 @@ function downloadSVG(){
 
         }
     );
+
 
     if(
         daftar.length === 0
@@ -872,22 +996,44 @@ function downloadSVG(){
     const LABEL_W =
         50;
 
+
     const LABEL_H =
         25;
+
+
+    /* =================================================
+       JARAK LABEL
+    ================================================= */
 
     const GAP =
         2;
 
+
+    /* =================================================
+       MARGIN
+    ================================================= */
+
     const MARGIN =
         10;
 
+
+    /* =================================================
+       KOLOM
+    ================================================= */
+
     const COL =
         4;
+
 
     const ROW =
         Math.ceil(
             daftar.length / COL
         );
+
+
+    /* =================================================
+       KANVAS
+    ================================================= */
 
     const CANVAS_W =
         MARGIN * 2 +
@@ -900,6 +1046,7 @@ function downloadSVG(){
             GAP
         );
 
+
     const CANVAS_H =
         MARGIN * 2 +
         (
@@ -910,6 +1057,7 @@ function downloadSVG(){
             (ROW - 1) *
             GAP
         );
+
 
     const NS =
         "http://www.w3.org/2000/svg";
@@ -925,20 +1073,24 @@ function downloadSVG(){
             "svg"
         );
 
+
     root.setAttribute(
         "xmlns",
         NS
     );
+
 
     root.setAttribute(
         "width",
         CANVAS_W + "mm"
     );
 
+
     root.setAttribute(
         "height",
         CANVAS_H + "mm"
     );
+
 
     root.setAttribute(
         "viewBox",
@@ -959,30 +1111,36 @@ function downloadSVG(){
             "rect"
         );
 
+
     background.setAttribute(
         "x",
         0
     );
+
 
     background.setAttribute(
         "y",
         0
     );
 
+
     background.setAttribute(
         "width",
         CANVAS_W
     );
+
 
     background.setAttribute(
         "height",
         CANVAS_H
     );
 
+
     background.setAttribute(
         "fill",
         "white"
     );
+
 
     root.appendChild(
         background
@@ -999,10 +1157,12 @@ function downloadSVG(){
             const col =
                 index % COL;
 
+
             const row =
                 Math.floor(
                     index / COL
                 );
+
 
             const labelX =
                 MARGIN +
@@ -1011,6 +1171,7 @@ function downloadSVG(){
                     LABEL_W +
                     GAP
                 );
+
 
             const labelY =
                 MARGIN +
@@ -1031,6 +1192,7 @@ function downloadSVG(){
                     "g"
                 );
 
+
             group.setAttribute(
                 "transform",
                 "translate(" +
@@ -1042,7 +1204,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               KOTAK
+               KOTAK LABEL
             ================================================= */
 
             const border =
@@ -1051,40 +1213,48 @@ function downloadSVG(){
                     "rect"
                 );
 
+
             border.setAttribute(
                 "x",
                 0
             );
+
 
             border.setAttribute(
                 "y",
                 0
             );
 
+
             border.setAttribute(
                 "width",
                 LABEL_W
             );
+
 
             border.setAttribute(
                 "height",
                 LABEL_H
             );
 
+
             border.setAttribute(
                 "fill",
                 "white"
             );
+
 
             border.setAttribute(
                 "stroke",
                 "black"
             );
 
+
             border.setAttribute(
                 "stroke-width",
                 "0.25"
             );
+
 
             group.appendChild(
                 border
@@ -1092,13 +1262,14 @@ function downloadSVG(){
 
 
             /* =================================================
-               AMBIL BARCODE DARI WEB
+               AMBIL BARCODE ASLI DARI WEB
             ================================================= */
 
             const svgWeb =
                 item.querySelector(
                     "svg"
                 );
+
 
             if(svgWeb){
 
@@ -1115,6 +1286,7 @@ function downloadSVG(){
                 const BARCODE_W =
                     47;
 
+
                 const BARCODE_H =
                     17;
 
@@ -1129,6 +1301,7 @@ function downloadSVG(){
                         BARCODE_W
                     ) / 2;
 
+
                 const barcodeY =
                     1;
 
@@ -1138,29 +1311,35 @@ function downloadSVG(){
                     barcodeX
                 );
 
+
                 clone.setAttribute(
                     "y",
                     barcodeY
                 );
+
 
                 clone.setAttribute(
                     "width",
                     BARCODE_W
                 );
 
+
                 clone.setAttribute(
                     "height",
                     BARCODE_H
                 );
+
 
                 clone.setAttribute(
                     "preserveAspectRatio",
                     "none"
                 );
 
+
                 clone.removeAttribute(
                     "style"
                 );
+
 
                 group.appendChild(
                     clone
@@ -1178,11 +1357,14 @@ function downloadSVG(){
                     ".info"
                 );
 
+
             let registerText =
                 "";
 
+
             let tumpukText =
                 "";
+
 
             if(info){
 
@@ -1191,12 +1373,14 @@ function downloadSVG(){
                         "span"
                     );
 
+
                 if(teks[0]){
 
                     registerText =
                         teks[0].textContent;
 
                 }
+
 
                 if(teks[1]){
 
@@ -1209,135 +1393,76 @@ function downloadSVG(){
 
 
             /* =================================================
-               GROUP ANGKA
+               REGISTER + TUMPUK
                
-               TITIK TENGAH = 25 MM
+               SATU TEKS
+               POSISI BENAR-BENAR TENGAH
             ================================================= */
 
-            const textGroup =
-                document.createElementNS(
-                    NS,
-                    "g"
-                );
-
-            textGroup.setAttribute(
-                "transform",
-                "translate(25 21.5)"
-            );
-
-
-            /* =================================================
-               REGISTER
-            ================================================= */
-
-            const register =
+            const angka =
                 document.createElementNS(
                     NS,
                     "text"
                 );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "x",
-                "-1"
+                LABEL_W / 2
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "y",
-                "0"
+                "21.5"
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "text-anchor",
-                "end"
+                "middle"
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "font-family",
                 "Arial"
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "font-size",
                 "4"
             );
 
-            register.setAttribute(
+
+            angka.setAttribute(
                 "font-weight",
                 "bold"
             );
 
-            register.textContent =
-                registerText;
 
-            textGroup.appendChild(
-                register
-            );
+            /*
+             * Register dan Tumpuk dibuat
+             * menjadi SATU tulisan.
+             *
+             * 3 spasi supaya agak renggang.
+             */
 
-
-            /* =================================================
-               TUMPUK
-            ================================================= */
-
-            const tumpuk =
-                document.createElementNS(
-                    NS,
-                    "text"
-                );
-
-            tumpuk.setAttribute(
-                "x",
-                "1"
-            );
-
-            tumpuk.setAttribute(
-                "y",
-                "0"
-            );
-
-            tumpuk.setAttribute(
-                "text-anchor",
-                "start"
-            );
-
-            tumpuk.setAttribute(
-                "dominant-baseline",
-                "middle"
-            );
-
-            tumpuk.setAttribute(
-                "font-family",
-                "Arial"
-            );
-
-            tumpuk.setAttribute(
-                "font-size",
-                "4"
-            );
-
-            tumpuk.setAttribute(
-                "font-weight",
-                "bold"
-            );
-
-            tumpuk.textContent =
+            angka.textContent =
+                registerText +
+                "   " +
                 tumpukText;
 
-            textGroup.appendChild(
-                tumpuk
-            );
-
-
-            /* =================================================
-               MASUKKAN ANGKA
-            ================================================= */
 
             group.appendChild(
-                textGroup
+                angka
             );
 
 
@@ -1360,10 +1485,12 @@ function downloadSVG(){
     const serializer =
         new XMLSerializer();
 
+
     let source =
         serializer.serializeToString(
             root
         );
+
 
     source =
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -1383,29 +1510,37 @@ function downloadSVG(){
             }
         );
 
+
     const url =
         URL.createObjectURL(
             blob
         );
+
 
     const link =
         document.createElement(
             "a"
         );
 
+
     link.href =
         url;
 
+
     link.download =
         "MASTER-BARCODE-KAYU.svg";
+
 
     document.body.appendChild(
         link
     );
 
+
     link.click();
 
+
     link.remove();
+
 
     setTimeout(
         function(){
