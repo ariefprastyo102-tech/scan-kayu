@@ -589,6 +589,15 @@ function filterData(){
                 register
             );
 
+        /*
+         * TUMPUK HARUS SAMA PERSIS
+         *
+         * 1  = masuk
+         * 11 = tidak
+         * 12 = tidak
+         * 13 = tidak
+         */
+
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
@@ -842,7 +851,6 @@ function downloadSVG(){
         }
     );
 
-
     if(
         daftar.length === 0
     ){
@@ -905,6 +913,11 @@ function downloadSVG(){
 
     const NS =
         "http://www.w3.org/2000/svg";
+
+
+    /* =================================================
+       SVG MASTER
+    ================================================= */
 
     const root =
         document.createElementNS(
@@ -1007,6 +1020,11 @@ function downloadSVG(){
                     GAP
                 );
 
+
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
+
             const group =
                 document.createElementNS(
                     NS,
@@ -1074,7 +1092,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               BARCODE
+               AMBIL BARCODE DARI WEB
             ================================================= */
 
             const svgWeb =
@@ -1089,11 +1107,21 @@ function downloadSVG(){
                         true
                     );
 
+
+                /* =================================================
+                   UKURAN BARCODE
+                ================================================= */
+
                 const BARCODE_W =
                     47;
 
                 const BARCODE_H =
                     17;
+
+
+                /* =================================================
+                   POSISI BARCODE
+                ================================================= */
 
                 const barcodeX =
                     (
@@ -1103,6 +1131,7 @@ function downloadSVG(){
 
                 const barcodeY =
                     1;
+
 
                 clone.setAttribute(
                     "x",
@@ -1141,7 +1170,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               AMBIL ANGKA
+               AMBIL ANGKA DARI WEB
             ================================================= */
 
             const info =
@@ -1181,6 +1210,8 @@ function downloadSVG(){
 
             /* =================================================
                GROUP ANGKA
+               
+               TITIK TENGAH = 25 MM
             ================================================= */
 
             const textGroup =
@@ -1207,7 +1238,7 @@ function downloadSVG(){
 
             register.setAttribute(
                 "x",
-                "-2"
+                "-1"
             );
 
             register.setAttribute(
@@ -1229,10 +1260,6 @@ function downloadSVG(){
                 "font-family",
                 "Arial"
             );
-
-            /*
-             * UKURAN ANGKA DIBESARKAN
-             */
 
             register.setAttribute(
                 "font-size",
@@ -1264,7 +1291,7 @@ function downloadSVG(){
 
             tumpuk.setAttribute(
                 "x",
-                "2"
+                "1"
             );
 
             tumpuk.setAttribute(
@@ -1287,10 +1314,6 @@ function downloadSVG(){
                 "Arial"
             );
 
-            /*
-             * UKURAN ANGKA DIBESARKAN
-             */
-
             tumpuk.setAttribute(
                 "font-size",
                 "4"
@@ -1309,10 +1332,18 @@ function downloadSVG(){
             );
 
 
+            /* =================================================
+               MASUKKAN ANGKA
+            ================================================= */
+
             group.appendChild(
                 textGroup
             );
 
+
+            /* =================================================
+               MASUKKAN LABEL
+            ================================================= */
 
             root.appendChild(
                 group
@@ -1323,7 +1354,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALIZE
+       SERIALIZE SVG
     ================================================= */
 
     const serializer =
@@ -1386,6 +1417,7 @@ function downloadSVG(){
         },
         1000
     );
+
 
     document.getElementById(
         "status"
