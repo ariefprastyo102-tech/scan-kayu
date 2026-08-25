@@ -16,6 +16,10 @@
 
 <style>
 
+/* =====================================================
+   DASAR
+   ===================================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -34,7 +38,7 @@ body {
 
 
 /* =====================================================
-   KONTROL
+   PANEL KONTROL
    ===================================================== */
 
 .kontrol {
@@ -49,7 +53,8 @@ body {
 
   border-radius: 10px;
 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.08);
 
 }
 
@@ -58,18 +63,23 @@ h2 {
 
   text-align: center;
 
-  margin: 0 0 20px;
+  margin:
+    0 0 20px;
 
 }
 
 
-button {
+/* =====================================================
+   TOMBOL
+   ===================================================== */
 
-  padding: 12px 16px;
+button {
 
   border: none;
 
   border-radius: 8px;
+
+  padding: 12px 16px;
 
   font-size: 15px;
 
@@ -82,18 +92,27 @@ button {
 
 #btnAmbil {
 
+  width: 100%;
+
   background: #1976d2;
 
   color: white;
 
-  width: 100%;
+}
+
+
+#btnPrintAll {
+
+  background: #388e3c;
+
+  color: white;
 
 }
 
 
-#btnPrint {
+#btnPrintSelected {
 
-  background: #388e3c;
+  background: #00796b;
 
   color: white;
 
@@ -168,7 +187,8 @@ button {
 
   padding: 9px;
 
-  border: 1px solid #bbb;
+  border:
+    1px solid #bbb;
 
   border-radius: 6px;
 
@@ -201,15 +221,18 @@ button {
 
   padding: 10px;
 
-  border: 1px solid #ccc;
+  border:
+    1px solid #ccc;
 
   border-radius: 7px;
+
+  font-size: 14px;
 
 }
 
 
 /* =====================================================
-   TOMBOL
+   AREA TOMBOL
    ===================================================== */
 
 .tombolArea {
@@ -229,7 +252,7 @@ button {
 
   flex: 1;
 
-  min-width: 150px;
+  min-width: 160px;
 
 }
 
@@ -304,7 +327,8 @@ button {
 
   background: white;
 
-  border: 1px solid #ccc;
+  border:
+    1px solid #ccc;
 
   border-radius: 6px;
 
@@ -349,7 +373,8 @@ button {
 
   display: block;
 
-  margin: 18px auto 2px;
+  margin:
+    18px auto 2px;
 
   width: 100%;
 
@@ -410,13 +435,14 @@ button {
   }
 
 
+  html,
   body {
 
+    margin: 0 !important;
+
+    padding: 0 !important;
+
     background: white;
-
-    padding: 0;
-
-    margin: 0;
 
   }
 
@@ -436,6 +462,8 @@ button {
 
     margin: 0;
 
+    padding: 0;
+
   }
 
 
@@ -443,10 +471,17 @@ button {
 
     display: grid;
 
-    gap: var(--jarak-v) var(--jarak-h);
-
     grid-template-columns:
-      repeat(var(--kolom), var(--barcode-width));
+      repeat(
+        var(--kolom),
+        var(--barcode-width)
+      );
+
+    column-gap:
+      var(--jarak-h);
+
+    row-gap:
+      var(--jarak-v);
 
     justify-content: start;
 
@@ -455,28 +490,9 @@ button {
   }
 
 
-  .barcodeItem {
-
-    width: var(--barcode-width);
-
-    height: var(--barcode-height);
-
-    border: none;
-
-    border-radius: 0;
-
-    padding: 0;
-
-    margin: 0;
-
-    background: white;
-
-    break-inside: avoid;
-
-    page-break-inside: avoid;
-
-  }
-
+  /* ================================================
+     BARCODE YANG TIDAK DIPILIH
+     ================================================ */
 
   .barcodeItem:not(.dipilih) {
 
@@ -485,6 +501,42 @@ button {
   }
 
 
+  /* ================================================
+     KOTAK BARCODE
+     ================================================ */
+
+  .barcodeItem {
+
+    width:
+      var(--barcode-width);
+
+    height:
+      var(--barcode-height);
+
+    padding: 0;
+
+    margin: 0;
+
+    background: white;
+
+    border:
+      0.15mm solid #000;
+
+    border-radius: 0;
+
+    break-inside: avoid;
+
+    page-break-inside: avoid;
+
+    overflow: hidden;
+
+  }
+
+
+  /* ================================================
+     CHECKBOX HILANG SAAT PRINT
+     ================================================ */
+
   .check {
 
     display: none !important;
@@ -492,26 +544,44 @@ button {
   }
 
 
+  /* ================================================
+     BARCODE
+     ================================================ */
+
   .barcodeItem svg {
 
-    width: var(--barcode-width);
+    width:
+      calc(
+        var(--barcode-width) - 0.15cm
+      );
 
-    height: calc(var(--barcode-height) - 0.45cm);
+    height:
+      calc(
+        var(--barcode-height) - 0.55cm
+      );
 
-    margin: 0;
+    margin:
+      0.05cm auto 0;
 
   }
 
 
+  /* ================================================
+     REGISTER + TUMPUK
+     ================================================ */
+
   .info {
 
-    font-size: 10pt;
+    font-size: 9pt;
 
     gap: 0.3cm;
 
     margin: 0;
 
-    line-height: 0.35cm;
+    line-height:
+      0.35cm;
+
+    white-space: nowrap;
 
   }
 
@@ -563,7 +633,7 @@ button {
   .grid {
 
     grid-template-columns:
-      repeat(1, 1fr);
+      1fr;
 
   }
 
@@ -587,6 +657,10 @@ button {
     🖨️ CETAK BARCODE KAYU
   </h2>
 
+
+  <!-- ===================================================
+       AMBIL DATABASE
+       =================================================== -->
 
   <button
     id="btnAmbil"
@@ -708,6 +782,7 @@ button {
 
   <div class="tombolArea">
 
+
     <button
       id="btnPilihSemua"
       onclick="pilihSemua()"
@@ -723,17 +798,27 @@ button {
       onclick="batalSemua()"
     >
 
-      ❌ BATALKAN SEMUA
+      ❌ BATAL SEMUA
 
     </button>
 
 
     <button
-      id="btnPrint"
-      onclick="cetakBarcode()"
+      id="btnPrintAll"
+      onclick="cetakSemua()"
     >
 
-      🖨️ CETAK BARCODE TERPILIH
+      🖨️ CETAK SEMUA
+
+    </button>
+
+
+    <button
+      id="btnPrintSelected"
+      onclick="cetakYangDipilih()"
+    >
+
+      🖨️ CETAK YANG DIPILIH
 
     </button>
 
@@ -768,7 +853,7 @@ button {
 
 
 <!-- =====================================================
-     HASIL
+     HASIL BARCODE
      ===================================================== -->
 
 <div id="hasil">
@@ -789,7 +874,7 @@ button {
 // ======================================================
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+"https://script.google.com/macros/s/AKfcybyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 
 // ======================================================
@@ -827,6 +912,10 @@ function ambilDatabase() {
   window[callbackName] =
     function(hasil) {
 
+
+      // ================================================
+      // CEK HASIL
+      // ================================================
 
       if (
         !hasil ||
@@ -879,9 +968,9 @@ function ambilDatabase() {
         0;
 
 
-      // =================================================
+      // ================================================
       // BUAT BARCODE
-      // =================================================
+      // ================================================
 
       for (
         let i = 0;
@@ -906,6 +995,10 @@ function ambilDatabase() {
           ).trim();
 
 
+        // ==============================================
+        // SKIP REGISTER KOSONG
+        // ==============================================
+
         if (
           !register
         ) {
@@ -916,11 +1009,8 @@ function ambilDatabase() {
 
 
         buatBarcode(
-
           register,
-
           tumpuk
-
         );
 
 
@@ -941,6 +1031,9 @@ function ambilDatabase() {
 
       status.innerHTML =
         "✅ Semua barcode berhasil dibuat";
+
+
+      updateTampilan();
 
 
       cleanup();
@@ -975,7 +1068,6 @@ function ambilDatabase() {
       status.innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-
       cleanup();
 
     };
@@ -985,6 +1077,10 @@ function ambilDatabase() {
     script
   );
 
+
+  // ====================================================
+  // CLEANUP
+  // ====================================================
 
   function cleanup() {
 
@@ -1057,13 +1153,10 @@ function buatBarcode(
     true;
 
 
-  check.dataset.register =
-    register;
-
-
   check.addEventListener(
     "change",
     function() {
+
 
       if (
         this.checked
@@ -1129,6 +1222,10 @@ function buatBarcode(
     "info";
 
 
+  // ====================================================
+  // REGISTER
+  // ====================================================
+
   const nomor =
     document.createElement(
       "span"
@@ -1143,6 +1240,10 @@ function buatBarcode(
     register;
 
 
+  // ====================================================
+  // TUMPUK
+  // ====================================================
+
   const angkaTumpuk =
     document.createElement(
       "span"
@@ -1156,6 +1257,10 @@ function buatBarcode(
   angkaTumpuk.textContent =
     tumpuk;
 
+
+  // ====================================================
+  // GABUNG INFO
+  // ====================================================
 
   info.appendChild(
     nomor
@@ -1183,7 +1288,7 @@ function buatBarcode(
 
 
   // ====================================================
-  // CODE 128
+  // GENERATE CODE 128
   // ====================================================
 
   JsBarcode(
@@ -1231,16 +1336,6 @@ function pilihSemua() {
 
   items.forEach(
     function(item) {
-
-
-      if (
-        item.style.display ===
-        "none"
-      ) {
-
-        return;
-
-      }
 
 
       const check =
@@ -1457,24 +1552,22 @@ function updateTampilan() {
     ) || 0;
 
 
-  const grid =
-    document.getElementById(
-      "grid"
+  // ====================================================
+  // LEBAR AREA PREVIEW
+  // ====================================================
+
+  const lebarPreview =
+    Math.min(
+      window.innerWidth - 40,
+      1200
     );
-
-
-  // ====================================================
-  // JUMLAH KOLOM TAMPILAN LAYAR
-  // ====================================================
-
-  const lebarLayar =
-    1000;
 
 
   let kolom =
     Math.floor(
-      lebarLayar /
-      (lebar + jarakH)
+      lebarPreview /
+      ((lebar * 37.8) +
+      (jarakH * 37.8))
     );
 
 
@@ -1485,6 +1578,12 @@ function updateTampilan() {
     kolom = 1;
 
   }
+
+
+  const grid =
+    document.getElementById(
+      "grid"
+    );
 
 
   grid.style.gridTemplateColumns =
@@ -1506,34 +1605,38 @@ function updateTampilan() {
 
 
   // ====================================================
-  // CSS VARIABLE UNTUK CETAK
+  // CSS VARIABLE CETAK
   // ====================================================
 
   document.documentElement.style
     .setProperty(
       "--barcode-width",
-      lebar + "cm"
+      lebar +
+      "cm"
     );
 
 
   document.documentElement.style
     .setProperty(
       "--barcode-height",
-      tinggi + "cm"
+      tinggi +
+      "cm"
     );
 
 
   document.documentElement.style
     .setProperty(
       "--jarak-h",
-      jarakH + "cm"
+      jarakH +
+      "cm"
     );
 
 
   document.documentElement.style
     .setProperty(
       "--jarak-v",
-      jarakV + "cm"
+      jarakV +
+      "cm"
     );
 
 
@@ -1547,10 +1650,89 @@ function updateTampilan() {
 
 
 // ======================================================
-// CETAK
+// CETAK SEMUA
 // ======================================================
 
-function cetakBarcode() {
+function cetakSemua() {
+
+
+  const semua =
+    document.querySelectorAll(
+      ".barcodeItem"
+    );
+
+
+  if (
+    semua.length === 0
+  ) {
+
+    alert(
+      "Belum ada barcode."
+    );
+
+    return;
+
+  }
+
+
+  // ==============================================
+  // SEMUA DIBUAT TERPILIH
+  // ==============================================
+
+  semua.forEach(
+    function(item) {
+
+
+      const check =
+        item.querySelector(
+          ".check"
+        );
+
+
+      check.checked =
+        true;
+
+
+      item.classList.add(
+        "dipilih"
+      );
+
+
+      item.classList.remove(
+        "tidakDipilih"
+      );
+
+    }
+  );
+
+
+  updateJumlahDipilih();
+
+
+  updateTampilan();
+
+
+  // ==============================================
+  // CETAK
+  // ==============================================
+
+  setTimeout(
+    function() {
+
+      window.print();
+
+    },
+    300
+  );
+
+}
+
+
+// ======================================================
+// CETAK YANG DIPILIH
+// ======================================================
+
+function cetakYangDipilih() {
 
 
   const dipilih =
@@ -1575,17 +1757,37 @@ function cetakBarcode() {
   updateTampilan();
 
 
-  window.print();
+  setTimeout(
+    function() {
+
+      window.print();
+
+    },
+    300
+  );
 
 }
 
 
 // ======================================================
-// JALANKAN AWAL
+// UPDATE SAAT WINDOW BERUBAH
+// ======================================================
+
+window.addEventListener(
+  "resize",
+  function() {
+
+    updateTampilan();
+
+  }
+);
+
+
+// ======================================================
+// AWAL
 // ======================================================
 
 updateTampilan();
-
 
 </script>
 
