@@ -9,7 +9,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Scan Register Kayu - IK Saradan</title>
+<title>Scan Register BBI - IK Saradan</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
@@ -38,30 +38,34 @@ body {
   margin: 0 auto 15px;
   background: white;
   border-radius: 14px;
-  padding: 16px 15px;
+  padding: 15px 10px;
   text-align: center;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  border-top: 4px solid #176b38;
 }
 
 .logo {
-  width: 75px;
-  height: 75px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
-  margin-bottom: 5px;
+  display: block;
+  margin: 0 auto 6px;
 }
 
 .judul {
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 800;
   margin: 3px 0;
   color: #176b38;
+  letter-spacing: 0.3px;
 }
 
 .subjudul {
   font-size: 15px;
   font-weight: bold;
   color: #555;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
 }
 
 
@@ -105,6 +109,7 @@ body {
   background: #1976d2;
   color: white;
   box-shadow: 0 3px 8px rgba(25,118,210,0.25);
+  cursor: pointer;
 }
 
 #btnScan:active {
@@ -140,7 +145,7 @@ body {
 
 
 /* ==========================================
-   DAFTAR
+   DAFTAR HASIL
 ========================================== */
 
 #daftar {
@@ -181,6 +186,7 @@ body {
   border-radius: 6px;
   font-size: 14px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .detail {
@@ -193,15 +199,15 @@ body {
 }
 
 .success {
-  color: green;
+  color: #16833a;
 }
 
 .duplicate {
-  color: red;
+  color: #d32f2f;
 }
 
 .notfound {
-  color: darkorange;
+  color: #e67e00;
 }
 
 .error {
@@ -230,7 +236,7 @@ body {
   }
 
   .header {
-    padding: 14px 10px;
+    padding: 13px 8px;
   }
 
   .logo {
@@ -262,16 +268,14 @@ body {
 
 <div class="header">
 
-  <!-- Logo Perhutani -->
   <img
     class="logo"
-    src="https://www.perhutani.co.id/wp-content/uploads/2023/11/logo-perhutani.png"
+    src="KL22_Perum%20Perhutani%20-%20Koleksilogo.com.svg"
     alt="Logo Perhutani"
-    onerror="this.style.display='none';"
   >
 
   <div class="judul">
-    SCAN REGISTER KAYU
+    SCAN REGISTER BBI
   </div>
 
   <div class="subjudul">
@@ -586,6 +590,11 @@ function cekRegister(register) {
   window[callbackName] =
     function(hasil) {
 
+
+      // ====================================
+      // BERHASIL
+      // ====================================
+
       if (
         hasil.status === "success"
       ) {
@@ -605,13 +614,23 @@ function cekRegister(register) {
         getarBerhasil();
 
         tambahHasil(
+
           hasil.data,
+
           hasil.tanggalScan,
+
           hasil.jamScan,
+
           "success"
+
         );
 
       }
+
+
+      // ====================================
+      // DUPLIKAT
+      // ====================================
 
       else if (
         hasil.status === "duplicate"
@@ -622,13 +641,23 @@ function cekRegister(register) {
           hasil.message;
 
         tambahHasil(
+
           hasil.data,
+
           "",
+
           "",
+
           "duplicate"
+
         );
 
       }
+
+
+      // ====================================
+      // TIDAK DITEMUKAN
+      // ====================================
 
       else if (
         hasil.status === "not_found"
@@ -644,6 +673,11 @@ function cekRegister(register) {
 
       }
 
+
+      // ====================================
+      // ERROR
+      // ====================================
+
       else {
 
         document.getElementById("status").innerHTML =
@@ -652,18 +686,26 @@ function cekRegister(register) {
 
       }
 
+
+      // ====================================
+      // SIAP SCAN BERIKUTNYA
+      // ====================================
+
       setTimeout(function() {
 
         sedangProses = false;
 
       }, 500);
 
+
       delete window[callbackName];
+
 
       const script =
         document.getElementById(
           callbackName
         );
+
 
       if (script) {
         script.remove();
@@ -672,11 +714,17 @@ function cekRegister(register) {
     };
 
 
+  // ======================================
+  // JSONP
+  // ======================================
+
   const script =
     document.createElement("script");
 
+
   script.id =
     callbackName;
+
 
   script.src =
     API_URL +
@@ -685,19 +733,24 @@ function cekRegister(register) {
     "&callback=" +
     callbackName;
 
+
   script.onerror =
     function() {
 
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
+
       sedangProses = false;
 
+
       delete window[callbackName];
+
 
       script.remove();
 
     };
+
 
   document.body.appendChild(script);
 
@@ -720,15 +773,19 @@ function tambahHasil(
   const register =
     data[0];
 
+
   const item =
     document.createElement("div");
+
 
   item.className =
     "item";
 
+
   const id =
     "detail_" +
     Date.now();
+
 
   let warna =
     tipe === "success"
@@ -737,6 +794,7 @@ function tambahHasil(
     :
     "duplicate";
 
+
   let tulisan =
     tipe === "success"
     ?
@@ -744,8 +802,10 @@ function tambahHasil(
     :
     "❌ " + register;
 
+
   let tombol =
     "DETAIL";
+
 
   item.innerHTML = `
 
@@ -763,6 +823,7 @@ function tambahHasil(
       </button>
 
     </div>
+
 
     <div
       id="${id}"
@@ -809,6 +870,7 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
+
       ${
         tanggalScan
         ?
@@ -827,9 +889,11 @@ function tambahHasil(
         ""
       }
 
+
     </div>
 
   `;
+
 
   document
     .getElementById("daftar")
@@ -849,8 +913,10 @@ function tambahHasilTidakDitemukan(
   const item =
     document.createElement("div");
 
+
   item.className =
     "item";
+
 
   item.innerHTML = `
 
@@ -867,6 +933,7 @@ function tambahHasilTidakDitemukan(
     </div>
 
   `;
+
 
   document
     .getElementById("daftar")
@@ -886,6 +953,7 @@ function toggleDetail(
 
   const detail =
     document.getElementById(id);
+
 
   if (
     detail.style.display === "block"
@@ -912,6 +980,7 @@ function toggleDetail(
 }
 
 </script>
+
 
 </body>
 
