@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>Scan Register BBI - IK Saradan</title>
 
@@ -27,11 +27,6 @@ body {
   color: #222;
 }
 
-
-/* ==========================================
-   HEADER
-========================================== */
-
 .header {
   width: 100%;
   max-width: 500px;
@@ -50,22 +45,12 @@ body {
   gap: 15px;
 }
 
-
-/* ==========================================
-   LOGO
-========================================== */
-
 .logo {
   width: 110px;
   height: 90px;
   object-fit: contain;
   flex-shrink: 0;
 }
-
-
-/* ==========================================
-   JUDUL
-========================================== */
 
 .judulBox {
   text-align: left;
@@ -87,11 +72,6 @@ body {
   margin-top: 6px;
 }
 
-
-/* ==========================================
-   CAMERA
-========================================== */
-
 .camera-card {
   width: 100%;
   max-width: 500px;
@@ -109,11 +89,6 @@ body {
   border-radius: 10px;
   overflow: hidden;
 }
-
-
-/* ==========================================
-   BUTTON
-========================================== */
 
 #btnScan {
   display: block;
@@ -134,11 +109,6 @@ body {
 #btnScan:active {
   transform: scale(0.98);
 }
-
-
-/* ==========================================
-   STATUS
-========================================== */
 
 .status-card {
   width: 100%;
@@ -161,11 +131,6 @@ body {
   font-weight: bold;
   color: #555;
 }
-
-
-/* ==========================================
-   DAFTAR HASIL
-========================================== */
 
 #daftar {
   width: 100%;
@@ -243,11 +208,6 @@ body {
   font-weight: bold;
 }
 
-
-/* ==========================================
-   HP
-========================================== */
-
 @media(max-width:500px) {
 
   body {
@@ -277,11 +237,6 @@ body {
 
 }
 
-
-/* ==========================================
-   HP KECIL
-========================================== */
-
 @media(max-width:380px) {
 
   .logo {
@@ -303,49 +258,35 @@ body {
 
 </head>
 
-
 <body>
-
-
-<!-- ==========================================
-     HEADER
-========================================== -->
 
 <div class="header">
 
   <div class="headerIsi">
 
-    <!-- LOGO DI KIRI -->
+```
+<img
+  class="logo"
+  src="logo-perhutani.jpg"
+  alt="Logo Perhutani"
+>
 
-    <img
-      class="logo"
-      src="logo-perhutani.jpg"
-      alt="Logo Perhutani"
-    >
+<div class="judulBox">
 
+  <div class="judul">
+    SCAN REGISTER BBI
+  </div>
 
-    <!-- TULISAN DI KANAN -->
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
-    <div class="judulBox">
-
-      <div class="judul">
-        SCAN REGISTER BBI
-      </div>
-
-      <div class="subjudul">
-        IK SARADAN
-      </div>
-
-    </div>
+</div>
+```
 
   </div>
 
 </div>
-
-
-<!-- ==========================================
-     CAMERA
-========================================== -->
 
 <div class="camera-card">
 
@@ -353,18 +294,13 @@ body {
 
 </div>
 
-
 <button
-  id="btnScan"
-  onclick="mulaiKamera()"
+id="btnScan"
+onclick="mulaiKamera()"
+
 >
-  📷 BUKA KAMERA
-</button>
 
-
-<!-- ==========================================
-     STATUS
-========================================== -->
+📷 BUKA KAMERA </button>
 
 <div class="status-card">
 
@@ -378,37 +314,17 @@ body {
 
 </div>
 
-
 <div id="daftar"></div>
 
-
 <script>
-
-
-// ==========================================
-// URL APPS SCRIPT
-// ==========================================
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
-
-// ==========================================
-// VARIABEL
-// ==========================================
-
 let scanner = null;
-
 let kameraAktif = false;
-
 let sedangProses = false;
-
 let jumlahBerhasil = 0;
-
-
-// ==========================================
-// SUARA CEKLING
-// ==========================================
 
 function bunyiBerhasil() {
 
@@ -425,58 +341,45 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
-
     const oscillator1 =
       audio.createOscillator();
 
     const gain1 =
       audio.createGain();
 
-
     oscillator1.type =
       "sine";
-
 
     oscillator1.frequency.setValueAtTime(
       1300,
       audio.currentTime
     );
 
-
     gain1.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
-
 
     gain1.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
-
     gain1.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.12
     );
 
-
     oscillator1.connect(gain1);
-
-    gain1.connect(
-      audio.destination
-    );
-
+    gain1.connect(audio.destination);
 
     oscillator1.start(
       audio.currentTime
     );
 
-
     oscillator1.stop(
       audio.currentTime + 0.13
     );
-
 
     const oscillator2 =
       audio.createOscillator();
@@ -484,58 +387,45 @@ function bunyiBerhasil() {
     const gain2 =
       audio.createGain();
 
-
     oscillator2.type =
       "sine";
-
 
     oscillator2.frequency.setValueAtTime(
       1850,
       audio.currentTime + 0.08
     );
 
-
     gain2.gain.setValueAtTime(
       0.001,
       audio.currentTime + 0.08
     );
-
 
     gain2.gain.exponentialRampToValueAtTime(
       0.28,
       audio.currentTime + 0.09
     );
 
-
     gain2.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.22
     );
 
-
     oscillator2.connect(gain2);
-
-    gain2.connect(
-      audio.destination
-    );
-
+    gain2.connect(audio.destination);
 
     oscillator2.start(
       audio.currentTime + 0.08
     );
 
-
     oscillator2.stop(
       audio.currentTime + 0.23
     );
-
 
     setTimeout(function() {
 
       audio.close();
 
     }, 400);
-
 
   } catch (e) {
 
@@ -548,16 +438,9 @@ function bunyiBerhasil() {
 
 }
 
-
-// ==========================================
-// GETAR
-// ==========================================
-
 function getarBerhasil() {
 
-  if (
-    navigator.vibrate
-  ) {
+  if (navigator.vibrate) {
 
     navigator.vibrate(
       [
@@ -571,28 +454,19 @@ function getarBerhasil() {
 
 }
 
-
-// ==========================================
-// BUKA KAMERA
-// ==========================================
-
 function mulaiKamera() {
 
   if (kameraAktif) {
     return;
   }
 
-
   kameraAktif = true;
-
 
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
 
-
   scanner =
     new Html5Qrcode("reader");
-
 
   scanner.start(
 
@@ -601,56 +475,43 @@ function mulaiKamera() {
     },
 
     {
-
       fps: 30,
 
       qrbox: {
         width: 280,
         height: 160
       }
-
     },
-
 
     function(register) {
 
-
       register =
         String(register).trim();
-
 
       if (!register) {
         return;
       }
 
-
       if (sedangProses) {
         return;
       }
 
-
       sedangProses = true;
-
 
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
         register +
         "...";
 
-
       cekRegister(register);
 
     },
 
-
     function(errorMessage) {
-
-      // Error pembacaan sementara diabaikan
 
     }
 
   )
-
 
   .then(function() {
 
@@ -660,11 +521,9 @@ function mulaiKamera() {
 
   })
 
-
   .catch(function(error) {
 
     kameraAktif = false;
-
 
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
@@ -674,50 +533,32 @@ function mulaiKamera() {
 
 }
 
-
-// ==========================================
-// CEK REGISTER
-// ==========================================
-
 function cekRegister(register) {
-
 
   const callbackName =
     "scan_" +
     Date.now();
 
-
   window[callbackName] =
     function(hasil) {
-
-
-      // ====================================
-      // BERHASIL
-      // ====================================
 
       if (
         hasil.status === "success"
       ) {
 
-
         jumlahBerhasil++;
-
 
         document.getElementById("jumlah").innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
 
-
         document.getElementById("status").innerHTML =
           "✅ " +
           register;
 
-
         bunyiBerhasil();
 
-
         getarBerhasil();
-
 
         tambahHasil(
 
@@ -733,20 +574,13 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // DUPLIKAT
-      // ====================================
-
       else if (
         hasil.status === "duplicate"
       ) {
 
-
         document.getElementById("status").innerHTML =
           "❌ " +
           hasil.message;
-
 
         tambahHasil(
 
@@ -762,20 +596,13 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // TIDAK DITEMUKAN
-      // ====================================
-
       else if (
         hasil.status === "not_found"
       ) {
 
-
         document.getElementById("status").innerHTML =
           "⚠️ " +
           hasil.message;
-
 
         tambahHasilTidakDitemukan(
           register
@@ -783,13 +610,7 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // ERROR
-      // ====================================
-
       else {
-
 
         document.getElementById("status").innerHTML =
           "⚠️ " +
@@ -797,26 +618,18 @@ function cekRegister(register) {
 
       }
 
-
-      // ====================================
-      // SIAP SCAN BERIKUTNYA
-      // ====================================
-
       setTimeout(function() {
 
         sedangProses = false;
 
       }, 500);
 
-
       delete window[callbackName];
-
 
       const script =
         document.getElementById(
           callbackName
         );
-
 
       if (script) {
         script.remove();
@@ -824,18 +637,11 @@ function cekRegister(register) {
 
     };
 
-
-  // ======================================
-  // JSONP
-  // ======================================
-
   const script =
     document.createElement("script");
 
-
   script.id =
     callbackName;
-
 
   script.src =
     API_URL +
@@ -844,34 +650,23 @@ function cekRegister(register) {
     "&callback=" +
     callbackName;
 
-
   script.onerror =
     function() {
-
 
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-
       sedangProses = false;
 
-
       delete window[callbackName];
-
 
       script.remove();
 
     };
 
-
   document.body.appendChild(script);
 
 }
-
-
-// ==========================================
-// HASIL BERHASIL / DUPLIKAT
-// ==========================================
 
 function tambahHasil(
 
@@ -882,23 +677,18 @@ function tambahHasil(
 
 ) {
 
-
   const register =
     data[0];
-
 
   const item =
     document.createElement("div");
 
-
   item.className =
     "item";
-
 
   const id =
     "detail_" +
     Date.now();
-
 
   let warna =
     tipe === "success"
@@ -907,18 +697,12 @@ function tambahHasil(
     :
     "duplicate";
 
-
   let tulisan =
     tipe === "success"
     ?
     "✅ " + register
     :
     "❌ " + register;
-
-
-  let tombol =
-    "DETAIL";
-
 
   item.innerHTML = `
 
@@ -932,11 +716,10 @@ function tambahHasil(
         class="detailBtn ${tipe === "duplicate" ? "duplicateBtn" : ""}"
         onclick="toggleDetail('${id}', this)"
       >
-        ${tombol}
+        DETAIL
       </button>
 
     </div>
-
 
     <div
       id="${id}"
@@ -983,7 +766,6 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
-
       ${
         tanggalScan
         ?
@@ -1002,11 +784,9 @@ function tambahHasil(
         ""
       }
 
-
     </div>
 
   `;
-
 
   document
     .getElementById("daftar")
@@ -1014,23 +794,15 @@ function tambahHasil(
 
 }
 
-
-// ==========================================
-// REGISTER TIDAK DITEMUKAN
-// ==========================================
-
 function tambahHasilTidakDitemukan(
   register
 ) {
 
-
   const item =
     document.createElement("div");
 
-
   item.className =
     "item";
-
 
   item.innerHTML = `
 
@@ -1048,49 +820,36 @@ function tambahHasilTidakDitemukan(
 
   `;
 
-
   document
     .getElementById("daftar")
     .prepend(item);
 
 }
 
-
-// ==========================================
-// BUKA / TUTUP DETAIL
-// ==========================================
-
 function toggleDetail(
   id,
   tombol
 ) {
 
-
   const detail =
     document.getElementById(id);
-
 
   if (
     detail.style.display === "block"
   ) {
 
-
     detail.style.display =
       "none";
 
-
     tombol.innerHTML =
       "DETAIL";
-
 
   }
 
   else {
 
-
     detail.style.display =
       "block";
-
 
     tombol.innerHTML =
       "TUTUP";
@@ -1101,8 +860,6 @@ function toggleDetail(
 
 </script>
 
-
 </body>
 
 </html>
-```
