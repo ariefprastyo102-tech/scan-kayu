@@ -38,39 +38,47 @@ body {
   margin: 0 auto 15px;
   background: white;
   border-radius: 14px;
-  padding: 15px 10px;
-  text-align: center;
+  padding: 15px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
 }
 
+.headerIsi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
 .logo {
-  width: 72px;
-  height: 72px;
+  width: 100px;
+  height: 80px;
   object-fit: contain;
-  display: block;
-  margin: 0 auto 6px;
+  flex-shrink: 0;
+}
+
+.judulBox {
+  text-align: left;
 }
 
 .judul {
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 800;
-  margin: 3px 0;
   color: #176b38;
-  letter-spacing: 0.3px;
+  line-height: 1.2;
 }
 
 .subjudul {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: bold;
   color: #555;
   letter-spacing: 1.5px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 
 /* ==========================================
-   CAMERA CARD
+   CAMERA
 ========================================== */
 
 .camera-card {
@@ -236,20 +244,24 @@ body {
   }
 
   .header {
-    padding: 13px 8px;
+    padding: 13px 10px;
+  }
+
+  .headerIsi {
+    gap: 12px;
   }
 
   .logo {
-    width: 65px;
-    height: 65px;
+    width: 90px;
+    height: 75px;
   }
 
   .judul {
-    font-size: 21px;
+    font-size: 19px;
   }
 
   .subjudul {
-    font-size: 14px;
+    font-size: 15px;
   }
 
 }
@@ -268,18 +280,26 @@ body {
 
 <div class="header">
 
-  <img
-    class="logo"
-    src="KL22_Perum%20Perhutani%20-%20Koleksilogo.com.svg"
-    alt="Logo Perhutani"
-  >
+  <div class="headerIsi">
 
-  <div class="judul">
-    SCAN REGISTER BBI
-  </div>
+    <img
+      class="logo"
+      src="KL22_Perum%20Perhutani%20-%20Koleksilogo.com.svg"
+      alt="Logo Perhutani"
+    >
 
-  <div class="subjudul">
-    IK SARADAN
+    <div class="judulBox">
+
+      <div class="judul">
+        SCAN REGISTER BBI
+      </div>
+
+      <div class="subjudul">
+        IK SARADAN
+      </div>
+
+    </div>
+
   </div>
 
 </div>
