@@ -161,11 +161,6 @@ h2{
   font-weight:bold;
 }
 
-
-/* =====================================================
-   STATUS HASIL SCAN
-===================================================== */
-
 .statusBerhasil{
   background:#2e7d32 !important;
   color:white;
@@ -203,11 +198,6 @@ h2{
   }
 
 }
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media(max-width:700px){
 
@@ -281,11 +271,6 @@ let sedangProses = false;
 
 let jumlahBerhasil = 0;
 
-
-// =====================================================
-// AUDIO
-// =====================================================
-
 let audioContext = null;
 
 
@@ -301,21 +286,14 @@ function siapkanAudio(){
       window.AudioContext ||
       window.webkitAudioContext;
 
-
     if(!AudioContext){
-
       return;
-
     }
-
 
     if(!audioContext){
-
       audioContext =
         new AudioContext();
-
     }
-
 
     if(
       audioContext.state ===
@@ -347,11 +325,8 @@ function bunyiBerhasil(){
   try{
 
     if(!audioContext){
-
       return;
-
     }
-
 
     if(
       audioContext.state ===
@@ -362,49 +337,39 @@ function bunyiBerhasil(){
 
     }
 
-
     const oscillator =
       audioContext.createOscillator();
-
 
     const gain =
       audioContext.createGain();
 
-
     oscillator.type =
       "sine";
-
 
     oscillator.frequency.setValueAtTime(
       1200,
       audioContext.currentTime
     );
 
-
     gain.gain.setValueAtTime(
       0.3,
       audioContext.currentTime
     );
-
 
     gain.gain.exponentialRampToValueAtTime(
       0.001,
       audioContext.currentTime + 0.25
     );
 
-
     oscillator.connect(
       gain
     );
-
 
     gain.connect(
       audioContext.destination
     );
 
-
     oscillator.start();
-
 
     oscillator.stop(
       audioContext.currentTime + 0.25
@@ -423,7 +388,7 @@ function bunyiBerhasil(){
 
 
 // =====================================================
-// GETAR HP
+// GETAR
 // =====================================================
 
 function getarBerhasil(){
@@ -438,6 +403,91 @@ function getarBerhasil(){
         60,
         120
       ]
+    );
+
+  }
+
+}
+
+
+// =====================================================
+// COBA AKTIFKAN ZOOM KAMERA
+// =====================================================
+
+async function aturZoomKamera(){
+
+  try{
+
+    if(!scanner){
+      return;
+    }
+
+    const video =
+      document.querySelector(
+        "#reader video"
+      );
+
+    if(!video){
+      return;
+    }
+
+    const track =
+      video.srcObject
+      ?
+      video.srcObject.getVideoTracks()[0]
+      :
+      null;
+
+    if(!track){
+      return;
+    }
+
+    const capabilities =
+      track.getCapabilities
+      ?
+      track.getCapabilities()
+      :
+      {};
+
+    if(
+      capabilities.zoom
+    ){
+
+      let zoom =
+        capabilities.zoom.min;
+
+      const maxZoom =
+        capabilities.zoom.max;
+
+      /*
+       * Jangan langsung zoom terlalu besar.
+       * Kita beri sedikit zoom agar barcode
+       * tetap mudah terbaca dari jarak lebih jauh.
+       */
+
+      zoom =
+        Math.min(
+          zoom + 1,
+          maxZoom
+        );
+
+      await track.applyConstraints({
+
+        advanced:[
+          {
+            zoom:zoom
+          }
+        ]
+
+      });
+
+    }
+
+  }catch(e){
+
+    console.log(
+      "Zoom tidak didukung",
+      e
     );
 
   }
@@ -487,20 +537,58 @@ function mulaiKamera(){
 
     {
       facingMode:
-        "environment"
+        {
+          exact:
+            "environment"
+        }
     },
 
     {
 
-      fps:15,
+      /*
+       * FPS dinaikkan supaya pembacaan
+       * lebih cepat.
+       */
+
+      fps:20,
+
+
+      /*
+       * Area scan diperbesar.
+       */
 
       qrbox:{
-        width:300,
-        height:180
+        width:380,
+        height:220
       },
 
+
+      /*
+       * Barcode CODE128 lebih cocok
+       * dengan area horizontal.
+       */
+
       aspectRatio:
-        1.7777778
+        1.7777778,
+
+
+      /*
+       * Minta resolusi kamera yang cukup tinggi
+       * agar barcode bisa terbaca dari jarak lebih jauh.
+       */
+
+      videoConstraints:{
+        facingMode:
+          "environment",
+
+        width:{
+          ideal:1920
+        },
+
+        height:{
+          ideal:1080
+        }
+      }
 
     },
 
@@ -514,16 +602,12 @@ function mulaiKamera(){
 
 
       if(!register){
-
         return;
-
       }
 
 
       if(sedangProses){
-
         return;
-
       }
 
 
@@ -554,7 +638,7 @@ function mulaiKamera(){
     function(errorMessage){
 
       // Error pembacaan sementara
-      // sengaja tidak ditampilkan
+      // tidak ditampilkan.
 
     }
 
@@ -575,26 +659,182 @@ function mulaiKamera(){
       "📷 KAMERA AKTIF<br>" +
       "Arahkan ke barcode";
 
+
+    /*
+     * Tunggu video benar-benar aktif
+     * sebelum mencoba zoom.
+     */
+
+    setTimeout(
+      function(){
+
+        aturZoomKamera();
+
+      },
+      1000
+    );
+
   })
 
 
   .catch(function(error){
 
+    /*
+     * Kalau mode exact environment
+     * tidak didukung, coba kamera
+     * belakang biasa.
+     */
+
     kameraAktif =
       false;
 
 
-    document.getElementById(
-      "status"
-    ).className =
-      "error";
+    scanner.clear()
+    .catch(
+      function(){}
+    );
 
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
-      "❌ Kamera gagal dibuka<br>" +
-      error;
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    scanner.start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+
+        fps:20,
+
+        qrbox:{
+          width:380,
+          height:220
+        },
+
+        aspectRatio:
+          1.7777778,
+
+        videoConstraints:{
+          facingMode:
+            "environment",
+
+          width:{
+            ideal:1920
+          },
+
+          height:{
+            ideal:1080
+          }
+        }
+
+      },
+
+
+      function(register){
+
+        register =
+          String(
+            register
+          ).trim();
+
+
+        if(!register){
+          return;
+        }
+
+
+        if(sedangProses){
+          return;
+        }
+
+
+        sedangProses =
+          true;
+
+
+        document.getElementById(
+          "status"
+        ).className =
+          "";
+
+
+        document.getElementById(
+          "status"
+        ).innerHTML =
+          "⏳ MENGECEK<br>" +
+          register;
+
+
+        cekRegister(
+          register
+        );
+
+      },
+
+
+      function(errorMessage){
+
+      }
+
+    )
+
+
+    .then(function(){
+
+      kameraAktif =
+        true;
+
+
+      document.getElementById(
+        "status"
+      ).className =
+        "";
+
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "📷 KAMERA AKTIF<br>" +
+        "Arahkan ke barcode";
+
+
+      setTimeout(
+        function(){
+
+          aturZoomKamera();
+
+        },
+        1000
+      );
+
+    })
+
+
+    .catch(function(error2){
+
+      kameraAktif =
+        false;
+
+
+      document.getElementById(
+        "status"
+      ).className =
+        "error";
+
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "❌ Kamera gagal dibuka<br>" +
+        error2;
+
+    });
 
   });
 
@@ -616,7 +856,6 @@ function cekRegister(
 
   window[callbackName] =
     function(hasil){
-
 
       if(!hasil){
 
@@ -658,7 +897,7 @@ function cekRegister(
 
 
         status.innerHTML =
-          "✅ SUDAH BERHASIL SCAN<br>" +
+          "✅ " +
           register;
 
 
@@ -702,7 +941,7 @@ function cekRegister(
 
 
         status.innerHTML =
-          "❌ SUDAH PERNAH SCAN<br>" +
+          "❌ " +
           register;
 
 
@@ -744,7 +983,7 @@ function cekRegister(
 
 
         status.innerHTML =
-          "⚠️ REGISTER TIDAK ADA<br>" +
+          "⚠️ " +
           register;
 
 
@@ -780,7 +1019,7 @@ function cekRegister(
 
 
       // =================================================
-      // SIAP SCAN LAGI
+      // SIAP SCAN BERIKUTNYA
       // =================================================
 
       setTimeout(
@@ -903,9 +1142,7 @@ function tambahHasil(
 ){
 
   if(!data){
-
     return;
-
   }
 
 
@@ -1037,7 +1274,6 @@ function tambahHasil(
         </span>
         : ${data[7] ?? ""}
       </div>
-
 
       ${
         tanggalScan
