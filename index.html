@@ -113,13 +113,6 @@ h2{
   word-break:break-all;
 }
 
-.statusScan{
-  display:block;
-  margin-top:5px;
-  font-size:13px;
-  font-weight:bold;
-}
-
 .success{
   color:#2e7d32;
 }
@@ -211,6 +204,10 @@ h2{
 
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:700px){
 
@@ -454,8 +451,6 @@ function getarBerhasil(){
 
 function mulaiKamera(){
 
-  // PENTING:
-  // Audio disiapkan saat tombol ditekan
   siapkanAudio();
 
 
@@ -667,11 +662,8 @@ function cekRegister(
           register;
 
 
-        // BUNYI
         bunyiBerhasil();
 
-
-        // GETAR
         getarBerhasil();
 
 
@@ -948,39 +940,17 @@ function tambahHasil(
     "❌ " + register;
 
 
-  const statusTulisan =
-    tipe === "success"
-    ?
-    "✅ SUDAH SCAN"
-    :
-    "❌ SUDAH PERNAH SCAN";
-
-
   item.innerHTML = `
 
     <div class="baris">
 
-      <div>
+      <div class="nomor ${
+        tipe === "success"
+        ? "success"
+        : "duplicate"
+      }">
 
-        <div class="nomor ${
-          tipe === "success"
-          ? "success"
-          : "duplicate"
-        }">
-
-          ${tulisan}
-
-        </div>
-
-        <div class="statusScan ${
-          tipe === "success"
-          ? "success"
-          : "duplicate"
-        }">
-
-          ${statusTulisan}
-
-        </div>
+        ${tulisan}
 
       </div>
 
@@ -1129,19 +1099,15 @@ function tambahHasilTidakDitemukan(
 
     <div class="baris">
 
-      <div>
+      <div class="nomor notfound">
 
-        <div class="nomor notfound">
+        ⚠️ ${register}
 
-          ⚠️ ${register}
+      </div>
 
-        </div>
+      <div class="notfound">
 
-        <div class="statusScan notfound">
-
-          ⚠️ TIDAK ADA DI DATABASE
-
-        </div>
+        TIDAK ADA
 
       </div>
 
