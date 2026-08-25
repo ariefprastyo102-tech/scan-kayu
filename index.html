@@ -326,7 +326,7 @@ body {
 
   <div class="headerIsi">
 
-
+```
 <img
   class="logo"
   src="logo-perhutani.jpg"
@@ -335,12 +335,16 @@ body {
 
 <div class="judulBox">
 
-  <div class="judul">SCAN REGISTER BBI</div>
+  <div class="judul">
+    SCAN REGISTER BBI
+  </div>
 
-  <div class="subjudul">IK SARADAN</div>
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
 </div>
-
+```
 
   </div>
 
@@ -390,8 +394,11 @@ const API_URL =
 
 
 let scanner = null;
+
 let kameraAktif = false;
+
 let sedangProses = false;
+
 let jumlahBerhasil = 0;
 
 
@@ -412,36 +419,48 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
+
     const oscillator1 =
       audio.createOscillator();
 
     const gain1 =
       audio.createGain();
 
-    oscillator1.type = "sine";
+
+    oscillator1.type =
+      "sine";
+
 
     oscillator1.frequency.setValueAtTime(
       1300,
       audio.currentTime
     );
 
+
     gain1.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
+
 
     gain1.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
+
     gain1.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.12
     );
 
+
     oscillator1.connect(gain1);
-    gain1.connect(audio.destination);
+
+    gain1.connect(
+      audio.destination
+    );
+
 
     oscillator1.start();
 
@@ -456,34 +475,46 @@ function bunyiBerhasil() {
     const gain2 =
       audio.createGain();
 
-    oscillator2.type = "sine";
+
+    oscillator2.type =
+      "sine";
+
 
     oscillator2.frequency.setValueAtTime(
       1850,
       audio.currentTime + 0.08
     );
 
+
     gain2.gain.setValueAtTime(
       0.001,
       audio.currentTime + 0.08
     );
+
 
     gain2.gain.exponentialRampToValueAtTime(
       0.28,
       audio.currentTime + 0.09
     );
 
+
     gain2.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.22
     );
 
+
     oscillator2.connect(gain2);
-    gain2.connect(audio.destination);
+
+    gain2.connect(
+      audio.destination
+    );
+
 
     oscillator2.start(
       audio.currentTime + 0.08
     );
+
 
     oscillator2.stop(
       audio.currentTime + 0.23
@@ -491,8 +522,11 @@ function bunyiBerhasil() {
 
 
     setTimeout(function() {
+
       audio.close();
+
     }, 400);
+
 
   } catch (e) {
 
@@ -535,6 +569,7 @@ function mulaiKamera() {
 
   kameraAktif = true;
 
+
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
 
@@ -550,23 +585,31 @@ function mulaiKamera() {
     },
 
     {
+
       fps: 30,
 
       qrbox: {
-        width: 280,
-        height: 160
-      }
+        width: 320,
+        height: 180
+      },
+
+      aspectRatio: 1.777778
+
     },
 
 
     function(register) {
 
+
       register =
         String(register).trim();
 
+
       if (!register) return;
 
+
       if (sedangProses) return;
+
 
       sedangProses = true;
 
@@ -584,6 +627,8 @@ function mulaiKamera() {
 
     function(errorMessage) {
 
+      // pembacaan yang belum berhasil diabaikan
+
     }
 
   )
@@ -591,20 +636,25 @@ function mulaiKamera() {
 
   .then(function() {
 
+
     document.getElementById("status").innerHTML =
       "📷 KAMERA AKTIF<br>" +
       "Arahkan ke barcode";
+
 
   })
 
 
   .catch(function(error) {
 
+
     kameraAktif = false;
+
 
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
       error;
+
 
   });
 
@@ -616,6 +666,7 @@ function mulaiKamera() {
 ============================== */
 
 function cekRegister(register) {
+
 
   const callbackName =
     "scan_" +
@@ -629,6 +680,7 @@ function cekRegister(register) {
       if (
         hasil.status === "success"
       ) {
+
 
         jumlahBerhasil++;
 
@@ -645,14 +697,20 @@ function cekRegister(register) {
 
         bunyiBerhasil();
 
+
         getarBerhasil();
 
 
         tambahHasil(
+
           hasil.data,
+
           hasil.tanggalScan,
+
           hasil.jamScan,
+
           "success"
+
         );
 
       }
@@ -662,16 +720,22 @@ function cekRegister(register) {
         hasil.status === "duplicate"
       ) {
 
+
         document.getElementById("status").innerHTML =
           "❌ " +
           hasil.message;
 
 
         tambahHasil(
+
           hasil.data,
+
           "",
+
           "",
+
           "duplicate"
+
         );
 
       }
@@ -680,6 +744,7 @@ function cekRegister(register) {
       else if (
         hasil.status === "not_found"
       ) {
+
 
         document.getElementById("status").innerHTML =
           "⚠️ " +
@@ -694,6 +759,7 @@ function cekRegister(register) {
 
 
       else {
+
 
         document.getElementById("status").innerHTML =
           "⚠️ " +
@@ -719,7 +785,9 @@ function cekRegister(register) {
 
 
       if (script) {
+
         script.remove();
+
       }
 
     };
@@ -743,6 +811,7 @@ function cekRegister(register) {
 
   script.onerror =
     function() {
+
 
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
@@ -769,34 +838,46 @@ function cekRegister(register) {
 ============================== */
 
 function tambahHasil(
+
   data,
   tanggalScan,
   jamScan,
   tipe
+
 ) {
+
 
   const register =
     data[0];
 
+
   const item =
     document.createElement("div");
 
+
   item.className =
     "item";
+
 
   const id =
     "detail_" +
     Date.now();
 
+
   const warna =
     tipe === "success"
-    ? "success"
-    : "duplicate";
+    ?
+    "success"
+    :
+    "duplicate";
+
 
   const tulisan =
     tipe === "success"
-    ? "✅ " + register
-    : "❌ " + register;
+    ?
+    "✅ " + register
+    :
+    "❌ " + register;
 
 
   item.innerHTML = `
@@ -866,6 +947,7 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
+
       ${
         tanggalScan
         ?
@@ -883,6 +965,7 @@ function tambahHasil(
         :
         ""
       }
+
 
     </div>
 
@@ -904,8 +987,10 @@ function tambahHasilTidakDitemukan(
   register
 ) {
 
+
   const item =
     document.createElement("div");
+
 
   item.className =
     "item";
@@ -944,6 +1029,7 @@ function toggleDetail(
   tombol
 ) {
 
+
   const detail =
     document.getElementById(id);
 
@@ -952,21 +1038,27 @@ function toggleDetail(
     detail.style.display === "block"
   ) {
 
+
     detail.style.display =
       "none";
 
+
     tombol.innerHTML =
       "DETAIL";
+
 
   }
 
   else {
 
+
     detail.style.display =
       "block";
 
+
     tombol.innerHTML =
       "TUTUP";
+
 
   }
 
