@@ -2,8 +2,11 @@
 
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Scan Register BBI - IK Saradan</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -90,6 +93,20 @@ body {
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 
+
+/* =================================================
+   AREA KAMERA + INDIKATOR HIJAU
+================================================= */
+
+.camera-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: black;
+}
+
 #reader {
   width: 100%;
   height: 220px;
@@ -104,6 +121,72 @@ body {
   width: 100% !important;
   height: 220px !important;
   object-fit: cover !important;
+}
+
+
+/* =================================================
+   INDIKATOR HIJAU
+================================================= */
+
+#scanBerhasil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 80%;
+  height: 55%;
+
+  transform: translate(-50%, -50%);
+
+  border: 5px solid #00e676;
+  border-radius: 12px;
+
+  box-shadow:
+    0 0 8px rgba(0,230,118,0.9),
+    0 0 20px rgba(0,230,118,0.7),
+    inset 0 0 10px rgba(0,230,118,0.25);
+
+  display: none;
+
+  z-index: 20;
+
+  pointer-events: none;
+}
+
+
+/* =================================================
+   TANDA CHECK HIJAU
+================================================= */
+
+#scanBerhasil::after {
+
+  content: "✓";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 55px;
+  height: 55px;
+
+  border-radius: 50%;
+
+  background: #00c853;
+
+  color: white;
+
+  font-size: 38px;
+  font-weight: bold;
+
+  line-height: 55px;
+
+  text-align: center;
+
+  box-shadow:
+    0 0 15px rgba(0,0,0,0.35);
 }
 
 
@@ -279,6 +362,10 @@ body {
     height: 220px !important;
   }
 
+  .camera-wrapper {
+    height: 220px;
+  }
+
 }
 
 
@@ -312,6 +399,10 @@ body {
     height: 210px !important;
   }
 
+  .camera-wrapper {
+    height: 210px;
+  }
+
 }
 
 </style>
@@ -320,51 +411,62 @@ body {
 
 <body>
 
+
 <!-- HEADER -->
 
 <div class="header">
 
   <div class="headerIsi">
 
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
 
-<img
-  class="logo"
-  src="logo-perhutani.jpg"
-  alt="Logo Perhutani"
->
+    <div class="judulBox">
 
-<div class="judulBox">
+      <div class="judul">
+        SCAN REGISTER BBI
+      </div>
 
-  <div class="judul">
-    SCAN REGISTER BBI
-  </div>
+      <div class="subjudul">
+        IK SARADAN
+      </div>
 
-  <div class="subjudul">
-    IK SARADAN
-  </div>
-
-</div>
-
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- CAMERA -->
 
 <div class="camera-card">
 
-  <div id="reader"></div>
+  <div class="camera-wrapper">
+
+    <div id="reader"></div>
+
+    <!-- INDIKATOR HIJAU -->
+
+    <div id="scanBerhasil"></div>
+
+  </div>
 
 </div>
 
-<button
-id="btnScan"
-onclick="mulaiKamera()"
 
+<button
+  id="btnScan"
+  onclick="mulaiKamera()"
 >
 
-📷 BUKA KAMERA </button>
+📷 BUKA KAMERA
+
+</button>
+
 
 <!-- STATUS -->
 
@@ -380,7 +482,9 @@ onclick="mulaiKamera()"
 
 </div>
 
+
 <div id="daftar"></div>
+
 
 <script>
 
@@ -400,6 +504,32 @@ let kameraAktif = false;
 let sedangProses = false;
 
 let jumlahBerhasil = 0;
+
+
+/* ==============================
+   INDIKATOR HIJAU
+============================== */
+
+function tampilkanIndikatorHijau() {
+
+  const indikator =
+    document.getElementById(
+      "scanBerhasil"
+    );
+
+
+  indikator.style.display =
+    "block";
+
+
+  setTimeout(function() {
+
+    indikator.style.display =
+      "none";
+
+  }, 700);
+
+}
 
 
 /* ==============================
@@ -614,6 +744,14 @@ function mulaiKamera() {
       sedangProses = true;
 
 
+      /*
+       * BARCODE BERHASIL TERBACA
+       * TAMPILKAN INDIKATOR HIJAU
+       */
+
+      tampilkanIndikatorHijau();
+
+
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
         register +
@@ -768,11 +906,7 @@ function cekRegister(register) {
       }
 
 
-      
-
-        sedangProses = false;
-
-      
+      sedangProses = false;
 
 
       delete window[callbackName];
