@@ -249,7 +249,7 @@ button{
     class="btnDownload"
     onclick="downloadSVG()">
 
-📄 DOWNLOAD MASTER A4 — TES STAPLES
+📥 DOWNLOAD MASTER SVG 6 × 3 CM
 
 </button>
 
@@ -874,7 +874,7 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD MASTER A4
+   DOWNLOAD MASTER SVG
 ===================================================== */
 
 function downloadSVG(){
@@ -924,18 +924,6 @@ function downloadSVG(){
 
 
     /* =================================================
-       UKURAN A4
-    ================================================= */
-
-    const A4_W =
-        210;
-
-
-    const A4_H =
-        297;
-
-
-    /* =================================================
        UKURAN LABEL
        60 x 30 MM
     ================================================= */
@@ -957,6 +945,14 @@ function downloadSVG(){
 
 
     /* =================================================
+       MARGIN
+    ================================================= */
+
+    const MARGIN =
+        10;
+
+
+    /* =================================================
        KOLOM
     ================================================= */
 
@@ -964,12 +960,38 @@ function downloadSVG(){
         3;
 
 
+    const ROW =
+        Math.ceil(
+            daftar.length / COL
+        );
+
+
     /* =================================================
-       BARIS
+       KANVAS
     ================================================= */
 
-    const ROW =
-        9;
+    const CANVAS_W =
+        MARGIN * 2 +
+        (
+            COL *
+            LABEL_W
+        ) +
+        (
+            (COL - 1) *
+            GAP
+        );
+
+
+    const CANVAS_H =
+        MARGIN * 2 +
+        (
+            ROW *
+            LABEL_H
+        ) +
+        (
+            (ROW - 1) *
+            GAP
+        );
 
 
     const NS =
@@ -977,7 +999,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SVG A4
+       SVG MASTER
     ================================================= */
 
     const root =
@@ -995,22 +1017,22 @@ function downloadSVG(){
 
     root.setAttribute(
         "width",
-        A4_W + "mm"
+        CANVAS_W + "mm"
     );
 
 
     root.setAttribute(
         "height",
-        A4_H + "mm"
+        CANVAS_H + "mm"
     );
 
 
     root.setAttribute(
         "viewBox",
         "0 0 " +
-        A4_W +
+        CANVAS_W +
         " " +
-        A4_H
+        CANVAS_H
     );
 
 
@@ -1039,13 +1061,13 @@ function downloadSVG(){
 
     background.setAttribute(
         "width",
-        A4_W
+        CANVAS_W
     );
 
 
     background.setAttribute(
         "height",
-        A4_H
+        CANVAS_H
     );
 
 
@@ -1064,12 +1086,7 @@ function downloadSVG(){
        BUAT LABEL
     ================================================= */
 
-    daftar
-    .slice(
-        0,
-        COL * ROW
-    )
-    .forEach(
+    daftar.forEach(
         function(item,index){
 
             const col =
@@ -1082,44 +1099,8 @@ function downloadSVG(){
                 );
 
 
-            const totalGridW =
-                (
-                    COL *
-                    LABEL_W
-                ) +
-                (
-                    (COL - 1) *
-                    GAP
-                );
-
-
-            const totalGridH =
-                (
-                    ROW *
-                    LABEL_H
-                ) +
-                (
-                    (ROW - 1) *
-                    GAP
-                );
-
-
-            const startX =
-                (
-                    A4_W -
-                    totalGridW
-                ) / 2;
-
-
-            const startY =
-                (
-                    A4_H -
-                    totalGridH
-                ) / 2;
-
-
             const labelX =
-                startX +
+                MARGIN +
                 col *
                 (
                     LABEL_W +
@@ -1128,13 +1109,17 @@ function downloadSVG(){
 
 
             const labelY =
-                startY +
+                MARGIN +
                 row *
                 (
                     LABEL_H +
                     GAP
                 );
 
+
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
 
             const group =
                 document.createElementNS(
@@ -1213,8 +1198,8 @@ function downloadSVG(){
 
             /* =================================================
                BARCODE
-               DIKECILKAN HANYA PADA LEBAR
-               AGAR ADA RUANG STAPLES KANAN-KIRI
+               
+               57 x 21 MM
             ================================================= */
 
             const svgWeb =
@@ -1232,7 +1217,7 @@ function downloadSVG(){
 
 
                 const BARCODE_W =
-                    48;
+                    57;
 
 
                 const BARCODE_H =
@@ -1406,6 +1391,10 @@ function downloadSVG(){
             );
 
 
+            /* =================================================
+               MASUKKAN LABEL
+            ================================================= */
+
             root.appendChild(
                 group
             );
@@ -1464,7 +1453,7 @@ function downloadSVG(){
 
 
     link.download =
-        "TES-A4-BARCODE-STAPLES.svg";
+        "MASTER-BARCODE-KAYU-6x3cm.svg";
 
 
     document.body.appendChild(
@@ -1493,11 +1482,8 @@ function downloadSVG(){
     document.getElementById(
         "status"
     ).innerHTML =
-        "✅ MASTER A4 selesai — " +
-        Math.min(
-            daftar.length,
-            27
-        ) +
+        "✅ MASTER SVG selesai — " +
+        daftar.length +
         " barcode";
 
 }
