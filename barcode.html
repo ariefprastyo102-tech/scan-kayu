@@ -12,6 +12,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
+<!-- ZIP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <style>
 
 *{
@@ -249,7 +252,7 @@ button{
     class="btnDownload"
     onclick="downloadSVG()">
 
-📥 DOWNLOAD MASTER SVG 6 × 3 CM
+📦 DOWNLOAD MASTER ZIP — 6 × 3 CM
 
 </button>
 
@@ -874,10 +877,10 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD MASTER SVG
+   DOWNLOAD MASTER SVG DALAM ZIP
 ===================================================== */
 
-function downloadSVG(){
+async function downloadSVG(){
 
     const semuaItem =
         document.querySelectorAll(
@@ -921,6 +924,16 @@ function downloadSVG(){
         return;
 
     }
+
+
+    /* =================================================
+       STATUS
+    ================================================= */
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "⏳ Membuat master SVG...";
 
 
     /* =================================================
@@ -1202,8 +1215,9 @@ function downloadSVG(){
 
             /* =================================================
                BARCODE
-               
+
                48 x 21 MM
+
                RUANG STAPLES KANAN-KIRI
             ================================================= */
 
@@ -1428,68 +1442,110 @@ function downloadSVG(){
 
 
     /* =================================================
-       DOWNLOAD
+       BUAT ZIP
     ================================================= */
 
-    const blob =
-        new Blob(
-            [source],
-            {
+    try{
+
+        const zip =
+            new JSZip();
+
+
+        zip.file(
+            "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg",
+            source
+        );
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "⏳ Mengompres file ZIP...";
+
+
+        const zipBlob =
+            await zip.generateAsync({
+
                 type:
-                    "image/svg+xml;charset=utf-8"
-            }
-        );
+                    "blob",
+
+                compression:
+                    "DEFLATE",
+
+                compressionOptions:{
+
+                    level:6
+
+                }
+
+            });
 
 
-    const url =
-        URL.createObjectURL(
-            blob
-        );
+        /* =================================================
+           DOWNLOAD ZIP
+        ================================================= */
 
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-
-    setTimeout(
-        function(){
-
-            URL.revokeObjectURL(
-                url
+        const url =
+            URL.createObjectURL(
+                zipBlob
             );
 
-        },
-        1000
-    );
+
+        const link =
+            document.createElement(
+                "a"
+            );
 
 
-    document.getElementById(
-        "status"
-    ).innerHTML =
-        "✅ MASTER SVG selesai — " +
-        daftar.length +
-        " barcode";
+        link.href =
+            url;
+
+
+        link.download =
+            "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.zip";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        setTimeout(
+            function(){
+
+                URL.revokeObjectURL(
+                    url
+                );
+
+            },
+            1000
+        );
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "✅ ZIP selesai — " +
+            daftar.length +
+            " barcode";
+
+
+    }
+    catch(error){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "❌ Gagal membuat ZIP: " +
+            error.message;
+
+    }
 
 }
 
