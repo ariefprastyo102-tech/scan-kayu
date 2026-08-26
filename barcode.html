@@ -12,8 +12,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
 
 *{
@@ -80,11 +78,6 @@ button{
     margin-top:15px;
     background:#6a1b9a;
     color:white;
-}
-
-.btnDownload:disabled{
-    background:#999;
-    cursor:not-allowed;
 }
 
 .filter{
@@ -253,11 +246,10 @@ button{
 </div>
 
 <button
-    id="btnDownload"
     class="btnDownload"
-    onclick="downloadPDF()">
+    onclick="downloadSVG()">
 
-📄 DOWNLOAD MASTER PDF A4 — 6 × 3 CM
+📥 DOWNLOAD MASTER SVG 6 × 3 CM
 
 </button>
 
@@ -350,7 +342,9 @@ function ambilDatabase(){
                     ).trim();
 
                 if(!register){
+
                     return;
+
                 }
 
                 database.push({
@@ -399,15 +393,22 @@ function ambilDatabase(){
         };
 
 
-    document.body.appendChild(script);
+    document.body.appendChild(
+        script
+    );
 
 
     function bersihkan(){
 
-        delete window[callback];
+        delete window[
+            callback
+        ];
+
 
         if(script){
+
             script.remove();
+
         }
 
     }
@@ -422,7 +423,10 @@ function ambilDatabase(){
 function tampilkan(){
 
     const grid =
-        document.getElementById("grid");
+        document.getElementById(
+            "grid"
+        );
+
 
     grid.innerHTML="";
 
@@ -431,16 +435,22 @@ function tampilkan(){
         function(data,index){
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "item";
 
+
             item.dataset.index =
                 index;
 
+
             item.dataset.register =
                 data.register.toLowerCase();
+
 
             item.dataset.tumpuk =
                 data.tumpuk.toLowerCase();
@@ -449,10 +459,14 @@ function tampilkan(){
             /* CHECKBOX */
 
             const check =
-                document.createElement("input");
+                document.createElement(
+                    "input"
+                );
+
 
             check.type =
                 "checkbox";
+
 
             check.checked =
                 data.dipilih;
@@ -464,15 +478,20 @@ function tampilkan(){
                     data.dipilih =
                         this.checked;
 
+
                     updateJumlah();
 
                 };
 
 
-            item.appendChild(check);
+            item.appendChild(
+                check
+            );
 
 
-            /* BARCODE */
+            /* =================================================
+               SVG BARCODE WEB
+            ================================================= */
 
             const svg =
                 document.createElementNS(
@@ -481,12 +500,17 @@ function tampilkan(){
                 );
 
 
-            item.appendChild(svg);
+            item.appendChild(
+                svg
+            );
 
 
             JsBarcode(
+
                 svg,
+
                 data.register,
+
                 {
 
                     format:
@@ -505,39 +529,60 @@ function tampilkan(){
                         3
 
                 }
+
             );
 
 
             /* INFO */
 
             const info =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             info.className =
                 "info";
 
 
             const register =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
+
 
             register.textContent =
                 data.register;
 
 
             const tumpuk =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
+
 
             tumpuk.textContent =
                 data.tumpuk;
 
 
-            info.appendChild(register);
+            info.appendChild(
+                register
+            );
 
-            info.appendChild(tumpuk);
 
-            item.appendChild(info);
+            info.appendChild(
+                tumpuk
+            );
 
-            grid.appendChild(item);
+
+            item.appendChild(
+                info
+            );
+
+
+            grid.appendChild(
+                item
+            );
 
         }
     );
@@ -553,7 +598,9 @@ function filterData(){
 
     const register =
         document
-        .getElementById("filterRegister")
+        .getElementById(
+            "filterRegister"
+        )
         .value
         .trim()
         .toLowerCase();
@@ -561,7 +608,9 @@ function filterData(){
 
     const tumpuk =
         document
-        .getElementById("filterTumpuk")
+        .getElementById(
+            "filterTumpuk"
+        )
         .value
         .trim()
         .toLowerCase();
@@ -574,13 +623,16 @@ function filterData(){
         const nilaiRegister =
             item.dataset.register;
 
+
         const nilaiTumpuk =
             item.dataset.tumpuk;
 
 
         const cocokRegister =
             register === "" ||
-            nilaiRegister.includes(register);
+            nilaiRegister.includes(
+                register
+            );
 
 
         const cocokTumpuk =
@@ -593,11 +645,15 @@ function filterData(){
             cocokTumpuk
         ){
 
-            item.classList.remove("hide");
+            item.classList.remove(
+                "hide"
+            );
 
         }else{
 
-            item.classList.add("hide");
+            item.classList.add(
+                "hide"
+            );
 
         }
 
@@ -616,6 +672,7 @@ function tampilkanSemua(){
         "filterRegister"
     ).value="";
 
+
     document.getElementById(
         "filterTumpuk"
     ).value="";
@@ -625,7 +682,9 @@ function tampilkanSemua(){
     .querySelectorAll(".item")
     .forEach(function(item){
 
-        item.classList.remove("hide");
+        item.classList.remove(
+            "hide"
+        );
 
     });
 
@@ -643,22 +702,28 @@ function pilihHasilFilter(){
     .forEach(function(item){
 
         if(
-            item.classList.contains("hide")
+            item.classList.contains(
+                "hide"
+            )
         ){
+
             return;
+
         }
 
 
         const index =
-            Number(item.dataset.index);
+            Number(
+                item.dataset.index
+            );
 
 
-        database[index].dipilih =
-            true;
+        database[index].dipilih=true;
 
 
-        item.querySelector("input").checked =
-            true;
+        item.querySelector(
+            "input"
+        ).checked=true;
 
     });
 
@@ -679,22 +744,28 @@ function batalHasilFilter(){
     .forEach(function(item){
 
         if(
-            item.classList.contains("hide")
+            item.classList.contains(
+                "hide"
+            )
         ){
+
             return;
+
         }
 
 
         const index =
-            Number(item.dataset.index);
+            Number(
+                item.dataset.index
+            );
 
 
-        database[index].dipilih =
-            false;
+        database[index].dipilih=false;
 
 
-        item.querySelector("input").checked =
-            false;
+        item.querySelector(
+            "input"
+        ).checked=false;
 
     });
 
@@ -713,8 +784,7 @@ function pilihSemua(){
     database.forEach(
         function(data){
 
-            data.dipilih =
-                true;
+            data.dipilih=true;
 
         }
     );
@@ -724,8 +794,9 @@ function pilihSemua(){
     .querySelectorAll(".item")
     .forEach(function(item){
 
-        item.querySelector("input").checked =
-            true;
+        item.querySelector(
+            "input"
+        ).checked=true;
 
     });
 
@@ -744,8 +815,7 @@ function batalSemua(){
     database.forEach(
         function(data){
 
-            data.dipilih =
-                false;
+            data.dipilih=false;
 
         }
     );
@@ -755,8 +825,9 @@ function batalSemua(){
     .querySelectorAll(".item")
     .forEach(function(item){
 
-        item.querySelector("input").checked =
-            false;
+        item.querySelector(
+            "input"
+        ).checked=false;
 
     });
 
@@ -779,17 +850,23 @@ function updateJumlah(){
     const dipilih =
         database.filter(
             function(data){
+
                 return data.dipilih;
+
             }
         ).length;
 
 
-    document.getElementById("jumlah").innerHTML =
+    document.getElementById(
+        "jumlah"
+    ).innerHTML =
         "Jumlah barcode: " +
         jumlah;
 
 
-    document.getElementById("dipilih").innerHTML =
+    document.getElementById(
+        "dipilih"
+    ).innerHTML =
         "Dipilih: " +
         dipilih;
 
@@ -797,66 +874,40 @@ function updateJumlah(){
 
 
 /* =====================================================
-   BUAT BARCODE KE CANVAS
+   DOWNLOAD MASTER SVG
 ===================================================== */
 
-function buatBarcodeCanvas(register){
+function downloadSVG(){
 
-    return new Promise(function(resolve){
-
-        const canvas =
-            document.createElement("canvas");
-
-
-        JsBarcode(
-            canvas,
-            register,
-            {
-
-                format:
-                    "CODE128",
-
-                width:
-                    2,
-
-                height:
-                    55,
-
-                displayValue:
-                    false,
-
-                margin:
-                    3,
-
-                background:
-                    "#ffffff",
-
-                lineColor:
-                    "#000000"
-
-            }
+    const semuaItem =
+        document.querySelectorAll(
+            ".item"
         );
 
 
-        resolve(canvas);
-
-    });
-
-}
+    const daftar=[];
 
 
-/* =====================================================
-   DOWNLOAD PDF CEPAT
-===================================================== */
+    semuaItem.forEach(
+        function(item){
 
-async function downloadPDF(){
+            const index =
+                Number(
+                    item.dataset.index
+                );
 
-    const daftar =
-        database.filter(
-            function(data){
-                return data.dipilih;
+
+            if(
+                database[index] &&
+                database[index].dipilih
+            ){
+
+                daftar.push(item);
+
             }
-        );
+
+        }
+    );
 
 
     if(
@@ -872,355 +923,581 @@ async function downloadPDF(){
     }
 
 
-    const btn =
-        document.getElementById(
-            "btnDownload"
-        );
-
-
-    const status =
-        document.getElementById(
-            "status"
-        );
-
-
-    btn.disabled =
-        true;
-
-
-    btn.innerHTML =
-        "⏳ MEMBUAT PDF...";
-
-
     /* =================================================
-       UKURAN
+       UKURAN LABEL
+       60 x 30 MM
     ================================================= */
 
     const LABEL_W =
         60;
 
+
     const LABEL_H =
         30;
 
-    const BARCODE_W =
-        48;
 
-    const BARCODE_H =
-        21;
+    /* =================================================
+       JARAK ANTAR LABEL
+    ================================================= */
 
     const GAP =
         2;
 
+
+    /* =================================================
+       MARGIN
+    ================================================= */
+
+    const MARGIN =
+        10;
+
+
+    /* =================================================
+       KOLOM
+    ================================================= */
+
     const COL =
         3;
 
+
+    /* =================================================
+       BARIS
+    ================================================= */
+
     const ROW =
-        9;
-
-    const PER_PAGE =
-        COL * ROW;
-
-
-    const A4_W =
-        210;
-
-    const A4_H =
-        297;
-
-
-    const totalGridW =
-        COL * LABEL_W +
-        (COL - 1) * GAP;
-
-
-    const totalGridH =
-        ROW * LABEL_H +
-        (ROW - 1) * GAP;
-
-
-    const startX =
-        (A4_W - totalGridW) / 2;
-
-
-    const startY =
-        (A4_H - totalGridH) / 2;
-
-
-    /* =================================================
-       PDF
-    ================================================= */
-
-    const {
-        jsPDF
-    } =
-        window.jspdf;
-
-
-    const pdf =
-        new jsPDF({
-
-            orientation:
-                "portrait",
-
-            unit:
-                "mm",
-
-            format:
-                "a4",
-
-            compress:
-                true
-
-        });
-
-
-    /* =================================================
-       PROSES PER BARCODE
-    ================================================= */
-
-    for(
-        let i = 0;
-        i < daftar.length;
-        i++
-    ){
-
-        /* progress */
-
-        if(
-            i % 20 === 0 ||
-            i === daftar.length - 1
-        ){
-
-            status.innerHTML =
-                "⏳ Membuat PDF... " +
-                (i + 1) +
-                " / " +
-                daftar.length;
-
-        }
-
-
-        /* halaman */
-
-        const posisi =
-            i % PER_PAGE;
-
-
-        if(
-            i > 0 &&
-            posisi === 0
-        ){
-
-            pdf.addPage();
-
-        }
-
-
-        const col =
-            posisi % COL;
-
-
-        const row =
-            Math.floor(
-                posisi / COL
-            );
-
-
-        const x =
-            startX +
-            col *
-            (
-                LABEL_W +
-                GAP
-            );
-
-
-        const y =
-            startY +
-            row *
-            (
-                LABEL_H +
-                GAP
-            );
-
-
-        /* =================================================
-           KOTAK LABEL
-        ================================================= */
-
-        pdf.setDrawColor(
-            0,
-            0,
-            0
+        Math.ceil(
+            daftar.length / COL
         );
 
 
-        pdf.setLineWidth(
-            0.25
+    /* =================================================
+       KANVAS
+    ================================================= */
+
+    const CANVAS_W =
+        MARGIN * 2 +
+        (
+            COL *
+            LABEL_W
+        ) +
+        (
+            (COL - 1) *
+            GAP
         );
 
 
-        pdf.rect(
-            x,
-            y,
-            LABEL_W,
+    const CANVAS_H =
+        MARGIN * 2 +
+        (
+            ROW *
             LABEL_H
+        ) +
+        (
+            (ROW - 1) *
+            GAP
         );
 
 
-        /* =================================================
-           BARCODE
-        ================================================= */
-
-        const canvas =
-            await buatBarcodeCanvas(
-                daftar[i].register
-            );
-
-
-        const image =
-            canvas.toDataURL(
-                "image/png"
-            );
-
-
-        const barcodeX =
-            x +
-            (
-                LABEL_W -
-                BARCODE_W
-            ) / 2;
-
-
-        const barcodeY =
-            y +
-            1;
-
-
-        pdf.addImage(
-
-            image,
-
-            "PNG",
-
-            barcodeX,
-
-            barcodeY,
-
-            BARCODE_W,
-
-            BARCODE_H,
-
-            undefined,
-
-            "FAST"
-
-        );
-
-
-        /* =================================================
-           REGISTER + TUMPUK
-        ================================================= */
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(
-            4.5
-        );
-
-
-        pdf.setTextColor(
-            0,
-            0,
-            0
-        );
-
-
-        const tulisan =
-            daftar[i].register +
-            " " +
-            daftar[i].tumpuk;
-
-
-        pdf.text(
-
-            tulisan,
-
-            x +
-            LABEL_W / 2,
-
-            y +
-            27,
-
-            {
-
-                align:
-                    "center"
-
-            }
-
-        );
-
-
-        /*
-         * Beri kesempatan browser bernapas
-         * setiap 30 barcode
-         */
-
-        if(
-            i % 30 === 0
-        ){
-
-            await new Promise(
-                function(resolve){
-
-                    setTimeout(
-                        resolve,
-                        0
-                    );
-
-                }
-            );
-
-        }
-
-    }
+    const NS =
+        "http://www.w3.org/2000/svg";
 
 
     /* =================================================
-       SIMPAN
+       SVG MASTER
     ================================================= */
 
-    status.innerHTML =
-        "⏳ Menyimpan PDF...";
+    const root =
+        document.createElementNS(
+            NS,
+            "svg"
+        );
 
 
-    pdf.save(
-        "MASTER-BARCODE-KAYU-6x3cm.pdf"
+    root.setAttribute(
+        "xmlns",
+        NS
     );
 
 
-    status.innerHTML =
-        "✅ PDF selesai — " +
+    root.setAttribute(
+        "width",
+        CANVAS_W + "mm"
+    );
+
+
+    root.setAttribute(
+        "height",
+        CANVAS_H + "mm"
+    );
+
+
+    root.setAttribute(
+        "viewBox",
+        "0 0 " +
+        CANVAS_W +
+        " " +
+        CANVAS_H
+    );
+
+
+    /* =================================================
+       BACKGROUND
+    ================================================= */
+
+    const background =
+        document.createElementNS(
+            NS,
+            "rect"
+        );
+
+
+    background.setAttribute(
+        "x",
+        0
+    );
+
+
+    background.setAttribute(
+        "y",
+        0
+    );
+
+
+    background.setAttribute(
+        "width",
+        CANVAS_W
+    );
+
+
+    background.setAttribute(
+        "height",
+        CANVAS_H
+    );
+
+
+    background.setAttribute(
+        "fill",
+        "white"
+    );
+
+
+    root.appendChild(
+        background
+    );
+
+
+    /* =================================================
+       BUAT LABEL
+    ================================================= */
+
+    daftar.forEach(
+        function(item,index){
+
+            const col =
+                index % COL;
+
+
+            const row =
+                Math.floor(
+                    index / COL
+                );
+
+
+            const labelX =
+                MARGIN +
+                col *
+                (
+                    LABEL_W +
+                    GAP
+                );
+
+
+            const labelY =
+                MARGIN +
+                row *
+                (
+                    LABEL_H +
+                    GAP
+                );
+
+
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
+
+            const group =
+                document.createElementNS(
+                    NS,
+                    "g"
+                );
+
+
+            group.setAttribute(
+                "transform",
+                "translate(" +
+                labelX +
+                " " +
+                labelY +
+                ")"
+            );
+
+
+            /* =================================================
+               KOTAK LABEL
+            ================================================= */
+
+            const border =
+                document.createElementNS(
+                    NS,
+                    "rect"
+                );
+
+
+            border.setAttribute(
+                "x",
+                0
+            );
+
+
+            border.setAttribute(
+                "y",
+                0
+            );
+
+
+            border.setAttribute(
+                "width",
+                LABEL_W
+            );
+
+
+            border.setAttribute(
+                "height",
+                LABEL_H
+            );
+
+
+            border.setAttribute(
+                "fill",
+                "white"
+            );
+
+
+            border.setAttribute(
+                "stroke",
+                "black"
+            );
+
+
+            border.setAttribute(
+                "stroke-width",
+                "0.25"
+            );
+
+
+            group.appendChild(
+                border
+            );
+
+
+            /* =================================================
+               BARCODE
+               
+               48 x 21 MM
+
+               RUANG KIRI-KANAN
+               UNTUK STAPLES
+            ================================================= */
+
+            const svgWeb =
+                item.querySelector(
+                    "svg"
+                );
+
+
+            if(svgWeb){
+
+                const clone =
+                    svgWeb.cloneNode(
+                        true
+                    );
+
+
+                const BARCODE_W =
+                    48;
+
+
+                const BARCODE_H =
+                    21;
+
+
+                const barcodeX =
+                    (
+                        LABEL_W -
+                        BARCODE_W
+                    ) / 2;
+
+
+                const barcodeY =
+                    1;
+
+
+                clone.setAttribute(
+                    "x",
+                    barcodeX
+                );
+
+
+                clone.setAttribute(
+                    "y",
+                    barcodeY
+                );
+
+
+                clone.setAttribute(
+                    "width",
+                    BARCODE_W
+                );
+
+
+                clone.setAttribute(
+                    "height",
+                    BARCODE_H
+                );
+
+
+                clone.setAttribute(
+                    "preserveAspectRatio",
+                    "none"
+                );
+
+
+                clone.removeAttribute(
+                    "style"
+                );
+
+
+                group.appendChild(
+                    clone
+                );
+
+            }
+
+
+            /* =================================================
+               AMBIL ANGKA
+            ================================================= */
+
+            const info =
+                item.querySelector(
+                    ".info"
+                );
+
+
+            let registerText =
+                "";
+
+
+            let tumpukText =
+                "";
+
+
+            if(info){
+
+                const teks =
+                    info.querySelectorAll(
+                        "span"
+                    );
+
+
+                if(teks[0]){
+
+                    registerText =
+                        teks[0].textContent;
+
+                }
+
+
+                if(teks[1]){
+
+                    tumpukText =
+                        teks[1].textContent;
+
+                }
+
+            }
+
+
+            /* =================================================
+               ANGKA REGISTER + TUMPUK
+
+               FONT 7 MM
+            ================================================= */
+
+            const angka =
+                document.createElementNS(
+                    NS,
+                    "text"
+                );
+
+
+            angka.setAttribute(
+                "x",
+                LABEL_W / 2
+            );
+
+
+            angka.setAttribute(
+                "y",
+                "26"
+            );
+
+
+            angka.setAttribute(
+                "text-anchor",
+                "middle"
+            );
+
+
+            angka.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+
+            angka.setAttribute(
+                "font-family",
+                "Arial"
+            );
+
+
+            angka.setAttribute(
+                "font-size",
+                "7"
+            );
+
+
+            angka.setAttribute(
+                "font-weight",
+                "bold"
+            );
+
+
+            angka.setAttribute(
+                "word-spacing",
+                "2px"
+            );
+
+
+            angka.textContent =
+                registerText +
+                " " +
+                tumpukText;
+
+
+            group.appendChild(
+                angka
+            );
+
+
+            /* =================================================
+               MASUKKAN LABEL
+            ================================================= */
+
+            root.appendChild(
+                group
+            );
+
+        }
+    );
+
+
+    /* =================================================
+       SERIALIZE SVG
+    ================================================= */
+
+    const serializer =
+        new XMLSerializer();
+
+
+    let source =
+        serializer.serializeToString(
+            root
+        );
+
+
+    source =
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        source;
+
+
+    /* =================================================
+       DOWNLOAD
+    ================================================= */
+
+    const blob =
+        new Blob(
+            [source],
+            {
+                type:
+                    "image/svg+xml;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    setTimeout(
+        function(){
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        },
+        1000
+    );
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "✅ MASTER SVG selesai — " +
         daftar.length +
         " barcode";
-
-
-    btn.disabled =
-        false;
-
-
-    btn.innerHTML =
-        "📄 DOWNLOAD MASTER PDF A4 — 6 × 3 CM";
 
 }
 
 </script>
 
 </body>
-
 </html>
