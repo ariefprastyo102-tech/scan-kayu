@@ -249,7 +249,7 @@ button{
     class="btnDownload"
     onclick="downloadSVG()">
 
-📄 DOWNLOAD MASTER A4 — TES 6×3 CM
+📄 DOWNLOAD MASTER A4 — TES STAPLES
 
 </button>
 
@@ -276,8 +276,18 @@ Dipilih: 0
 
 <script>
 
+
+/* =====================================================
+   API DATABASE
+===================================================== */
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
+
+/* =====================================================
+   DATABASE
+===================================================== */
 
 let database=[];
 
@@ -360,14 +370,17 @@ function ambilDatabase(){
 
         };
 
+
     const script =
         document.createElement("script");
+
 
     script.src =
         API_URL +
         "?getDatabase=1" +
         "&callback=" +
         callback;
+
 
     script.onerror =
         function(){
@@ -379,15 +392,18 @@ function ambilDatabase(){
 
         };
 
+
     document.body.appendChild(
         script
     );
+
 
     function bersihkan(){
 
         delete window[
             callback
         ];
+
 
         if(script){
 
@@ -411,7 +427,9 @@ function tampilkan(){
             "grid"
         );
 
+
     grid.innerHTML="";
+
 
     database.forEach(
         function(data,index){
@@ -421,28 +439,38 @@ function tampilkan(){
                     "div"
                 );
 
+
             item.className =
                 "item";
+
 
             item.dataset.index =
                 index;
 
+
             item.dataset.register =
                 data.register.toLowerCase();
 
+
             item.dataset.tumpuk =
                 data.tumpuk.toLowerCase();
+
+
+            /* CHECKBOX */
 
             const check =
                 document.createElement(
                     "input"
                 );
 
+
             check.type =
                 "checkbox";
 
+
             check.checked =
                 data.dipilih;
+
 
             check.onchange =
                 function(){
@@ -450,13 +478,20 @@ function tampilkan(){
                     data.dipilih =
                         this.checked;
 
+
                     updateJumlah();
 
                 };
 
+
             item.appendChild(
                 check
             );
+
+
+            /* =================================================
+               SVG BARCODE WEB
+            ================================================= */
 
             const svg =
                 document.createElementNS(
@@ -464,9 +499,11 @@ function tampilkan(){
                     "svg"
                 );
 
+
             item.appendChild(
                 svg
             );
+
 
             JsBarcode(
 
@@ -495,41 +532,53 @@ function tampilkan(){
 
             );
 
+
+            /* INFO */
+
             const info =
                 document.createElement(
                     "div"
                 );
 
+
             info.className =
                 "info";
+
 
             const register =
                 document.createElement(
                     "span"
                 );
 
+
             register.textContent =
                 data.register;
+
 
             const tumpuk =
                 document.createElement(
                     "span"
                 );
 
+
             tumpuk.textContent =
                 data.tumpuk;
+
 
             info.appendChild(
                 register
             );
 
+
             info.appendChild(
                 tumpuk
             );
 
+
             item.appendChild(
                 info
             );
+
 
             grid.appendChild(
                 item
@@ -556,6 +605,7 @@ function filterData(){
         .trim()
         .toLowerCase();
 
+
     const tumpuk =
         document
         .getElementById(
@@ -565,6 +615,7 @@ function filterData(){
         .trim()
         .toLowerCase();
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -572,8 +623,10 @@ function filterData(){
         const nilaiRegister =
             item.dataset.register;
 
+
         const nilaiTumpuk =
             item.dataset.tumpuk;
+
 
         const cocokRegister =
             register === "" ||
@@ -581,9 +634,11 @@ function filterData(){
                 register
             );
 
+
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
+
 
         if(
             cocokRegister &&
@@ -617,9 +672,11 @@ function tampilkanSemua(){
         "filterRegister"
     ).value="";
 
+
     document.getElementById(
         "filterTumpuk"
     ).value="";
+
 
     document
     .querySelectorAll(".item")
@@ -654,18 +711,22 @@ function pilihHasilFilter(){
 
         }
 
+
         const index =
             Number(
                 item.dataset.index
             );
 
+
         database[index].dipilih=true;
+
 
         item.querySelector(
             "input"
         ).checked=true;
 
     });
+
 
     updateJumlah();
 
@@ -692,18 +753,22 @@ function batalHasilFilter(){
 
         }
 
+
         const index =
             Number(
                 item.dataset.index
             );
 
+
         database[index].dipilih=false;
+
 
         item.querySelector(
             "input"
         ).checked=false;
 
     });
+
 
     updateJumlah();
 
@@ -724,6 +789,7 @@ function pilihSemua(){
         }
     );
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -733,6 +799,7 @@ function pilihSemua(){
         ).checked=true;
 
     });
+
 
     updateJumlah();
 
@@ -753,6 +820,7 @@ function batalSemua(){
         }
     );
 
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -762,6 +830,7 @@ function batalSemua(){
         ).checked=false;
 
     });
+
 
     updateJumlah();
 
@@ -777,6 +846,7 @@ function updateJumlah(){
     const jumlah =
         database.length;
 
+
     const dipilih =
         database.filter(
             function(data){
@@ -786,11 +856,13 @@ function updateJumlah(){
             }
         ).length;
 
+
     document.getElementById(
         "jumlah"
     ).innerHTML =
         "Jumlah barcode: " +
         jumlah;
+
 
     document.getElementById(
         "dipilih"
@@ -812,7 +884,9 @@ function downloadSVG(){
             ".item"
         );
 
+
     const daftar=[];
+
 
     semuaItem.forEach(
         function(item){
@@ -821,6 +895,7 @@ function downloadSVG(){
                 Number(
                     item.dataset.index
                 );
+
 
             if(
                 database[index] &&
@@ -850,11 +925,11 @@ function downloadSVG(){
 
     /* =================================================
        UKURAN A4
-       210 x 297 MM
     ================================================= */
 
     const A4_W =
         210;
+
 
     const A4_H =
         297;
@@ -868,6 +943,7 @@ function downloadSVG(){
     const LABEL_W =
         60;
 
+
     const LABEL_H =
         30;
 
@@ -878,14 +954,6 @@ function downloadSVG(){
 
     const GAP =
         2;
-
-
-    /* =================================================
-       MARGIN A4
-    ================================================= */
-
-    const MARGIN =
-        5;
 
 
     /* =================================================
@@ -918,20 +986,24 @@ function downloadSVG(){
             "svg"
         );
 
+
     root.setAttribute(
         "xmlns",
         NS
     );
+
 
     root.setAttribute(
         "width",
         A4_W + "mm"
     );
 
+
     root.setAttribute(
         "height",
         A4_H + "mm"
     );
+
 
     root.setAttribute(
         "viewBox",
@@ -952,30 +1024,36 @@ function downloadSVG(){
             "rect"
         );
 
+
     background.setAttribute(
         "x",
         0
     );
+
 
     background.setAttribute(
         "y",
         0
     );
 
+
     background.setAttribute(
         "width",
         A4_W
     );
+
 
     background.setAttribute(
         "height",
         A4_H
     );
 
+
     background.setAttribute(
         "fill",
         "white"
     );
+
 
     root.appendChild(
         background
@@ -996,6 +1074,7 @@ function downloadSVG(){
 
             const col =
                 index % COL;
+
 
             const row =
                 Math.floor(
@@ -1084,40 +1163,48 @@ function downloadSVG(){
                     "rect"
                 );
 
+
             border.setAttribute(
                 "x",
                 0
             );
+
 
             border.setAttribute(
                 "y",
                 0
             );
 
+
             border.setAttribute(
                 "width",
                 LABEL_W
             );
+
 
             border.setAttribute(
                 "height",
                 LABEL_H
             );
 
+
             border.setAttribute(
                 "fill",
                 "white"
             );
+
 
             border.setAttribute(
                 "stroke",
                 "black"
             );
 
+
             border.setAttribute(
                 "stroke-width",
                 "0.25"
             );
+
 
             group.appendChild(
                 border
@@ -1126,6 +1213,8 @@ function downloadSVG(){
 
             /* =================================================
                BARCODE
+               DIKECILKAN HANYA PADA LEBAR
+               AGAR ADA RUANG STAPLES KANAN-KIRI
             ================================================= */
 
             const svgWeb =
@@ -1143,7 +1232,8 @@ function downloadSVG(){
 
 
                 const BARCODE_W =
-                    57;
+                    48;
+
 
                 const BARCODE_H =
                     21;
@@ -1165,29 +1255,35 @@ function downloadSVG(){
                     barcodeX
                 );
 
+
                 clone.setAttribute(
                     "y",
                     barcodeY
                 );
+
 
                 clone.setAttribute(
                     "width",
                     BARCODE_W
                 );
 
+
                 clone.setAttribute(
                     "height",
                     BARCODE_H
                 );
+
 
                 clone.setAttribute(
                     "preserveAspectRatio",
                     "none"
                 );
 
+
                 clone.removeAttribute(
                     "style"
                 );
+
 
                 group.appendChild(
                     clone
@@ -1197,7 +1293,7 @@ function downloadSVG(){
 
 
             /* =================================================
-               ANGKA
+               AMBIL ANGKA
             ================================================= */
 
             const info =
@@ -1208,6 +1304,7 @@ function downloadSVG(){
 
             let registerText =
                 "";
+
 
             let tumpukText =
                 "";
@@ -1239,6 +1336,10 @@ function downloadSVG(){
             }
 
 
+            /* =================================================
+               ANGKA REGISTER + TUMPUK
+            ================================================= */
+
             const angka =
                 document.createElementNS(
                     NS,
@@ -1251,40 +1352,48 @@ function downloadSVG(){
                 LABEL_W / 2
             );
 
+
             angka.setAttribute(
                 "y",
                 "26"
             );
+
 
             angka.setAttribute(
                 "text-anchor",
                 "middle"
             );
 
+
             angka.setAttribute(
                 "dominant-baseline",
                 "middle"
             );
+
 
             angka.setAttribute(
                 "font-family",
                 "Arial"
             );
 
+
             angka.setAttribute(
                 "font-size",
                 "4.5"
             );
+
 
             angka.setAttribute(
                 "font-weight",
                 "bold"
             );
 
+
             angka.setAttribute(
                 "word-spacing",
                 "2px"
             );
+
 
             angka.textContent =
                 registerText +
@@ -1306,7 +1415,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALIZE
+       SERIALIZE SVG
     ================================================= */
 
     const serializer =
@@ -1355,7 +1464,7 @@ function downloadSVG(){
 
 
     link.download =
-        "TES-A4-BARCODE-6x3-CM.svg";
+        "TES-A4-BARCODE-STAPLES.svg";
 
 
     document.body.appendChild(
@@ -1364,6 +1473,7 @@ function downloadSVG(){
 
 
     link.click();
+
 
     link.remove();
 
@@ -1395,4 +1505,5 @@ function downloadSVG(){
 </script>
 
 </body>
+
 </html>
