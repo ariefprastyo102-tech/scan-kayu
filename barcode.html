@@ -12,8 +12,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
-<!-- ZIP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- SVG KE PDF VEKTOR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.2.4/svg2pdf.umd.min.js"></script>
 
 <style>
 
@@ -250,9 +253,9 @@ button{
 
 <button
     class="btnDownload"
-    onclick="downloadSVG()">
+    onclick="downloadPDF()">
 
-📦 DOWNLOAD MASTER ZIP — 6 × 3 CM
+📄 DOWNLOAD MASTER PDF A4 — 6 × 3 CM
 
 </button>
 
@@ -877,35 +880,20 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD MASTER SVG DALAM ZIP
+   DOWNLOAD PDF
 ===================================================== */
 
-async function downloadSVG(){
-
-    const semuaItem =
-        document.querySelectorAll(
-            ".item"
-        );
-
+async function downloadPDF(){
 
     const daftar=[];
 
 
-    semuaItem.forEach(
-        function(item){
+    database.forEach(
+        function(data){
 
-            const index =
-                Number(
-                    item.dataset.index
-                );
+            if(data.dipilih){
 
-
-            if(
-                database[index] &&
-                database[index].dipilih
-            ){
-
-                daftar.push(item);
+                daftar.push(data);
 
             }
 
@@ -926,19 +914,33 @@ async function downloadSVG(){
     }
 
 
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.innerHTML =
+        "⏳ Membuat PDF " +
+        daftar.length +
+        " barcode...";
+
+
     /* =================================================
-       STATUS
+       UKURAN A4
+       MM
     ================================================= */
 
-    document.getElementById(
-        "status"
-    ).innerHTML =
-        "⏳ Membuat master SVG...";
+    const A4_W =
+        210;
+
+
+    const A4_H =
+        297;
 
 
     /* =================================================
-       UKURAN LABEL
-       60 x 30 MM
+       LABEL 6 × 3 CM
     ================================================= */
 
     const LABEL_W =
@@ -958,37 +960,42 @@ async function downloadSVG(){
 
 
     /* =================================================
-       MARGIN
-    ================================================= */
-
-    const MARGIN =
-        10;
-
-
-    /* =================================================
-       KOLOM
+       GRID
+       3 KOLOM × 9 BARIS
+       = 27 BARCODE / HALAMAN
     ================================================= */
 
     const COL =
         3;
 
 
-    /* =================================================
-       BARIS
-    ================================================= */
-
     const ROW =
-        Math.ceil(
-            daftar.length / COL
-        );
+        9;
+
+
+    const PER_PAGE =
+        COL * ROW;
 
 
     /* =================================================
-       KANVAS
+       BARCODE
+       48 MM
+       ADA RUANG KANAN-KIRI
     ================================================= */
 
-    const CANVAS_W =
-        MARGIN * 2 +
+    const BARCODE_W =
+        48;
+
+
+    const BARCODE_H =
+        21;
+
+
+    /* =================================================
+       POSISI GRID
+    ================================================= */
+
+    const totalGridW =
         (
             COL *
             LABEL_W
@@ -999,8 +1006,7 @@ async function downloadSVG(){
         );
 
 
-    const CANVAS_H =
-        MARGIN * 2 +
+    const totalGridH =
         (
             ROW *
             LABEL_H
@@ -1011,113 +1017,204 @@ async function downloadSVG(){
         );
 
 
-    const NS =
-        "http://www.w3.org/2000/svg";
+    const startX =
+        (
+            A4_W -
+            totalGridW
+        ) / 2;
+
+
+    const startY =
+        (
+            A4_H -
+            totalGridH
+        ) / 2;
 
 
     /* =================================================
-       SVG MASTER
+       PDF
     ================================================= */
 
-    const root =
-        document.createElementNS(
-            NS,
-            "svg"
+    const {
+        jsPDF
+    } =
+        window.jspdf;
+
+
+    const pdf =
+        new jsPDF({
+
+            orientation:
+                "portrait",
+
+            unit:
+                "mm",
+
+            format:
+                "a4",
+
+            compress:
+                true
+
+        });
+
+
+    /* =================================================
+       LOOP HALAMAN
+    ================================================= */
+
+    const jumlahHalaman =
+        Math.ceil(
+            daftar.length /
+            PER_PAGE
         );
 
 
-    root.setAttribute(
-        "xmlns",
-        NS
-    );
+    for(
+        let halaman = 0;
+        halaman < jumlahHalaman;
+        halaman++
+    ){
+
+        if(
+            halaman > 0
+        ){
+
+            pdf.addPage();
+
+        }
 
 
-    root.setAttribute(
-        "width",
-        CANVAS_W + "mm"
-    );
+        /* =================================================
+           BUAT SVG A4
+        ================================================= */
+
+        const NS =
+            "http://www.w3.org/2000/svg";
 
 
-    root.setAttribute(
-        "height",
-        CANVAS_H + "mm"
-    );
+        const root =
+            document.createElementNS(
+                NS,
+                "svg"
+            );
 
 
-    root.setAttribute(
-        "viewBox",
-        "0 0 " +
-        CANVAS_W +
-        " " +
-        CANVAS_H
-    );
-
-
-    /* =================================================
-       BACKGROUND
-    ================================================= */
-
-    const background =
-        document.createElementNS(
-            NS,
-            "rect"
+        root.setAttribute(
+            "xmlns",
+            NS
         );
 
 
-    background.setAttribute(
-        "x",
-        0
-    );
+        root.setAttribute(
+            "width",
+            A4_W + "mm"
+        );
 
 
-    background.setAttribute(
-        "y",
-        0
-    );
+        root.setAttribute(
+            "height",
+            A4_H + "mm"
+        );
 
 
-    background.setAttribute(
-        "width",
-        CANVAS_W
-    );
+        root.setAttribute(
+            "viewBox",
+            "0 0 " +
+            A4_W +
+            " " +
+            A4_H
+        );
 
 
-    background.setAttribute(
-        "height",
-        CANVAS_H
-    );
+        /* =================================================
+           BACKGROUND
+        ================================================= */
+
+        const background =
+            document.createElementNS(
+                NS,
+                "rect"
+            );
 
 
-    background.setAttribute(
-        "fill",
-        "white"
-    );
+        background.setAttribute(
+            "x",
+            "0"
+        );
 
 
-    root.appendChild(
-        background
-    );
+        background.setAttribute(
+            "y",
+            "0"
+        );
 
 
-    /* =================================================
-       BUAT LABEL
-    ================================================= */
+        background.setAttribute(
+            "width",
+            A4_W
+        );
 
-    daftar.forEach(
-        function(item,index){
+
+        background.setAttribute(
+            "height",
+            A4_H
+        );
+
+
+        background.setAttribute(
+            "fill",
+            "white"
+        );
+
+
+        root.appendChild(
+            background
+        );
+
+
+        /* =================================================
+           DATA HALAMAN
+        ================================================= */
+
+        const mulai =
+            halaman *
+            PER_PAGE;
+
+
+        const selesai =
+            Math.min(
+                mulai +
+                PER_PAGE,
+                daftar.length
+            );
+
+
+        for(
+            let i = mulai;
+            i < selesai;
+            i++
+        ){
+
+            const indexHalaman =
+                i -
+                mulai;
+
 
             const col =
-                index % COL;
+                indexHalaman %
+                COL;
 
 
             const row =
                 Math.floor(
-                    index / COL
+                    indexHalaman /
+                    COL
                 );
 
 
             const labelX =
-                MARGIN +
+                startX +
                 col *
                 (
                     LABEL_W +
@@ -1126,17 +1223,13 @@ async function downloadSVG(){
 
 
             const labelY =
-                MARGIN +
+                startY +
                 row *
                 (
                     LABEL_H +
                     GAP
                 );
 
-
-            /* =================================================
-               GROUP LABEL
-            ================================================= */
 
             const group =
                 document.createElementNS(
@@ -1168,13 +1261,13 @@ async function downloadSVG(){
 
             border.setAttribute(
                 "x",
-                0
+                "0"
             );
 
 
             border.setAttribute(
                 "y",
-                0
+                "0"
             );
 
 
@@ -1214,130 +1307,81 @@ async function downloadSVG(){
 
 
             /* =================================================
-               BARCODE
-
-               48 x 21 MM
-
-               RUANG STAPLES KANAN-KIRI
+               BUAT BARCODE BARU
+               LANGSUNG KE SVG
             ================================================= */
 
-            const svgWeb =
-                item.querySelector(
+            const barcodeSVG =
+                document.createElementNS(
+                    NS,
                     "svg"
                 );
 
 
-            if(svgWeb){
-
-                const clone =
-                    svgWeb.cloneNode(
-                        true
-                    );
-
-
-                const BARCODE_W =
-                    48;
-
-
-                const BARCODE_H =
-                    21;
-
-
-                const barcodeX =
-                    (
-                        LABEL_W -
-                        BARCODE_W
-                    ) / 2;
-
-
-                const barcodeY =
-                    1;
-
-
-                clone.setAttribute(
-                    "x",
-                    barcodeX
-                );
-
-
-                clone.setAttribute(
-                    "y",
-                    barcodeY
-                );
-
-
-                clone.setAttribute(
-                    "width",
+            barcodeSVG.setAttribute(
+                "x",
+                (
+                    LABEL_W -
                     BARCODE_W
-                );
+                ) / 2
+            );
 
 
-                clone.setAttribute(
-                    "height",
-                    BARCODE_H
-                );
+            barcodeSVG.setAttribute(
+                "y",
+                "1"
+            );
 
 
-                clone.setAttribute(
-                    "preserveAspectRatio",
-                    "none"
-                );
+            barcodeSVG.setAttribute(
+                "width",
+                BARCODE_W
+            );
 
 
-                clone.removeAttribute(
-                    "style"
-                );
+            barcodeSVG.setAttribute(
+                "height",
+                BARCODE_H
+            );
 
 
-                group.appendChild(
-                    clone
-                );
-
-            }
-
-
-            /* =================================================
-               AMBIL ANGKA
-            ================================================= */
-
-            const info =
-                item.querySelector(
-                    ".info"
-                );
+            barcodeSVG.setAttribute(
+                "preserveAspectRatio",
+                "none"
+            );
 
 
-            let registerText =
-                "";
+            group.appendChild(
+                barcodeSVG
+            );
 
 
-            let tumpukText =
-                "";
+            JsBarcode(
 
+                barcodeSVG,
 
-            if(info){
+                daftar[i].register,
 
-                const teks =
-                    info.querySelectorAll(
-                        "span"
-                    );
+                {
 
+                    format:
+                        "CODE128",
 
-                if(teks[0]){
+                    width:
+                        2,
 
-                    registerText =
-                        teks[0].textContent;
+                    height:
+                        55,
+
+                    displayValue:
+                        false,
+
+                    margin:
+                        3
 
                 }
 
-
-                if(teks[1]){
-
-                    tumpukText =
-                        teks[1].textContent;
-
-                }
-
-            }
+            );
 
 
             /* =================================================
@@ -1400,9 +1444,9 @@ async function downloadSVG(){
 
 
             angka.textContent =
-                registerText +
+                daftar[i].register +
                 " " +
-                tumpukText;
+                daftar[i].tumpuk;
 
 
             group.appendChild(
@@ -1410,146 +1454,60 @@ async function downloadSVG(){
             );
 
 
-            /* =================================================
-               MASUKKAN LABEL
-            ================================================= */
-
             root.appendChild(
                 group
             );
 
         }
-    );
-
-
-    /* =================================================
-       SERIALIZE SVG
-    ================================================= */
-
-    const serializer =
-        new XMLSerializer();
-
-
-    let source =
-        serializer.serializeToString(
-            root
-        );
-
-
-    source =
-        '<?xml version="1.0" encoding="UTF-8"?>\n' +
-        source;
-
-
-    /* =================================================
-       BUAT ZIP
-    ================================================= */
-
-    try{
-
-        const zip =
-            new JSZip();
-
-
-        zip.file(
-            "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg",
-            source
-        );
-
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-            "⏳ Mengompres file ZIP...";
-
-
-        const zipBlob =
-            await zip.generateAsync({
-
-                type:
-                    "blob",
-
-                compression:
-                    "DEFLATE",
-
-                compressionOptions:{
-
-                    level:6
-
-                }
-
-            });
 
 
         /* =================================================
-           DOWNLOAD ZIP
+           RENDER SVG KE PDF
         ================================================= */
 
-        const url =
-            URL.createObjectURL(
-                zipBlob
-            );
+        await svg2pdf(
+            root,
+            pdf,
+            {
 
+                x:
+                    0,
 
-        const link =
-            document.createElement(
-                "a"
-            );
+                y:
+                    0,
 
+                width:
+                    A4_W,
 
-        link.href =
-            url;
+                height:
+                    A4_H
 
-
-        link.download =
-            "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.zip";
-
-
-        document.body.appendChild(
-            link
+            }
         );
 
-
-        link.click();
-
-
-        link.remove();
-
-
-        setTimeout(
-            function(){
-
-                URL.revokeObjectURL(
-                    url
-                );
-
-            },
-            1000
-        );
-
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-            "✅ ZIP selesai — " +
-            daftar.length +
-            " barcode";
-
-
     }
-    catch(error){
 
-        document.getElementById(
-            "status"
-        ).innerHTML =
-            "❌ Gagal membuat ZIP: " +
-            error.message;
 
-    }
+    /* =================================================
+       SIMPAN PDF
+    ================================================= */
+
+    pdf.save(
+        "MASTER-BARCODE-KAYU-6x3cm.pdf"
+    );
+
+
+    status.innerHTML =
+        "✅ PDF selesai — " +
+        daftar.length +
+        " barcode — " +
+        jumlahHalaman +
+        " halaman";
 
 }
 
 </script>
 
 </body>
+
 </html>
