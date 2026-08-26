@@ -960,6 +960,10 @@ function downloadSVG(){
         3;
 
 
+    /* =================================================
+       BARIS
+    ================================================= */
+
     const ROW =
         Math.ceil(
             daftar.length / COL
@@ -1199,7 +1203,8 @@ function downloadSVG(){
             /* =================================================
                BARCODE
                
-               57 x 21 MM
+               48 x 21 MM
+               RUANG STAPLES KANAN-KIRI
             ================================================= */
 
             const svgWeb =
@@ -1217,7 +1222,7 @@ function downloadSVG(){
 
 
                 const BARCODE_W =
-                    57;
+                    48;
 
 
                 const BARCODE_H =
@@ -1453,7 +1458,7 @@ function downloadSVG(){
 
 
     link.download =
-        "MASTER-BARCODE-KAYU-6x3cm.svg";
+        "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg";
 
 
     document.body.appendChild(
@@ -1491,5 +1496,4 @@ function downloadSVG(){
 </script>
 
 </body>
-
 </html>
