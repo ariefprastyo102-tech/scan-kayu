@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -490,7 +491,7 @@ body {
 
 
 /* ==============================
-   DATABASE
+   DATABASE TEST QR
 ============================== */
 
 const API_URL =
@@ -728,14 +729,14 @@ function mulaiKamera() {
     },
 
 
-    function(register) {
+    function(kode) {
 
 
-      register =
-        String(register).trim();
+      kode =
+        String(kode).trim();
 
 
-      if (!register) return;
+      if (!kode) return;
 
 
       if (sedangProses) return;
@@ -745,8 +746,7 @@ function mulaiKamera() {
 
 
       /*
-       * BARCODE BERHASIL TERBACA
-       * TAMPILKAN INDIKATOR HIJAU
+       * QR BERHASIL TERBACA
        */
 
       tampilkanIndikatorHijau();
@@ -754,11 +754,11 @@ function mulaiKamera() {
 
       document.getElementById("status").innerHTML =
         "⏳ Mengecek " +
-        register +
+        kode +
         "...";
 
 
-      cekRegister(register);
+      cekKode(kode);
 
     },
 
@@ -777,7 +777,7 @@ function mulaiKamera() {
 
     document.getElementById("status").innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan ke barcode";
+      "Arahkan ke QR";
 
 
   })
@@ -800,10 +800,10 @@ function mulaiKamera() {
 
 
 /* ==============================
-   CEK REGISTER
+   CEK KODE QR
 ============================== */
 
-function cekRegister(register) {
+function cekKode(kode) {
 
 
   const callbackName =
@@ -828,9 +828,14 @@ function cekRegister(register) {
           jumlahBerhasil;
 
 
+        /*
+         * YANG DITAMPILKAN TETAP REGISTER
+         * DARI KOLOM A DATABASE
+         */
+
         document.getElementById("status").innerHTML =
           "✅ " +
-          register;
+          hasil.data[0];
 
 
         bunyiBerhasil();
@@ -890,7 +895,7 @@ function cekRegister(register) {
 
 
         tambahHasilTidakDitemukan(
-          register
+          kode
         );
 
       }
@@ -935,10 +940,14 @@ function cekRegister(register) {
     callbackName;
 
 
+  /*
+   * QR DIKIRIM SEBAGAI KODE
+   */
+
   script.src =
     API_URL +
-    "?register=" +
-    encodeURIComponent(register) +
+    "?kode=" +
+    encodeURIComponent(kode) +
     "&callback=" +
     callbackName;
 
@@ -1118,7 +1127,7 @@ function tambahHasil(
 ============================== */
 
 function tambahHasilTidakDitemukan(
-  register
+  kode
 ) {
 
 
@@ -1135,7 +1144,7 @@ function tambahHasilTidakDitemukan(
     <div class="baris">
 
       <div class="nomor notfound">
-        ⚠️ ${register}
+        ⚠️ ${kode}
       </div>
 
       <div class="notfound">
@@ -1202,3 +1211,4 @@ function toggleDetail(
 
 </body>
 </html>
+
