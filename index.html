@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-<title>Scan Register BBI - IK Saradan</title>
+<title>Scan QR Register BBI - IK Saradan</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
@@ -93,15 +93,10 @@ body {
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 
-
-/* =================================================
-   AREA KAMERA + INDIKATOR HIJAU
-================================================= */
-
 .camera-wrapper {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 300px;
   border-radius: 10px;
   overflow: hidden;
   background: black;
@@ -109,42 +104,110 @@ body {
 
 #reader {
   width: 100%;
-  height: 220px;
-  max-height: 220px;
+  height: 300px;
   margin: auto;
-  background: white;
+  background: black;
   border-radius: 10px;
   overflow: hidden;
 }
 
 #reader video {
   width: 100% !important;
-  height: 220px !important;
+  height: 300px !important;
   object-fit: cover !important;
 }
 
 
-/* =================================================
-   INDIKATOR HIJAU
-================================================= */
+/* ==============================
+   GARIS POJOK QR
+============================== */
 
-#scanBerhasil {
+.qr-frame {
   position: absolute;
+
   left: 50%;
   top: 50%;
 
-  width: 80%;
-  height: 55%;
+  width: 250px;
+  height: 250px;
 
   transform: translate(-50%, -50%);
 
-  border: 5px solid #00e676;
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+.corner {
+  position: absolute;
+
+  width: 50px;
+  height: 50px;
+
+  border-color: #00e676;
+  border-style: solid;
+}
+
+.corner.tl {
+  left: 0;
+  top: 0;
+
+  border-width: 5px 0 0 5px;
+
+  border-radius: 5px 0 0 0;
+}
+
+.corner.tr {
+  right: 0;
+  top: 0;
+
+  border-width: 5px 5px 0 0;
+
+  border-radius: 0 5px 0 0;
+}
+
+.corner.bl {
+  left: 0;
+  bottom: 0;
+
+  border-width: 0 0 5px 5px;
+
+  border-radius: 0 0 0 5px;
+}
+
+.corner.br {
+  right: 0;
+  bottom: 0;
+
+  border-width: 0 5px 5px 0;
+
+  border-radius: 0 0 5px 0;
+}
+
+
+/* ==============================
+   INDIKATOR BERHASIL
+============================== */
+
+#scanBerhasil {
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 250px;
+  height: 250px;
+
+  transform: translate(-50%, -50%);
+
+  border: 6px solid #00e676;
+
   border-radius: 12px;
 
   box-shadow:
-    0 0 8px rgba(0,230,118,0.9),
-    0 0 20px rgba(0,230,118,0.7),
-    inset 0 0 10px rgba(0,230,118,0.25);
+    0 0 10px rgba(0,230,118,0.9),
+    0 0 25px rgba(0,230,118,0.8);
 
   display: none;
 
@@ -152,11 +215,6 @@ body {
 
   pointer-events: none;
 }
-
-
-/* =================================================
-   TANDA CHECK HIJAU
-================================================= */
 
 #scanBerhasil::after {
 
@@ -169,8 +227,8 @@ body {
 
   transform: translate(-50%, -50%);
 
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
 
   border-radius: 50%;
 
@@ -178,15 +236,13 @@ body {
 
   color: white;
 
-  font-size: 38px;
+  font-size: 40px;
+
   font-weight: bold;
 
-  line-height: 55px;
+  line-height: 60px;
 
   text-align: center;
-
-  box-shadow:
-    0 0 15px rgba(0,0,0,0.35);
 }
 
 
@@ -195,18 +251,31 @@ body {
 ============================== */
 
 #btnScan {
+
   display: block;
+
   width: 100%;
   max-width: 500px;
+
   margin: 15px auto;
+
   padding: 15px;
+
   font-size: 18px;
+
   font-weight: bold;
+
   border: none;
+
   border-radius: 10px;
+
   background: #1976d2;
+
   color: white;
-  box-shadow: 0 3px 8px rgba(25,118,210,0.25);
+
+  box-shadow:
+    0 3px 8px rgba(25,118,210,0.25);
+
   cursor: pointer;
 }
 
@@ -220,79 +289,122 @@ body {
 ============================== */
 
 .status-card {
+
   width: 100%;
+
   max-width: 500px;
+
   margin: 10px auto;
+
   background: white;
+
   border-radius: 12px;
+
   padding: 13px;
+
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+
+  box-shadow:
+    0 3px 10px rgba(0,0,0,0.06);
 }
 
 #status {
+
   font-weight: bold;
+
   line-height: 1.6;
 }
 
 #jumlah {
+
   margin-top: 5px;
+
   font-weight: bold;
+
   color: #555;
 }
 
 
 /* ==============================
-   HASIL SCAN
+   HASIL
 ============================== */
 
 #daftar {
+
   width: 100%;
+
   max-width: 500px;
+
   margin: 15px auto;
 }
 
 .item {
+
   background: white;
+
   margin-bottom: 9px;
+
   border-radius: 10px;
+
   padding: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.07);
 }
 
 .baris {
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 10px;
 }
 
 .nomor {
+
   font-size: 20px;
+
   font-weight: bold;
+
   word-break: break-all;
 }
 
 .detailBtn {
-  width: auto;
+
   min-width: 80px;
+
   padding: 8px 12px;
-  margin: 0;
+
   background: #555;
+
   color: white;
+
   border: none;
+
   border-radius: 6px;
+
   font-size: 14px;
+
   font-weight: bold;
+
   cursor: pointer;
 }
 
 .detail {
+
   display: none;
+
   margin-top: 12px;
+
   padding-top: 10px;
+
   border-top: 1px solid #ddd;
+
   font-size: 15px;
+
   line-height: 1.7;
 }
 
@@ -308,13 +420,16 @@ body {
   color: #e67e00;
 }
 
-.detailBtn.duplicateBtn {
+.duplicateBtn {
   background: #c62828;
 }
 
 .label {
+
   display: inline-block;
+
   width: 115px;
+
   font-weight: bold;
 }
 
@@ -333,11 +448,6 @@ body {
     padding: 10px 8px;
   }
 
-  .headerIsi {
-    gap: 8px;
-    transform: translateX(-8px);
-  }
-
   .logo {
     width: 95px;
     height: 85px;
@@ -345,33 +455,29 @@ body {
 
   .judul {
     font-size: 22px;
-    white-space: nowrap;
   }
 
   .subjudul {
     font-size: 17px;
-    white-space: nowrap;
   }
 
+  .camera-wrapper,
   #reader {
-    height: 220px;
-    max-height: 220px;
+    height: 300px;
   }
 
   #reader video {
-    height: 220px !important;
+    height: 300px !important;
   }
 
-  .camera-wrapper {
-    height: 220px;
+  .qr-frame,
+  #scanBerhasil {
+    width: 230px;
+    height: 230px;
   }
 
 }
 
-
-/* ==============================
-   HP SANGAT KECIL
-============================== */
 
 @media(max-width:380px) {
 
@@ -382,24 +488,24 @@ body {
 
   .judul {
     font-size: 20px;
-    white-space: nowrap;
   }
 
   .subjudul {
     font-size: 16px;
-    white-space: nowrap;
   }
 
+  .camera-wrapper,
   #reader {
-    height: 210px;
-    max-height: 210px;
+    height: 280px;
   }
 
   #reader video {
-    height: 210px !important;
+    height: 280px !important;
   }
 
-  .camera-wrapper {
+  .qr-frame,
+  #scanBerhasil {
+    width: 210px;
     height: 210px;
   }
 
@@ -449,7 +555,14 @@ body {
 
     <div id="reader"></div>
 
-    <!-- INDIKATOR HIJAU -->
+    <div class="qr-frame">
+
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+    </div>
 
     <div id="scanBerhasil"></div>
 
@@ -462,9 +575,7 @@ body {
   id="btnScan"
   onclick="mulaiKamera()"
 >
-
 📷 BUKA KAMERA
-
 </button>
 
 
@@ -490,11 +601,11 @@ body {
 
 
 /* ==============================
-   DATABASE
+   API
 ============================== */
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+"https://script.google.com/macros/s/AKfycbyCBGCWXwOS62cahHe8zA3FSwKFunkcm3qhaan7oJOBPJMzdu3r7WNlFXoLt-xyGD8/exec";
 
 
 let scanner = null;
@@ -507,33 +618,29 @@ let jumlahBerhasil = 0;
 
 
 /* ==============================
-   INDIKATOR HIJAU
+   INDIKATOR
 ============================== */
 
 function tampilkanIndikatorHijau() {
 
   const indikator =
-    document.getElementById(
-      "scanBerhasil"
-    );
-
+    document.getElementById("scanBerhasil");
 
   indikator.style.display =
     "block";
-
 
   setTimeout(function() {
 
     indikator.style.display =
       "none";
 
-  }, 700);
+  }, 500);
 
 }
 
 
 /* ==============================
-   SUARA CEKLING
+   SUARA
 ============================== */
 
 function bunyiBerhasil() {
@@ -549,121 +656,54 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
-
-    const oscillator1 =
+    const oscillator =
       audio.createOscillator();
 
-    const gain1 =
+    const gain =
       audio.createGain();
 
-
-    oscillator1.type =
+    oscillator.type =
       "sine";
 
-
-    oscillator1.frequency.setValueAtTime(
-      1300,
+    oscillator.frequency.setValueAtTime(
+      1400,
       audio.currentTime
     );
 
-
-    gain1.gain.setValueAtTime(
+    gain.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
 
-
-    gain1.gain.exponentialRampToValueAtTime(
+    gain.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
-
-    gain1.gain.exponentialRampToValueAtTime(
+    gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audio.currentTime + 0.12
+      audio.currentTime + 0.15
     );
 
+    oscillator.connect(gain);
 
-    oscillator1.connect(gain1);
+    gain.connect(audio.destination);
 
-    gain1.connect(
-      audio.destination
+    oscillator.start();
+
+    oscillator.stop(
+      audio.currentTime + 0.16
     );
-
-
-    oscillator1.start();
-
-    oscillator1.stop(
-      audio.currentTime + 0.13
-    );
-
-
-    const oscillator2 =
-      audio.createOscillator();
-
-    const gain2 =
-      audio.createGain();
-
-
-    oscillator2.type =
-      "sine";
-
-
-    oscillator2.frequency.setValueAtTime(
-      1850,
-      audio.currentTime + 0.08
-    );
-
-
-    gain2.gain.setValueAtTime(
-      0.001,
-      audio.currentTime + 0.08
-    );
-
-
-    gain2.gain.exponentialRampToValueAtTime(
-      0.28,
-      audio.currentTime + 0.09
-    );
-
-
-    gain2.gain.exponentialRampToValueAtTime(
-      0.001,
-      audio.currentTime + 0.22
-    );
-
-
-    oscillator2.connect(gain2);
-
-    gain2.connect(
-      audio.destination
-    );
-
-
-    oscillator2.start(
-      audio.currentTime + 0.08
-    );
-
-
-    oscillator2.stop(
-      audio.currentTime + 0.23
-    );
-
 
     setTimeout(function() {
 
       audio.close();
 
-    }, 400);
-
+    }, 300);
 
   } catch (e) {
 
-    console.log(
-      "Audio tidak tersedia",
-      e
-    );
+    console.log(e);
 
   }
 
@@ -679,9 +719,9 @@ function getarBerhasil() {
   if (navigator.vibrate) {
 
     navigator.vibrate([
-      100,
-      50,
-      100
+      80,
+      40,
+      80
     ]);
 
   }
@@ -697,7 +737,20 @@ function mulaiKamera() {
 
   if (kameraAktif) return;
 
+
   kameraAktif = true;
+
+
+  const tombol =
+    document.getElementById("btnScan");
+
+
+  tombol.innerHTML =
+    "📷 KAMERA AKTIF";
+
+
+  tombol.style.background =
+    "#555";
 
 
   document.getElementById("status").innerHTML =
@@ -708,34 +761,74 @@ function mulaiKamera() {
     new Html5Qrcode("reader");
 
 
+  /*
+   * KHUSUS QR CODE
+   *
+   * Tidak menggunakan aspectRatio
+   * agar kamera HP bebas memilih
+   * rasio terbaik.
+   */
+
+  const config = {
+
+    fps: 30,
+
+    qrbox: function(
+      viewfinderWidth,
+      viewfinderHeight
+    ) {
+
+      const ukuran =
+        Math.min(
+          viewfinderWidth,
+          viewfinderHeight
+        ) * 0.75;
+
+      return {
+        width: Math.floor(ukuran),
+        height: Math.floor(ukuran)
+      };
+
+    },
+
+    formatsToSupport: [
+
+      Html5QrcodeSupportedFormats.QR_CODE
+
+    ],
+
+    experimentalFeatures: {
+
+      useBarCodeDetectorIfSupported: true
+
+    }
+
+  };
+
+
+  /*
+   * MINTA KAMERA BELAKANG
+   */
+
   scanner.start(
 
     {
-      facingMode: "environment"
+      facingMode: {
+        exact: "environment"
+      }
     },
 
-    {
-
-      fps: 30,
-
-      qrbox: {
-        width: 320,
-        height: 180
-      },
-
-      aspectRatio: 1.777778
-
-    },
+    config,
 
 
-    function(register) {
+    function(kode) {
 
 
-      register =
-        String(register).trim();
+      kode =
+        String(kode).trim();
 
 
-      if (!register) return;
+      if (!kode) return;
 
 
       if (sedangProses) return;
@@ -744,28 +837,25 @@ function mulaiKamera() {
       sedangProses = true;
 
 
-      /*
-       * BARCODE BERHASIL TERBACA
-       * TAMPILKAN INDIKATOR HIJAU
-       */
-
       tampilkanIndikatorHijau();
 
 
       document.getElementById("status").innerHTML =
-        "⏳ Mengecek " +
-        register +
-        "...";
+        "⏳ QR TERBACA<br>Mengecek database...";
 
 
-      cekRegister(register);
+      cekKode(kode);
 
     },
 
 
     function(errorMessage) {
 
-      // pembacaan yang belum berhasil diabaikan
+      /*
+       * Tidak menampilkan error
+       * setiap frame agar scanner
+       * tetap ringan.
+       */
 
     }
 
@@ -777,7 +867,7 @@ function mulaiKamera() {
 
     document.getElementById("status").innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan ke barcode";
+      "Arahkan QR ke garis hijau";
 
 
   })
@@ -787,6 +877,14 @@ function mulaiKamera() {
 
 
     kameraAktif = false;
+
+
+    tombol.innerHTML =
+      "📷 BUKA KAMERA";
+
+
+    tombol.style.background =
+      "#1976d2";
 
 
     document.getElementById("status").innerHTML =
@@ -800,11 +898,10 @@ function mulaiKamera() {
 
 
 /* ==============================
-   CEK REGISTER
+   CEK KODE
 ============================== */
 
-function cekRegister(register) {
-
+function cekKode(kode) {
 
   const callbackName =
     "scan_" +
@@ -830,7 +927,7 @@ function cekRegister(register) {
 
         document.getElementById("status").innerHTML =
           "✅ " +
-          register;
+          hasil.data[0];
 
 
         bunyiBerhasil();
@@ -890,7 +987,7 @@ function cekRegister(register) {
 
 
         tambahHasilTidakDitemukan(
-          register
+          kode
         );
 
       }
@@ -937,8 +1034,8 @@ function cekRegister(register) {
 
   script.src =
     API_URL +
-    "?register=" +
-    encodeURIComponent(register) +
+    "?kode=" +
+    encodeURIComponent(kode) +
     "&callback=" +
     callbackName;
 
@@ -1081,7 +1178,6 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
-
       ${
         tanggalScan
         ?
@@ -1100,7 +1196,6 @@ function tambahHasil(
         ""
       }
 
-
     </div>
 
   `;
@@ -1118,7 +1213,7 @@ function tambahHasil(
 ============================== */
 
 function tambahHasilTidakDitemukan(
-  register
+  kode
 ) {
 
 
@@ -1135,7 +1230,7 @@ function tambahHasilTidakDitemukan(
     <div class="baris">
 
       <div class="nomor notfound">
-        ⚠️ ${register}
+        ⚠️ ${kode}
       </div>
 
       <div class="notfound">
