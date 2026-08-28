@@ -1,23 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
-
 <title>Scan QR Register BBI - IK Saradan</title>
-
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
 <style>
-
 * {
   box-sizing: border-box;
 }
-
 body {
   font-family: Arial, sans-serif;
   background: #f3f6f4;
@@ -25,12 +17,9 @@ body {
   padding: 15px;
   color: #222;
 }
-
-
 /* ==============================
    HEADER
 ============================== */
-
 .header {
   width: 100%;
   max-width: 500px;
@@ -41,7 +30,6 @@ body {
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
 }
-
 .headerIsi {
   display: flex;
   align-items: center;
@@ -49,19 +37,16 @@ body {
   gap: 10px;
   transform: translateX(-10px);
 }
-
 .logo {
   width: 100px;
   height: 90px;
   object-fit: contain;
   flex-shrink: 0;
 }
-
 .judulBox {
   flex: 0 0 auto;
   text-align: left;
 }
-
 .judul {
   font-size: 22px;
   font-weight: 800;
@@ -69,7 +54,6 @@ body {
   line-height: 1.2;
   white-space: nowrap;
 }
-
 .subjudul {
   font-size: 17px;
   font-weight: bold;
@@ -78,12 +62,9 @@ body {
   margin-top: 6px;
   white-space: nowrap;
 }
-
-
 /* ==============================
    CAMERA
 ============================== */
-
 .camera-card {
   width: 100%;
   max-width: 500px;
@@ -93,7 +74,6 @@ body {
   padding: 8px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
-
 .camera-wrapper {
   position: relative;
   width: 100%;
@@ -102,7 +82,6 @@ body {
   overflow: hidden;
   background: black;
 }
-
 #reader {
   width: 100%;
   height: 300px;
@@ -111,985 +90,598 @@ body {
   border-radius: 10px;
   overflow: hidden;
 }
-
 #reader video {
   width: 100% !important;
   height: 300px !important;
   object-fit: cover !important;
 }
-
-
 /* ==============================
    GARIS POJOK QR
 ============================== */
-
 .qr-frame {
   position: absolute;
-
   left: 50%;
   top: 50%;
-
-  width: 240px;
-  height: 240px;
-
+  width: 250px;
+  height: 250px;
   transform: translate(-50%, -50%);
-
   pointer-events: none;
-
   z-index: 10;
 }
-
-
-/* KIRI ATAS */
-
-.corner.tl {
+.corner {
   position: absolute;
+  width: 50px;
+  height: 50px;
+  border-color: #00e676;
+  border-style: solid;
+}
+.corner.tl {
   left: 0;
   top: 0;
-
-  width: 48px;
-  height: 48px;
-
-  border-left: 5px solid #00e676;
-  border-top: 5px solid #00e676;
-
+  border-width: 5px 0 0 5px;
   border-radius: 5px 0 0 0;
 }
-
-
-/* KANAN ATAS */
-
 .corner.tr {
-  position: absolute;
   right: 0;
   top: 0;
-
-  width: 48px;
-  height: 48px;
-
-  border-right: 5px solid #00e676;
-  border-top: 5px solid #00e676;
-
+  border-width: 5px 5px 0 0;
   border-radius: 0 5px 0 0;
 }
-
-
-/* KIRI BAWAH */
-
 .corner.bl {
-  position: absolute;
   left: 0;
   bottom: 0;
-
-  width: 48px;
-  height: 48px;
-
-  border-left: 5px solid #00e676;
-  border-bottom: 5px solid #00e676;
-
+  border-width: 0 0 5px 5px;
   border-radius: 0 0 0 5px;
 }
-
-
-/* KANAN BAWAH */
-
 .corner.br {
-  position: absolute;
   right: 0;
   bottom: 0;
-
-  width: 48px;
-  height: 48px;
-
-  border-right: 5px solid #00e676;
-  border-bottom: 5px solid #00e676;
-
+  border-width: 0 5px 5px 0;
   border-radius: 0 0 5px 0;
 }
-
-
 /* ==============================
    INDIKATOR BERHASIL
 ============================== */
-
 #scanBerhasil {
   position: absolute;
-
   left: 50%;
   top: 50%;
-
-  width: 240px;
-  height: 240px;
-
+  width: 250px;
+  height: 250px;
   transform: translate(-50%, -50%);
-
   border: 6px solid #00e676;
-
   border-radius: 12px;
-
   box-shadow:
     0 0 10px rgba(0,230,118,0.9),
     0 0 25px rgba(0,230,118,0.8);
-
   display: none;
-
   z-index: 20;
-
   pointer-events: none;
 }
-
 #scanBerhasil::after {
-
   content: "✓";
-
   position: absolute;
-
   left: 50%;
   top: 50%;
-
   transform: translate(-50%, -50%);
-
   width: 60px;
   height: 60px;
-
   border-radius: 50%;
-
   background: #00c853;
-
   color: white;
-
   font-size: 40px;
-
   font-weight: bold;
-
   line-height: 60px;
-
   text-align: center;
 }
-
-
 /* ==============================
    BUTTON
 ============================== */
-
 #btnScan {
-
   display: block;
-
   width: 100%;
   max-width: 500px;
-
   margin: 15px auto;
-
   padding: 15px;
-
   font-size: 18px;
-
   font-weight: bold;
-
   border: none;
-
   border-radius: 10px;
-
   background: #1976d2;
-
   color: white;
-
   box-shadow:
     0 3px 8px rgba(25,118,210,0.25);
-
   cursor: pointer;
 }
-
 #btnScan:active {
   transform: scale(0.98);
 }
-
-
 /* ==============================
    STATUS
 ============================== */
-
 .status-card {
-
   width: 100%;
-
   max-width: 500px;
-
   margin: 10px auto;
-
   background: white;
-
   border-radius: 12px;
-
   padding: 13px;
-
   text-align: center;
-
   box-shadow:
     0 3px 10px rgba(0,0,0,0.06);
 }
-
 #status {
-
   font-weight: bold;
-
   line-height: 1.6;
 }
-
 #jumlah {
-
   margin-top: 5px;
-
   font-weight: bold;
-
   color: #555;
 }
-
-
 /* ==============================
    HASIL
 ============================== */
-
 #daftar {
-
   width: 100%;
-
   max-width: 500px;
-
   margin: 15px auto;
 }
-
 .item {
-
   background: white;
-
   margin-bottom: 9px;
-
   border-radius: 10px;
-
   padding: 12px;
-
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
 }
-
 .baris {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 10px;
 }
-
 .nomor {
-
   font-size: 20px;
-
   font-weight: bold;
-
   word-break: break-all;
 }
-
 .detailBtn {
-
   min-width: 80px;
-
   padding: 8px 12px;
-
   background: #555;
-
   color: white;
-
   border: none;
-
   border-radius: 6px;
-
   font-size: 14px;
-
   font-weight: bold;
-
   cursor: pointer;
 }
-
 .detail {
-
   display: none;
-
   margin-top: 12px;
-
   padding-top: 10px;
-
   border-top: 1px solid #ddd;
-
   font-size: 15px;
-
   line-height: 1.7;
 }
-
 .success {
   color: #16833a;
 }
-
 .duplicate {
   color: #d32f2f;
 }
-
 .notfound {
   color: #e67e00;
 }
-
 .duplicateBtn {
   background: #c62828;
 }
-
 .label {
-
   display: inline-block;
-
   width: 115px;
-
   font-weight: bold;
 }
-
-
 /* ==============================
    HP
 ============================== */
-
 @media(max-width:500px) {
-
   body {
     padding: 10px;
   }
-
   .header {
     padding: 10px 8px;
   }
-
   .logo {
     width: 95px;
     height: 85px;
   }
-
   .judul {
     font-size: 22px;
   }
-
   .subjudul {
     font-size: 17px;
   }
-
   .camera-wrapper,
   #reader {
     height: 300px;
   }
-
   #reader video {
     height: 300px !important;
   }
-
   .qr-frame,
   #scanBerhasil {
-    width: 220px;
-    height: 220px;
+    width: 230px;
+    height: 230px;
   }
-
 }
-
-
 @media(max-width:380px) {
-
   .logo {
     width: 85px;
     height: 75px;
   }
-
   .judul {
     font-size: 20px;
   }
-
   .subjudul {
     font-size: 16px;
   }
-
   .camera-wrapper,
   #reader {
     height: 280px;
   }
-
   #reader video {
     height: 280px !important;
   }
-
   .qr-frame,
   #scanBerhasil {
-    width: 200px;
-    height: 200px;
+    width: 210px;
+    height: 210px;
   }
-
 }
-
 </style>
-
 </head>
-
 <body>
-
-
 <!-- HEADER -->
-
 <div class="header">
-
   <div class="headerIsi">
-
     <img
       class="logo"
       src="logo-perhutani.jpg"
       alt="Logo Perhutani"
     >
-
     <div class="judulBox">
-
       <div class="judul">
         SCAN REGISTER BBI
       </div>
-
       <div class="subjudul">
         IK SARADAN
       </div>
-
     </div>
-
   </div>
-
 </div>
-
-
 <!-- CAMERA -->
-
 <div class="camera-card">
-
   <div class="camera-wrapper">
-
     <div id="reader"></div>
-
-
-    <!-- FRAME QR -->
-
     <div class="qr-frame">
-
       <div class="corner tl"></div>
-
       <div class="corner tr"></div>
-
       <div class="corner bl"></div>
-
       <div class="corner br"></div>
-
     </div>
-
-
-    <!-- INDIKATOR -->
-
     <div id="scanBerhasil"></div>
-
   </div>
-
 </div>
-
-
 <button
   id="btnScan"
   onclick="mulaiKamera()"
 >
 📷 BUKA KAMERA
 </button>
-
-
 <!-- STATUS -->
-
 <div class="status-card">
-
   <div id="status">
     Tekan Buka Kamera
   </div>
-
   <div id="jumlah">
     Jumlah berhasil: 0
   </div>
-
 </div>
-
-
 <div id="daftar"></div>
-
-
 <script>
-
-
 /* ==============================
-   API LAMA
+   API
 ============================== */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyCBGCWXwOS62cahHe8zA3FSwKFunkcm3qhaan7oJOBPJMzdu3r7WNlFXoLt-xyGD8/exec";
-
-
 let scanner = null;
-
 let kameraAktif = false;
-
 let sedangProses = false;
-
 let jumlahBerhasil = 0;
-
-
 /* ==============================
    INDIKATOR
 ============================== */
-
 function tampilkanIndikatorHijau() {
-
   const indikator =
     document.getElementById("scanBerhasil");
-
-  indikator.style.display = "block";
-
+  indikator.style.display =
+    "block";
   setTimeout(function() {
-
-    indikator.style.display = "none";
-
-  }, 700);
-
+    indikator.style.display =
+      "none";
+  }, 500);
 }
-
-
 /* ==============================
    SUARA
 ============================== */
-
 function bunyiBerhasil() {
-
   try {
-
     const AudioContext =
       window.AudioContext ||
       window.webkitAudioContext;
-
     if (!AudioContext) return;
-
     const audio =
       new AudioContext();
-
     const oscillator =
       audio.createOscillator();
-
     const gain =
       audio.createGain();
-
-    oscillator.type = "sine";
-
+    oscillator.type =
+      "sine";
     oscillator.frequency.setValueAtTime(
       1400,
       audio.currentTime
     );
-
     gain.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
-
     gain.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
-
     gain.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.15
     );
-
     oscillator.connect(gain);
-
     gain.connect(audio.destination);
-
     oscillator.start();
-
     oscillator.stop(
       audio.currentTime + 0.16
     );
-
     setTimeout(function() {
-
       audio.close();
-
     }, 300);
-
   } catch (e) {
-
     console.log(e);
-
   }
-
 }
-
-
 /* ==============================
    GETAR
 ============================== */
-
 function getarBerhasil() {
-
   if (navigator.vibrate) {
-
     navigator.vibrate([
-      100,
-      50,
-      100
+      80,
+      40,
+      80
     ]);
-
   }
-
 }
-
-
 /* ==============================
    MULAI KAMERA
 ============================== */
-
 function mulaiKamera() {
-
   if (kameraAktif) return;
-
   kameraAktif = true;
-
+  const tombol =
+    document.getElementById("btnScan");
+  tombol.innerHTML =
+    "📷 KAMERA AKTIF";
+  tombol.style.background =
+    "#555";
   document.getElementById("status").innerHTML =
     "⏳ Membuka kamera...";
-
-
   scanner =
     new Html5Qrcode("reader");
-
-
   /*
    * KHUSUS QR CODE
+   *
+   * Tidak menggunakan aspectRatio
+   * agar kamera HP bebas memilih
+   * rasio terbaik.
    */
-
   const config = {
-
     fps: 30,
-
-    qrbox: {
-      width: 220,
-      height: 220
+    qrbox: function(
+      viewfinderWidth,
+      viewfinderHeight
+    ) {
+      const ukuran =
+        Math.min(
+          viewfinderWidth,
+          viewfinderHeight
+        ) * 0.75;
+      return {
+        width: Math.floor(ukuran),
+        height: Math.floor(ukuran)
+      };
     },
-
-    aspectRatio: 1.0,
-
     formatsToSupport: [
-
       Html5QrcodeSupportedFormats.QR_CODE
-
-    ]
-
+    ],
+    experimentalFeatures: {
+      useBarCodeDetectorIfSupported: true
+    }
   };
-
-
+  /*
+   * MINTA KAMERA BELAKANG
+   */
   scanner.start(
-
     {
-      facingMode: "environment"
+      facingMode: {
+        exact: "environment"
+      }
     },
-
     config,
-
-
     function(kode) {
-
       kode =
         String(kode).trim();
-
-
       if (!kode) return;
-
-
       if (sedangProses) return;
-
-
       sedangProses = true;
-
-
       tampilkanIndikatorHijau();
-
-
       document.getElementById("status").innerHTML =
-        "⏳ Mengecek QR...";
-
-
+        "⏳ QR TERBACA<br>Mengecek database...";
       cekKode(kode);
-
     },
-
-
     function(errorMessage) {
-
-      // Frame belum terbaca diabaikan.
-
+      /*
+       * Tidak menampilkan error
+       * setiap frame agar scanner
+       * tetap ringan.
+       */
     }
-
   )
-
-
   .then(function() {
-
     document.getElementById("status").innerHTML =
       "📷 KAMERA AKTIF<br>" +
       "Arahkan QR ke garis hijau";
-
   })
-
-
   .catch(function(error) {
-
     kameraAktif = false;
-
+    tombol.innerHTML =
+      "📷 BUKA KAMERA";
+    tombol.style.background =
+      "#1976d2";
     document.getElementById("status").innerHTML =
       "❌ Kamera gagal dibuka<br>" +
       error;
-
   });
-
 }
-
-
 /* ==============================
-   CEK KODE KE DATABASE
+   CEK KODE
 ============================== */
-
 function cekKode(kode) {
-
   const callbackName =
     "scan_" +
     Date.now();
-
-
   window[callbackName] =
     function(hasil) {
-
-
       if (
         hasil.status === "success"
       ) {
-
-
         jumlahBerhasil++;
-
-
         document.getElementById("jumlah").innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
-
-
         document.getElementById("status").innerHTML =
           "✅ " +
           hasil.data[0];
-
-
         bunyiBerhasil();
-
         getarBerhasil();
-
-
         tambahHasil(
-
           hasil.data,
-
           hasil.tanggalScan,
-
           hasil.jamScan,
-
           "success"
-
         );
-
       }
-
-
       else if (
         hasil.status === "duplicate"
       ) {
-
-
         document.getElementById("status").innerHTML =
           "❌ " +
           hasil.message;
-
-
         tambahHasil(
-
           hasil.data,
-
           "",
-
           "",
-
           "duplicate"
-
         );
-
       }
-
-
       else if (
         hasil.status === "not_found"
       ) {
-
-
         document.getElementById("status").innerHTML =
           "⚠️ " +
           hasil.message;
-
-
         tambahHasilTidakDitemukan(
           kode
         );
-
       }
-
-
       else {
-
-
         document.getElementById("status").innerHTML =
           "⚠️ " +
           hasil.message;
-
       }
-
-
       sedangProses = false;
-
-
       delete window[callbackName];
-
-
       const script =
         document.getElementById(
           callbackName
         );
-
-
       if (script) {
-
         script.remove();
-
       }
-
     };
-
-
   const script =
     document.createElement("script");
-
-
   script.id =
     callbackName;
-
-
-  /*
-   * KIRIM HASIL QR KE API
-   */
-
   script.src =
     API_URL +
     "?kode=" +
     encodeURIComponent(kode) +
     "&callback=" +
     callbackName;
-
-
   script.onerror =
     function() {
-
       document.getElementById("status").innerHTML =
         "❌ Gagal menghubungi DATABASE";
-
-
       sedangProses = false;
-
-
       delete window[callbackName];
-
-
       script.remove();
-
     };
-
-
   document.body.appendChild(script);
-
 }
-
-
 /* ==============================
    HASIL SCAN
 ============================== */
-
 function tambahHasil(
-
   data,
   tanggalScan,
   jamScan,
   tipe
-
 ) {
-
-
   const register =
     data[0];
-
-
   const item =
     document.createElement("div");
-
-
   item.className =
     "item";
-
-
   const id =
     "detail_" +
     Date.now();
-
-
   const warna =
     tipe === "success"
     ?
     "success"
     :
     "duplicate";
-
-
   const tulisan =
     tipe === "success"
     ?
     "✅ " + register
     :
     "❌ " + register;
-
-
   item.innerHTML = `
-
     <div class="baris">
-
       <div class="nomor ${warna}">
         ${tulisan}
       </div>
-
       <button
         class="detailBtn ${
           tipe === "duplicate"
@@ -1100,56 +692,43 @@ function tambahHasil(
       >
         DETAIL
       </button>
-
     </div>
-
-
     <div
       id="${id}"
       class="detail"
     >
-
       <div>
         <span class="label">REGISTER</span>
         : ${data[0]}
       </div>
-
       <div>
         <span class="label">PANJANG</span>
         : ${data[1]}
       </div>
-
       <div>
         <span class="label">DIAMETER</span>
         : ${data[2]}
       </div>
-
       <div>
         <span class="label">TPK</span>
         : ${data[3]}
       </div>
-
       <div>
         <span class="label">TUMPUK</span>
         : ${data[4]}
       </div>
-
       <div>
         <span class="label">MUTU</span>
         : ${data[5]}
       </div>
-
       <div>
         <span class="label">STATUS</span>
         : ${data[6]}
       </div>
-
       <div>
         <span class="label">M3</span>
         : ${data[7]}
       </div>
-
-
       ${
         tanggalScan
         ?
@@ -1158,7 +737,6 @@ function tambahHasil(
           <span class="label">TANGGAL</span>
           : ${tanggalScan}
         </div>
-
         <div>
           <span class="label">JAM</span>
           : ${jamScan}
@@ -1167,107 +745,60 @@ function tambahHasil(
         :
         ""
       }
-
-
     </div>
-
   `;
-
-
   document
     .getElementById("daftar")
     .prepend(item);
-
 }
-
-
 /* ==============================
    TIDAK DITEMUKAN
 ============================== */
-
 function tambahHasilTidakDitemukan(
   kode
 ) {
-
-
   const item =
     document.createElement("div");
-
-
   item.className =
     "item";
-
-
   item.innerHTML = `
-
     <div class="baris">
-
       <div class="nomor notfound">
         ⚠️ ${kode}
       </div>
-
       <div class="notfound">
         TIDAK ADA
       </div>
-
     </div>
-
   `;
-
-
   document
     .getElementById("daftar")
     .prepend(item);
-
 }
-
-
 /* ==============================
    DETAIL
 ============================== */
-
 function toggleDetail(
   id,
   tombol
 ) {
-
-
   const detail =
     document.getElementById(id);
-
-
   if (
     detail.style.display === "block"
   ) {
-
-
     detail.style.display =
       "none";
-
-
     tombol.innerHTML =
       "DETAIL";
-
-
   }
-
   else {
-
-
     detail.style.display =
       "block";
-
-
     tombol.innerHTML =
       "TUTUP";
-
-
   }
-
 }
-
 </script>
-
 </body>
 </html>
-
