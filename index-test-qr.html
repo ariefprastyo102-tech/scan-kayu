@@ -1,6 +1,5 @@
 
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 
@@ -93,11 +92,6 @@ body {
   padding: 8px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
-
-
-/* =================================================
-   AREA KAMERA + INDIKATOR HIJAU
-================================================= */
 
 .camera-wrapper {
   position: relative;
@@ -450,8 +444,6 @@ body {
 
     <div id="reader"></div>
 
-    <!-- INDIKATOR HIJAU -->
-
     <div id="scanBerhasil"></div>
 
   </div>
@@ -491,7 +483,7 @@ body {
 
 
 /* ==============================
-   DATABASE TEST QR
+   API TEST
 ============================== */
 
 const API_URL =
@@ -518,10 +510,8 @@ function tampilkanIndikatorHijau() {
       "scanBerhasil"
     );
 
-
   indikator.style.display =
     "block";
-
 
   setTimeout(function() {
 
@@ -692,6 +682,7 @@ function getarBerhasil() {
 
 /* ==============================
    MULAI KAMERA
+   KHUSUS QR CODE
 ============================== */
 
 function mulaiKamera() {
@@ -709,24 +700,31 @@ function mulaiKamera() {
     new Html5Qrcode("reader");
 
 
+  const qrConfig = {
+
+    fps: 20,
+
+    qrbox: {
+      width: 250,
+      height: 250
+    },
+
+    aspectRatio: 1.0,
+
+    formatsToSupport: [
+      Html5QrcodeSupportedFormats.QR_CODE
+    ]
+
+  };
+
+
   scanner.start(
 
     {
       facingMode: "environment"
     },
 
-    {
-
-      fps: 30,
-
-      qrbox: {
-        width: 320,
-        height: 180
-      },
-
-      aspectRatio: 1.777778
-
-    },
+    qrConfig,
 
 
     function(kode) {
@@ -744,10 +742,6 @@ function mulaiKamera() {
 
       sedangProses = true;
 
-
-      /*
-       * QR BERHASIL TERBACA
-       */
 
       tampilkanIndikatorHijau();
 
@@ -827,11 +821,6 @@ function cekKode(kode) {
           "Jumlah berhasil: " +
           jumlahBerhasil;
 
-
-        /*
-         * YANG DITAMPILKAN TETAP REGISTER
-         * DARI KOLOM A DATABASE
-         */
 
         document.getElementById("status").innerHTML =
           "✅ " +
@@ -939,10 +928,6 @@ function cekKode(kode) {
   script.id =
     callbackName;
 
-
-  /*
-   * QR DIKIRIM SEBAGAI KODE
-   */
 
   script.src =
     API_URL +
