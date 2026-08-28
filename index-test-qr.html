@@ -5,7 +5,6 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 <title>Scan QR Register BBI - IK Saradan</title>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 * {
   box-sizing: border-box;
@@ -82,28 +81,21 @@ body {
   overflow: hidden;
   background: black;
 }
-#reader {
+#video {
   width: 100%;
   height: 300px;
-  margin: auto;
-  background: black;
-  border-radius: 10px;
-  overflow: hidden;
-}
-#reader video {
-  width: 100% !important;
-  height: 300px !important;
-  object-fit: cover !important;
+  object-fit: cover;
+  display: block;
 }
 /* ==============================
-   GARIS POJOK QR
+   GARIS POJOK
 ============================== */
 .qr-frame {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 250px;
-  height: 250px;
+  width: 240px;
+  height: 240px;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 10;
@@ -115,48 +107,48 @@ body {
   border-color: #00e676;
   border-style: solid;
 }
-.corner.tl {
+.tl {
   left: 0;
   top: 0;
   border-width: 5px 0 0 5px;
   border-radius: 5px 0 0 0;
 }
-.corner.tr {
+.tr {
   right: 0;
   top: 0;
   border-width: 5px 5px 0 0;
   border-radius: 0 5px 0 0;
 }
-.corner.bl {
+.bl {
   left: 0;
   bottom: 0;
   border-width: 0 0 5px 5px;
   border-radius: 0 0 0 5px;
 }
-.corner.br {
+.br {
   right: 0;
   bottom: 0;
   border-width: 0 5px 5px 0;
   border-radius: 0 0 5px 0;
 }
 /* ==============================
-   INDIKATOR BERHASIL
+   HASIL SCAN
 ============================== */
 #scanBerhasil {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 250px;
-  height: 250px;
+  width: 240px;
+  height: 240px;
   transform: translate(-50%, -50%);
   border: 6px solid #00e676;
   border-radius: 12px;
-  box-shadow:
-    0 0 10px rgba(0,230,118,0.9),
-    0 0 25px rgba(0,230,118,0.8);
   display: none;
   z-index: 20;
   pointer-events: none;
+  box-shadow:
+    0 0 10px rgba(0,230,118,0.9),
+    0 0 25px rgba(0,230,118,0.8);
 }
 #scanBerhasil::after {
   content: "✓";
@@ -189,12 +181,7 @@ body {
   border-radius: 10px;
   background: #1976d2;
   color: white;
-  box-shadow:
-    0 3px 8px rgba(25,118,210,0.25);
   cursor: pointer;
-}
-#btnScan:active {
-  transform: scale(0.98);
 }
 /* ==============================
    STATUS
@@ -255,7 +242,6 @@ body {
   border-radius: 6px;
   font-size: 14px;
   font-weight: bold;
-  cursor: pointer;
 }
 .detail {
   display: none;
@@ -282,63 +268,6 @@ body {
   width: 115px;
   font-weight: bold;
 }
-/* ==============================
-   HP
-============================== */
-@media(max-width:500px) {
-  body {
-    padding: 10px;
-  }
-  .header {
-    padding: 10px 8px;
-  }
-  .logo {
-    width: 95px;
-    height: 85px;
-  }
-  .judul {
-    font-size: 22px;
-  }
-  .subjudul {
-    font-size: 17px;
-  }
-  .camera-wrapper,
-  #reader {
-    height: 300px;
-  }
-  #reader video {
-    height: 300px !important;
-  }
-  .qr-frame,
-  #scanBerhasil {
-    width: 230px;
-    height: 230px;
-  }
-}
-@media(max-width:380px) {
-  .logo {
-    width: 85px;
-    height: 75px;
-  }
-  .judul {
-    font-size: 20px;
-  }
-  .subjudul {
-    font-size: 16px;
-  }
-  .camera-wrapper,
-  #reader {
-    height: 280px;
-  }
-  #reader video {
-    height: 280px !important;
-  }
-  .qr-frame,
-  #scanBerhasil {
-    width: 210px;
-    height: 210px;
-  }
-}
 </style>
 </head>
 <body>
@@ -363,7 +292,12 @@ body {
 <!-- CAMERA -->
 <div class="camera-card">
   <div class="camera-wrapper">
-    <div id="reader"></div>
+    <video
+      id="video"
+      autoplay
+      muted
+      playsinline
+    ></video>
     <div class="qr-frame">
       <div class="corner tl"></div>
       <div class="corner tr"></div>
@@ -395,16 +329,20 @@ body {
 ============================== */
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyCBGCWXwOS62cahHe8zA3FSwKFunkcm3qhaan7oJOBPJMzdu3r7WNlFXoLt-xyGD8/exec";
-let scanner = null;
+let stream = null;
+let scanTimer = null;
 let kameraAktif = false;
 let sedangProses = false;
 let jumlahBerhasil = 0;
+let detector = null;
 /* ==============================
    INDIKATOR
 ============================== */
 function tampilkanIndikatorHijau() {
   const indikator =
-    document.getElementById("scanBerhasil");
+    document.getElementById(
+      "scanBerhasil"
+    );
   indikator.style.display =
     "block";
   setTimeout(function() {
@@ -446,7 +384,9 @@ function bunyiBerhasil() {
       audio.currentTime + 0.15
     );
     oscillator.connect(gain);
-    gain.connect(audio.destination);
+    gain.connect(
+      audio.destination
+    );
     oscillator.start();
     oscillator.stop(
       audio.currentTime + 0.16
@@ -473,93 +413,194 @@ function getarBerhasil() {
 /* ==============================
    MULAI KAMERA
 ============================== */
-function mulaiKamera() {
+async function mulaiKamera() {
   if (kameraAktif) return;
-  kameraAktif = true;
+  const status =
+    document.getElementById(
+      "status"
+    );
   const tombol =
-    document.getElementById("btnScan");
-  tombol.innerHTML =
-    "📷 KAMERA AKTIF";
-  tombol.style.background =
-    "#555";
-  document.getElementById("status").innerHTML =
+    document.getElementById(
+      "btnScan"
+    );
+  status.innerHTML =
     "⏳ Membuka kamera...";
-  scanner =
-    new Html5Qrcode("reader");
-  /*
-   * KHUSUS QR CODE
-   *
-   * Tidak menggunakan aspectRatio
-   * agar kamera HP bebas memilih
-   * rasio terbaik.
-   */
-  const config = {
-    fps: 30,
-    qrbox: function(
-      viewfinderWidth,
-      viewfinderHeight
+  try {
+    /*
+     * KAMERA BELAKANG
+     */
+    stream =
+      await navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode: {
+              ideal: "environment"
+            },
+            width: {
+              ideal: 1280
+            },
+            height: {
+              ideal: 720
+            },
+            frameRate: {
+              ideal: 30,
+              max: 60
+            }
+          },
+          audio: false
+        });
+    const video =
+      document.getElementById(
+        "video"
+      );
+    video.srcObject =
+      stream;
+    await video.play();
+    kameraAktif = true;
+    tombol.innerHTML =
+      "📷 KAMERA AKTIF";
+    tombol.style.background =
+      "#555";
+    /*
+     * CEK NATIVE BARCODE DETECTOR
+     */
+    if (
+      "BarcodeDetector"
+      in window
     ) {
-      const ukuran =
-        Math.min(
-          viewfinderWidth,
-          viewfinderHeight
-        ) * 0.75;
-      return {
-        width: Math.floor(ukuran),
-        height: Math.floor(ukuran)
-      };
-    },
-    formatsToSupport: [
-      Html5QrcodeSupportedFormats.QR_CODE
-    ],
-    experimentalFeatures: {
-      useBarCodeDetectorIfSupported: true
-    }
-  };
-  /*
-   * MINTA KAMERA BELAKANG
-   */
-  scanner.start(
-    {
-      facingMode: {
-        exact: "environment"
+      let formatDidukung =
+        false;
+      try {
+        const format =
+          await BarcodeDetector
+            .getSupportedFormats();
+        formatDidukung =
+          format.includes(
+            "qr_code"
+          );
+      } catch (e) {
+        formatDidukung = true;
       }
-    },
-    config,
-    function(kode) {
-      kode =
-        String(kode).trim();
-      if (!kode) return;
-      if (sedangProses) return;
-      sedangProses = true;
-      tampilkanIndikatorHijau();
-      document.getElementById("status").innerHTML =
-        "⏳ QR TERBACA<br>Mengecek database...";
-      cekKode(kode);
-    },
-    function(errorMessage) {
-      /*
-       * Tidak menampilkan error
-       * setiap frame agar scanner
-       * tetap ringan.
-       */
+      if (formatDidukung) {
+        detector =
+          new BarcodeDetector({
+            formats: [
+              "qr_code"
+            ]
+          });
+        status.innerHTML =
+          "📷 KAMERA AKTIF<br>" +
+          "Arahkan QR ke garis hijau";
+        mulaiDeteksiNative();
+        return;
+      }
     }
-  )
-  .then(function() {
-    document.getElementById("status").innerHTML =
-      "📷 KAMERA AKTIF<br>" +
-      "Arahkan QR ke garis hijau";
-  })
-  .catch(function(error) {
+    /*
+     * NATIVE TIDAK TERSEDIA
+     */
+    status.innerHTML =
+      "⚠️ Scanner QR native tidak didukung browser ini.";
+    stopKamera();
+  } catch (error) {
     kameraAktif = false;
     tombol.innerHTML =
       "📷 BUKA KAMERA";
     tombol.style.background =
       "#1976d2";
-    document.getElementById("status").innerHTML =
+    status.innerHTML =
       "❌ Kamera gagal dibuka<br>" +
-      error;
-  });
+      error.message;
+  }
+}
+/* ==============================
+   DETEKSI NATIVE
+============================== */
+function mulaiDeteksiNative() {
+  if (!kameraAktif) return;
+  const video =
+    document.getElementById(
+      "video"
+    );
+  async function scanFrame() {
+    if (!kameraAktif) return;
+    if (
+      !sedangProses &&
+      video.readyState >= 2
+    ) {
+      try {
+        const hasil =
+          await detector.detect(
+            video
+          );
+        if (
+          hasil &&
+          hasil.length > 0
+        ) {
+          const kode =
+            String(
+              hasil[0].rawValue || ""
+            ).trim();
+          if (kode) {
+            sedangProses =
+              true;
+            tampilkanIndikatorHijau();
+            document.getElementById(
+              "status"
+            ).innerHTML =
+              "⏳ QR TERBACA<br>" +
+              "Mengecek database...";
+            cekKode(kode);
+          }
+        }
+      } catch (e) {
+        /*
+         * Frame yang gagal dibaca
+         * diabaikan.
+         */
+      }
+    }
+    scanTimer =
+      requestAnimationFrame(
+        scanFrame
+      );
+  }
+  scanFrame();
+}
+/* ==============================
+   STOP KAMERA
+============================== */
+function stopKamera() {
+  kameraAktif = false;
+  if (scanTimer) {
+    cancelAnimationFrame(
+      scanTimer
+    );
+    scanTimer = null;
+  }
+  if (stream) {
+    stream
+      .getTracks()
+      .forEach(
+        function(track) {
+          track.stop();
+        }
+      );
+    stream = null;
+  }
+  const video =
+    document.getElementById(
+      "video"
+    );
+  video.srcObject =
+    null;
+  const tombol =
+    document.getElementById(
+      "btnScan"
+    );
+  tombol.innerHTML =
+    "📷 BUKA KAMERA";
+  tombol.style.background =
+    "#1976d2";
 }
 /* ==============================
    CEK KODE
@@ -574,10 +615,14 @@ function cekKode(kode) {
         hasil.status === "success"
       ) {
         jumlahBerhasil++;
-        document.getElementById("jumlah").innerHTML =
+        document.getElementById(
+          "jumlah"
+        ).innerHTML =
           "Jumlah berhasil: " +
           jumlahBerhasil;
-        document.getElementById("status").innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "✅ " +
           hasil.data[0];
         bunyiBerhasil();
@@ -592,7 +637,9 @@ function cekKode(kode) {
       else if (
         hasil.status === "duplicate"
       ) {
-        document.getElementById("status").innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "❌ " +
           hasil.message;
         tambahHasil(
@@ -605,7 +652,9 @@ function cekKode(kode) {
       else if (
         hasil.status === "not_found"
       ) {
-        document.getElementById("status").innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "⚠️ " +
           hasil.message;
         tambahHasilTidakDitemukan(
@@ -613,12 +662,17 @@ function cekKode(kode) {
         );
       }
       else {
-        document.getElementById("status").innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "⚠️ " +
           hasil.message;
       }
-      sedangProses = false;
-      delete window[callbackName];
+      sedangProses =
+        false;
+      delete window[
+        callbackName
+      ];
       const script =
         document.getElementById(
           callbackName
@@ -628,27 +682,38 @@ function cekKode(kode) {
       }
     };
   const script =
-    document.createElement("script");
+    document.createElement(
+      "script"
+    );
   script.id =
     callbackName;
   script.src =
     API_URL +
     "?kode=" +
-    encodeURIComponent(kode) +
+    encodeURIComponent(
+      kode
+    ) +
     "&callback=" +
     callbackName;
   script.onerror =
     function() {
-      document.getElementById("status").innerHTML =
+      document.getElementById(
+        "status"
+      ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
-      sedangProses = false;
-      delete window[callbackName];
+      sedangProses =
+        false;
+      delete window[
+        callbackName
+      ];
       script.remove();
     };
-  document.body.appendChild(script);
+  document.body.appendChild(
+    script
+  );
 }
 /* ==============================
-   HASIL SCAN
+   HASIL
 ============================== */
 function tambahHasil(
   data,
@@ -659,7 +724,9 @@ function tambahHasil(
   const register =
     data[0];
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
   item.className =
     "item";
   const id =
@@ -748,7 +815,9 @@ function tambahHasil(
     </div>
   `;
   document
-    .getElementById("daftar")
+    .getElementById(
+      "daftar"
+    )
     .prepend(item);
 }
 /* ==============================
@@ -758,7 +827,9 @@ function tambahHasilTidakDitemukan(
   kode
 ) {
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
   item.className =
     "item";
   item.innerHTML = `
@@ -772,7 +843,9 @@ function tambahHasilTidakDitemukan(
     </div>
   `;
   document
-    .getElementById("daftar")
+    .getElementById(
+      "daftar"
+    )
     .prepend(item);
 }
 /* ==============================
@@ -783,9 +856,12 @@ function toggleDetail(
   tombol
 ) {
   const detail =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
   if (
-    detail.style.display === "block"
+    detail.style.display ===
+    "block"
   ) {
     detail.style.display =
       "none";
