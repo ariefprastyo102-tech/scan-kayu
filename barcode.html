@@ -249,7 +249,7 @@ button{
     class="btnDownload"
     onclick="downloadSVG()">
 
-📥 DOWNLOAD SVG F4 — 33 BARCODE / LEMBAR
+📥 DOWNLOAD MASTER SVG 6 × 3 CM — F4 33/LBR
 
 </button>
 
@@ -874,9 +874,10 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD SVG F4
+   DOWNLOAD MASTER SVG
+   F4 = 215 × 330 MM
    33 BARCODE / LEMBAR
-   3 KOLOM x 11 BARIS
+   3 KOLOM × 11 BARIS
 ===================================================== */
 
 function downloadSVG(){
@@ -890,23 +891,25 @@ function downloadSVG(){
     const daftar=[];
 
 
-    semuaItem.forEach(
-        function(item){
+    /*
+       AMBIL BERDASARKAN DATABASE,
+       BUKAN BERDASARKAN YANG TERLIHAT.
+       JADI HASIL FILTER TETAP BISA
+       DICETAK SESUAI CHECKBOX.
+    */
 
-            const index =
-                Number(
-                    item.dataset.index
-                );
-
+    database.forEach(
+        function(data,index){
 
             if(
-                database[index] &&
-                database[index].dipilih
+                data.dipilih
             ){
 
-                daftar.push(
-                    database[index]
-                );
+                daftar.push({
+                    register:data.register,
+                    tumpuk:data.tumpuk,
+                    index:index
+                });
 
             }
 
@@ -929,72 +932,73 @@ function downloadSVG(){
 
     /* =================================================
        UKURAN KERTAS F4
-       215 x 330 MM
+       215 × 330 MM
     ================================================= */
 
-    const F4_W =
+    const PAPER_W =
         215;
 
-
-    const F4_H =
+    const PAPER_H =
         330;
 
 
     /* =================================================
-       UKURAN LABEL
-       60 x 30 MM
+       UKURAN BARCODE
+       60 × 30 MM
     ================================================= */
 
     const LABEL_W =
         60;
-
 
     const LABEL_H =
         30;
 
 
     /* =================================================
-       3 KOLOM
+       33 BARCODE
+       3 KOLOM × 11 BARIS
     ================================================= */
 
     const COL =
         3;
 
-
-    /* =================================================
-       11 BARIS
-    ================================================= */
-
     const ROW =
         11;
 
-
-    /* =================================================
-       TOTAL 33
-    ================================================= */
-
     const PER_LEMBAR =
-        COL * ROW;
+        33;
 
 
     /* =================================================
        POSISI HORIZONTAL
        
-       3 x 60 = 180
+       TOTAL LABEL:
+       3 × 60 = 180 MM
        
-       Sisa:
-       215 - 180 = 35
+       SISA:
+       215 - 180 = 35 MM
        
-       Dibagi 2:
-       17.5 mm kiri/kanan
+       MARGIN KIRI/KANAN:
+       17.5 MM
     ================================================= */
+
+    const GAP_X =
+        0;
+
+    const GAP_Y =
+        0;
+
 
     const MARGIN_X =
         (
-            F4_W -
+            PAPER_W -
             (
                 COL *
                 LABEL_W
+            ) -
+            (
+                (COL - 1) *
+                GAP_X
             )
         ) / 2;
 
@@ -1002,13 +1006,28 @@ function downloadSVG(){
     /* =================================================
        POSISI VERTIKAL
        
-       11 x 30 = 330
+       TOTAL LABEL:
+       11 × 30 = 330 MM
        
-       Jadi mulai dari 0.
+       PAS F4
     ================================================= */
 
     const MARGIN_Y =
-        0;
+        (
+            PAPER_H -
+            (
+                ROW *
+                LABEL_H
+            ) -
+            (
+                (ROW - 1) *
+                GAP_Y
+            )
+        ) / 2;
+
+
+    const NS =
+        "http://www.w3.org/2000/svg";
 
 
     /* =================================================
@@ -1022,17 +1041,13 @@ function downloadSVG(){
         );
 
 
-    let jumlahBerhasil =
-        0;
-
-
     /* =================================================
        BUAT SETIAP LEMBAR
     ================================================= */
 
     for(
-        let lembar = 0;
-        lembar < jumlahLembar;
+        let lembar=0;
+        lembar<jumlahLembar;
         lembar++
     ){
 
@@ -1056,12 +1071,8 @@ function downloadSVG(){
             );
 
 
-        const NS =
-            "http://www.w3.org/2000/svg";
-
-
         /* =================================================
-           ROOT SVG
+           ROOT SVG F4
         ================================================= */
 
         const root =
@@ -1079,22 +1090,22 @@ function downloadSVG(){
 
         root.setAttribute(
             "width",
-            F4_W + "mm"
+            PAPER_W + "mm"
         );
 
 
         root.setAttribute(
             "height",
-            F4_H + "mm"
+            PAPER_H + "mm"
         );
 
 
         root.setAttribute(
             "viewBox",
             "0 0 " +
-            F4_W +
+            PAPER_W +
             " " +
-            F4_H
+            PAPER_H
         );
 
 
@@ -1123,13 +1134,13 @@ function downloadSVG(){
 
         background.setAttribute(
             "width",
-            F4_W
+            PAPER_W
         );
 
 
         background.setAttribute(
             "height",
-            F4_H
+            PAPER_H
         );
 
 
@@ -1145,7 +1156,7 @@ function downloadSVG(){
 
 
         /* =================================================
-           BUAT LABEL
+           BUAT BARCODE
         ================================================= */
 
         dataLembar.forEach(
@@ -1165,17 +1176,19 @@ function downloadSVG(){
 
                 const labelX =
                     MARGIN_X +
+                    col *
                     (
-                        col *
-                        LABEL_W
+                        LABEL_W +
+                        GAP_X
                     );
 
 
                 const labelY =
                     MARGIN_Y +
+                    row *
                     (
-                        row *
-                        LABEL_H
+                        LABEL_H +
+                        GAP_Y
                     );
 
 
@@ -1192,16 +1205,16 @@ function downloadSVG(){
 
                 group.setAttribute(
                     "transform",
-                    "translate(" +
-                    labelX +
-                    " " +
-                    labelY +
-                    ")"
+                        "translate(" +
+                        labelX +
+                        " " +
+                        labelY +
+                        ")"
                 );
 
 
                 /* =================================================
-                   KOTAK LABEL
+                   KOTAK 6 × 3 CM
                 ================================================= */
 
                 const border =
@@ -1259,11 +1272,10 @@ function downloadSVG(){
 
 
                 /* =================================================
-                   BUAT BARCODE BARU LANGSUNG DI SVG
+                   BUAT BARCODE LANGSUNG
                    
-                   TIDAK COPY SVG DARI WEB
-                   
-                   Supaya barcode tidak rusak.
+                   JANGAN CLONE SVG WEB
+                   AGAR ANGKA/BARCODE TIDAK HILANG
                 ================================================= */
 
                 const barcodeSVG =
@@ -1329,11 +1341,11 @@ function downloadSVG(){
 
 
                 /*
-                 * BARCODE DIBUAT DARI
-                 * DATA REGISTER LANGSUNG
-                 */
+                   Buat barcode CODE128
+                   langsung ke SVG sementara
+                */
 
-                const barcodeTemp =
+                const tempSVG =
                     document.createElementNS(
                         NS,
                         "svg"
@@ -1341,7 +1353,7 @@ function downloadSVG(){
 
 
                 JsBarcode(
-                    barcodeTemp,
+                    tempSVG,
                     data.register,
                     {
 
@@ -1365,36 +1377,35 @@ function downloadSVG(){
 
 
                 /*
-                 * AMBIL VIEWBOX BARCODE
-                 */
+                   Ambil ukuran SVG hasil JsBarcode
+                */
 
-                const viewBox =
-                    barcodeTemp.getAttribute(
+                const tempViewBox =
+                    tempSVG.getAttribute(
                         "viewBox"
                     );
 
 
-                if(viewBox){
+                if(tempViewBox){
 
                     barcodeSVG.setAttribute(
                         "viewBox",
-                        viewBox
+                        tempViewBox
                     );
 
                 }
 
 
                 /*
-                 * COPY SEMUA
-                 * ELEMEN BARCODE
-                 */
+                   Copy semua isi barcode
+                */
 
                 while(
-                    barcodeTemp.firstChild
+                    tempSVG.firstChild
                 ){
 
                     barcodeSVG.appendChild(
-                        barcodeTemp.firstChild
+                        tempSVG.firstChild
                     );
 
                 }
@@ -1406,7 +1417,7 @@ function downloadSVG(){
 
 
                 /* =================================================
-                   REGISTER + TUMPUK
+                   ANGKA REGISTER + TUMPUK
                 ================================================= */
 
                 const angka =
@@ -1424,7 +1435,7 @@ function downloadSVG(){
 
                 angka.setAttribute(
                     "y",
-                    26
+                    "26"
                 );
 
 
@@ -1537,8 +1548,8 @@ function downloadSVG(){
 
 
         link.download =
-            "BARCODE-F4-LEMBAR-" +
-            (
+            "F4-BARCODE-KAYU-" +
+            String(
                 lembar + 1
             ) +
             ".svg";
@@ -1566,58 +1577,23 @@ function downloadSVG(){
             1000
         );
 
-
-        jumlahBerhasil +=
-            dataLembar.length;
-
-
-        /*
-         * Beri jeda sedikit
-         * supaya browser tidak
-         * memblokir download
-         */
-
-        await jeda(300);
-
     }
 
+
+    /* =================================================
+       STATUS
+    ================================================= */
 
     document.getElementById(
         "status"
     ).innerHTML =
         "✅ " +
-        jumlahBerhasil +
-        " barcode selesai — " +
         jumlahLembar +
-        " lembar F4";
-
-
-}
-
-
-/* =====================================================
-   JEDA DOWNLOAD
-===================================================== */
-
-function jeda(ms){
-
-    return new Promise(
-        function(resolve){
-
-            setTimeout(
-                resolve,
-                ms
-            );
-
-        }
-    );
+        " lembar F4 selesai — " +
+        daftar.length +
+        " barcode";
 
 }
-
-
-/* =====================================================
-   DETAIL TIDAK DIPAKAI
-===================================================== */
 
 </script>
 
