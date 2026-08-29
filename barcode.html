@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -6,17 +7,20 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>Barcode Kayu</title>
 
 <!-- BARCODE -->
+
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 <!-- PDF -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <!-- SVG KE PDF VECTOR -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.2.4/svg2pdf.umd.min.js"></script>
 
 <style>
@@ -173,88 +177,79 @@ button{
 
 <body>
 
-
 <div class="kontrol">
 
 <h2>
 🪵 CETAK BARCODE KAYU
 </h2>
 
-
 <button
-    class="btnAmbil"
-    onclick="ambilDatabase()">
+ class="btnAmbil"
+ onclick="ambilDatabase()">
 
 🔄 AMBIL DATA REGISTER
 
 </button>
 
-
 <div class="filter">
 
 <input
-    id="filterRegister"
-    type="text"
-    placeholder="Cari nomor register">
+ id="filterRegister"
+ type="text"
+ placeholder="Cari nomor register">
 
 <input
-    id="filterTumpuk"
-    type="text"
-    placeholder="Nomor tumpuk, contoh: 1">
+ id="filterTumpuk"
+ type="text"
+ placeholder="Nomor tumpuk, contoh: 1">
 
 </div>
-
 
 <div>
 
 <button
-    class="btnFilter"
-    onclick="filterData()">
+ class="btnFilter"
+ onclick="filterData()">
 
 🔎 FILTER
 
 </button>
 
-
 <button
-    class="btnSemua"
-    onclick="tampilkanSemua()">
+ class="btnSemua"
+ onclick="tampilkanSemua()">
 
 🔄 TAMPILKAN SEMUA
 
 </button>
 
-
 <button
-    class="btnPilih"
-    onclick="pilihHasilFilter()">
+ class="btnPilih"
+ onclick="pilihHasilFilter()">
 
 ☑️ PILIH HASIL FILTER
 
 </button>
 
-
 <button
-    class="btnBatal"
-    onclick="batalHasilFilter()">
+ class="btnBatal"
+ onclick="batalHasilFilter()">
 
 ❌ BATAL HASIL FILTER
 
 </button>
 
-
 <button
-    class="btnPilih"
-    onclick="pilihSemua()">
+ class="btnPilih"
+ onclick="pilihSemua()">
 
 ☑️ PILIH SEMUA
 
 </button>
 
-
 <button
-    class="btnBatal"
-    onclick="batalSemua()">
+ class="btnBatal"
+ onclick="batalSemua()">
 
 ❌ BATAL SEMUA
 
@@ -262,15 +257,13 @@ button{
 
 </div>
 
-
 <button
-    class="btnDownload"
-    onclick="downloadPDF()">
+ class="btnDownload"
+ onclick="downloadSVG()">
 
-📄 DOWNLOAD PDF — MASTER BARCODE 6 × 3 CM
+📄 DOWNLOAD SVG — MASTER BARCODE 6 × 3 CM
 
 </button>
-
 
 <div class="status">
 
@@ -290,9 +283,7 @@ Dipilih: 0
 
 </div>
 
-
 <div id="grid"></div>
-
 
 <script>
 
@@ -853,31 +844,20 @@ function updateJumlah(){
 
 
 /* =====================================================
-   DOWNLOAD PDF
+   DOWNLOAD SVG
 ===================================================== */
 
-async function downloadPDF(){
-
-    const semuaItem =
-        document.querySelectorAll(".item");
-
+function downloadSVG(){
 
     const daftar=[];
 
 
-    semuaItem.forEach(
-        function(item){
+    database.forEach(
+        function(data){
 
-            const index =
-                Number(item.dataset.index);
+            if(data.dipilih){
 
-
-            if(
-                database[index] &&
-                database[index].dipilih
-            ){
-
-                daftar.push(database[index]);
+                daftar.push(data);
 
             }
 
@@ -903,7 +883,7 @@ async function downloadPDF(){
 
 
     status.innerHTML =
-        "⏳ Membuat PDF " +
+        "⏳ Membuat SVG " +
         daftar.length +
         " barcode...";
 
@@ -926,8 +906,7 @@ async function downloadPDF(){
 
 
     /* =================================================
-       RUANG STAPLES
-       KANAN - KIRI
+       RUANG KIRI - KANAN
     ================================================= */
 
     const RUANG_KIRI =
@@ -935,27 +914,8 @@ async function downloadPDF(){
 
 
     /* =================================================
-       PDF
+       A4
     ================================================= */
-
-    const {
-        jsPDF
-    } = window.jspdf;
-
-
-    const doc =
-        new jsPDF({
-
-            orientation:"portrait",
-
-            unit:"mm",
-
-            format:"a4",
-
-            compress:true
-
-        });
-
 
     const PAGE_W = 210;
     const PAGE_H = 297;
@@ -966,6 +926,11 @@ async function downloadPDF(){
     ================================================= */
 
     const COL = 3;
+
+    const ROW = 9;
+
+    const PER_PAGE =
+        COL * ROW;
 
 
     const GAP_X = 2;
@@ -985,227 +950,355 @@ async function downloadPDF(){
 
 
     /* =================================================
-       FUNGSI BUAT SVG BARCODE
+       BUAT SVG UTAMA
     ================================================= */
 
-    function buatBarcodeSVG(register){
-
-        const svg =
-            document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "svg"
-            );
+    const svgNS =
+        "http://www.w3.org/2000/svg";
 
 
-        JsBarcode(
-
-            svg,
-
-            register,
-
-            {
-
-                format:"CODE128",
-
-                width:2,
-
-                height:55,
-
-                displayValue:false,
-
-                margin:0
-
-            }
-
+    const svg =
+        document.createElementNS(
+            svgNS,
+            "svg"
         );
 
 
-        svg.setAttribute(
-            "xmlns",
-            "http://www.w3.org/2000/svg"
-        );
+    svg.setAttribute(
+        "xmlns",
+        svgNS
+    );
 
 
-        svg.setAttribute(
-            "width",
-            BARCODE_W + "mm"
-        );
+    svg.setAttribute(
+        "width",
+        PAGE_W + "mm"
+    );
 
 
-        svg.setAttribute(
-            "height",
-            BARCODE_H + "mm"
-        );
+    svg.setAttribute(
+        "height",
+        PAGE_H + "mm"
+    );
 
 
-        svg.setAttribute(
-            "viewBox",
-            svg.getAttribute("viewBox")
-        );
-
-
-        return svg;
-
-    }
+    svg.setAttribute(
+        "viewBox",
+        "0 0 " +
+        PAGE_W +
+        " " +
+        PAGE_H
+    );
 
 
     /* =================================================
        MASUKKAN BARCODE
     ================================================= */
 
-    for(
-        let i=0;
-        i<daftar.length;
-        i++
-    ){
+    daftar.forEach(
+        function(data,i){
 
-        const posisi =
-            i % 27;
+            const indexHalaman =
+                i % PER_PAGE;
 
 
-        if(
-            i > 0 &&
-            posisi === 0
-        ){
+            const col =
+                indexHalaman % COL;
 
-            doc.addPage();
+
+            const row =
+                Math.floor(
+                    indexHalaman / COL
+                );
+
+
+            const x =
+                START_X +
+                col *
+                (
+                    LABEL_W +
+                    GAP_X
+                );
+
+
+            const y =
+                START_Y +
+                row *
+                (
+                    LABEL_H +
+                    GAP_Y
+                );
+
+
+            /* =================================================
+               GROUP LABEL
+            ================================================= */
+
+            const group =
+                document.createElementNS(
+                    svgNS,
+                    "g"
+                );
+
+
+            /* =================================================
+               KOTAK LABEL
+            ================================================= */
+
+            const rect =
+                document.createElementNS(
+                    svgNS,
+                    "rect"
+                );
+
+
+            rect.setAttribute(
+                "x",
+                x
+            );
+
+
+            rect.setAttribute(
+                "y",
+                y
+            );
+
+
+            rect.setAttribute(
+                "width",
+                LABEL_W
+            );
+
+
+            rect.setAttribute(
+                "height",
+                LABEL_H
+            );
+
+
+            rect.setAttribute(
+                "fill",
+                "white"
+            );
+
+
+            rect.setAttribute(
+                "stroke",
+                "black"
+            );
+
+
+            rect.setAttribute(
+                "stroke-width",
+                "0.25"
+            );
+
+
+            group.appendChild(rect);
+
+
+            /* =================================================
+               BARCODE
+            ================================================= */
+
+            const barcode =
+                document.createElementNS(
+                    svgNS,
+                    "svg"
+                );
+
+
+            barcode.setAttribute(
+                "x",
+                x + RUANG_KIRI
+            );
+
+
+            barcode.setAttribute(
+                "y",
+                y + 1
+            );
+
+
+            barcode.setAttribute(
+                "width",
+                BARCODE_W
+            );
+
+
+            barcode.setAttribute(
+                "height",
+                BARCODE_H
+            );
+
+
+            JsBarcode(
+
+                barcode,
+
+                data.register,
+
+                {
+
+                    format:
+                        "CODE128",
+
+                    width:
+                        2,
+
+                    height:
+                        55,
+
+                    displayValue:
+                        false,
+
+                    margin:
+                        0
+
+                }
+
+            );
+
+
+            group.appendChild(barcode);
+
+
+            /* =================================================
+               TEKS REGISTER + TUMPUK
+            ================================================= */
+
+            const teks =
+                document.createElementNS(
+                    svgNS,
+                    "text"
+                );
+
+
+            teks.setAttribute(
+                "x",
+                x + LABEL_W / 2
+            );
+
+
+            teks.setAttribute(
+                "y",
+                y + 27
+            );
+
+
+            teks.setAttribute(
+                "text-anchor",
+                "middle"
+            );
+
+
+            teks.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+
+            teks.setAttribute(
+                "font-family",
+                "Arial, Helvetica, sans-serif"
+            );
+
+
+            teks.setAttribute(
+                "font-size",
+                "6"
+            );
+
+
+            teks.setAttribute(
+                "font-weight",
+                "bold"
+            );
+
+
+            teks.textContent =
+                data.register +
+                "    " +
+                data.tumpuk;
+
+
+            group.appendChild(teks);
+
+
+            svg.appendChild(group);
 
         }
-
-
-        const indexHalaman =
-            i % 27;
-
-
-        const col =
-            indexHalaman % COL;
-
-
-        const row =
-            Math.floor(
-                indexHalaman / COL
-            );
-
-
-        const x =
-            START_X +
-            col *
-            (
-                LABEL_W +
-                GAP_X
-            );
-
-
-        const y =
-            START_Y +
-            row *
-            (
-                LABEL_H +
-                GAP_Y
-            );
-
-
-        /* =================================================
-           KOTAK LABEL
-        ================================================= */
-
-        doc.setLineWidth(0.25);
-
-
-        doc.rect(
-            x,
-            y,
-            LABEL_W,
-            LABEL_H
-        );
-
-
-        /* =================================================
-           BARCODE SVG
-        ================================================= */
-
-        const barcode =
-            buatBarcodeSVG(
-                daftar[i].register
-            );
-
-
-        const barcodeX =
-            x +
-            RUANG_KIRI;
-
-
-        const barcodeY =
-            y +
-            1;
-
-
-        await doc.svg(
-            barcode,
-            {
-
-                x:barcodeX,
-
-                y:barcodeY,
-
-                width:BARCODE_W,
-
-                height:BARCODE_H
-
-            }
-        );
-
-
-        /* =================================================
-           ANGKA REGISTER + TUMPUK
-           
-           FONT 6 MM
-           ================================================= */
-
-        const teks =
-            daftar[i].register +
-            "    " +
-            daftar[i].tumpuk;
-
-
-        doc.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        doc.setFontSize(
-            6
-        );
-
-
-        doc.text(
-            teks,
-            x + LABEL_W / 2,
-            y + 27,
-            {
-
-                align:"center",
-
-                baseline:"middle"
-
-            }
-        );
-
-    }
+    );
 
 
     /* =================================================
-       SIMPAN
+       SERIALISASI SVG
     ================================================= */
 
-    doc.save(
-        "MASTER-BARCODE-KAYU-6x3cm.pdf"
+    const serializer =
+        new XMLSerializer();
+
+
+    const source =
+        serializer.serializeToString(
+            svg
+        );
+
+
+    const blob =
+        new Blob(
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>\n',
+                source
+            ],
+            {
+                type:"image/svg+xml;charset=utf-8"
+            }
+        );
+
+
+    /* =================================================
+       DOWNLOAD
+    ================================================= */
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "MASTER-BARCODE-KAYU-6x3cm.svg";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
     );
 
 
     status.innerHTML =
-        "✅ PDF selesai — " +
+        "✅ SVG selesai — " +
         daftar.length +
         " barcode";
 
