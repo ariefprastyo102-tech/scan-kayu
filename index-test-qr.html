@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -11,7 +12,6 @@
 <title>Scan Register BBI - IK Saradan</title>
 
 <!-- ZXING -->
-
 <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
@@ -280,7 +280,7 @@ body {
   width: 100%;
   max-width: 500px;
 
-  margin: 8px auto 15px;
+  margin: 8px auto;
 
   padding: 12px;
 
@@ -304,9 +304,45 @@ body {
 }
 
 #btnScanBaru:active {
-
   transform: scale(0.98);
+}
 
+/* ==============================
+   TOMBOL HISTORY
+============================== */
+
+#btnHistory {
+
+  display: block;
+
+  width: 100%;
+  max-width: 500px;
+
+  margin: 8px auto 15px;
+
+  padding: 12px;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #176b38;
+
+  color: white;
+
+  box-shadow:
+    0 3px 8px rgba(23,107,56,0.20);
+
+  cursor: pointer;
+
+}
+
+#btnHistory:active {
+  transform: scale(0.98);
 }
 
 /* ==============================
@@ -470,6 +506,206 @@ body {
 }
 
 /* ==============================
+   HISTORY
+============================== */
+
+#historyPanel {
+
+  display: none;
+
+  width: 100%;
+
+  max-width: 500px;
+
+  margin: 15px auto;
+
+}
+
+.historyHeader {
+
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  margin-bottom: 10px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.07);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+}
+
+.historyJudul {
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+  color: #176b38;
+
+}
+
+.tutupHistory {
+
+  border: none;
+
+  background: #555;
+
+  color: white;
+
+  padding: 8px 12px;
+
+  border-radius: 6px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+.historyItem {
+
+  background: white;
+
+  border-radius: 10px;
+
+  margin-bottom: 10px;
+
+  padding: 13px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.07);
+
+}
+
+.historyTop {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+}
+
+.historyTanggal {
+
+  font-weight: bold;
+
+  font-size: 16px;
+
+}
+
+.historyJumlah {
+
+  color: #176b38;
+
+  font-size: 20px;
+
+  font-weight: bold;
+
+}
+
+.historyInfo {
+
+  margin-top: 6px;
+
+  color: #666;
+
+  font-size: 14px;
+
+}
+
+.historyDetail {
+
+  display: none;
+
+  margin-top: 12px;
+
+  padding-top: 10px;
+
+  border-top: 1px solid #ddd;
+
+}
+
+.historyRegister {
+
+  padding: 8px 0;
+
+  border-bottom: 1px solid #eee;
+
+  font-weight: bold;
+
+  word-break: break-all;
+
+}
+
+.historyRegister.success {
+  color: #16833a;
+}
+
+.historyRegister.duplicate {
+  color: #d32f2f;
+}
+
+.historyRegister.notfound {
+  color: #e67e00;
+}
+
+.btnHistoryDetail {
+
+  margin-top: 10px;
+
+  border: none;
+
+  background: #176b38;
+
+  color: white;
+
+  padding: 9px 12px;
+
+  border-radius: 6px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+.btnHapusHistory {
+
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 11px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #c62828;
+
+  color: white;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+/* ==============================
    HP
 ============================== */
 
@@ -616,6 +852,13 @@ body {
   🔄 SCAN BARU
 </button>
 
+<button
+  id="btnHistory"
+  onclick="tampilkanHistory()"
+>
+  📋 HISTORY SCAN
+</button>
+
 <!-- STATUS -->
 
 <div class="status-card">
@@ -630,7 +873,34 @@ body {
 
 </div>
 
+<!-- HASIL SCAN AKTIF -->
+
 <div id="daftar"></div>
+
+<!-- ==============================
+     HISTORY PANEL
+============================== -->
+
+<div id="historyPanel">
+
+  <div class="historyHeader">
+
+    <div class="historyJudul">
+      📋 HISTORY SCAN
+    </div>
+
+    <button
+      class="tutupHistory"
+      onclick="tutupHistory()"
+    >
+      TUTUP
+    </button>
+
+  </div>
+
+  <div id="isiHistory"></div>
+
+</div>
 
 <script>
 
@@ -666,7 +936,7 @@ let jumlahBerhasil = 0;
 let dataScanTersimpan = [];
 
 /* =====================================================
-   LOAD DATA SAAT HALAMAN DIBUKA
+   LOAD DATA
 ===================================================== */
 
 function muatDataTersimpan() {
@@ -720,7 +990,7 @@ function muatDataTersimpan() {
 }
 
 /* =====================================================
-   SIMPAN DATA
+   SIMPAN DATA AKTIF
 ===================================================== */
 
 function simpanData() {
@@ -751,60 +1021,6 @@ function simpanData() {
 }
 
 /* =====================================================
-   TAMPILKAN DATA LAMA
-===================================================== */
-
-function tampilkanDataTersimpan() {
-
-  const daftar =
-    document.getElementById(
-      "daftar"
-    );
-
-  daftar.innerHTML = "";
-
-  /*
-   * Data disimpan dari yang terbaru
-   * sehingga langsung ditampilkan
-   * dengan urutan terbaru di atas.
-   */
-
-  dataScanTersimpan
-    .slice()
-    .reverse()
-    .forEach(
-      function(item) {
-
-        if (
-          item.tipe ===
-          "notfound"
-        ) {
-
-          tambahHasilTidakDitemukan(
-            item.kode,
-            false
-          );
-
-        }
-
-        else {
-
-          tambahHasil(
-            item.data,
-            item.tanggalScan,
-            item.jamScan,
-            item.tipe,
-            false
-          );
-
-        }
-
-      }
-    );
-
-}
-
-/* =====================================================
    UPDATE JUMLAH
 ===================================================== */
 
@@ -819,7 +1035,53 @@ function updateJumlah() {
 }
 
 /* =====================================================
-   INISIALISASI
+   TAMPILKAN DATA AKTIF
+===================================================== */
+
+function tampilkanDataTersimpan() {
+
+  const daftar =
+    document.getElementById(
+      "daftar"
+    );
+
+  daftar.innerHTML = "";
+
+  dataScanTersimpan
+    .slice()
+    .reverse()
+    .forEach(
+      function(item) {
+
+        if (
+          item.tipe ===
+          "notfound"
+        ) {
+
+          tambahHasilTidakDitemukan(
+            item.kode
+          );
+
+        }
+
+        else {
+
+          tambahHasil(
+            item.data,
+            item.tanggalScan,
+            item.jamScan,
+            item.tipe
+          );
+
+        }
+
+      }
+    );
+
+}
+
+/* =====================================================
+   LOAD SAAT HALAMAN DIBUKA
 ===================================================== */
 
 muatDataTersimpan();
@@ -1275,10 +1537,6 @@ function prosesHasilScan(
 
     getarBerhasil();
 
-    /*
-     * SIMPAN KE STORAGE
-     */
-
     dataScanTersimpan.push({
 
       tipe: "success",
@@ -1302,8 +1560,7 @@ function prosesHasilScan(
       hasil.data,
       hasil.tanggalScan,
       hasil.jamScan,
-      "success",
-      true
+      "success"
     );
 
   }
@@ -1318,11 +1575,6 @@ function prosesHasilScan(
     ).innerHTML =
       "❌ " +
       hasil.message;
-
-    /*
-     * DUPLICATE JUGA DISIMPAN
-     * tetapi tidak menambah jumlah berhasil.
-     */
 
     dataScanTersimpan.push({
 
@@ -1343,11 +1595,10 @@ function prosesHasilScan(
     simpanData();
 
     tambahHasil(
-      hasil.data,
+      hasil.data || [kode],
       "",
       "",
-      "duplicate",
-      true
+      "duplicate"
     );
 
   }
@@ -1363,11 +1614,6 @@ function prosesHasilScan(
       "⚠️ " +
       hasil.message;
 
-    /*
-     * TIDAK DITEMUKAN JUGA
-     * DICATAT DI HISTORY LOKAL.
-     */
-
     dataScanTersimpan.push({
 
       tipe: "notfound",
@@ -1382,8 +1628,7 @@ function prosesHasilScan(
     simpanData();
 
     tambahHasilTidakDitemukan(
-      kode,
-      true
+      kode
     );
 
   }
@@ -1427,8 +1672,7 @@ function tambahHasil(
   data,
   tanggalScan,
   jamScan,
-  tipe,
-  simpan = false
+  tipe
 
 ) {
 
@@ -1568,8 +1812,7 @@ function tambahHasil(
 ===================================================== */
 
 function tambahHasilTidakDitemukan(
-  kode,
-  prepend = true
+  kode
 ) {
 
   const item =
@@ -1649,16 +1892,6 @@ function toggleDetail(
 
 function scanBaru() {
 
-  const jumlahLama =
-    dataScanTersimpan.filter(
-      function(item) {
-
-        return item.tipe ===
-          "success";
-
-      }
-    ).length;
-
   if (
     dataScanTersimpan.length === 0
   ) {
@@ -1671,54 +1904,97 @@ function scanBaru() {
 
   }
 
+  const jumlahLama =
+    dataScanTersimpan.filter(
+      function(item) {
+
+        return item.tipe ===
+          "success";
+
+      }
+    ).length;
+
+  const sekarang =
+    new Date();
+
+  const tanggal =
+    sekarang.toLocaleDateString(
+      "id-ID"
+    );
+
+  const jam =
+    sekarang.toLocaleTimeString(
+      "id-ID"
+    );
+
   const yakin =
     confirm(
 
-      "Mulai scan baru?\n\n" +
+      "Mulai SCAN BARU?\n\n" +
 
       "Jumlah berhasil saat ini: " +
       jumlahLama +
       " batang\n\n" +
 
-      "Data lama akan disimpan sebagai history " +
-      "dan jumlah aktif akan kembali 0."
+      "Data ini akan dipindahkan ke HISTORY."
 
     );
 
   if (!yakin) return;
 
-  /*
-   * SIMPAN SESI LAMA KE HISTORY
-   */
+  /* ============================
+     AMBIL HISTORY LAMA
+  ============================ */
+
+  let historyLama = [];
 
   try {
 
-    const historyLama =
+    historyLama =
       JSON.parse(
         localStorage.getItem(
           STORAGE_HISTORY
         ) || "[]"
       );
 
-    historyLama.push({
+    if (
+      !Array.isArray(historyLama)
+    ) {
 
-      tanggal:
-        new Date().toLocaleDateString(
-          "id-ID"
-        ),
+      historyLama = [];
 
-      waktu:
-        new Date().toLocaleTimeString(
-          "id-ID"
-        ),
+    }
 
-      jumlah:
-        jumlahLama,
+  }
 
-      data:
-        dataScanTersimpan
+  catch (e) {
 
-    });
+    historyLama = [];
+
+  }
+
+  /* ============================
+     BUAT HISTORY BARU
+  ============================ */
+
+  historyLama.push({
+
+    tanggal: tanggal,
+
+    jam: jam,
+
+    jumlah: jumlahLama,
+
+    data:
+      JSON.parse(
+        JSON.stringify(
+          dataScanTersimpan
+        )
+      )
+
+  });
+
+  try {
 
     localStorage.setItem(
 
@@ -1734,16 +2010,17 @@ function scanBaru() {
 
   catch (e) {
 
-    console.log(
-      "Gagal menyimpan history:",
-      e
+    alert(
+      "History gagal disimpan di browser."
     );
+
+    return;
 
   }
 
-  /*
-   * KOSONGKAN SESI AKTIF
-   */
+  /* ============================
+     RESET DATA AKTIF
+  ============================ */
 
   dataScanTersimpan = [];
 
@@ -1752,10 +2029,6 @@ function scanBaru() {
   localStorage.removeItem(
     STORAGE_DATA
   );
-
-  /*
-   * KOSONGKAN TAMPILAN
-   */
 
   document.getElementById(
     "daftar"
@@ -1766,24 +2039,389 @@ function scanBaru() {
   document.getElementById(
     "status"
   ).innerHTML =
-    "📷 Siap scan baru";
+    "📷 Siap untuk scan baru";
+
+  /* TUTUP HISTORY JIKA TERBUKA */
+
+  document.getElementById(
+    "historyPanel"
+  ).style.display =
+    "none";
 
 }
 
 /* =====================================================
-   CEK DATA SAAT LOAD
+   TAMPILKAN HISTORY
 ===================================================== */
 
-window.addEventListener(
-  "load",
-  function() {
+function tampilkanHistory() {
 
-    updateJumlah();
+  const panel =
+    document.getElementById(
+      "historyPanel"
+    );
+
+  const isi =
+    document.getElementById(
+      "isiHistory"
+    );
+
+  let history = [];
+
+  try {
+
+    history =
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_HISTORY
+        ) || "[]"
+      );
+
+    if (
+      !Array.isArray(history)
+    ) {
+
+      history = [];
+
+    }
 
   }
-);
+
+  catch (e) {
+
+    history = [];
+
+  }
+
+  isi.innerHTML = "";
+
+  if (
+    history.length === 0
+  ) {
+
+    isi.innerHTML = `
+
+      <div class="historyItem">
+
+        <div style="
+          text-align:center;
+          color:#777;
+          padding:10px;
+        ">
+
+          Belum ada history scan.
+
+        </div>
+
+      </div>
+
+    `;
+
+    panel.style.display =
+      "block";
+
+    panel.scrollIntoView({
+      behavior: "smooth"
+    });
+
+    return;
+
+  }
+
+  /* ============================
+     URUTAN TERBARU DI ATAS
+  ============================ */
+
+  history
+    .slice()
+    .reverse()
+    .forEach(
+      function(sesi, index) {
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "historyItem";
+
+        const id =
+          "history_detail_" +
+          Date.now() +
+          "_" +
+          index;
+
+        const semuaData =
+          Array.isArray(
+            sesi.data
+          )
+          ?
+          sesi.data
+          :
+          [];
+
+        item.innerHTML = `
+
+          <div class="historyTop">
+
+            <div>
+
+              <div class="historyTanggal">
+                📅 ${sesi.tanggal || "-"}
+              </div>
+
+              <div class="historyInfo">
+                🕐 ${sesi.jam || "-"}
+              </div>
+
+            </div>
+
+            <div class="historyJumlah">
+              ${sesi.jumlah || 0}
+            </div>
+
+          </div>
+
+          <div class="historyInfo">
+            Jumlah berhasil
+          </div>
+
+          <button
+            class="btnHistoryDetail"
+            onclick="toggleHistoryDetail('${id}', this)"
+          >
+            LIHAT DETAIL REGISTER
+          </button>
+
+          <div
+            id="${id}"
+            class="historyDetail"
+          ></div>
+
+        `;
+
+        isi.appendChild(
+          item
+        );
+
+        const detail =
+          document.getElementById(
+            id
+          );
+
+        semuaData.forEach(
+          function(dataScan) {
+
+            if (
+              dataScan.tipe ===
+              "success"
+            ) {
+
+              const register =
+                dataScan.data &&
+                dataScan.data[0]
+                ?
+                dataScan.data[0]
+                :
+                "";
+
+              const baris =
+                document.createElement(
+                  "div"
+                );
+
+              baris.className =
+                "historyRegister success";
+
+              baris.innerHTML =
+                "✅ " +
+                register;
+
+              detail.appendChild(
+                baris
+              );
+
+            }
+
+            else if (
+              dataScan.tipe ===
+              "duplicate"
+            ) {
+
+              const register =
+                dataScan.data &&
+                dataScan.data[0]
+                ?
+                dataScan.data[0]
+                :
+                "";
+
+              const baris =
+                document.createElement(
+                  "div"
+                );
+
+              baris.className =
+                "historyRegister duplicate";
+
+              baris.innerHTML =
+                "❌ " +
+                register +
+                " — DUPLIKAT";
+
+              detail.appendChild(
+                baris
+              );
+
+            }
+
+            else if (
+              dataScan.tipe ===
+              "notfound"
+            ) {
+
+              const baris =
+                document.createElement(
+                  "div"
+                );
+
+              baris.className =
+                "historyRegister notfound";
+
+              baris.innerHTML =
+                "⚠️ " +
+                (
+                  dataScan.kode ||
+                  ""
+                ) +
+                " — TIDAK ADA";
+
+              detail.appendChild(
+                baris
+              );
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+  /* ============================
+     TOMBOL HAPUS SEMUA HISTORY
+  ============================ */
+
+  const tombolHapus =
+    document.createElement(
+      "button"
+    );
+
+  tombolHapus.className =
+    "btnHapusHistory";
+
+  tombolHapus.innerHTML =
+    "🗑️ HAPUS SEMUA HISTORY";
+
+  tombolHapus.onclick =
+    hapusSemuaHistory;
+
+  isi.appendChild(
+    tombolHapus
+  );
+
+  panel.style.display =
+    "block";
+
+  panel.scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+/* =====================================================
+   TUTUP HISTORY
+===================================================== */
+
+function tutupHistory() {
+
+  document.getElementById(
+    "historyPanel"
+  ).style.display =
+    "none";
+
+}
+
+/* =====================================================
+   DETAIL HISTORY
+===================================================== */
+
+function toggleHistoryDetail(
+  id,
+  tombol
+) {
+
+  const detail =
+    document.getElementById(
+      id
+    );
+
+  if (
+    detail.style.display ===
+    "block"
+  ) {
+
+    detail.style.display =
+      "none";
+
+    tombol.innerHTML =
+      "LIHAT DETAIL REGISTER";
+
+  }
+
+  else {
+
+    detail.style.display =
+      "block";
+
+    tombol.innerHTML =
+      "TUTUP DETAIL";
+
+  }
+
+}
+
+/* =====================================================
+   HAPUS SEMUA HISTORY
+===================================================== */
+
+function hapusSemuaHistory() {
+
+  const yakin =
+    confirm(
+
+      "Yakin ingin menghapus SEMUA history scan?\n\n" +
+      "Data history yang sudah dihapus tidak dapat dikembalikan."
+
+    );
+
+  if (!yakin) return;
+
+  localStorage.removeItem(
+    STORAGE_HISTORY
+  );
+
+  tampilkanHistory();
+
+}
+
+/* =====================================================
+   SELESAI
+===================================================== */
 
 </script>
 
 </body>
 </html>
+
