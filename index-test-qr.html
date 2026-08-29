@@ -270,6 +270,46 @@ body {
 }
 
 /* ==============================
+   TOMBOL SCAN BARU
+============================== */
+
+#btnScanBaru {
+
+  display: block;
+
+  width: 100%;
+  max-width: 500px;
+
+  margin: 8px auto 15px;
+
+  padding: 12px;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #c62828;
+
+  color: white;
+
+  box-shadow:
+    0 3px 8px rgba(198,40,40,0.20);
+
+  cursor: pointer;
+
+}
+
+#btnScanBaru:active {
+
+  transform: scale(0.98);
+
+}
+
+/* ==============================
    STATUS
 ============================== */
 
@@ -297,6 +337,7 @@ body {
   font-weight: bold;
 
   line-height: 1.6;
+
 }
 
 #jumlah {
@@ -306,6 +347,7 @@ body {
   font-weight: bold;
 
   color: #555;
+
 }
 
 /* ==============================
@@ -319,6 +361,7 @@ body {
   max-width: 500px;
 
   margin: 15px auto;
+
 }
 
 .item {
@@ -333,6 +376,7 @@ body {
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
+
 }
 
 .baris {
@@ -344,6 +388,7 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .nomor {
@@ -353,6 +398,7 @@ body {
   font-weight: bold;
 
   word-break: break-all;
+
 }
 
 .detailBtn {
@@ -378,6 +424,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 .detail {
@@ -393,6 +440,7 @@ body {
   font-size: 15px;
 
   line-height: 1.7;
+
 }
 
 .success {
@@ -418,6 +466,7 @@ body {
   width: 115px;
 
   font-weight: bold;
+
 }
 
 /* ==============================
@@ -503,25 +552,23 @@ body {
 
   <div class="headerIsi">
 
-```
-<img
-  class="logo"
-  src="logo-perhutani.jpg"
-  alt="Logo Perhutani"
->
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
 
-<div class="judulBox">
+    <div class="judulBox">
 
-  <div class="judul">
-    SCAN REGISTER BBI
-  </div>
+      <div class="judul">
+        SCAN REGISTER BBI
+      </div>
 
-  <div class="subjudul">
-    IK SARADAN
-  </div>
+      <div class="subjudul">
+        IK SARADAN
+      </div>
 
-</div>
-```
+    </div>
 
   </div>
 
@@ -533,37 +580,41 @@ body {
 
   <div class="camera-wrapper">
 
-```
-<video
-  id="video"
-  autoplay
-  muted
-  playsinline
-></video>
+    <video
+      id="video"
+      autoplay
+      muted
+      playsinline
+    ></video>
 
-<div class="qr-frame">
+    <div class="qr-frame">
 
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
 
-</div>
+    </div>
 
-<div id="scanBerhasil"></div>
-```
+    <div id="scanBerhasil"></div>
 
   </div>
 
 </div>
 
 <button
-id="btnScan"
-onclick="mulaiKamera()"
-
+  id="btnScan"
+  onclick="mulaiKamera()"
 >
+  📷 BUKA KAMERA
+</button>
 
-📷 BUKA KAMERA </button>
+<button
+  id="btnScanBaru"
+  onclick="scanBaru()"
+>
+  🔄 SCAN BARU
+</button>
 
 <!-- STATUS -->
 
@@ -591,6 +642,16 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 /* =====================================================
+   STORAGE
+===================================================== */
+
+const STORAGE_DATA =
+"SCAN_REGISTER_BBI_DATA";
+
+const STORAGE_HISTORY =
+"SCAN_REGISTER_BBI_HISTORY";
+
+/* =====================================================
    VARIABEL
 ===================================================== */
 
@@ -601,6 +662,171 @@ let kameraAktif = false;
 let sedangProses = false;
 
 let jumlahBerhasil = 0;
+
+let dataScanTersimpan = [];
+
+/* =====================================================
+   LOAD DATA SAAT HALAMAN DIBUKA
+===================================================== */
+
+function muatDataTersimpan() {
+
+  try {
+
+    const data =
+      localStorage.getItem(
+        STORAGE_DATA
+      );
+
+    if (data) {
+
+      dataScanTersimpan =
+        JSON.parse(data);
+
+    }
+
+    if (
+      !Array.isArray(
+        dataScanTersimpan
+      )
+    ) {
+
+      dataScanTersimpan = [];
+
+    }
+
+  }
+
+  catch (e) {
+
+    console.log(
+      "Gagal membaca storage:",
+      e
+    );
+
+    dataScanTersimpan = [];
+
+  }
+
+  jumlahBerhasil =
+    dataScanTersimpan.filter(
+      function(item) {
+
+        return item.tipe === "success";
+
+      }
+    ).length;
+
+}
+
+/* =====================================================
+   SIMPAN DATA
+===================================================== */
+
+function simpanData() {
+
+  try {
+
+    localStorage.setItem(
+
+      STORAGE_DATA,
+
+      JSON.stringify(
+        dataScanTersimpan
+      )
+
+    );
+
+  }
+
+  catch (e) {
+
+    console.log(
+      "Gagal menyimpan data:",
+      e
+    );
+
+  }
+
+}
+
+/* =====================================================
+   TAMPILKAN DATA LAMA
+===================================================== */
+
+function tampilkanDataTersimpan() {
+
+  const daftar =
+    document.getElementById(
+      "daftar"
+    );
+
+  daftar.innerHTML = "";
+
+  /*
+   * Data disimpan dari yang terbaru
+   * sehingga langsung ditampilkan
+   * dengan urutan terbaru di atas.
+   */
+
+  dataScanTersimpan
+    .slice()
+    .reverse()
+    .forEach(
+      function(item) {
+
+        if (
+          item.tipe ===
+          "notfound"
+        ) {
+
+          tambahHasilTidakDitemukan(
+            item.kode,
+            false
+          );
+
+        }
+
+        else {
+
+          tambahHasil(
+            item.data,
+            item.tanggalScan,
+            item.jamScan,
+            item.tipe,
+            false
+          );
+
+        }
+
+      }
+    );
+
+}
+
+/* =====================================================
+   UPDATE JUMLAH
+===================================================== */
+
+function updateJumlah() {
+
+  document.getElementById(
+    "jumlah"
+  ).innerHTML =
+    "Jumlah berhasil: " +
+    jumlahBerhasil;
+
+}
+
+/* =====================================================
+   INISIALISASI
+===================================================== */
+
+muatDataTersimpan();
+
+updateJumlah();
+
+tampilkanDataTersimpan();
 
 /* =====================================================
    INDIKATOR HIJAU
@@ -689,7 +915,9 @@ function bunyiBerhasil() {
 
     }, 300);
 
-  } catch (e) {
+  }
+
+  catch (e) {
 
     console.log(e);
 
@@ -753,13 +981,6 @@ async function mulaiKamera() {
       document.getElementById(
         "video"
       );
-
-    /*
-     * MULTI FORMAT
-     *
-     * Mendukung QR CODE
-     * dan CODE 128
-     */
 
     const reader =
       new ZXingBrowser.BrowserMultiFormatReader();
@@ -830,22 +1051,10 @@ async function mulaiKamera() {
             kode +
             "...";
 
-          /*
-           * ==========================================
-           * BEDAKAN QR DAN CODE 128
-           * ==========================================
-           */
-
           if (
             format ===
             ZXingBrowser.BarcodeFormat.QR_CODE
           ) {
-
-            /*
-             * QR
-             *
-             * Cari kode di KOLOM M
-             */
 
             cekQR(kode);
 
@@ -855,12 +1064,6 @@ async function mulaiKamera() {
             format ===
             ZXingBrowser.BarcodeFormat.CODE_128
           ) {
-
-            /*
-             * CODE 128
-             *
-             * Cari register di KOLOM A
-             */
 
             cekRegister(kode);
 
@@ -921,7 +1124,6 @@ async function mulaiKamera() {
 
 /* =====================================================
    CEK QR
-   KIRIM ?kode=
 ===================================================== */
 
 function cekQR(kode) {
@@ -984,7 +1186,6 @@ function cekQR(kode) {
 
 /* =====================================================
    CEK CODE 128
-   KIRIM ?register=
 ===================================================== */
 
 function cekRegister(register) {
@@ -1062,11 +1263,7 @@ function prosesHasilScan(
 
     jumlahBerhasil++;
 
-    document.getElementById(
-      "jumlah"
-    ).innerHTML =
-      "Jumlah berhasil: " +
-      jumlahBerhasil;
+    updateJumlah();
 
     document.getElementById(
       "status"
@@ -1078,11 +1275,35 @@ function prosesHasilScan(
 
     getarBerhasil();
 
+    /*
+     * SIMPAN KE STORAGE
+     */
+
+    dataScanTersimpan.push({
+
+      tipe: "success",
+
+      data: hasil.data,
+
+      tanggalScan:
+        hasil.tanggalScan || "",
+
+      jamScan:
+        hasil.jamScan || "",
+
+      waktuSimpan:
+        new Date().toISOString()
+
+    });
+
+    simpanData();
+
     tambahHasil(
       hasil.data,
       hasil.tanggalScan,
       hasil.jamScan,
-      "success"
+      "success",
+      true
     );
 
   }
@@ -1098,11 +1319,35 @@ function prosesHasilScan(
       "❌ " +
       hasil.message;
 
+    /*
+     * DUPLICATE JUGA DISIMPAN
+     * tetapi tidak menambah jumlah berhasil.
+     */
+
+    dataScanTersimpan.push({
+
+      tipe: "duplicate",
+
+      data:
+        hasil.data || [kode],
+
+      tanggalScan: "",
+
+      jamScan: "",
+
+      waktuSimpan:
+        new Date().toISOString()
+
+    });
+
+    simpanData();
+
     tambahHasil(
       hasil.data,
       "",
       "",
-      "duplicate"
+      "duplicate",
+      true
     );
 
   }
@@ -1118,8 +1363,27 @@ function prosesHasilScan(
       "⚠️ " +
       hasil.message;
 
+    /*
+     * TIDAK DITEMUKAN JUGA
+     * DICATAT DI HISTORY LOKAL.
+     */
+
+    dataScanTersimpan.push({
+
+      tipe: "notfound",
+
+      kode: kode,
+
+      waktuSimpan:
+        new Date().toISOString()
+
+    });
+
+    simpanData();
+
     tambahHasilTidakDitemukan(
-      kode
+      kode,
+      true
     );
 
   }
@@ -1163,12 +1427,15 @@ function tambahHasil(
   data,
   tanggalScan,
   jamScan,
-  tipe
+  tipe,
+  simpan = false
 
 ) {
 
+  if (!data) return;
+
   const register =
-    data[0];
+    data[0] || "";
 
   const item =
     document.createElement(
@@ -1180,7 +1447,11 @@ function tambahHasil(
 
   const id =
     "detail_" +
-    Date.now();
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .substring(2,8);
 
   const warna =
     tipe === "success"
@@ -1224,42 +1495,42 @@ function tambahHasil(
 
       <div>
         <span class="label">REGISTER</span>
-        : ${data[0]}
+        : ${data[0] || ""}
       </div>
 
       <div>
         <span class="label">PANJANG</span>
-        : ${data[1]}
+        : ${data[1] || ""}
       </div>
 
       <div>
         <span class="label">DIAMETER</span>
-        : ${data[2]}
+        : ${data[2] || ""}
       </div>
 
       <div>
         <span class="label">TPK</span>
-        : ${data[3]}
+        : ${data[3] || ""}
       </div>
 
       <div>
         <span class="label">TUMPUK</span>
-        : ${data[4]}
+        : ${data[4] || ""}
       </div>
 
       <div>
         <span class="label">MUTU</span>
-        : ${data[5]}
+        : ${data[5] || ""}
       </div>
 
       <div>
         <span class="label">STATUS</span>
-        : ${data[6]}
+        : ${data[6] || ""}
       </div>
 
       <div>
         <span class="label">M3</span>
-        : ${data[7]}
+        : ${data[7] || ""}
       </div>
 
       ${
@@ -1297,7 +1568,8 @@ function tambahHasil(
 ===================================================== */
 
 function tambahHasilTidakDitemukan(
-  kode
+  kode,
+  prepend = true
 ) {
 
   const item =
@@ -1370,6 +1642,146 @@ function toggleDetail(
   }
 
 }
+
+/* =====================================================
+   SCAN BARU
+===================================================== */
+
+function scanBaru() {
+
+  const jumlahLama =
+    dataScanTersimpan.filter(
+      function(item) {
+
+        return item.tipe ===
+          "success";
+
+      }
+    ).length;
+
+  if (
+    dataScanTersimpan.length === 0
+  ) {
+
+    alert(
+      "Belum ada data scan."
+    );
+
+    return;
+
+  }
+
+  const yakin =
+    confirm(
+
+      "Mulai scan baru?\n\n" +
+
+      "Jumlah berhasil saat ini: " +
+      jumlahLama +
+      " batang\n\n" +
+
+      "Data lama akan disimpan sebagai history " +
+      "dan jumlah aktif akan kembali 0."
+
+    );
+
+  if (!yakin) return;
+
+  /*
+   * SIMPAN SESI LAMA KE HISTORY
+   */
+
+  try {
+
+    const historyLama =
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_HISTORY
+        ) || "[]"
+      );
+
+    historyLama.push({
+
+      tanggal:
+        new Date().toLocaleDateString(
+          "id-ID"
+        ),
+
+      waktu:
+        new Date().toLocaleTimeString(
+          "id-ID"
+        ),
+
+      jumlah:
+        jumlahLama,
+
+      data:
+        dataScanTersimpan
+
+    });
+
+    localStorage.setItem(
+
+      STORAGE_HISTORY,
+
+      JSON.stringify(
+        historyLama
+      )
+
+    );
+
+  }
+
+  catch (e) {
+
+    console.log(
+      "Gagal menyimpan history:",
+      e
+    );
+
+  }
+
+  /*
+   * KOSONGKAN SESI AKTIF
+   */
+
+  dataScanTersimpan = [];
+
+  jumlahBerhasil = 0;
+
+  localStorage.removeItem(
+    STORAGE_DATA
+  );
+
+  /*
+   * KOSONGKAN TAMPILAN
+   */
+
+  document.getElementById(
+    "daftar"
+  ).innerHTML = "";
+
+  updateJumlah();
+
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "📷 Siap scan baru";
+
+}
+
+/* =====================================================
+   CEK DATA SAAT LOAD
+===================================================== */
+
+window.addEventListener(
+  "load",
+  function() {
+
+    updateJumlah();
+
+  }
+);
 
 </script>
 
