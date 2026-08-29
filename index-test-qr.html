@@ -346,10 +346,16 @@ body {
 }
 
 /* ==============================
-   STATUS
+   TOTAL BATANG SELALU TERLIHAT
 ============================== */
 
 .status-card {
+
+  position: sticky;
+
+  top: 8px;
+
+  z-index: 100;
 
   width: 100%;
   max-width: 500px;
@@ -358,31 +364,76 @@ body {
 
   background: white;
 
-  border-radius: 12px;
+  border-radius: 14px;
 
-  padding: 13px;
+  padding: 12px;
 
   text-align: center;
 
   box-shadow:
-    0 3px 10px rgba(0,0,0,0.06);
-}
+    0 4px 14px rgba(0,0,0,0.15);
 
-#status {
-
-  font-weight: bold;
-
-  line-height: 1.6;
+  border: 2px solid #176b38;
 
 }
+
+/* TOTAL BESAR */
 
 #jumlah {
 
-  margin-top: 5px;
+  margin: 0;
 
   font-weight: bold;
 
-  color: #555;
+  color: #176b38;
+
+  line-height: 1;
+
+  display: flex;
+
+  align-items: baseline;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+
+}
+
+/* ANGKA */
+
+#jumlah .angkaTotal {
+
+  font-size: 56px;
+
+  font-weight: 900;
+
+  line-height: 1;
+
+}
+
+/* BATANG */
+
+#jumlah .teksBatang {
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+}
+
+/* STATUS KAMERA */
+
+#status {
+
+  margin-top: 7px;
+
+  font-weight: bold;
+
+  line-height: 1.5;
+
+  font-size: 14px;
 
 }
 
@@ -611,9 +662,11 @@ body {
 
   color: #176b38;
 
-  font-size: 20px;
+  font-size: 28px;
 
-  font-weight: bold;
+  font-weight: 900;
+
+  white-space: nowrap;
 
 }
 
@@ -742,6 +795,14 @@ body {
     height: 300px;
   }
 
+  #jumlah .angkaTotal {
+    font-size: 52px;
+  }
+
+  #jumlah .teksBatang {
+    font-size: 23px;
+  }
+
 }
 
 /* ==============================
@@ -772,6 +833,14 @@ body {
   #scanBerhasil {
     width: 220px;
     height: 220px;
+  }
+
+  #jumlah .angkaTotal {
+    font-size: 46px;
+  }
+
+  #jumlah .teksBatang {
+    font-size: 21px;
   }
 
 }
@@ -859,16 +928,24 @@ body {
   📋 HISTORY SCAN
 </button>
 
-<!-- STATUS -->
+<!-- STATUS / TOTAL -->
 
 <div class="status-card">
 
-  <div id="status">
-    Tekan Buka Kamera
+  <div id="jumlah">
+
+    <span class="angkaTotal">
+      0
+    </span>
+
+    <span class="teksBatang">
+      BATANG
+    </span>
+
   </div>
 
-  <div id="jumlah">
-    Jumlah berhasil: 0
+  <div id="status">
+    Tekan Buka Kamera
   </div>
 
 </div>
@@ -1026,10 +1103,12 @@ function simpanData() {
 
 function updateJumlah() {
 
-  document.getElementById(
-    "jumlah"
-  ).innerHTML =
-    "Jumlah berhasil: " +
+  const jumlah =
+    document.querySelector(
+      "#jumlah .angkaTotal"
+    );
+
+  jumlah.innerHTML =
     jumlahBerhasil;
 
 }
@@ -1974,7 +2053,7 @@ function scanBaru() {
   }
 
   /* ============================
-     BUAT HISTORY BARU
+     SIMPAN HISTORY
   ============================ */
 
   historyLama.push({
@@ -2040,8 +2119,6 @@ function scanBaru() {
     "status"
   ).innerHTML =
     "📷 Siap untuk scan baru";
-
-  /* TUTUP HISTORY JIKA TERBUKA */
 
   document.getElementById(
     "historyPanel"
@@ -2128,10 +2205,6 @@ function tampilkanHistory() {
 
   }
 
-  /* ============================
-     URUTAN TERBARU DI ATAS
-  ============================ */
-
   history
     .slice()
     .reverse()
@@ -2178,13 +2251,9 @@ function tampilkanHistory() {
             </div>
 
             <div class="historyJumlah">
-              ${sesi.jumlah || 0}
+              ${sesi.jumlah || 0} BATANG
             </div>
 
-          </div>
-
-          <div class="historyInfo">
-            Jumlah berhasil
           </div>
 
           <button
@@ -2309,10 +2378,6 @@ function tampilkanHistory() {
       }
     );
 
-  /* ============================
-     TOMBOL HAPUS SEMUA HISTORY
-  ============================ */
-
   const tombolHapus =
     document.createElement(
       "button"
@@ -2415,10 +2480,6 @@ function hapusSemuaHistory() {
   tampilkanHistory();
 
 }
-
-/* =====================================================
-   SELESAI
-===================================================== */
 
 </script>
 
