@@ -39,7 +39,6 @@ body {
   padding: 12px 15px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
-  position: relative;
 }
 
 .headerIsi {
@@ -77,50 +76,6 @@ body {
   letter-spacing: 1.5px;
   margin-top: 6px;
   white-space: nowrap;
-}
-
-/* ==============================
-   TOMBOL HISTORY KECIL
-============================== */
-
-#btnHistoryMini {
-
-  position: absolute;
-
-  right: 9px;
-  top: 9px;
-
-  width: 34px;
-  height: 34px;
-
-  padding: 0;
-
-  border: none;
-
-  border-radius: 50%;
-
-  background: #176b38;
-
-  color: white;
-
-  font-size: 18px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 2px 6px rgba(23,107,56,0.25);
-
-  z-index: 5;
-}
-
-#btnHistoryMini:active {
-  transform: scale(0.92);
 }
 
 /* ==============================
@@ -279,15 +234,69 @@ body {
 }
 
 /* ==============================
+   HISTORY FLOATING
+============================== */
+
+/*
+ * HISTORY TIDAK LAGI ADA
+ * DI BAWAH KAMERA.
+ *
+ * Dibuat tombol kecil melayang
+ * di pojok kanan bawah.
+ */
+
+#btnHistory {
+
+  position: fixed;
+
+  right: 15px;
+  bottom: 15px;
+
+  width: auto;
+  min-width: 48px;
+  height: 48px;
+
+  padding: 0 14px;
+
+  margin: 0;
+
+  border: none;
+  border-radius: 24px;
+
+  background: #176b38;
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  z-index: 1000;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.25);
+
+}
+
+#btnHistory:active {
+  transform: scale(0.94);
+}
+
+/* ==============================
    TOTAL BATANG
 ============================== */
 
 .status-card {
+
   position: sticky;
+
   top: 8px;
+
   z-index: 100;
 
   width: 100%;
+
   max-width: 500px;
 
   margin: 10px auto;
@@ -304,9 +313,11 @@ body {
 
   box-shadow:
     0 4px 14px rgba(0,0,0,0.15);
+
 }
 
 #jumlah {
+
   margin: 0;
 
   display: flex;
@@ -322,24 +333,37 @@ body {
   color: #176b38;
 
   line-height: 1;
+
 }
 
 #jumlah .angkaTotal {
+
   font-size: 56px;
+
   font-weight: 900;
+
   line-height: 1;
+
 }
 
 #jumlah .teksBatang {
+
   font-size: 25px;
+
   font-weight: 800;
+
 }
 
 #status {
+
   margin-top: 7px;
+
   font-weight: bold;
+
   line-height: 1.5;
+
   font-size: 14px;
+
 }
 
 /* ==============================
@@ -347,55 +371,92 @@ body {
 ============================== */
 
 #daftar {
+
   width: 100%;
+
   max-width: 500px;
+
   margin: 15px auto;
+
 }
 
 .item {
+
   background: white;
+
   margin-bottom: 9px;
+
   border-radius: 10px;
+
   padding: 12px;
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
+
 }
 
 .baris {
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 10px;
+
 }
 
 .nomor {
+
   font-size: 20px;
+
   font-weight: bold;
+
   word-break: break-all;
+
 }
 
 .detailBtn {
+
   width: auto;
+
   min-width: 80px;
+
   padding: 8px 12px;
+
   margin: 0;
+
   background: #555;
+
   color: white;
+
   border: none;
+
   border-radius: 6px;
+
   font-size: 14px;
+
   font-weight: bold;
+
   cursor: pointer;
+
 }
 
 .detail {
+
   display: none;
+
   margin-top: 12px;
+
   padding-top: 10px;
+
   border-top: 1px solid #ddd;
+
   font-size: 15px;
+
   line-height: 1.7;
+
 }
 
 .success {
@@ -415,25 +476,33 @@ body {
 }
 
 .label {
+
   display: inline-block;
+
   width: 115px;
+
   font-weight: bold;
+
 }
 
 /* ==============================
-   HISTORY
+   HISTORY PANEL
 ============================== */
 
 #historyPanel {
+
   display: none;
 
   width: 100%;
+
   max-width: 500px;
 
   margin: 15px auto;
+
 }
 
 .historyHeader {
+
   background: white;
 
   border-radius: 12px;
@@ -452,25 +521,43 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .historyJudul {
+
   font-size: 20px;
+
   font-weight: bold;
+
   color: #176b38;
+
 }
 
 .tutupHistory {
+
   border: none;
+
   background: #555;
+
   color: white;
+
   padding: 8px 12px;
+
   border-radius: 6px;
+
   font-weight: bold;
+
   cursor: pointer;
+
 }
 
+/* ==============================
+   SATU SESI HISTORY
+============================== */
+
 .historyItem {
+
   background: white;
 
   border-radius: 12px;
@@ -481,9 +568,11 @@ body {
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
+
 }
 
 .historyTop {
+
   display: flex;
 
   align-items: center;
@@ -491,28 +580,43 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .historyNomor {
+
   font-size: 18px;
+
   font-weight: 900;
+
   color: #176b38;
+
 }
 
 .historyTanggal {
+
   margin-top: 4px;
+
   font-size: 14px;
+
   color: #666;
+
 }
 
 .historyJumlah {
+
   color: #176b38;
+
   font-size: 27px;
+
   font-weight: 900;
+
   white-space: nowrap;
+
 }
 
 .historyDetail {
+
   display: none;
 
   margin-top: 12px;
@@ -520,9 +624,11 @@ body {
   padding-top: 10px;
 
   border-top: 1px solid #ddd;
+
 }
 
 .historyRegister {
+
   padding: 8px 0;
 
   border-bottom: 1px solid #eee;
@@ -530,6 +636,7 @@ body {
   font-weight: bold;
 
   word-break: break-all;
+
 }
 
 .historyRegister.success {
@@ -545,6 +652,7 @@ body {
 }
 
 .btnHistoryDetail {
+
   margin-top: 10px;
 
   border: none;
@@ -560,9 +668,11 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 .btnHapusHistory {
+
   width: 100%;
 
   margin-top: 10px;
@@ -580,6 +690,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 /* ==============================
@@ -627,6 +738,21 @@ body {
     font-size: 23px;
   }
 
+  #btnHistory {
+
+    right: 12px;
+    bottom: 12px;
+
+    height: 46px;
+
+    min-width: 46px;
+
+    padding: 0 13px;
+
+    font-size: 14px;
+
+  }
+
 }
 
 /* ==============================
@@ -669,6 +795,15 @@ body {
 
 }
 
+/* ==============================
+   AREA BAWAH AGAR TOMBOL
+   FLOATING TIDAK MENGGANGGU
+============================== */
+
+body {
+  padding-bottom: 80px;
+}
+
 </style>
 
 </head>
@@ -680,16 +815,6 @@ body {
 ============================== -->
 
 <div class="header">
-
-  <!-- HISTORY SEKARANG HANYA IKON KECIL -->
-
-  <button
-    id="btnHistoryMini"
-    onclick="tampilkanHistory()"
-    title="History Scan"
-  >
-    📋
-  </button>
 
   <div class="headerIsi">
 
@@ -757,6 +882,18 @@ body {
   onclick="scanBaru()"
 >
   🔄 SCAN BARU
+</button>
+
+<!-- ==============================
+     HISTORY FLOATING
+============================== -->
+
+<button
+  id="btnHistory"
+  onclick="tampilkanHistory()"
+  title="History Scan"
+>
+  📋 HISTORY
 </button>
 
 <!-- ==============================
@@ -1899,7 +2036,7 @@ function scanBaru() {
   }
 
   /* =================================================
-     NOMOR SESI
+     BUAT SATU HISTORY BARU
   ================================================= */
 
   const nomorSesi =
