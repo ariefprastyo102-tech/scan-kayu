@@ -95,6 +95,12 @@ button{
     font-size:15px;
 }
 
+/* INPUT REGISTER BISA BANYAK */
+
+#filterRegister{
+    min-height:44px;
+}
+
 .status{
     margin-top:15px;
     padding:12px;
@@ -147,18 +153,6 @@ button{
     font-size:14px;
 }
 
-@media(max-width:700px){
-
-    .filter{
-        grid-template-columns:1fr;
-    }
-
-    #grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
 
 /* =====================================================
    AREA CETAK
@@ -205,6 +199,7 @@ button{
     .lembar{
         width:215.9mm;
         height:330.2mm;
+
         page-break-after:always;
         page-break-inside:avoid;
 
@@ -304,6 +299,19 @@ button{
 
 }
 
+
+@media(max-width:700px){
+
+    .filter{
+        grid-template-columns:1fr;
+    }
+
+    #grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
 </style>
 
 </head>
@@ -336,7 +344,7 @@ button{
 <input
     id="filterRegister"
     type="text"
-    placeholder="Cari nomor register">
+    placeholder="Cari nomor register (bisa banyak)">
 
 <input
     id="filterTumpuk"
@@ -784,19 +792,19 @@ function tampilkan(){
 
 
 /* =====================================================
-   FILTER
+   FILTER DATA
+   BISA BANYAK NOMOR REGISTER
 ===================================================== */
 
 function filterData(){
 
-    const register =
+    const registerInput =
         document
         .getElementById(
             "filterRegister"
         )
         .value
-        .trim()
-        .toLowerCase();
+        .trim();
 
 
     const tumpuk =
@@ -807,6 +815,46 @@ function filterData(){
         .value
         .trim()
         .toLowerCase();
+
+
+    /*
+     * NOMOR REGISTER BISA DIPISAH:
+     *
+     * ENTER
+     * SPASI
+     * KOMA
+     * TITIK KOMA
+     */
+
+    const daftarRegister =
+        registerInput
+        .split(/[\s,;]+/)
+        .map(function(nomor){
+
+            return nomor
+                .trim()
+                .toLowerCase();
+
+        })
+        .filter(function(nomor){
+
+            return nomor !== "";
+
+        });
+
+
+    /*
+     * HAPUS DUPLIKAT
+     */
+
+    const registerUnik =
+        [...new Set(
+            daftarRegister
+        )];
+
+
+    let jumlahCocok =
+        0;
 
 
     document
@@ -821,12 +869,35 @@ function filterData(){
             item.dataset.tumpuk;
 
 
-        const cocokRegister =
-            register === "" ||
-            nilaiRegister.includes(
-                register
-            );
+        /*
+         * JIKA TIDAK ADA INPUT REGISTER
+         * MAKA SEMUA REGISTER COCOK
+         */
 
+        let cocokRegister =
+            registerUnik.length === 0;
+
+
+        /*
+         * JIKA ADA BANYAK NOMOR
+         * CARI KECocokan PERSIS
+         */
+
+        if(
+            registerUnik.length > 0
+        ){
+
+            cocokRegister =
+                registerUnik.includes(
+                    nilaiRegister
+                );
+
+        }
+
+
+        /*
+         * FILTER TUMPUK
+         */
 
         const cocokTumpuk =
             tumpuk === "" ||
@@ -842,7 +913,11 @@ function filterData(){
                 "hide"
             );
 
-        }else{
+            jumlahCocok++;
+
+        }
+
+        else{
 
             item.classList.add(
                 "hide"
@@ -851,6 +926,48 @@ function filterData(){
         }
 
     });
+
+
+    /*
+     * STATUS
+     */
+
+    if(
+        registerUnik.length > 0
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 " +
+            registerUnik.length +
+            " nomor dicari — " +
+            jumlahCocok +
+            " ditemukan";
+
+    }
+
+    else if(
+        tumpuk !== ""
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 Filter tumpuk — " +
+            jumlahCocok +
+            " ditemukan";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 Semua data ditampilkan";
+
+    }
 
 }
 
@@ -880,6 +997,12 @@ function tampilkanSemua(){
         );
 
     });
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "✅ Semua DATABASE ditampilkan";
 
 }
 
@@ -1112,10 +1235,10 @@ function cetakF4(){
     area.innerHTML="";
 
 
-    /* =================================================
-       33 BARCODE / LEMBAR
-       3 KOLOM × 11 BARIS
-    ================================================= */
+    /*
+     * 33 BARCODE / LEMBAR
+     * 3 KOLOM × 11 BARIS
+     */
 
     const PER_LEMBAR =
         33;
