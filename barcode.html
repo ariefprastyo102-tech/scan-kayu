@@ -849,20 +849,14 @@ function updateJumlah(){
 
 function downloadSVG(){
 
-    const daftar=[];
+    const daftar =
+        database.filter(
+            function(data){
 
-
-    database.forEach(
-        function(data){
-
-            if(data.dipilih){
-
-                daftar.push(data);
+                return data.dipilih;
 
             }
-
-        }
-    );
+        );
 
 
     if(
@@ -922,16 +916,10 @@ function downloadSVG(){
 
 
     /* =================================================
-       SUSUNAN A4
+       SUSUNAN
     ================================================= */
 
     const COL = 3;
-
-    const ROW = 9;
-
-    const PER_PAGE =
-        COL * ROW;
-
 
     const GAP_X = 2;
     const GAP_Y = 2;
@@ -949,8 +937,11 @@ function downloadSVG(){
     const START_Y = 10;
 
 
+    const PER_PAGE = 27;
+
+
     /* =================================================
-       BUAT SVG UTAMA
+       SVG UTAMA
     ================================================= */
 
     const svgNS =
@@ -992,23 +983,23 @@ function downloadSVG(){
 
 
     /* =================================================
-       MASUKKAN BARCODE
+       BUAT LABEL
     ================================================= */
 
     daftar.forEach(
         function(data,i){
 
-            const indexHalaman =
+            const posisi =
                 i % PER_PAGE;
 
 
             const col =
-                indexHalaman % COL;
+                posisi % COL;
 
 
             const row =
                 Math.floor(
-                    indexHalaman / COL
+                    posisi / COL
                 );
 
 
@@ -1030,9 +1021,7 @@ function downloadSVG(){
                 );
 
 
-            /* =================================================
-               GROUP LABEL
-            ================================================= */
+            /* LABEL */
 
             const group =
                 document.createElementNS(
@@ -1040,10 +1029,6 @@ function downloadSVG(){
                     "g"
                 );
 
-
-            /* =================================================
-               KOTAK LABEL
-            ================================================= */
 
             const rect =
                 document.createElementNS(
@@ -1097,9 +1082,7 @@ function downloadSVG(){
             group.appendChild(rect);
 
 
-            /* =================================================
-               BARCODE
-            ================================================= */
+            /* BARCODE */
 
             const barcode =
                 document.createElementNS(
@@ -1163,9 +1146,7 @@ function downloadSVG(){
             group.appendChild(barcode);
 
 
-            /* =================================================
-               TEKS REGISTER + TUMPUK
-            ================================================= */
+            /* TEKS */
 
             const teks =
                 document.createElementNS(
@@ -1232,7 +1213,7 @@ function downloadSVG(){
 
 
     /* =================================================
-       SERIALISASI SVG
+       DOWNLOAD
     ================================================= */
 
     const serializer =
@@ -1252,14 +1233,11 @@ function downloadSVG(){
                 source
             ],
             {
-                type:"image/svg+xml;charset=utf-8"
+                type:
+                    "image/svg+xml;charset=utf-8"
             }
         );
 
-
-    /* =================================================
-       DOWNLOAD
-    ================================================= */
 
     const url =
         URL.createObjectURL(
