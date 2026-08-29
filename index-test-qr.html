@@ -1,15 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
 
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>Scan Register BBI - IK Saradan</title>
 
 <!-- ZXING -->
+
 <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
@@ -25,7 +27,6 @@ body {
   padding: 15px;
   color: #222;
 }
-
 
 /* ==============================
    HEADER
@@ -79,7 +80,6 @@ body {
   white-space: nowrap;
 }
 
-
 /* ==============================
    CAMERA
 ============================== */
@@ -109,7 +109,6 @@ body {
   object-fit: cover;
   display: block;
 }
-
 
 /* ==============================
    GARIS POJOK
@@ -173,7 +172,6 @@ body {
   border-radius: 0 0 6px 0;
 }
 
-
 /* ==============================
    INDIKATOR BERHASIL
 ============================== */
@@ -234,7 +232,6 @@ body {
   text-align: center;
 }
 
-
 /* ==============================
    BUTTON
 ============================== */
@@ -271,7 +268,6 @@ body {
 #btnScan:active {
   transform: scale(0.98);
 }
-
 
 /* ==============================
    STATUS
@@ -311,7 +307,6 @@ body {
 
   color: #555;
 }
-
 
 /* ==============================
    HASIL
@@ -425,7 +420,6 @@ body {
   font-weight: bold;
 }
 
-
 /* ==============================
    HP
 ============================== */
@@ -465,7 +459,6 @@ body {
 
 }
 
-
 /* ==============================
    HP KECIL
 ============================== */
@@ -504,35 +497,35 @@ body {
 
 <body>
 
-
 <!-- HEADER -->
 
 <div class="header">
 
   <div class="headerIsi">
 
-    <img
-      class="logo"
-      src="logo-perhutani.jpg"
-      alt="Logo Perhutani"
-    >
+```
+<img
+  class="logo"
+  src="logo-perhutani.jpg"
+  alt="Logo Perhutani"
+>
 
-    <div class="judulBox">
+<div class="judulBox">
 
-      <div class="judul">
-        SCAN REGISTER BBI
-      </div>
+  <div class="judul">
+    SCAN REGISTER BBI
+  </div>
 
-      <div class="subjudul">
-        IK SARADAN
-      </div>
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
-    </div>
+</div>
+```
 
   </div>
 
 </div>
-
 
 <!-- CAMERA -->
 
@@ -540,38 +533,37 @@ body {
 
   <div class="camera-wrapper">
 
-    <video
-      id="video"
-      autoplay
-      muted
-      playsinline
-    ></video>
+```
+<video
+  id="video"
+  autoplay
+  muted
+  playsinline
+></video>
 
+<div class="qr-frame">
 
-    <div class="qr-frame">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
 
-      <div class="corner tl"></div>
-      <div class="corner tr"></div>
-      <div class="corner bl"></div>
-      <div class="corner br"></div>
+</div>
 
-    </div>
-
-
-    <div id="scanBerhasil"></div>
+<div id="scanBerhasil"></div>
+```
 
   </div>
 
 </div>
 
-
 <button
-  id="btnScan"
-  onclick="mulaiKamera()"
->
-📷 BUKA KAMERA
-</button>
+id="btnScan"
+onclick="mulaiKamera()"
 
+>
+
+📷 BUKA KAMERA </button>
 
 <!-- STATUS -->
 
@@ -587,12 +579,9 @@ body {
 
 </div>
 
-
 <div id="daftar"></div>
 
-
 <script>
-
 
 /* =====================================================
    API
@@ -600,7 +589,6 @@ body {
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
-
 
 /* =====================================================
    VARIABEL
@@ -613,7 +601,6 @@ let kameraAktif = false;
 let sedangProses = false;
 
 let jumlahBerhasil = 0;
-
 
 /* =====================================================
    INDIKATOR HIJAU
@@ -637,7 +624,6 @@ function tampilkanIndikatorHijau() {
   }, 500);
 
 }
-
 
 /* =====================================================
    SUARA
@@ -711,7 +697,6 @@ function bunyiBerhasil() {
 
 }
 
-
 /* =====================================================
    GETAR
 ===================================================== */
@@ -730,10 +715,9 @@ function getarBerhasil() {
 
 }
 
-
 /* =====================================================
    MULAI KAMERA ZXING
-   KHUSUS CODE 128
+   QR + CODE 128
 ===================================================== */
 
 async function mulaiKamera() {
@@ -770,22 +754,15 @@ async function mulaiKamera() {
         "video"
       );
 
-
     /*
-     * READER GENERIC
+     * MULTI FORMAT
      *
-     * BrowserMultiFormatReader
-     * digunakan supaya CODE 128
-     * benar-benar didukung.
+     * Mendukung QR CODE
+     * dan CODE 128
      */
 
     const reader =
       new ZXingBrowser.BrowserMultiFormatReader();
-
-
-    /*
-     * KAMERA BELAKANG
-     */
 
     const constraints = {
 
@@ -814,14 +791,8 @@ async function mulaiKamera() {
 
     };
 
-
     status.innerHTML =
       "⏳ Meminta akses kamera...";
-
-
-    /*
-     * MULAI SCAN
-     */
 
     scannerControls =
       await reader.decodeFromConstraints(
@@ -837,33 +808,21 @@ async function mulaiKamera() {
 
           if (!result) return;
 
-
-          /*
-           * AMBIL HASIL BARCODE
-           */
-
           const kode =
             String(
               result.getText() || ""
             ).trim();
 
-
           if (!kode) return;
-
-
-          /*
-           * CEGAH SCAN BERULANG
-           */
 
           if (sedangProses) return;
 
-
-          sedangProses =
-            true;
-
+          sedangProses = true;
 
           tampilkanIndikatorHijau();
 
+          const format =
+            result.getBarcodeFormat();
 
           status.innerHTML =
             "⏳ BARCODE TERBACA<br>" +
@@ -871,21 +830,58 @@ async function mulaiKamera() {
             kode +
             "...";
 
-
           /*
-           * KIRIM KE DATABASE
+           * ==========================================
+           * BEDAKAN QR DAN CODE 128
+           * ==========================================
            */
 
-          cekKode(kode);
+          if (
+            format ===
+            ZXingBrowser.BarcodeFormat.QR_CODE
+          ) {
+
+            /*
+             * QR
+             *
+             * Cari kode di KOLOM M
+             */
+
+            cekQR(kode);
+
+          }
+
+          else if (
+            format ===
+            ZXingBrowser.BarcodeFormat.CODE_128
+          ) {
+
+            /*
+             * CODE 128
+             *
+             * Cari register di KOLOM A
+             */
+
+            cekRegister(kode);
+
+          }
+
+          else {
+
+            status.innerHTML =
+              "⚠️ Format barcode tidak didukung<br>" +
+              kode;
+
+            sedangProses = false;
+
+          }
 
         }
 
       );
 
-
     kameraAktif =
       true;
-
 
     tombol.innerHTML =
       "📷 KAMERA AKTIF";
@@ -893,30 +889,26 @@ async function mulaiKamera() {
     tombol.style.background =
       "#555";
 
-
     status.innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan CODE 128 ke kotak hijau";
+      "Arahkan QR / CODE 128 ke kotak hijau";
 
+  }
 
-  } catch (error) {
+  catch (error) {
 
     kameraAktif =
       false;
 
-
     tombol.innerHTML =
       "📷 BUKA KAMERA";
-
 
     tombol.style.background =
       "#1976d2";
 
-
     status.innerHTML =
       "❌ Kamera gagal dibuka<br>" +
       error.message;
-
 
     console.log(
       "ZXing error:",
@@ -927,177 +919,98 @@ async function mulaiKamera() {
 
 }
 
-
 /* =====================================================
-   CEK CODE 128 KE APPS SCRIPT
-   MENGGUNAKAN ?register=
+   CEK QR
+   KIRIM ?kode=
 ===================================================== */
 
-function cekKode(
-  register
-) {
+function cekQR(kode) {
 
   const callbackName =
     "scan_" +
     Date.now();
 
-
   window[callbackName] =
-    function(
-      hasil
-    ) {
+    function(hasil) {
 
-
-      if (
-        hasil.status ===
-        "success"
-      ) {
-
-
-        jumlahBerhasil++;
-
-
-        document.getElementById(
-          "jumlah"
-        ).innerHTML =
-          "Jumlah berhasil: " +
-          jumlahBerhasil;
-
-
-        document.getElementById(
-          "status"
-        ).innerHTML =
-          "✅ " +
-          hasil.data[0];
-
-
-        bunyiBerhasil();
-
-
-        getarBerhasil();
-
-
-        tambahHasil(
-
-          hasil.data,
-
-          hasil.tanggalScan,
-
-          hasil.jamScan,
-
-          "success"
-
-        );
-
-      }
-
-
-      else if (
-        hasil.status ===
-        "duplicate"
-      ) {
-
-
-        document.getElementById(
-          "status"
-        ).innerHTML =
-          "❌ " +
-          hasil.message;
-
-
-        tambahHasil(
-
-          hasil.data,
-
-          "",
-
-          "",
-
-          "duplicate"
-
-        );
-
-      }
-
-
-      else if (
-        hasil.status ===
-        "not_found"
-      ) {
-
-
-        document.getElementById(
-          "status"
-        ).innerHTML =
-          "⚠️ " +
-          hasil.message;
-
-
-        tambahHasilTidakDitemukan(
-          register
-        );
-
-      }
-
-
-      else {
-
-
-        document.getElementById(
-          "status"
-        ).innerHTML =
-          "⚠️ " +
-          hasil.message;
-
-      }
-
-
-      sedangProses =
-        false;
-
-
-      delete window[
+      prosesHasilScan(
+        hasil,
+        kode,
         callbackName
-      ];
-
-
-      const script =
-        document.getElementById(
-          callbackName
-        );
-
-
-      if (
-        script
-      ) {
-
-        script.remove();
-
-      }
+      );
 
     };
-
 
   const script =
     document.createElement(
       "script"
     );
 
-
   script.id =
     callbackName;
 
+  script.src =
+    API_URL +
+    "?kode=" +
+    encodeURIComponent(
+      kode
+    ) +
+    "&callback=" +
+    callbackName;
 
-  /*
-   * PENTING:
-   *
-   * CODE 128
-   * 2600003
-   *
-   * dikirim sebagai:
-   *
-   * ?register=2600003
-   */
+  script.onerror =
+    function() {
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "❌ Gagal menghubungi DATABASE";
+
+      sedangProses = false;
+
+      delete window[
+        callbackName
+      ];
+
+      script.remove();
+
+    };
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+/* =====================================================
+   CEK CODE 128
+   KIRIM ?register=
+===================================================== */
+
+function cekRegister(register) {
+
+  const callbackName =
+    "scan_" +
+    Date.now();
+
+  window[callbackName] =
+    function(hasil) {
+
+      prosesHasilScan(
+        hasil,
+        register,
+        callbackName
+      );
+
+    };
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+  script.id =
+    callbackName;
 
   script.src =
     API_URL +
@@ -1108,30 +1021,23 @@ function cekKode(
     "&callback=" +
     callbackName;
 
-
   script.onerror =
     function() {
-
 
       document.getElementById(
         "status"
       ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-
-      sedangProses =
-        false;
-
+      sedangProses = false;
 
       delete window[
         callbackName
       ];
 
-
       script.remove();
 
     };
-
 
   document.body.appendChild(
     script
@@ -1139,6 +1045,114 @@ function cekKode(
 
 }
 
+/* =====================================================
+   HASIL SCAN
+===================================================== */
+
+function prosesHasilScan(
+  hasil,
+  kode,
+  callbackName
+) {
+
+  if (
+    hasil.status ===
+    "success"
+  ) {
+
+    jumlahBerhasil++;
+
+    document.getElementById(
+      "jumlah"
+    ).innerHTML =
+      "Jumlah berhasil: " +
+      jumlahBerhasil;
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "✅ " +
+      hasil.data[0];
+
+    bunyiBerhasil();
+
+    getarBerhasil();
+
+    tambahHasil(
+      hasil.data,
+      hasil.tanggalScan,
+      hasil.jamScan,
+      "success"
+    );
+
+  }
+
+  else if (
+    hasil.status ===
+    "duplicate"
+  ) {
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "❌ " +
+      hasil.message;
+
+    tambahHasil(
+      hasil.data,
+      "",
+      "",
+      "duplicate"
+    );
+
+  }
+
+  else if (
+    hasil.status ===
+    "not_found"
+  ) {
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "⚠️ " +
+      hasil.message;
+
+    tambahHasilTidakDitemukan(
+      kode
+    );
+
+  }
+
+  else {
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "⚠️ " +
+      hasil.message;
+
+  }
+
+  sedangProses =
+    false;
+
+  delete window[
+    callbackName
+  ];
+
+  const script =
+    document.getElementById(
+      callbackName
+    );
+
+  if (script) {
+
+    script.remove();
+
+  }
+
+}
 
 /* =====================================================
    HASIL SCAN
@@ -1153,25 +1167,20 @@ function tambahHasil(
 
 ) {
 
-
   const register =
     data[0];
-
 
   const item =
     document.createElement(
       "div"
     );
 
-
   item.className =
     "item";
-
 
   const id =
     "detail_" +
     Date.now();
-
 
   const warna =
     tipe === "success"
@@ -1180,14 +1189,12 @@ function tambahHasil(
     :
     "duplicate";
 
-
   const tulisan =
     tipe === "success"
     ?
     "✅ " + register
     :
     "❌ " + register;
-
 
   item.innerHTML = `
 
@@ -1209,7 +1216,6 @@ function tambahHasil(
       </button>
 
     </div>
-
 
     <div
       id="${id}"
@@ -1278,7 +1284,6 @@ function tambahHasil(
 
   `;
 
-
   document
     .getElementById(
       "daftar"
@@ -1286,7 +1291,6 @@ function tambahHasil(
     .prepend(item);
 
 }
-
 
 /* =====================================================
    TIDAK DITEMUKAN
@@ -1296,16 +1300,13 @@ function tambahHasilTidakDitemukan(
   kode
 ) {
 
-
   const item =
     document.createElement(
       "div"
     );
 
-
   item.className =
     "item";
-
 
   item.innerHTML = `
 
@@ -1323,7 +1324,6 @@ function tambahHasilTidakDitemukan(
 
   `;
 
-
   document
     .getElementById(
       "daftar"
@@ -1331,7 +1331,6 @@ function tambahHasilTidakDitemukan(
     .prepend(item);
 
 }
-
 
 /* =====================================================
    DETAIL
@@ -1342,35 +1341,28 @@ function toggleDetail(
   tombol
 ) {
 
-
   const detail =
     document.getElementById(
       id
     );
-
 
   if (
     detail.style.display ===
     "block"
   ) {
 
-
     detail.style.display =
       "none";
 
-
     tombol.innerHTML =
       "DETAIL";
-
 
   }
 
   else {
 
-
     detail.style.display =
       "block";
-
 
     tombol.innerHTML =
       "TUTUP";
