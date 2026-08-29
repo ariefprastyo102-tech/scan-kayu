@@ -847,16 +847,41 @@ function updateJumlah(){
    DOWNLOAD SVG
 ===================================================== */
 
-function downloadSVG(){
+async function downloadSVG(){
 
-    const daftar =
-        database.filter(
-            function(data){
+    const semuaItem =
+        document.querySelectorAll(".item");
 
-                return data.dipilih;
+
+    const daftar=[];
+
+
+    semuaItem.forEach(
+        function(item){
+
+            const index =
+                Number(item.dataset.index);
+
+
+            if(
+                database[index] &&
+                database[index].dipilih
+            ){
+
+                daftar.push({
+
+                    data:
+                        database[index],
+
+                    barcode:
+                        item.querySelector("svg")
+
+                });
 
             }
-        );
+
+        }
+    );
 
 
     if(
@@ -892,7 +917,7 @@ function downloadSVG(){
 
     /* =================================================
        BARCODE
-       48 MM
+       SAMA DENGAN KODE ASLI
     ================================================= */
 
     const BARCODE_W = 48;
@@ -900,7 +925,8 @@ function downloadSVG(){
 
 
     /* =================================================
-       RUANG KIRI - KANAN
+       RUANG STAPLES
+       KANAN - KIRI
     ================================================= */
 
     const RUANG_KIRI =
@@ -908,7 +934,8 @@ function downloadSVG(){
 
 
     /* =================================================
-       A4
+       PDF / A4
+       TETAP SAMA DENGAN KODE ASLI
     ================================================= */
 
     const PAGE_W = 210;
@@ -916,10 +943,11 @@ function downloadSVG(){
 
 
     /* =================================================
-       SUSUNAN
+       SUSUNAN A4
     ================================================= */
 
     const COL = 3;
+
 
     const GAP_X = 2;
     const GAP_Y = 2;
@@ -937,9 +965,6 @@ function downloadSVG(){
     const START_Y = 10;
 
 
-    const PER_PAGE = 27;
-
-
     /* =================================================
        SVG UTAMA
     ================================================= */
@@ -948,32 +973,32 @@ function downloadSVG(){
         "http://www.w3.org/2000/svg";
 
 
-    const svg =
+    const hasil =
         document.createElementNS(
             svgNS,
             "svg"
         );
 
 
-    svg.setAttribute(
+    hasil.setAttribute(
         "xmlns",
         svgNS
     );
 
 
-    svg.setAttribute(
+    hasil.setAttribute(
         "width",
         PAGE_W + "mm"
     );
 
 
-    svg.setAttribute(
+    hasil.setAttribute(
         "height",
         PAGE_H + "mm"
     );
 
 
-    svg.setAttribute(
+    hasil.setAttribute(
         "viewBox",
         "0 0 " +
         PAGE_W +
@@ -983,237 +1008,208 @@ function downloadSVG(){
 
 
     /* =================================================
-       BUAT LABEL
+       MASUKKAN BARCODE YANG DIPILIH
     ================================================= */
 
-    daftar.forEach(
-        function(data,i){
+    for(
+        let i=0;
+        i<daftar.length;
+        i++
+    ){
 
-            const posisi =
-                i % PER_PAGE;
-
-
-            const col =
-                posisi % COL;
-
-
-            const row =
-                Math.floor(
-                    posisi / COL
-                );
+        const posisi =
+            i % 27;
 
 
-            const x =
-                START_X +
-                col *
-                (
-                    LABEL_W +
-                    GAP_X
-                );
+        const col =
+            posisi % COL;
 
 
-            const y =
-                START_Y +
-                row *
-                (
-                    LABEL_H +
-                    GAP_Y
-                );
-
-
-            /* LABEL */
-
-            const group =
-                document.createElementNS(
-                    svgNS,
-                    "g"
-                );
-
-
-            const rect =
-                document.createElementNS(
-                    svgNS,
-                    "rect"
-                );
-
-
-            rect.setAttribute(
-                "x",
-                x
+        const row =
+            Math.floor(
+                posisi / COL
             );
 
 
-            rect.setAttribute(
-                "y",
-                y
+        const x =
+            START_X +
+            col *
+            (
+                LABEL_W +
+                GAP_X
             );
 
 
-            rect.setAttribute(
-                "width",
-                LABEL_W
+        const y =
+            START_Y +
+            row *
+            (
+                LABEL_H +
+                GAP_Y
             );
 
 
-            rect.setAttribute(
-                "height",
-                LABEL_H
+        /* =================================================
+           KOTAK LABEL
+        ================================================= */
+
+        const rect =
+            document.createElementNS(
+                svgNS,
+                "rect"
             );
 
 
-            rect.setAttribute(
-                "fill",
-                "white"
+        rect.setAttribute(
+            "x",
+            x
+        );
+
+
+        rect.setAttribute(
+            "y",
+            y
+        );
+
+
+        rect.setAttribute(
+            "width",
+            LABEL_W
+        );
+
+
+        rect.setAttribute(
+            "height",
+            LABEL_H
+        );
+
+
+        rect.setAttribute(
+            "fill",
+            "white"
+        );
+
+
+        rect.setAttribute(
+            "stroke",
+            "black"
+        );
+
+
+        rect.setAttribute(
+            "stroke-width",
+            "0.25"
+        );
+
+
+        hasil.appendChild(rect);
+
+
+        /* =================================================
+           COPY BARCODE ASLI
+        ================================================= */
+
+        const barcode =
+            daftar[i].barcode.cloneNode(true);
+
+
+        barcode.setAttribute(
+            "x",
+            x + RUANG_KIRI
+        );
+
+
+        barcode.setAttribute(
+            "y",
+            y + 1
+        );
+
+
+        barcode.setAttribute(
+            "width",
+            BARCODE_W + "mm"
+        );
+
+
+        barcode.setAttribute(
+            "height",
+            BARCODE_H + "mm"
+        );
+
+
+        hasil.appendChild(
+            barcode
+        );
+
+
+        /* =================================================
+           ANGKA REGISTER + TUMPUK
+        ================================================= */
+
+        const teks =
+            document.createElementNS(
+                svgNS,
+                "text"
             );
 
 
-            rect.setAttribute(
-                "stroke",
-                "black"
-            );
+        teks.setAttribute(
+            "x",
+            x + LABEL_W / 2
+        );
 
 
-            rect.setAttribute(
-                "stroke-width",
-                "0.25"
-            );
+        teks.setAttribute(
+            "y",
+            y + 27
+        );
 
 
-            group.appendChild(rect);
+        teks.setAttribute(
+            "text-anchor",
+            "middle"
+        );
 
 
-            /* BARCODE */
-
-            const barcode =
-                document.createElementNS(
-                    svgNS,
-                    "svg"
-                );
+        teks.setAttribute(
+            "dominant-baseline",
+            "middle"
+        );
 
 
-            barcode.setAttribute(
-                "x",
-                x + RUANG_KIRI
-            );
+        teks.setAttribute(
+            "font-family",
+            "Arial, Helvetica, sans-serif"
+        );
 
 
-            barcode.setAttribute(
-                "y",
-                y + 1
-            );
+        teks.setAttribute(
+            "font-size",
+            "6"
+        );
 
 
-            barcode.setAttribute(
-                "width",
-                BARCODE_W
-            );
+        teks.setAttribute(
+            "font-weight",
+            "bold"
+        );
 
 
-            barcode.setAttribute(
-                "height",
-                BARCODE_H
-            );
+        teks.textContent =
+            daftar[i].data.register +
+            "    " +
+            daftar[i].data.tumpuk;
 
 
-            JsBarcode(
+        hasil.appendChild(
+            teks
+        );
 
-                barcode,
-
-                data.register,
-
-                {
-
-                    format:
-                        "CODE128",
-
-                    width:
-                        2,
-
-                    height:
-                        55,
-
-                    displayValue:
-                        false,
-
-                    margin:
-                        0
-
-                }
-
-            );
-
-
-            group.appendChild(barcode);
-
-
-            /* TEKS */
-
-            const teks =
-                document.createElementNS(
-                    svgNS,
-                    "text"
-                );
-
-
-            teks.setAttribute(
-                "x",
-                x + LABEL_W / 2
-            );
-
-
-            teks.setAttribute(
-                "y",
-                y + 27
-            );
-
-
-            teks.setAttribute(
-                "text-anchor",
-                "middle"
-            );
-
-
-            teks.setAttribute(
-                "dominant-baseline",
-                "middle"
-            );
-
-
-            teks.setAttribute(
-                "font-family",
-                "Arial, Helvetica, sans-serif"
-            );
-
-
-            teks.setAttribute(
-                "font-size",
-                "6"
-            );
-
-
-            teks.setAttribute(
-                "font-weight",
-                "bold"
-            );
-
-
-            teks.textContent =
-                data.register +
-                "    " +
-                data.tumpuk;
-
-
-            group.appendChild(teks);
-
-
-            svg.appendChild(group);
-
-        }
-    );
+    }
 
 
     /* =================================================
-       DOWNLOAD
+       SIMPAN SVG
     ================================================= */
 
     const serializer =
@@ -1222,7 +1218,7 @@ function downloadSVG(){
 
     const source =
         serializer.serializeToString(
-            svg
+            hasil
         );
 
 
