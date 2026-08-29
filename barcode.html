@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
+
 <title>Barcode Kayu</title>
+
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-<!-- LIBRARY XLSX -->
-<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
 <style>
+
 *{
     box-sizing:border-box;
 }
+
 body{
     margin:0;
     padding:20px;
     font-family:Arial,sans-serif;
     background:#f2f2f2;
 }
+
 .kontrol{
     max-width:900px;
     margin:auto;
@@ -25,10 +32,12 @@ body{
     padding:20px;
     border-radius:12px;
 }
+
 h2{
     text-align:center;
     margin-top:0;
 }
+
 button{
     border:none;
     border-radius:7px;
@@ -37,45 +46,47 @@ button{
     font-weight:bold;
     cursor:pointer;
 }
+
 .btnAmbil{
     width:100%;
     background:#1976d2;
     color:white;
 }
+
 .btnFilter{
     background:#1976d2;
     color:white;
 }
+
 .btnSemua{
     background:#607d8b;
     color:white;
 }
+
 .btnPilih{
     background:#388e3c;
     color:white;
 }
+
 .btnBatal{
     background:#d32f2f;
     color:white;
 }
+
 .btnDownload{
     width:100%;
     margin-top:15px;
     background:#6a1b9a;
     color:white;
 }
-.btnExcel{
-    width:100%;
-    margin-top:8px;
-    background:#217346;
-    color:white;
-}
+
 .filter{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
     margin-top:15px;
 }
+
 .filter input{
     width:100%;
     padding:11px;
@@ -83,6 +94,7 @@ button{
     border-radius:7px;
     font-size:15px;
 }
+
 .status{
     margin-top:15px;
     padding:12px;
@@ -91,6 +103,7 @@ button{
     text-align:center;
     line-height:1.8;
 }
+
 #grid{
     max-width:1100px;
     margin:20px auto;
@@ -98,6 +111,7 @@ button{
     grid-template-columns:repeat(4,1fr);
     gap:10px;
 }
+
 .item{
     background:white;
     border:1px solid #aaa;
@@ -105,9 +119,11 @@ button{
     text-align:center;
     position:relative;
 }
+
 .item.hide{
     display:none;
 }
+
 .item input{
     position:absolute;
     top:5px;
@@ -115,11 +131,13 @@ button{
     width:18px;
     height:18px;
 }
+
 .item svg{
     width:100%;
     height:70px;
     margin-top:15px;
 }
+
 .info{
     display:flex;
     justify-content:center;
@@ -128,275 +146,456 @@ button{
     font-weight:bold;
     font-size:14px;
 }
+
 @media(max-width:700px){
+
     .filter{
         grid-template-columns:1fr;
     }
+
     #grid{
         grid-template-columns:repeat(2,1fr);
     }
+
 }
+
 </style>
+
 </head>
+
 <body>
+
 <div class="kontrol">
+
 <h2>
 🪵 CETAK BARCODE KAYU
 </h2>
+
 <button
     class="btnAmbil"
     onclick="ambilDatabase()">
+
 🔄 AMBIL DATA REGISTER
+
 </button>
+
 <div class="filter">
+
 <input
     id="filterRegister"
     type="text"
     placeholder="Cari nomor register">
+
 <input
     id="filterTumpuk"
     type="text"
     placeholder="Nomor tumpuk, contoh: 1">
+
 </div>
+
 <div>
+
 <button
     class="btnFilter"
     onclick="filterData()">
+
 🔎 FILTER
+
 </button>
+
 <button
     class="btnSemua"
     onclick="tampilkanSemua()">
+
 🔄 TAMPILKAN SEMUA
+
 </button>
+
 <button
     class="btnPilih"
     onclick="pilihHasilFilter()">
+
 ☑️ PILIH HASIL FILTER
+
 </button>
+
 <button
     class="btnBatal"
     onclick="batalHasilFilter()">
+
 ❌ BATAL HASIL FILTER
+
 </button>
+
 <button
     class="btnPilih"
     onclick="pilihSemua()">
+
 ☑️ PILIH SEMUA
+
 </button>
+
 <button
     class="btnBatal"
     onclick="batalSemua()">
+
 ❌ BATAL SEMUA
+
 </button>
+
 </div>
+
 <button
     class="btnDownload"
     onclick="downloadSVG()">
-📥 DOWNLOAD MASTER SVG 6 × 3 CM
+
+📥 DOWNLOAD SVG F4 — 33 BARCODE / LEMBAR
+
 </button>
-<button
-    class="btnExcel"
-    onclick="downloadExcel()">
-📊 DOWNLOAD EXCEL XLSX 6 × 3 CM
-</button>
+
 <div class="status">
+
 <div id="status">
 Belum mengambil database
 </div>
+
 <div id="jumlah">
 Jumlah barcode: 0
 </div>
+
 <div id="dipilih">
 Dipilih: 0
 </div>
+
 </div>
+
 </div>
+
 <div id="grid"></div>
+
+
 <script>
+
+
 /* =====================================================
    API DATABASE
 ===================================================== */
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
+
 /* =====================================================
    DATABASE
 ===================================================== */
+
 let database=[];
+
+
 /* =====================================================
    AMBIL DATABASE
 ===================================================== */
+
 function ambilDatabase(){
+
     const status =
         document.getElementById("status");
+
     status.innerHTML =
         "⏳ Mengambil DATABASE...";
+
     const callback =
         "database_"+Date.now();
+
     window[callback] =
         function(hasil){
+
             if(
                 !hasil ||
                 hasil.status !== "success"
             ){
+
                 status.innerHTML =
                     "❌ Gagal mengambil DATABASE";
+
                 bersihkan();
+
                 return;
+
             }
+
             database=[];
+
             const data =
                 hasil.data || [];
+
             data.forEach(function(item){
+
                 const register =
                     String(
                         item.register || ""
                     ).trim();
+
                 const tumpuk =
                     String(
                         item.tumpuk || ""
                     ).trim();
+
                 if(!register){
+
                     return;
+
                 }
+
                 database.push({
+
                     register:register,
+
                     tumpuk:tumpuk,
+
                     dipilih:true
+
                 });
+
             });
+
             tampilkan();
+
             updateJumlah();
+
             status.innerHTML =
                 "✅ DATABASE berhasil diambil";
+
             bersihkan();
+
         };
+
+
     const script =
         document.createElement("script");
+
+
     script.src =
         API_URL +
         "?getDatabase=1" +
         "&callback=" +
         callback;
+
+
     script.onerror =
         function(){
+
             status.innerHTML =
                 "❌ Gagal menghubungi DATABASE";
+
             bersihkan();
+
         };
+
+
     document.body.appendChild(
         script
     );
+
+
     function bersihkan(){
+
         delete window[
             callback
         ];
+
+
         if(script){
+
             script.remove();
+
         }
+
     }
+
 }
+
+
 /* =====================================================
    TAMPILKAN DATABASE
 ===================================================== */
+
 function tampilkan(){
+
     const grid =
         document.getElementById(
             "grid"
         );
+
+
     grid.innerHTML="";
+
+
     database.forEach(
         function(data,index){
+
             const item =
                 document.createElement(
                     "div"
                 );
+
+
             item.className =
                 "item";
+
+
             item.dataset.index =
                 index;
+
+
             item.dataset.register =
                 data.register.toLowerCase();
+
+
             item.dataset.tumpuk =
                 data.tumpuk.toLowerCase();
+
+
+            /* CHECKBOX */
+
             const check =
                 document.createElement(
                     "input"
                 );
+
+
             check.type =
                 "checkbox";
+
+
             check.checked =
                 data.dipilih;
+
+
             check.onchange =
                 function(){
+
                     data.dipilih =
                         this.checked;
+
+
                     updateJumlah();
+
                 };
+
+
             item.appendChild(
                 check
             );
+
+
+            /* =================================================
+               SVG BARCODE WEB
+            ================================================= */
+
             const svg =
                 document.createElementNS(
                     "http://www.w3.org/2000/svg",
                     "svg"
                 );
+
+
             item.appendChild(
                 svg
             );
+
+
             JsBarcode(
+
                 svg,
+
                 data.register,
+
                 {
+
                     format:
                         "CODE128",
+
                     width:
                         2,
+
                     height:
                         55,
+
                     displayValue:
                         false,
+
                     margin:
                         3
+
                 }
+
             );
+
+
+            /* INFO */
+
             const info =
                 document.createElement(
                     "div"
                 );
+
+
             info.className =
                 "info";
+
+
             const register =
                 document.createElement(
                     "span"
                 );
+
+
             register.textContent =
                 data.register;
+
+
             const tumpuk =
                 document.createElement(
                     "span"
                 );
+
+
             tumpuk.textContent =
                 data.tumpuk;
+
+
             info.appendChild(
                 register
             );
+
+
             info.appendChild(
                 tumpuk
             );
+
+
             item.appendChild(
                 info
             );
+
+
             grid.appendChild(
                 item
             );
+
         }
     );
+
 }
+
+
 /* =====================================================
    FILTER
 ===================================================== */
+
 function filterData(){
+
     const register =
         document
         .getElementById(
@@ -405,6 +604,8 @@ function filterData(){
         .value
         .trim()
         .toLowerCase();
+
+
     const tumpuk =
         document
         .getElementById(
@@ -413,1051 +614,1012 @@ function filterData(){
         .value
         .trim()
         .toLowerCase();
+
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         const nilaiRegister =
             item.dataset.register;
+
+
         const nilaiTumpuk =
             item.dataset.tumpuk;
+
+
         const cocokRegister =
             register === "" ||
             nilaiRegister.includes(
                 register
             );
+
+
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
+
+
         if(
             cocokRegister &&
             cocokTumpuk
         ){
+
             item.classList.remove(
                 "hide"
             );
+
         }else{
+
             item.classList.add(
                 "hide"
             );
+
         }
+
     });
+
 }
+
+
 /* =====================================================
    TAMPILKAN SEMUA
 ===================================================== */
+
 function tampilkanSemua(){
+
     document.getElementById(
         "filterRegister"
     ).value="";
+
+
     document.getElementById(
         "filterTumpuk"
     ).value="";
+
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         item.classList.remove(
             "hide"
         );
+
     });
+
 }
+
+
 /* =====================================================
    PILIH HASIL FILTER
 ===================================================== */
+
 function pilihHasilFilter(){
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         if(
             item.classList.contains(
                 "hide"
             )
         ){
+
             return;
+
         }
+
+
         const index =
             Number(
                 item.dataset.index
             );
+
+
         database[index].dipilih=true;
+
+
         item.querySelector(
             "input"
         ).checked=true;
+
     });
+
+
     updateJumlah();
+
 }
+
+
 /* =====================================================
    BATAL HASIL FILTER
 ===================================================== */
+
 function batalHasilFilter(){
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         if(
             item.classList.contains(
                 "hide"
             )
         ){
+
             return;
+
         }
+
+
         const index =
             Number(
                 item.dataset.index
             );
+
+
         database[index].dipilih=false;
+
+
         item.querySelector(
             "input"
         ).checked=false;
+
     });
+
+
     updateJumlah();
+
 }
+
+
 /* =====================================================
    PILIH SEMUA
 ===================================================== */
+
 function pilihSemua(){
+
     database.forEach(
         function(data){
+
             data.dipilih=true;
+
         }
     );
+
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         item.querySelector(
             "input"
         ).checked=true;
+
     });
+
+
     updateJumlah();
+
 }
+
+
 /* =====================================================
    BATAL SEMUA
 ===================================================== */
+
 function batalSemua(){
+
     database.forEach(
         function(data){
+
             data.dipilih=false;
+
         }
     );
+
+
     document
     .querySelectorAll(".item")
     .forEach(function(item){
+
         item.querySelector(
             "input"
         ).checked=false;
+
     });
+
+
     updateJumlah();
+
 }
+
+
 /* =====================================================
    UPDATE JUMLAH
 ===================================================== */
+
 function updateJumlah(){
+
     const jumlah =
         database.length;
+
+
     const dipilih =
         database.filter(
             function(data){
+
                 return data.dipilih;
+
             }
         ).length;
+
+
     document.getElementById(
         "jumlah"
     ).innerHTML =
         "Jumlah barcode: " +
         jumlah;
+
+
     document.getElementById(
         "dipilih"
     ).innerHTML =
         "Dipilih: " +
         dipilih;
+
 }
+
+
 /* =====================================================
-   DOWNLOAD MASTER SVG
-   TETAP SEPERTI KODE ASLI
+   DOWNLOAD SVG F4
+   33 BARCODE / LEMBAR
+   3 KOLOM x 11 BARIS
 ===================================================== */
+
 function downloadSVG(){
+
     const semuaItem =
         document.querySelectorAll(
             ".item"
         );
+
+
     const daftar=[];
+
+
     semuaItem.forEach(
         function(item){
+
             const index =
                 Number(
                     item.dataset.index
                 );
+
+
             if(
                 database[index] &&
                 database[index].dipilih
             ){
-                daftar.push(item);
+
+                daftar.push(
+                    database[index]
+                );
+
             }
+
         }
     );
+
+
     if(
         daftar.length === 0
     ){
+
         alert(
             "Belum ada barcode yang dipilih."
         );
+
         return;
+
     }
+
+
+    /* =================================================
+       UKURAN KERTAS F4
+       215 x 330 MM
+    ================================================= */
+
+    const F4_W =
+        215;
+
+
+    const F4_H =
+        330;
+
+
+    /* =================================================
+       UKURAN LABEL
+       60 x 30 MM
+    ================================================= */
+
     const LABEL_W =
         60;
+
+
     const LABEL_H =
         30;
-    const GAP =
-        2;
-    const MARGIN =
-        10;
+
+
+    /* =================================================
+       3 KOLOM
+    ================================================= */
+
     const COL =
         3;
+
+
+    /* =================================================
+       11 BARIS
+    ================================================= */
+
     const ROW =
-        Math.ceil(
-            daftar.length / COL
-        );
-    const CANVAS_W =
-        MARGIN * 2 +
+        11;
+
+
+    /* =================================================
+       TOTAL 33
+    ================================================= */
+
+    const PER_LEMBAR =
+        COL * ROW;
+
+
+    /* =================================================
+       POSISI HORIZONTAL
+       
+       3 x 60 = 180
+       
+       Sisa:
+       215 - 180 = 35
+       
+       Dibagi 2:
+       17.5 mm kiri/kanan
+    ================================================= */
+
+    const MARGIN_X =
         (
-            COL *
-            LABEL_W
-        ) +
-        (
-            (COL - 1) *
-            GAP
-        );
-    const CANVAS_H =
-        MARGIN * 2 +
-        (
-            ROW *
-            LABEL_H
-        ) +
-        (
-            (ROW - 1) *
-            GAP
-        );
-    const NS =
-        "http://www.w3.org/2000/svg";
-    const root =
-        document.createElementNS(
-            NS,
-            "svg"
-        );
-    root.setAttribute(
-        "xmlns",
-        NS
-    );
-    root.setAttribute(
-        "width",
-        CANVAS_W + "mm"
-    );
-    root.setAttribute(
-        "height",
-        CANVAS_H + "mm"
-    );
-    root.setAttribute(
-        "viewBox",
-        "0 0 " +
-        CANVAS_W +
-        " " +
-        CANVAS_H
-    );
-    const background =
-        document.createElementNS(
-            NS,
-            "rect"
-        );
-    background.setAttribute(
-        "x",
-        0
-    );
-    background.setAttribute(
-        "y",
-        0
-    );
-    background.setAttribute(
-        "width",
-        CANVAS_W
-    );
-    background.setAttribute(
-        "height",
-        CANVAS_H
-    );
-    background.setAttribute(
-        "fill",
-        "white"
-    );
-    root.appendChild(
-        background
-    );
-    daftar.forEach(
-        function(item,index){
-            const col =
-                index % COL;
-            const row =
-                Math.floor(
-                    index / COL
-                );
-            const labelX =
-                MARGIN +
-                col *
-                (
-                    LABEL_W +
-                    GAP
-                );
-            const labelY =
-                MARGIN +
-                row *
-                (
-                    LABEL_H +
-                    GAP
-                );
-            const group =
-                document.createElementNS(
-                    NS,
-                    "g"
-                );
-            group.setAttribute(
-                "transform",
-                "translate(" +
-                labelX +
-                " " +
-                labelY +
-                ")"
-            );
-            const border =
-                document.createElementNS(
-                    NS,
-                    "rect"
-                );
-            border.setAttribute(
-                "x",
-                0
-            );
-            border.setAttribute(
-                "y",
-                0
-            );
-            border.setAttribute(
-                "width",
+            F4_W -
+            (
+                COL *
                 LABEL_W
+            )
+        ) / 2;
+
+
+    /* =================================================
+       POSISI VERTIKAL
+       
+       11 x 30 = 330
+       
+       Jadi mulai dari 0.
+    ================================================= */
+
+    const MARGIN_Y =
+        0;
+
+
+    /* =================================================
+       JUMLAH LEMBAR
+    ================================================= */
+
+    const jumlahLembar =
+        Math.ceil(
+            daftar.length /
+            PER_LEMBAR
+        );
+
+
+    let jumlahBerhasil =
+        0;
+
+
+    /* =================================================
+       BUAT SETIAP LEMBAR
+    ================================================= */
+
+    for(
+        let lembar = 0;
+        lembar < jumlahLembar;
+        lembar++
+    ){
+
+        const mulai =
+            lembar *
+            PER_LEMBAR;
+
+
+        const akhir =
+            Math.min(
+                mulai +
+                PER_LEMBAR,
+                daftar.length
             );
-            border.setAttribute(
-                "height",
-                LABEL_H
+
+
+        const dataLembar =
+            daftar.slice(
+                mulai,
+                akhir
             );
-            border.setAttribute(
-                "fill",
-                "white"
+
+
+        const NS =
+            "http://www.w3.org/2000/svg";
+
+
+        /* =================================================
+           ROOT SVG
+        ================================================= */
+
+        const root =
+            document.createElementNS(
+                NS,
+                "svg"
             );
-            border.setAttribute(
-                "stroke",
-                "black"
+
+
+        root.setAttribute(
+            "xmlns",
+            NS
+        );
+
+
+        root.setAttribute(
+            "width",
+            F4_W + "mm"
+        );
+
+
+        root.setAttribute(
+            "height",
+            F4_H + "mm"
+        );
+
+
+        root.setAttribute(
+            "viewBox",
+            "0 0 " +
+            F4_W +
+            " " +
+            F4_H
+        );
+
+
+        /* =================================================
+           BACKGROUND
+        ================================================= */
+
+        const background =
+            document.createElementNS(
+                NS,
+                "rect"
             );
-            border.setAttribute(
-                "stroke-width",
-                "0.25"
-            );
-            group.appendChild(
-                border
-            );
-            const svgWeb =
-                item.querySelector(
-                    "svg"
-                );
-            if(svgWeb){
-                const clone =
-                    svgWeb.cloneNode(
-                        true
+
+
+        background.setAttribute(
+            "x",
+            0
+        );
+
+
+        background.setAttribute(
+            "y",
+            0
+        );
+
+
+        background.setAttribute(
+            "width",
+            F4_W
+        );
+
+
+        background.setAttribute(
+            "height",
+            F4_H
+        );
+
+
+        background.setAttribute(
+            "fill",
+            "white"
+        );
+
+
+        root.appendChild(
+            background
+        );
+
+
+        /* =================================================
+           BUAT LABEL
+        ================================================= */
+
+        dataLembar.forEach(
+            function(data,index){
+
+                const col =
+                    index %
+                    COL;
+
+
+                const row =
+                    Math.floor(
+                        index /
+                        COL
                     );
+
+
+                const labelX =
+                    MARGIN_X +
+                    (
+                        col *
+                        LABEL_W
+                    );
+
+
+                const labelY =
+                    MARGIN_Y +
+                    (
+                        row *
+                        LABEL_H
+                    );
+
+
+                /* =================================================
+                   GROUP
+                ================================================= */
+
+                const group =
+                    document.createElementNS(
+                        NS,
+                        "g"
+                    );
+
+
+                group.setAttribute(
+                    "transform",
+                    "translate(" +
+                    labelX +
+                    " " +
+                    labelY +
+                    ")"
+                );
+
+
+                /* =================================================
+                   KOTAK LABEL
+                ================================================= */
+
+                const border =
+                    document.createElementNS(
+                        NS,
+                        "rect"
+                    );
+
+
+                border.setAttribute(
+                    "x",
+                    0
+                );
+
+
+                border.setAttribute(
+                    "y",
+                    0
+                );
+
+
+                border.setAttribute(
+                    "width",
+                    LABEL_W
+                );
+
+
+                border.setAttribute(
+                    "height",
+                    LABEL_H
+                );
+
+
+                border.setAttribute(
+                    "fill",
+                    "white"
+                );
+
+
+                border.setAttribute(
+                    "stroke",
+                    "black"
+                );
+
+
+                border.setAttribute(
+                    "stroke-width",
+                    "0.25"
+                );
+
+
+                group.appendChild(
+                    border
+                );
+
+
+                /* =================================================
+                   BUAT BARCODE BARU LANGSUNG DI SVG
+                   
+                   TIDAK COPY SVG DARI WEB
+                   
+                   Supaya barcode tidak rusak.
+                ================================================= */
+
+                const barcodeSVG =
+                    document.createElementNS(
+                        NS,
+                        "svg"
+                    );
+
+
                 const BARCODE_W =
                     48;
+
+
                 const BARCODE_H =
                     21;
+
+
                 const barcodeX =
                     (
                         LABEL_W -
                         BARCODE_W
                     ) / 2;
+
+
                 const barcodeY =
                     1;
-                clone.setAttribute(
+
+
+                barcodeSVG.setAttribute(
                     "x",
                     barcodeX
                 );
-                clone.setAttribute(
+
+
+                barcodeSVG.setAttribute(
                     "y",
                     barcodeY
                 );
-                clone.setAttribute(
+
+
+                barcodeSVG.setAttribute(
                     "width",
                     BARCODE_W
                 );
-                clone.setAttribute(
+
+
+                barcodeSVG.setAttribute(
                     "height",
                     BARCODE_H
                 );
-                clone.setAttribute(
+
+
+                barcodeSVG.setAttribute(
+                    "viewBox",
+                    "0 0 100 100"
+                );
+
+
+                barcodeSVG.setAttribute(
                     "preserveAspectRatio",
                     "none"
                 );
-                clone.removeAttribute(
-                    "style"
-                );
-                group.appendChild(
-                    clone
-                );
-            }
-            const info =
-                item.querySelector(
-                    ".info"
-                );
-            let registerText =
-                "";
-            let tumpukText =
-                "";
-            if(info){
-                const teks =
-                    info.querySelectorAll(
-                        "span"
+
+
+                /*
+                 * BARCODE DIBUAT DARI
+                 * DATA REGISTER LANGSUNG
+                 */
+
+                const barcodeTemp =
+                    document.createElementNS(
+                        NS,
+                        "svg"
                     );
-                if(teks[0]){
-                    registerText =
-                        teks[0].textContent;
-                }
-                if(teks[1]){
-                    tumpukText =
-                        teks[1].textContent;
-                }
-            }
-            const angka =
-                document.createElementNS(
-                    NS,
-                    "text"
-                );
-            angka.setAttribute(
-                "x",
-                LABEL_W / 2
-            );
-            angka.setAttribute(
-                "y",
-                "26"
-            );
-            angka.setAttribute(
-                "text-anchor",
-                "middle"
-            );
-            angka.setAttribute(
-                "dominant-baseline",
-                "middle"
-            );
-            angka.setAttribute(
-                "font-family",
-                "Arial"
-            );
-            angka.setAttribute(
-                "font-size",
-                "4.5"
-            );
-            angka.setAttribute(
-                "font-weight",
-                "bold"
-            );
-            angka.setAttribute(
-                "word-spacing",
-                "2px"
-            );
-            angka.textContent =
-                registerText +
-                " " +
-                tumpukText;
-            group.appendChild(
-                angka
-            );
-            root.appendChild(
-                group
-            );
-        }
-    );
-    const serializer =
-        new XMLSerializer();
-    let source =
-        serializer.serializeToString(
-            root
-        );
-    source =
-        '<?xml version="1.0" encoding="UTF-8"?>\n' +
-        source;
-    const blob =
-        new Blob(
-            [source],
-            {
-                type:
-                    "image/svg+xml;charset=utf-8"
-            }
-        );
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-    const link =
-        document.createElement(
-            "a"
-        );
-    link.href =
-        url;
-    link.download =
-        "MASTER-BARCODE-KAYU-6x3cm-STAPLES-KANAN-KIRI.svg";
-    document.body.appendChild(
-        link
-    );
-    link.click();
-    link.remove();
-    setTimeout(
-        function(){
-            URL.revokeObjectURL(
-                url
-            );
-        },
-        1000
-    );
-    document.getElementById(
-        "status"
-    ).innerHTML =
-        "✅ MASTER SVG selesai — " +
-        daftar.length +
-        " barcode";
-}
-/* =====================================================
-   DOWNLOAD EXCEL XLSX
-   ===================================================== */
-async function downloadExcel(){
-    const status =
-        document.getElementById(
-            "status"
-        );
-    const daftar =
-        database.filter(
-            function(data){
-                return data.dipilih;
-            }
-        );
-    if(
-        daftar.length === 0
-    ){
-        alert(
-            "Belum ada barcode yang dipilih."
-        );
-        return;
-    }
-    if(
-        typeof ExcelJS === "undefined"
-    ){
-        alert(
-            "Library Excel belum berhasil dimuat. Coba refresh halaman."
-        );
-        return;
-    }
-    try{
-        status.innerHTML =
-            "⏳ Membuat file Excel...";
-        /*
-         * =============================================
-         * UKURAN LABEL
-         * 60 x 30 MM
-         * =============================================
-         */
-        const LABEL_W_MM =
-            60;
-        const LABEL_H_MM =
-            30;
-        /*
-         * =============================================
-         * SUSUNAN
-         * 3 KOLOM
-         * =============================================
-         */
-        const COL =
-            3;
-        /*
-         * =============================================
-         * KONVERSI MM KE PIXEL
-         * UNTUK GAMBAR BARCODE
-         * =============================================
-         */
-        const MM_TO_PX =
-            3.779527559;
-        /*
-         * =============================================
-         * BUAT WORKBOOK
-         * =============================================
-         */
-        const workbook =
-            new ExcelJS.Workbook();
-        workbook.creator =
-            "Barcode Kayu";
-        workbook.lastModifiedBy =
-            "Barcode Kayu";
-        workbook.created =
-            new Date();
-        const worksheet =
-            workbook.addWorksheet(
-                "BARCODE"
-            );
-        /*
-         * =============================================
-         * MATIKAN GRIDLINES
-         * =============================================
-         */
-        worksheet.views = [
-            {
-                showGridLines:false
-            }
-        ];
-        /*
-         * =============================================
-         * UKURAN KOLOM
-         *
-         * 3 KOLOM LABEL
-         *
-         * Masing-masing dibuat kira-kira
-         * 60 mm.
-         * =============================================
-         */
-        const COLUMN_WIDTH =
-            33.0;
-        for(
-            let c=1;
-            c<=COL;
-            c++
-        ){
-            worksheet.getColumn(c).width =
-                COLUMN_WIDTH;
-        }
-        /*
-         * =============================================
-         * DATA LABEL
-         * =============================================
-         */
-        for(
-            let i=0;
-            i<daftar.length;
-            i++
-        ){
-            const data =
-                daftar[i];
-            const colIndex =
-                i % COL;
-            const rowIndex =
-                Math.floor(
-                    i / COL
-                );
-            /*
-             * Setiap label memakai
-             * 2 baris Excel.
-             *
-             * Baris pertama:
-             * barcode
-             *
-             * Baris kedua:
-             * register + tumpuk
-             */
-            const rowBarcode =
-                rowIndex * 2 + 1;
-            const rowText =
-                rowBarcode + 1;
-            const col =
-                colIndex + 1;
-            /*
-             * =========================================
-             * TINGGI BARIS
-             * =========================================
-             */
-            worksheet.getRow(
-                rowBarcode
-            ).height =
-                105;
-            worksheet.getRow(
-                rowText
-            ).height =
-                24;
-            /*
-             * =========================================
-             * CELL
-             * =========================================
-             */
-            const cellBarcode =
-                worksheet.getCell(
-                    rowBarcode,
-                    col
-                );
-            const cellText =
-                worksheet.getCell(
-                    rowText,
-                    col
-                );
-            /*
-             * =========================================
-             * BORDER LABEL
-             * =========================================
-             */
-            cellBarcode.border = {
-                top:{
-                    style:"thin"
-                },
-                left:{
-                    style:"thin"
-                },
-                right:{
-                    style:"thin"
-                },
-                bottom:{
-                    style:"thin"
-                }
-            };
-            cellText.border = {
-                top:{
-                    style:"thin"
-                },
-                left:{
-                    style:"thin"
-                },
-                right:{
-                    style:"thin"
-                },
-                bottom:{
-                    style:"thin"
-                }
-            };
-            cellBarcode.alignment = {
-                horizontal:
-                    "center",
-                vertical:
-                    "middle"
-            };
-            cellText.alignment = {
-                horizontal:
-                    "center",
-                vertical:
-                    "middle"
-            };
-            /*
-             * =========================================
-             * BUAT SVG BARCODE SENDIRI
-             *
-             * JANGAN COPY SVG DARI HTML.
-             *
-             * Ini supaya barcode tidak berubah
-             * atau hilang ketika masuk Excel.
-             * =========================================
-             */
-            const svg =
-                document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "svg"
-                );
-            JsBarcode(
-                svg,
-                data.register,
-                {
-                    format:
-                        "CODE128",
-                    width:
-                        2,
-                    height:
-                        70,
-                    displayValue:
-                        false,
-                    margin:
-                        5
-                }
-            );
-            /*
-             * =========================================
-             * UBAH SVG KE DATA URL
-             * =========================================
-             */
-            const serializer =
-                new XMLSerializer();
-            let svgText =
-                serializer.serializeToString(
-                    svg
-                );
-            svgText =
-                '<?xml version="1.0" encoding="UTF-8"?>' +
-                svgText;
-            const svgBlob =
-                new Blob(
-                    [svgText],
+
+
+                JsBarcode(
+                    barcodeTemp,
+                    data.register,
                     {
-                        type:
-                            "image/svg+xml"
-                    }
-                );
-            const svgUrl =
-                URL.createObjectURL(
-                    svgBlob
-                );
-            /*
-             * =========================================
-             * LOAD SVG KE IMAGE
-             * =========================================
-             */
-            const image =
-                await loadImage(
-                    svgUrl
-                );
-            URL.revokeObjectURL(
-                svgUrl
-            );
-            /*
-             * =========================================
-             * CANVAS
-             * =========================================
-             */
-            const canvas =
-                document.createElement(
-                    "canvas"
-                );
-            canvas.width =
-                Math.round(
-                    48 *
-                    MM_TO_PX
-                );
-            canvas.height =
-                Math.round(
-                    20 *
-                    MM_TO_PX
-                );
-            const ctx =
-                canvas.getContext(
-                    "2d"
-                );
-            ctx.fillStyle =
-                "white";
-            ctx.fillRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-            ctx.drawImage(
-                image,
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-            /*
-             * =========================================
-             * PNG
-             * =========================================
-             */
-            const pngData =
-                canvas.toDataURL(
-                    "image/png"
-                );
-            /*
-             * =========================================
-             * MASUKKAN GAMBAR KE EXCEL
-             * =========================================
-             */
-            const imageId =
-                workbook.addImage({
-                    base64:
-                        pngData,
-                    extension:
-                        "png"
-                });
-            /*
-             * =========================================
-             * POSISI BARCODE
-             *
-             * DIBUAT DI DALAM CELL LABEL
-             * =========================================
-             */
-            worksheet.addImage(
-                imageId,
-                {
-                    tl:{
-                        col:
-                            colIndex + 0.12,
-                        row:
-                            rowBarcode - 0.02
-                    },
-                    ext:{
+
+                        format:
+                            "CODE128",
+
                         width:
-                            180,
+                            2,
+
                         height:
-                            75
+                            55,
+
+                        displayValue:
+                            false,
+
+                        margin:
+                            3
+
                     }
-                }
-            );
-            /*
-             * =========================================
-             * REGISTER + TUMPUK
-             * =========================================
-             */
-            cellText.value =
-                String(
-                    data.register
-                ) +
-                "     " +
-                String(
-                    data.tumpuk
                 );
-            cellText.font = {
-                name:
-                    "Arial",
-                size:
-                    12,
-                bold:
-                    true
-            };
-            /*
-             * =========================================
-             * PAGE SETUP
-             * =========================================
-             */
-        }
-        /*
-         * =============================================
-         * PAGE SETUP EXCEL
-         * =============================================
-         */
-        worksheet.pageSetup = {
-            paperSize:
-                worksheet.PAPERSIZE_A4,
-            orientation:
-                "portrait",
-            fitToPage:
-                true,
-            fitToWidth:
-                1,
-            fitToHeight:
-                0,
-            horizontalDpi:
-                300,
-            verticalDpi:
-                300,
-            margins:{
-                left:
-                    0.2,
-                right:
-                    0.2,
-                top:
-                    0.2,
-                bottom:
-                    0.2,
-                header:
-                    0,
-                footer:
-                    0
+
+
+                /*
+                 * AMBIL VIEWBOX BARCODE
+                 */
+
+                const viewBox =
+                    barcodeTemp.getAttribute(
+                        "viewBox"
+                    );
+
+
+                if(viewBox){
+
+                    barcodeSVG.setAttribute(
+                        "viewBox",
+                        viewBox
+                    );
+
+                }
+
+
+                /*
+                 * COPY SEMUA
+                 * ELEMEN BARCODE
+                 */
+
+                while(
+                    barcodeTemp.firstChild
+                ){
+
+                    barcodeSVG.appendChild(
+                        barcodeTemp.firstChild
+                    );
+
+                }
+
+
+                group.appendChild(
+                    barcodeSVG
+                );
+
+
+                /* =================================================
+                   REGISTER + TUMPUK
+                ================================================= */
+
+                const angka =
+                    document.createElementNS(
+                        NS,
+                        "text"
+                    );
+
+
+                angka.setAttribute(
+                    "x",
+                    LABEL_W / 2
+                );
+
+
+                angka.setAttribute(
+                    "y",
+                    26
+                );
+
+
+                angka.setAttribute(
+                    "text-anchor",
+                    "middle"
+                );
+
+
+                angka.setAttribute(
+                    "dominant-baseline",
+                    "middle"
+                );
+
+
+                angka.setAttribute(
+                    "font-family",
+                    "Arial"
+                );
+
+
+                angka.setAttribute(
+                    "font-size",
+                    "4.5"
+                );
+
+
+                angka.setAttribute(
+                    "font-weight",
+                    "bold"
+                );
+
+
+                angka.setAttribute(
+                    "word-spacing",
+                    "2px"
+                );
+
+
+                angka.textContent =
+                    data.register +
+                    " " +
+                    data.tumpuk;
+
+
+                group.appendChild(
+                    angka
+                );
+
+
+                /* =================================================
+                   MASUKKAN LABEL
+                ================================================= */
+
+                root.appendChild(
+                    group
+                );
+
             }
-        };
-        worksheet.properties.pageSetUpPr = {
-            fitToPage:
-                true
-        };
-        /*
-         * =============================================
-         * FREEZE / PRINT AREA
-         * =============================================
-         */
-        worksheet.printOptions = {
-            horizontalCentered:
-                false,
-            verticalCentered:
-                false
-        };
-        /*
-         * =============================================
-         * BUAT FILE
-         * =============================================
-         */
-        const buffer =
-            await workbook.xlsx.writeBuffer();
+        );
+
+
+        /* =================================================
+           SERIALIZE
+        ================================================= */
+
+        const serializer =
+            new XMLSerializer();
+
+
+        let source =
+            serializer.serializeToString(
+                root
+            );
+
+
+        source =
+            '<?xml version="1.0" encoding="UTF-8"?>\n' +
+            source;
+
+
+        /* =================================================
+           DOWNLOAD
+        ================================================= */
+
         const blob =
             new Blob(
-                [buffer],
+                [source],
                 {
                     type:
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        "image/svg+xml;charset=utf-8"
                 }
             );
+
+
         const url =
             URL.createObjectURL(
                 blob
             );
+
+
         const link =
             document.createElement(
                 "a"
             );
+
+
         link.href =
             url;
+
+
         link.download =
-            "MASTER-BARCODE-KAYU-6x3cm.xlsx";
+            "BARCODE-F4-LEMBAR-" +
+            (
+                lembar + 1
+            ) +
+            ".svg";
+
+
         document.body.appendChild(
             link
         );
+
+
         link.click();
+
+
         link.remove();
+
+
         setTimeout(
             function(){
+
                 URL.revokeObjectURL(
                     url
                 );
+
             },
-            2000
+            1000
         );
-        status.innerHTML =
-            "✅ EXCEL selesai — " +
-            daftar.length +
-            " barcode";
-    }catch(error){
-        console.error(
-            "Excel error:",
-            error
-        );
-        status.innerHTML =
-            "❌ Gagal membuat Excel";
-        alert(
-            "Gagal membuat Excel:\n" +
-            error.message
-        );
+
+
+        jumlahBerhasil +=
+            dataLembar.length;
+
+
+        /*
+         * Beri jeda sedikit
+         * supaya browser tidak
+         * memblokir download
+         */
+
+        await jeda(300);
+
     }
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "✅ " +
+        jumlahBerhasil +
+        " barcode selesai — " +
+        jumlahLembar +
+        " lembar F4";
+
+
 }
+
+
 /* =====================================================
-   LOAD IMAGE
+   JEDA DOWNLOAD
 ===================================================== */
-function loadImage(
-    url
-){
+
+function jeda(ms){
+
     return new Promise(
-        function(
-            resolve,
-            reject
-        ){
-            const img =
-                new Image();
-            img.onload =
-                function(){
-                    resolve(
-                        img
-                    );
-                };
-            img.onerror =
-                function(){
-                    reject(
-                        new Error(
-                            "Barcode gagal dibuat sebagai gambar"
-                        )
-                    );
-                };
-            img.src =
-                url;
+        function(resolve){
+
+            setTimeout(
+                resolve,
+                ms
+            );
+
         }
     );
+
 }
+
+
+/* =====================================================
+   DETAIL TIDAK DIPAKAI
+===================================================== */
+
 </script>
+
 </body>
 </html>
