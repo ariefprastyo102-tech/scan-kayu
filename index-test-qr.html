@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
-
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
 
 <meta name="viewport"
-   content="width=device-width, initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 <title>Scan Register BBI - IK Saradan</title>
 
-<!-- ZXING -->
 <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
@@ -41,6 +39,7 @@ body {
   padding: 12px 15px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
+  position: relative;
 }
 
 .headerIsi {
@@ -81,6 +80,50 @@ body {
 }
 
 /* ==============================
+   TOMBOL HISTORY KECIL
+============================== */
+
+#btnHistoryMini {
+
+  position: absolute;
+
+  right: 9px;
+  top: 9px;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #176b38;
+
+  color: white;
+
+  font-size: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 6px rgba(23,107,56,0.25);
+
+  z-index: 5;
+}
+
+#btnHistoryMini:active {
+  transform: scale(0.92);
+}
+
+/* ==============================
    CAMERA
 ============================== */
 
@@ -115,33 +158,22 @@ body {
 ============================== */
 
 .qr-frame {
-
   position: absolute;
-
   left: 50%;
   top: 50%;
-
   width: 250px;
   height: 250px;
-
   transform: translate(-50%, -50%);
-
   pointer-events: none;
-
   z-index: 10;
 }
 
 .corner {
-
   position: absolute;
-
   width: 55px;
   height: 55px;
-
   border-color: #00e676;
-
   border-style: solid;
-
 }
 
 .tl {
@@ -177,58 +209,36 @@ body {
 ============================== */
 
 #scanBerhasil {
-
   position: absolute;
-
   left: 50%;
   top: 50%;
-
   width: 250px;
   height: 250px;
-
   transform: translate(-50%, -50%);
-
   border: 6px solid #00e676;
-
   border-radius: 12px;
-
   display: none;
-
   z-index: 20;
-
   pointer-events: none;
-
   box-shadow:
     0 0 10px rgba(0,230,118,0.9),
     0 0 25px rgba(0,230,118,0.8);
 }
 
 #scanBerhasil::after {
-
   content: "✓";
-
   position: absolute;
-
   left: 50%;
   top: 50%;
-
   transform: translate(-50%, -50%);
-
   width: 60px;
   height: 60px;
-
   border-radius: 50%;
-
   background: #00c853;
-
   color: white;
-
   font-size: 40px;
-
   font-weight: bold;
-
   line-height: 60px;
-
   text-align: center;
 }
 
@@ -236,125 +246,45 @@ body {
    BUTTON
 ============================== */
 
-#btnScan {
-
+#btnScan,
+#btnScanBaru {
   display: block;
-
   width: 100%;
   max-width: 500px;
-
   margin: 15px auto;
-
   padding: 15px;
-
   font-size: 18px;
-
   font-weight: bold;
-
   border: none;
-
   border-radius: 10px;
-
-  background: #1976d2;
-
   color: white;
+  cursor: pointer;
+}
 
+#btnScan {
+  background: #1976d2;
   box-shadow:
     0 3px 8px rgba(25,118,210,0.25);
-
-  cursor: pointer;
 }
-
-#btnScan:active {
-  transform: scale(0.98);
-}
-
-/* ==============================
-   TOMBOL SCAN BARU
-============================== */
 
 #btnScanBaru {
-
-  display: block;
-
-  width: 100%;
-  max-width: 500px;
-
-  margin: 8px auto;
-
-  padding: 12px;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  border: none;
-
-  border-radius: 10px;
-
   background: #c62828;
-
-  color: white;
-
   box-shadow:
     0 3px 8px rgba(198,40,40,0.20);
-
-  cursor: pointer;
-
 }
 
+#btnScan:active,
 #btnScanBaru:active {
   transform: scale(0.98);
 }
 
 /* ==============================
-   TOMBOL HISTORY
-============================== */
-
-#btnHistory {
-
-  display: block;
-
-  width: 100%;
-  max-width: 500px;
-
-  margin: 8px auto 15px;
-
-  padding: 12px;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #176b38;
-
-  color: white;
-
-  box-shadow:
-    0 3px 8px rgba(23,107,56,0.20);
-
-  cursor: pointer;
-
-}
-
-#btnHistory:active {
-  transform: scale(0.98);
-}
-
-/* ==============================
-   TOTAL BATANG SELALU TERLIHAT
+   TOTAL BATANG
 ============================== */
 
 .status-card {
-
   position: sticky;
-
   top: 8px;
-
   z-index: 100;
 
   width: 100%;
@@ -370,24 +300,14 @@ body {
 
   text-align: center;
 
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.15);
-
   border: 2px solid #176b38;
 
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.15);
 }
 
-/* TOTAL BESAR */
-
 #jumlah {
-
   margin: 0;
-
-  font-weight: bold;
-
-  color: #176b38;
-
-  line-height: 1;
 
   display: flex;
 
@@ -399,42 +319,27 @@ body {
 
   white-space: nowrap;
 
-}
-
-/* ANGKA */
-
-#jumlah .angkaTotal {
-
-  font-size: 56px;
-
-  font-weight: 900;
+  color: #176b38;
 
   line-height: 1;
-
 }
 
-/* BATANG */
+#jumlah .angkaTotal {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+}
 
 #jumlah .teksBatang {
-
   font-size: 25px;
-
   font-weight: 800;
-
 }
 
-/* STATUS KAMERA */
-
 #status {
-
   margin-top: 7px;
-
   font-weight: bold;
-
   line-height: 1.5;
-
   font-size: 14px;
-
 }
 
 /* ==============================
@@ -442,92 +347,55 @@ body {
 ============================== */
 
 #daftar {
-
   width: 100%;
-
   max-width: 500px;
-
   margin: 15px auto;
-
 }
 
 .item {
-
   background: white;
-
   margin-bottom: 9px;
-
   border-radius: 10px;
-
   padding: 12px;
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
-
 }
 
 .baris {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 10px;
-
 }
 
 .nomor {
-
   font-size: 20px;
-
   font-weight: bold;
-
   word-break: break-all;
-
 }
 
 .detailBtn {
-
   width: auto;
-
   min-width: 80px;
-
   padding: 8px 12px;
-
   margin: 0;
-
   background: #555;
-
   color: white;
-
   border: none;
-
   border-radius: 6px;
-
   font-size: 14px;
-
   font-weight: bold;
-
   cursor: pointer;
-
 }
 
 .detail {
-
   display: none;
-
   margin-top: 12px;
-
   padding-top: 10px;
-
   border-top: 1px solid #ddd;
-
   font-size: 15px;
-
   line-height: 1.7;
-
 }
 
 .success {
@@ -547,13 +415,9 @@ body {
 }
 
 .label {
-
   display: inline-block;
-
   width: 115px;
-
   font-weight: bold;
-
 }
 
 /* ==============================
@@ -561,19 +425,15 @@ body {
 ============================== */
 
 #historyPanel {
-
   display: none;
 
   width: 100%;
-
   max-width: 500px;
 
   margin: 15px auto;
-
 }
 
 .historyHeader {
-
   background: white;
 
   border-radius: 12px;
@@ -592,42 +452,28 @@ body {
   justify-content: space-between;
 
   gap: 10px;
-
 }
 
 .historyJudul {
-
   font-size: 20px;
-
   font-weight: bold;
-
   color: #176b38;
-
 }
 
 .tutupHistory {
-
   border: none;
-
   background: #555;
-
   color: white;
-
   padding: 8px 12px;
-
   border-radius: 6px;
-
   font-weight: bold;
-
   cursor: pointer;
-
 }
 
 .historyItem {
-
   background: white;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
   margin-bottom: 10px;
 
@@ -635,11 +481,9 @@ body {
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
-
 }
 
 .historyTop {
-
   display: flex;
 
   align-items: center;
@@ -647,41 +491,28 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+}
 
+.historyNomor {
+  font-size: 18px;
+  font-weight: 900;
+  color: #176b38;
 }
 
 .historyTanggal {
-
-  font-weight: bold;
-
-  font-size: 16px;
-
+  margin-top: 4px;
+  font-size: 14px;
+  color: #666;
 }
 
 .historyJumlah {
-
   color: #176b38;
-
-  font-size: 28px;
-
+  font-size: 27px;
   font-weight: 900;
-
   white-space: nowrap;
-
-}
-
-.historyInfo {
-
-  margin-top: 6px;
-
-  color: #666;
-
-  font-size: 14px;
-
 }
 
 .historyDetail {
-
   display: none;
 
   margin-top: 12px;
@@ -689,11 +520,9 @@ body {
   padding-top: 10px;
 
   border-top: 1px solid #ddd;
-
 }
 
 .historyRegister {
-
   padding: 8px 0;
 
   border-bottom: 1px solid #eee;
@@ -701,7 +530,6 @@ body {
   font-weight: bold;
 
   word-break: break-all;
-
 }
 
 .historyRegister.success {
@@ -717,7 +545,6 @@ body {
 }
 
 .btnHistoryDetail {
-
   margin-top: 10px;
 
   border: none;
@@ -733,11 +560,9 @@ body {
   font-weight: bold;
 
   cursor: pointer;
-
 }
 
 .btnHapusHistory {
-
   width: 100%;
 
   margin-top: 10px;
@@ -755,7 +580,6 @@ body {
   font-weight: bold;
 
   cursor: pointer;
-
 }
 
 /* ==============================
@@ -851,9 +675,21 @@ body {
 
 <body>
 
-<!-- HEADER -->
+<!-- ==============================
+     HEADER
+============================== -->
 
 <div class="header">
+
+  <!-- HISTORY SEKARANG HANYA IKON KECIL -->
+
+  <button
+    id="btnHistoryMini"
+    onclick="tampilkanHistory()"
+    title="History Scan"
+  >
+    📋
+  </button>
 
   <div class="headerIsi">
 
@@ -879,7 +715,9 @@ body {
 
 </div>
 
-<!-- CAMERA -->
+<!-- ==============================
+     CAMERA
+============================== -->
 
 <div class="camera-card">
 
@@ -921,14 +759,9 @@ body {
   🔄 SCAN BARU
 </button>
 
-<button
-  id="btnHistory"
-  onclick="tampilkanHistory()"
->
-  📋 HISTORY SCAN
-</button>
-
-<!-- STATUS / TOTAL -->
+<!-- ==============================
+     TOTAL
+============================== -->
 
 <div class="status-card">
 
@@ -950,12 +783,14 @@ body {
 
 </div>
 
-<!-- HASIL SCAN AKTIF -->
+<!-- ==============================
+     HASIL SCAN SESI AKTIF
+============================== -->
 
 <div id="daftar"></div>
 
 <!-- ==============================
-     HISTORY PANEL
+     HISTORY
 ============================== -->
 
 <div id="historyPanel">
@@ -989,7 +824,7 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 /* =====================================================
-   STORAGE
+   LOCAL STORAGE
 ===================================================== */
 
 const STORAGE_DATA =
@@ -1013,7 +848,7 @@ let jumlahBerhasil = 0;
 let dataScanTersimpan = [];
 
 /* =====================================================
-   LOAD DATA
+   LOAD SESI AKTIF
 ===================================================== */
 
 function muatDataTersimpan() {
@@ -1047,7 +882,7 @@ function muatDataTersimpan() {
   catch (e) {
 
     console.log(
-      "Gagal membaca storage:",
+      "Gagal membaca data:",
       e
     );
 
@@ -1067,7 +902,7 @@ function muatDataTersimpan() {
 }
 
 /* =====================================================
-   SIMPAN DATA AKTIF
+   SIMPAN SESI AKTIF
 ===================================================== */
 
 function simpanData() {
@@ -1098,23 +933,27 @@ function simpanData() {
 }
 
 /* =====================================================
-   UPDATE JUMLAH
+   UPDATE TOTAL
 ===================================================== */
 
 function updateJumlah() {
 
-  const jumlah =
+  const angka =
     document.querySelector(
       "#jumlah .angkaTotal"
     );
 
-  jumlah.innerHTML =
-    jumlahBerhasil;
+  if (angka) {
+
+    angka.innerHTML =
+      jumlahBerhasil;
+
+  }
 
 }
 
 /* =====================================================
-   TAMPILKAN DATA AKTIF
+   TAMPILKAN SESI AKTIF
 ===================================================== */
 
 function tampilkanDataTersimpan() {
@@ -1160,7 +999,7 @@ function tampilkanDataTersimpan() {
 }
 
 /* =====================================================
-   LOAD SAAT HALAMAN DIBUKA
+   LOAD AWAL
 ===================================================== */
 
 muatDataTersimpan();
@@ -1183,12 +1022,15 @@ function tampilkanIndikatorHijau() {
   indikator.style.display =
     "block";
 
-  setTimeout(function() {
+  setTimeout(
+    function() {
 
-    indikator.style.display =
-      "none";
+      indikator.style.display =
+        "none";
 
-  }, 500);
+    },
+    500
+  );
 
 }
 
@@ -1250,11 +1092,14 @@ function bunyiBerhasil() {
       audio.currentTime + 0.13
     );
 
-    setTimeout(function() {
+    setTimeout(
+      function() {
 
-      audio.close();
+        audio.close();
 
-    }, 300);
+      },
+      300
+    );
 
   }
 
@@ -1286,7 +1131,6 @@ function getarBerhasil() {
 
 /* =====================================================
    MULAI KAMERA ZXING
-   QR + CODE 128
 ===================================================== */
 
 async function mulaiKamera() {
@@ -1588,7 +1432,7 @@ function cekRegister(register) {
 }
 
 /* =====================================================
-   HASIL SCAN
+   PROSES HASIL
 ===================================================== */
 
 function prosesHasilScan(
@@ -1743,7 +1587,7 @@ function prosesHasilScan(
 }
 
 /* =====================================================
-   HASIL SCAN
+   TAMBAH HASIL
 ===================================================== */
 
 function tambahHasil(
@@ -1967,6 +1811,7 @@ function toggleDetail(
 
 /* =====================================================
    SCAN BARU
+   SATU KLIK = SATU HISTORY
 ===================================================== */
 
 function scanBaru() {
@@ -1983,7 +1828,7 @@ function scanBaru() {
 
   }
 
-  const jumlahLama =
+  const jumlahSesi =
     dataScanTersimpan.filter(
       function(item) {
 
@@ -2011,25 +1856,26 @@ function scanBaru() {
 
       "Mulai SCAN BARU?\n\n" +
 
-      "Jumlah berhasil saat ini: " +
-      jumlahLama +
+      "Sesi saat ini: " +
+      jumlahSesi +
       " batang\n\n" +
 
-      "Data ini akan dipindahkan ke HISTORY."
+      "Sesi ini akan disimpan sebagai 1 HISTORY."
 
     );
 
   if (!yakin) return;
 
-  /* ============================
+  /* =================================================
      AMBIL HISTORY LAMA
-  ============================ */
+  ================================================= */
 
-  let historyLama = [];
+  let history =
+    [];
 
   try {
 
-    historyLama =
+    history =
       JSON.parse(
         localStorage.getItem(
           STORAGE_HISTORY
@@ -2037,10 +1883,10 @@ function scanBaru() {
       );
 
     if (
-      !Array.isArray(historyLama)
+      !Array.isArray(history)
     ) {
 
-      historyLama = [];
+      history = [];
 
     }
 
@@ -2048,21 +1894,30 @@ function scanBaru() {
 
   catch (e) {
 
-    historyLama = [];
+    history = [];
 
   }
 
-  /* ============================
-     SIMPAN HISTORY
-  ============================ */
+  /* =================================================
+     NOMOR SESI
+  ================================================= */
 
-  historyLama.push({
+  const nomorSesi =
+    history.length + 1;
 
-    tanggal: tanggal,
+  const sesiBaru = {
 
-    jam: jam,
+    nomorSesi:
+      nomorSesi,
 
-    jumlah: jumlahLama,
+    tanggal:
+      tanggal,
+
+    jam:
+      jam,
+
+    jumlah:
+      jumlahSesi,
 
     data:
       JSON.parse(
@@ -2071,7 +1926,11 @@ function scanBaru() {
         )
       )
 
-  });
+  };
+
+  history.push(
+    sesiBaru
+  );
 
   try {
 
@@ -2080,7 +1939,7 @@ function scanBaru() {
       STORAGE_HISTORY,
 
       JSON.stringify(
-        historyLama
+        history
       )
 
     );
@@ -2090,16 +1949,16 @@ function scanBaru() {
   catch (e) {
 
     alert(
-      "History gagal disimpan di browser."
+      "History gagal disimpan."
     );
 
     return;
 
   }
 
-  /* ============================
-     RESET DATA AKTIF
-  ============================ */
+  /* =================================================
+     RESET SESI AKTIF
+  ================================================= */
 
   dataScanTersimpan = [];
 
@@ -2120,11 +1979,6 @@ function scanBaru() {
   ).innerHTML =
     "📷 Siap untuk scan baru";
 
-  document.getElementById(
-    "historyPanel"
-  ).style.display =
-    "none";
-
 }
 
 /* =====================================================
@@ -2143,7 +1997,8 @@ function tampilkanHistory() {
       "isiHistory"
     );
 
-  let history = [];
+  let history =
+    [];
 
   try {
 
@@ -2171,6 +2026,10 @@ function tampilkanHistory() {
   }
 
   isi.innerHTML = "";
+
+  /* =================================================
+     BELUM ADA HISTORY
+  ================================================= */
 
   if (
     history.length === 0
@@ -2204,6 +2063,10 @@ function tampilkanHistory() {
     return;
 
   }
+
+  /* =================================================
+     HISTORY TERBARU DI ATAS
+  ================================================= */
 
   history
     .slice()
@@ -2240,11 +2103,15 @@ function tampilkanHistory() {
 
             <div>
 
+              <div class="historyNomor">
+                SCAN #${sesi.nomorSesi || "-"}
+              </div>
+
               <div class="historyTanggal">
                 📅 ${sesi.tanggal || "-"}
               </div>
 
-              <div class="historyInfo">
+              <div class="historyTanggal">
                 🕐 ${sesi.jam || "-"}
               </div>
 
@@ -2258,7 +2125,10 @@ function tampilkanHistory() {
 
           <button
             class="btnHistoryDetail"
-            onclick="toggleHistoryDetail('${id}', this)"
+            onclick="toggleHistoryDetail(
+              '${id}',
+              this
+            )"
           >
             LIHAT DETAIL REGISTER
           </button>
@@ -2278,6 +2148,10 @@ function tampilkanHistory() {
           document.getElementById(
             id
           );
+
+        /* ============================================
+           DETAIL REGISTER
+        ============================================ */
 
         semuaData.forEach(
           function(dataScan) {
@@ -2378,6 +2252,10 @@ function tampilkanHistory() {
       }
     );
 
+  /* =================================================
+     TOMBOL HAPUS HISTORY
+  ================================================= */
+
   const tombolHapus =
     document.createElement(
       "button"
@@ -2467,6 +2345,7 @@ function hapusSemuaHistory() {
     confirm(
 
       "Yakin ingin menghapus SEMUA history scan?\n\n" +
+
       "Data history yang sudah dihapus tidak dapat dikembalikan."
 
     );
@@ -2485,4 +2364,3 @@ function hapusSemuaHistory() {
 
 </body>
 </html>
-
