@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -113,7 +112,7 @@ body {
 
 
 /* ==============================
-   GARIS POJOK QR
+   GARIS POJOK
 ============================== */
 
 .qr-frame {
@@ -552,11 +551,8 @@ body {
     <div class="qr-frame">
 
       <div class="corner tl"></div>
-
       <div class="corner tr"></div>
-
       <div class="corner bl"></div>
-
       <div class="corner br"></div>
 
     </div>
@@ -599,11 +595,12 @@ body {
 
 
 /* =====================================================
-   API LAMA — TIDAK DIUBAH
+   API
 ===================================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
+
 
 /* =====================================================
    VARIABEL
@@ -629,10 +626,8 @@ function tampilkanIndikatorHijau() {
       "scanBerhasil"
     );
 
-
   indikator.style.display =
     "block";
-
 
   setTimeout(function() {
 
@@ -658,10 +653,8 @@ function bunyiBerhasil() {
 
     if (!AudioContext) return;
 
-
     const audio =
       new AudioContext();
-
 
     const oscillator1 =
       audio.createOscillator();
@@ -669,34 +662,28 @@ function bunyiBerhasil() {
     const gain1 =
       audio.createGain();
 
-
     oscillator1.type =
       "sine";
-
 
     oscillator1.frequency.setValueAtTime(
       1300,
       audio.currentTime
     );
 
-
     gain1.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
-
 
     gain1.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
-
     gain1.gain.exponentialRampToValueAtTime(
       0.001,
       audio.currentTime + 0.12
     );
-
 
     oscillator1.connect(gain1);
 
@@ -704,20 +691,17 @@ function bunyiBerhasil() {
       audio.destination
     );
 
-
     oscillator1.start();
 
     oscillator1.stop(
       audio.currentTime + 0.13
     );
 
-
     setTimeout(function() {
 
       audio.close();
 
     }, 300);
-
 
   } catch (e) {
 
@@ -749,31 +733,27 @@ function getarBerhasil() {
 
 /* =====================================================
    MULAI KAMERA ZXING
+   KHUSUS CODE 128
 ===================================================== */
 
 async function mulaiKamera() {
 
   if (kameraAktif) return;
 
-
   const status =
     document.getElementById(
       "status"
     );
-
 
   const tombol =
     document.getElementById(
       "btnScan"
     );
 
-
   status.innerHTML =
     "⏳ Membuka kamera...";
 
-
   try {
-
 
     if (
       !window.ZXingBrowser
@@ -785,7 +765,6 @@ async function mulaiKamera() {
 
     }
 
-
     const video =
       document.getElementById(
         "video"
@@ -793,19 +772,19 @@ async function mulaiKamera() {
 
 
     /*
-     * READER KHUSUS QR
+     * READER GENERIC
+     *
+     * BrowserMultiFormatReader
+     * digunakan supaya CODE 128
+     * benar-benar didukung.
      */
 
     const reader =
-      new ZXingBrowser.BrowserQRCodeReader();
+      new ZXingBrowser.BrowserMultiFormatReader();
 
 
     /*
-     * CONSTRAINT KAMERA
-     *
-     * Kita minta resolusi tinggi
-     * supaya QR kecil dari jauh
-     * tetap punya cukup pixel.
+     * KAMERA BELAKANG
      */
 
     const constraints = {
@@ -841,7 +820,7 @@ async function mulaiKamera() {
 
 
     /*
-     * ZXING MENGAMBIL KAMERA
+     * MULAI SCAN
      */
 
     scannerControls =
@@ -856,57 +835,48 @@ async function mulaiKamera() {
           error
         ) {
 
-
-          if (
-            result
-          ) {
+          if (!result) return;
 
 
-            const text =
-              result
-                .getText();
+          /*
+           * AMBIL HASIL BARCODE
+           */
+
+          const kode =
+            String(
+              result.getText() || ""
+            ).trim();
 
 
-            const kode =
-              String(
-                text || ""
-              ).trim();
+          if (!kode) return;
 
 
-            if (
-              !kode
-            ) return;
+          /*
+           * CEGAH SCAN BERULANG
+           */
+
+          if (sedangProses) return;
 
 
-            /*
-             * JIKA SEDANG CEK
-             * ABAIKAN FRAME BERIKUTNYA
-             */
-
-            if (
-              sedangProses
-            ) return;
+          sedangProses =
+            true;
 
 
-            sedangProses =
-              true;
+          tampilkanIndikatorHijau();
 
 
-            tampilkanIndikatorHijau();
+          status.innerHTML =
+            "⏳ BARCODE TERBACA<br>" +
+            "Mengecek " +
+            kode +
+            "...";
 
 
-            status.innerHTML =
-              "⏳ QR TERBACA<br>" +
-              "Mengecek " +
-              kode +
-              "...";
+          /*
+           * KIRIM KE DATABASE
+           */
 
-
-            cekKode(
-              kode
-            );
-
-          }
+          cekKode(kode);
 
         }
 
@@ -920,18 +890,16 @@ async function mulaiKamera() {
     tombol.innerHTML =
       "📷 KAMERA AKTIF";
 
-
     tombol.style.background =
       "#555";
 
 
     status.innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan QR ke kotak hijau";
+      "Arahkan CODE 128 ke kotak hijau";
 
 
   } catch (error) {
-
 
     kameraAktif =
       false;
@@ -961,13 +929,13 @@ async function mulaiKamera() {
 
 
 /* =====================================================
-   CEK KODE KE APPS SCRIPT
+   CEK CODE 128 KE APPS SCRIPT
+   MENGGUNAKAN ?register=
 ===================================================== */
 
 function cekKode(
-  kode
+  register
 ) {
-
 
   const callbackName =
     "scan_" +
@@ -1066,7 +1034,7 @@ function cekKode(
 
 
         tambahHasilTidakDitemukan(
-          kode
+          register
         );
 
       }
@@ -1122,15 +1090,20 @@ function cekKode(
 
   /*
    * PENTING:
-   * API SEKARANG MENERIMA PARAMETER
-   * "kode", BUKAN "register".
+   *
+   * CODE 128
+   * 2600003
+   *
+   * dikirim sebagai:
+   *
+   * ?register=2600003
    */
 
   script.src =
     API_URL +
-    "?kode=" +
+    "?register=" +
     encodeURIComponent(
-      kode
+      register
     ) +
     "&callback=" +
     callbackName;
@@ -1283,7 +1256,6 @@ function tambahHasil(
         : ${data[7]}
       </div>
 
-
       ${
         tanggalScan
         ?
@@ -1411,4 +1383,3 @@ function toggleDetail(
 
 </body>
 </html>
-
