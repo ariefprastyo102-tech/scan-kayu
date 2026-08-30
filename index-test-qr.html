@@ -237,14 +237,6 @@ body {
    HISTORY FLOATING
 ============================== */
 
-/*
- * HISTORY TIDAK LAGI ADA
- * DI BAWAH KAMERA.
- *
- * Dibuat tombol kecil melayang
- * di pojok kanan bawah.
- */
-
 #btnHistory {
 
   position: fixed;
@@ -795,11 +787,6 @@ body {
 
 }
 
-/* ==============================
-   AREA BAWAH AGAR TOMBOL
-   FLOATING TIDAK MENGGANGGU
-============================== */
-
 body {
   padding-bottom: 80px;
 }
@@ -984,6 +971,23 @@ let jumlahBerhasil = 0;
 
 let dataScanTersimpan = [];
 
+/*
+ * Menyimpan kode terakhir yang terbaca.
+ * Ini mencegah kamera membaca barcode yang sama
+ * berkali-kali sebelum proses sebelumnya selesai.
+ */
+
+let kodeTerakhir = "";
+
+let waktuScanTerakhir = 0;
+
+/*
+ * Jeda antar pembacaan barcode.
+ * Dibuat pendek agar scanner tetap responsif.
+ */
+
+const JEDA_SCAN = 700;
+
 /* =====================================================
    LOAD SESI AKTIF
 ===================================================== */
@@ -1166,7 +1170,7 @@ function tampilkanIndikatorHijau() {
         "none";
 
     },
-    500
+    400
   );
 
 }
@@ -1257,9 +1261,9 @@ function getarBerhasil() {
   if (navigator.vibrate) {
 
     navigator.vibrate([
-      100,
-      50,
-      100
+      70,
+      40,
+      70
     ]);
 
   }
@@ -1307,6 +1311,14 @@ async function mulaiKamera() {
     const reader =
       new ZXingBrowser.BrowserMultiFormatReader();
 
+    /*
+     * Resolusi kamera dibuat cukup tinggi
+     * tetapi tidak dipaksa terlalu berat.
+     *
+     * 1280 x 720 biasanya lebih stabil
+     * untuk scanning barcode lewat HP.
+     */
+
     const constraints = {
 
       audio: false,
@@ -1318,17 +1330,22 @@ async function mulaiKamera() {
         },
 
         width: {
-          ideal: 1920
+          ideal: 1280,
+          min: 640
         },
 
         height: {
-          ideal: 1080
+          ideal: 720,
+          min: 480
         },
 
         frameRate: {
           ideal: 30,
+          min: 20,
           max: 60
-        }
+        },
+
+        focusMode: "continuous"
 
       }
 
@@ -1357,6 +1374,33 @@ async function mulaiKamera() {
             ).trim();
 
           if (!kode) return;
+
+          /*
+           * Jangan proses barcode yang sama
+           * berulang-ulang terlalu cepat.
+           */
+
+          const sekarang =
+            Date.now();
+
+          if (
+            kode === kodeTerakhir &&
+            (
+              sekarang -
+              waktuScanTerakhir
+            ) <
+            JEDA_SCAN
+          ) {
+
+            return;
+
+          }
+
+          kodeTerakhir =
+            kode;
+
+          waktuScanTerakhir =
+            sekarang;
 
           if (sedangProses) return;
 
@@ -1407,6 +1451,62 @@ async function mulaiKamera() {
 
     kameraAktif =
       true;
+
+    /*
+     * Coba aktifkan continuous autofocus
+     * jika browser/HP mendukung.
+     */
+
+    try {
+
+      const stream =
+        video.srcObject;
+
+      if (stream) {
+
+        const track =
+          stream.getVideoTracks()[0];
+
+        if (track) {
+
+          const capabilities =
+            track.getCapabilities
+            ?
+            track.getCapabilities()
+            :
+            {};
+
+          if (
+            capabilities.focusMode &&
+            capabilities.focusMode
+              .includes("continuous")
+          ) {
+
+            await track.applyConstraints({
+              advanced: [
+                {
+                  focusMode:
+                    "continuous"
+                }
+              ]
+            });
+
+          }
+
+        }
+
+      }
+
+    }
+
+    catch (e) {
+
+      console.log(
+        "Autofocus tidak dapat diatur:",
+        e
+      );
+
+    }
 
     tombol.innerHTML =
       "📷 KAMERA AKTIF";
@@ -1948,7 +2048,6 @@ function toggleDetail(
 
 /* =====================================================
    SCAN BARU
-   SATU KLIK = SATU HISTORY
 ===================================================== */
 
 function scanBaru() {
@@ -2003,10 +2102,6 @@ function scanBaru() {
 
   if (!yakin) return;
 
-  /* =================================================
-     AMBIL HISTORY LAMA
-  ================================================= */
-
   let history =
     [];
 
@@ -2034,10 +2129,6 @@ function scanBaru() {
     history = [];
 
   }
-
-  /* =================================================
-     BUAT SATU HISTORY BARU
-  ================================================= */
 
   const nomorSesi =
     history.length + 1;
@@ -2093,10 +2184,6 @@ function scanBaru() {
 
   }
 
-  /* =================================================
-     RESET SESI AKTIF
-  ================================================= */
-
   dataScanTersimpan = [];
 
   jumlahBerhasil = 0;
@@ -2110,6 +2197,17 @@ function scanBaru() {
   ).innerHTML = "";
 
   updateJumlah();
+
+  /*
+   * Reset pembacaan barcode supaya
+   * barcode lama tidak dianggap scan baru.
+   */
+
+  kodeTerakhir = "";
+
+  waktuScanTerakhir = 0;
+
+  sedangProses = false;
 
   document.getElementById(
     "status"
@@ -2164,10 +2262,6 @@ function tampilkanHistory() {
 
   isi.innerHTML = "";
 
-  /* =================================================
-     BELUM ADA HISTORY
-  ================================================= */
-
   if (
     history.length === 0
   ) {
@@ -2200,10 +2294,6 @@ function tampilkanHistory() {
     return;
 
   }
-
-  /* =================================================
-     HISTORY TERBARU DI ATAS
-  ================================================= */
 
   history
     .slice()
@@ -2285,10 +2375,6 @@ function tampilkanHistory() {
           document.getElementById(
             id
           );
-
-        /* ============================================
-           DETAIL REGISTER
-        ============================================ */
 
         semuaData.forEach(
           function(dataScan) {
@@ -2388,10 +2474,6 @@ function tampilkanHistory() {
 
       }
     );
-
-  /* =================================================
-     TOMBOL HAPUS HISTORY
-  ================================================= */
 
   const tombolHapus =
     document.createElement(
@@ -2500,4 +2582,5 @@ function hapusSemuaHistory() {
 </script>
 
 </body>
+
 </html>
