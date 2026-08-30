@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -6,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>Barcode Kayu</title>
 
@@ -269,22 +270,11 @@ button{
 
     /* =================================================
        KOMPENSASI EPSON
-       
-       HASIL FISIK SEKARANG ±28 MM
-       TARGET 30 MM
-       
-       FAKTOR:
-       30 / 28 = 1.071428
     ================================================= */
 
     .labelBarcode{
 
         position:absolute;
-
-        /*
-         * Barcode asli tetap 48 x 21 mm
-         * dan ditempatkan dengan aman.
-         */
 
         left:11mm;
 
@@ -370,7 +360,6 @@ button{
 
 <body>
 
-
 <!-- =====================================================
      KONTROL
 ===================================================== -->
@@ -381,81 +370,73 @@ button{
 🪵 CETAK BARCODE KAYU
 </h2>
 
-
 <button
-    class="btnAmbil"
-    onclick="ambilDatabase()">
+ class="btnAmbil"
+ onclick="ambilDatabase()">
 
 🔄 AMBIL DATA REGISTER
 
 </button>
 
-
 <div class="filter">
 
 <input
-    id="filterRegister"
-    type="text"
-    placeholder="Cari nomor register (bisa banyak)">
+ id="filterRegister"
+ type="text"
+ placeholder="Cari nomor register (bisa banyak)">
 
 <input
-    id="filterTumpuk"
-    type="text"
-    placeholder="Nomor tumpuk, contoh: 1">
+ id="filterTumpuk"
+ type="text"
+ placeholder="Nomor tumpuk, contoh: 1">
 
 </div>
-
 
 <div>
 
 <button
-    class="btnFilter"
-    onclick="filterData()">
+ class="btnFilter"
+ onclick="filterData()">
 
 🔎 FILTER
 
 </button>
 
-
 <button
-    class="btnSemua"
-    onclick="tampilkanSemua()">
+ class="btnSemua"
+ onclick="tampilkanSemua()">
 
 🔄 TAMPILKAN SEMUA
 
 </button>
 
-
 <button
-    class="btnPilih"
-    onclick="pilihHasilFilter()">
+ class="btnPilih"
+ onclick="pilihHasilFilter()">
 
 ☑️ PILIH HASIL FILTER
 
 </button>
 
-
 <button
-    class="btnBatal"
-    onclick="batalHasilFilter()">
+ class="btnBatal"
+ onclick="batalHasilFilter()">
 
 ❌ BATAL HASIL FILTER
 
 </button>
 
-
 <button
-    class="btnPilih"
-    onclick="pilihSemua()">
+ class="btnPilih"
+ onclick="pilihSemua()">
 
 ☑️ PILIH SEMUA
 
 </button>
 
-
 <button
-    class="btnBatal"
-    onclick="batalSemua()">
+ class="btnBatal"
+ onclick="batalSemua()">
 
 ❌ BATAL SEMUA
 
@@ -463,15 +444,13 @@ button{
 
 </div>
 
-
 <button
-    class="btnDownload"
-    onclick="cetakF4()">
+ class="btnDownload"
+ onclick="cetakF4()">
 
 🖨️ CETAK F4 — 33 BARCODE / LEMBAR
 
 </button>
-
 
 <div class="status">
 
@@ -479,11 +458,9 @@ button{
 Belum mengambil database
 </div>
 
-
 <div id="jumlah">
 Jumlah barcode: 0
 </div>
-
 
 <div id="dipilih">
 Dipilih: 0
@@ -493,13 +470,11 @@ Dipilih: 0
 
 </div>
 
-
 <!-- =====================================================
      GRID WEB
 ===================================================== -->
 
 <div id="grid"></div>
-
 
 <!-- =====================================================
      AREA CETAK
@@ -509,7 +484,6 @@ Dipilih: 0
     id="areaCetak"
     class="areaCetak">
 </div>
-
 
 <script>
 
@@ -1257,6 +1231,69 @@ function cetakF4(){
         return;
 
     }
+
+
+    /*
+     * =================================================
+     * URUT TUMPUK KECIL → BESAR
+     * =================================================
+     *
+     * Contoh:
+     * 1
+     * 2
+     * 3
+     * 4
+     * 10
+     * 11
+     *
+     * Nomor register tetap mengikuti urutan data
+     * di dalam tumpuk yang sama.
+     */
+
+    daftar.sort(
+        function(a,b){
+
+            const angkaA =
+                parseInt(
+                    String(
+                        a.tumpuk
+                    ).replace(
+                        /[^0-9-]/g,
+                        ""
+                    )
+                );
+
+            const angkaB =
+                parseInt(
+                    String(
+                        b.tumpuk
+                    ).replace(
+                        /[^0-9-]/g,
+                        ""
+                    )
+                );
+
+
+            const nilaiA =
+                isNaN(
+                    angkaA
+                )
+                ? Infinity
+                : angkaA;
+
+
+            const nilaiB =
+                isNaN(
+                    angkaB
+                )
+                ? Infinity
+                : angkaB;
+
+
+            return nilaiA - nilaiB;
+
+        }
+    );
 
 
     const area =
