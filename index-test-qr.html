@@ -787,6 +787,10 @@ body {
 
 }
 
+/* ==============================
+   AREA BAWAH
+============================== */
+
 body {
   padding-bottom: 80px;
 }
@@ -972,21 +976,12 @@ let jumlahBerhasil = 0;
 let dataScanTersimpan = [];
 
 /*
- * Menyimpan kode terakhir yang terbaca.
- * Ini mencegah kamera membaca barcode yang sama
- * berkali-kali sebelum proses sebelumnya selesai.
+ * Menyimpan kode yang sedang dicek.
+ * Ini mencegah kamera membaca barcode
+ * yang sama berkali-kali sebelum API selesai.
  */
 
-let kodeTerakhir = "";
-
-let waktuScanTerakhir = 0;
-
-/*
- * Jeda antar pembacaan barcode.
- * Dibuat pendek agar scanner tetap responsif.
- */
-
-const JEDA_SCAN = 700;
+let kodeSedangDicek = "";
 
 /* =====================================================
    LOAD SESI AKTIF
@@ -1170,7 +1165,7 @@ function tampilkanIndikatorHijau() {
         "none";
 
     },
-    400
+    350
   );
 
 }
@@ -1260,11 +1255,7 @@ function getarBerhasil() {
 
   if (navigator.vibrate) {
 
-    navigator.vibrate([
-      70,
-      40,
-      70
-    ]);
+    navigator.vibrate(80);
 
   }
 
@@ -1311,14 +1302,6 @@ async function mulaiKamera() {
     const reader =
       new ZXingBrowser.BrowserMultiFormatReader();
 
-    /*
-     * Resolusi kamera dibuat cukup tinggi
-     * tetapi tidak dipaksa terlalu berat.
-     *
-     * 1280 x 720 biasanya lebih stabil
-     * untuk scanning barcode lewat HP.
-     */
-
     const constraints = {
 
       audio: false,
@@ -1330,22 +1313,17 @@ async function mulaiKamera() {
         },
 
         width: {
-          ideal: 1280,
-          min: 640
+          ideal: 1920
         },
 
         height: {
-          ideal: 720,
-          min: 480
+          ideal: 1080
         },
 
         frameRate: {
           ideal: 30,
-          min: 20,
           max: 60
-        },
-
-        focusMode: "continuous"
+        }
 
       }
 
@@ -1376,35 +1354,29 @@ async function mulaiKamera() {
           if (!kode) return;
 
           /*
-           * Jangan proses barcode yang sama
-           * berulang-ulang terlalu cepat.
+           * LANGSUNG BLOK SCAN BERIKUTNYA
+           * SAAT BARCODE TERBACA.
            */
 
-          const sekarang =
-            Date.now();
+          if (sedangProses) return;
+
+          /*
+           * Pengaman tambahan agar barcode
+           * yang sama tidak dikirim dua kali.
+           */
 
           if (
-            kode === kodeTerakhir &&
-            (
-              sekarang -
-              waktuScanTerakhir
-            ) <
-            JEDA_SCAN
+            kode === kodeSedangDicek
           ) {
 
             return;
 
           }
 
-          kodeTerakhir =
-            kode;
-
-          waktuScanTerakhir =
-            sekarang;
-
-          if (sedangProses) return;
-
           sedangProses = true;
+
+          kodeSedangDicek =
+            kode;
 
           tampilkanIndikatorHijau();
 
@@ -1416,6 +1388,11 @@ async function mulaiKamera() {
             "Mengecek " +
             kode +
             "...";
+
+          /*
+           * LANGSUNG CEK.
+           * Tidak ada setTimeout / delay.
+           */
 
           if (
             format ===
@@ -1443,6 +1420,8 @@ async function mulaiKamera() {
 
             sedangProses = false;
 
+            kodeSedangDicek = "";
+
           }
 
         }
@@ -1451,62 +1430,6 @@ async function mulaiKamera() {
 
     kameraAktif =
       true;
-
-    /*
-     * Coba aktifkan continuous autofocus
-     * jika browser/HP mendukung.
-     */
-
-    try {
-
-      const stream =
-        video.srcObject;
-
-      if (stream) {
-
-        const track =
-          stream.getVideoTracks()[0];
-
-        if (track) {
-
-          const capabilities =
-            track.getCapabilities
-            ?
-            track.getCapabilities()
-            :
-            {};
-
-          if (
-            capabilities.focusMode &&
-            capabilities.focusMode
-              .includes("continuous")
-          ) {
-
-            await track.applyConstraints({
-              advanced: [
-                {
-                  focusMode:
-                    "continuous"
-                }
-              ]
-            });
-
-          }
-
-        }
-
-      }
-
-    }
-
-    catch (e) {
-
-      console.log(
-        "Autofocus tidak dapat diatur:",
-        e
-      );
-
-    }
 
     tombol.innerHTML =
       "📷 KAMERA AKTIF";
@@ -1592,6 +1515,8 @@ function cekQR(kode) {
 
       sedangProses = false;
 
+      kodeSedangDicek = "";
+
       delete window[
         callbackName
       ];
@@ -1654,6 +1579,8 @@ function cekRegister(register) {
 
       sedangProses = false;
 
+      kodeSedangDicek = "";
+
       delete window[
         callbackName
       ];
@@ -1678,7 +1605,17 @@ function prosesHasilScan(
   callbackName
 ) {
 
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  /*
+   * HASIL SUKSES
+   */
+
   if (
+    hasil &&
     hasil.status ===
     "success"
   ) {
@@ -1687,9 +1624,7 @@ function prosesHasilScan(
 
     updateJumlah();
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
+    status.innerHTML =
       "✅ " +
       hasil.data[0];
 
@@ -1725,14 +1660,17 @@ function prosesHasilScan(
 
   }
 
+  /*
+   * DUPLIKAT
+   */
+
   else if (
+    hasil &&
     hasil.status ===
     "duplicate"
   ) {
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
+    status.innerHTML =
       "❌ " +
       hasil.message;
 
@@ -1763,14 +1701,17 @@ function prosesHasilScan(
 
   }
 
+  /*
+   * TIDAK DITEMUKAN
+   */
+
   else if (
+    hasil &&
     hasil.status ===
     "not_found"
   ) {
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
+    status.innerHTML =
       "⚠️ " +
       hasil.message;
 
@@ -1793,18 +1734,34 @@ function prosesHasilScan(
 
   }
 
+  /*
+   * RESPONSE LAIN
+   */
+
   else {
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
+    status.innerHTML =
       "⚠️ " +
-      hasil.message;
+      (
+        hasil &&
+        hasil.message
+        ?
+        hasil.message
+        :
+        "Response DATABASE tidak dikenal"
+      );
 
   }
 
+  /*
+   * LANGSUNG SIAP SCAN BERIKUTNYA
+   */
+
   sedangProses =
     false;
+
+  kodeSedangDicek =
+    "";
 
   delete window[
     callbackName
@@ -2198,17 +2155,6 @@ function scanBaru() {
 
   updateJumlah();
 
-  /*
-   * Reset pembacaan barcode supaya
-   * barcode lama tidak dianggap scan baru.
-   */
-
-  kodeTerakhir = "";
-
-  waktuScanTerakhir = 0;
-
-  sedangProses = false;
-
   document.getElementById(
     "status"
   ).innerHTML =
@@ -2582,5 +2528,4 @@ function hapusSemuaHistory() {
 </script>
 
 </body>
-
 </html>
