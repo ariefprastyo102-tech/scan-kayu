@@ -18,19 +18,11 @@ content="width=device-width, initial-scale=1.0">
 }
 
 body {
-
   font-family: Arial, sans-serif;
-
   background: #f3f6f4;
-
   margin: 0;
-
-  padding: 12px;
-
-  padding-bottom: 30px;
-
+  padding: 10px;
   color: #222;
-
 }
 
 /* =====================================================
@@ -38,231 +30,99 @@ body {
 ===================================================== */
 
 .header {
-
   width: 100%;
-
   max-width: 600px;
-
-  margin: 0 auto 12px;
-
+  margin: 0 auto 10px;
   background: white;
-
-  border-radius: 14px;
-
-  padding: 10px 12px;
-
-  box-shadow:
-    0 3px 12px rgba(0,0,0,0.08);
-
+  border-radius: 12px;
+  padding: 8px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border-top: 4px solid #176b38;
-
 }
 
 .headerIsi {
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  gap: 10px;
-
+  gap: 8px;
 }
 
 .logo {
-
-  width: 75px;
-
-  height: 65px;
-
+  width: 65px;
+  height: 55px;
   object-fit: contain;
-
-  flex-shrink: 0;
-
 }
 
 .judulBox {
-
   text-align: left;
-
 }
 
 .judul {
-
-  font-size: 21px;
-
+  font-size: 20px;
   font-weight: 900;
-
   color: #176b38;
-
 }
 
 .subjudul {
-
-  font-size: 15px;
-
+  font-size: 14px;
   font-weight: bold;
-
   color: #666;
-
-  margin-top: 4px;
-
-  letter-spacing: 1px;
-
+  margin-top: 2px;
 }
 
 /* =====================================================
    RINGKASAN
 ===================================================== */
 
-.summary {
-
+.ringkasan {
   width: 100%;
-
   max-width: 600px;
-
-  margin: 0 auto 12px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 8px;
-
-}
-
-.summaryBox {
-
+  margin: 0 auto 10px;
   background: white;
-
-  border-radius: 12px;
-
-  padding: 10px 5px;
-
-  text-align: center;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-
-}
-
-.summaryAngka {
-
-  font-size: 27px;
-
-  font-weight: 900;
-
-  line-height: 1.1;
-
-}
-
-.summaryTeks {
-
-  margin-top: 4px;
-
-  font-size: 12px;
-
-  font-weight: bold;
-
-}
-
-.totalBox {
-
-  border: 2px solid #176b38;
-
-  color: #176b38;
-
-}
-
-.olahanBox {
-
-  border: 2px solid #16833a;
-
-  color: #16833a;
-
-}
-
-.sisaBox {
-
-  border: 2px solid #d97706;
-
-  color: #d97706;
-
-}
-
-/* =====================================================
-   VOLUME
-===================================================== */
-
-.volumeCard {
-
-  width: 100%;
-
-  max-width: 600px;
-
-  margin: 0 auto 12px;
-
-  background: white;
-
-  border-radius: 12px;
-
-  padding: 12px;
-
-  text-align: center;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-
-}
-
-.volumeJudul {
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-  color: #666;
-
-}
-
-.volumeAngka {
-
-  font-size: 30px;
-
-  font-weight: 900;
-
-  color: #176b38;
-
-  margin-top: 3px;
-
-}
-
-/* =====================================================
-   KETERANGAN
-===================================================== */
-
-.info {
-
-  width: 100%;
-
-  max-width: 600px;
-
-  margin: 0 auto 12px;
-
-  background: #fff8e1;
-
-  border: 1px solid #f0c36d;
-
   border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.07);
+}
 
-  padding: 10px;
+.ringkasBaris {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
 
+.ringkasItem {
+  flex: 1;
+}
+
+.ringkasAngka {
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.ringkasLabel {
+  font-size: 10px;
+  font-weight: bold;
+  color: #666;
+  margin-top: 2px;
+}
+
+.hijau {
+  color: #176b38;
+}
+
+.orange {
+  color: #d97706;
+}
+
+.volume {
+  border-top: 1px solid #ddd;
+  margin-top: 7px;
+  padding-top: 7px;
+  text-align: center;
   font-size: 13px;
-
-  line-height: 1.5;
-
+  font-weight: bold;
+  color: #176b38;
 }
 
 /* =====================================================
@@ -270,47 +130,25 @@ body {
 ===================================================== */
 
 .toolbar {
-
   width: 100%;
-
   max-width: 600px;
-
-  margin: 0 auto 10px;
-
+  margin: 0 auto 8px;
   display: flex;
-
-  gap: 8px;
-
+  gap: 7px;
 }
 
 .toolbar button {
-
   flex: 1;
-
-  padding: 12px 8px;
-
   border: none;
-
-  border-radius: 9px;
-
-  font-weight: bold;
-
+  border-radius: 8px;
+  padding: 10px;
   color: white;
-
-  cursor: pointer;
-
+  font-size: 13px;
+  font-weight: bold;
 }
 
-.btnRefresh {
-
+.refresh {
   background: #1976d2;
-
-}
-
-.btnSemua {
-
-  background: #555;
-
 }
 
 /* =====================================================
@@ -318,21 +156,13 @@ body {
 ===================================================== */
 
 #status {
-
   width: 100%;
-
   max-width: 600px;
-
-  margin: 0 auto 10px;
-
+  margin: 0 auto 8px;
   text-align: center;
-
-  font-size: 14px;
-
+  font-size: 12px;
   font-weight: bold;
-
-  color: #555;
-
+  color: #666;
 }
 
 /* =====================================================
@@ -340,13 +170,9 @@ body {
 ===================================================== */
 
 #daftar {
-
   width: 100%;
-
   max-width: 600px;
-
   margin: auto;
-
 }
 
 /* =====================================================
@@ -354,62 +180,26 @@ body {
 ===================================================== */
 
 .item {
-
   background: white;
-
-  border-radius: 12px;
-
-  margin-bottom: 9px;
-
-  padding: 11px;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-
+  border-radius: 8px;
+  margin-bottom: 6px;
+  padding: 7px 8px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.07);
 }
 
 .itemSisa {
-
-  border-left: 5px solid #d97706;
-
-  background: #fffaf0;
-
+  background: #fff8e8;
+  border-left: 4px solid #d97706;
 }
 
 /* =====================================================
-   BARIS ATAS
+   BARIS UTAMA
 ===================================================== */
 
-.itemTop {
-
+.barisUtama {
   display: flex;
-
   align-items: center;
-
-  justify-content: space-between;
-
-  gap: 8px;
-
-}
-
-.register {
-
-  font-size: 19px;
-
-  font-weight: 900;
-
-}
-
-.registerDiolah {
-
-  color: #16833a;
-
-}
-
-.registerSisa {
-
-  color: #d97706;
-
+  gap: 7px;
 }
 
 /* =====================================================
@@ -417,205 +207,150 @@ body {
 ===================================================== */
 
 .btnSisa {
-
+  flex: 0 0 55px;
+  height: 30px;
+  padding: 0 5px;
   border: none;
-
+  border-radius: 6px;
   background: #d97706;
-
   color: white;
-
-  padding: 9px 12px;
-
-  border-radius: 7px;
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
-  flex-shrink: 0;
-
-}
-
-.btnBatalSisa {
-
-  background: #555;
-
+  font-size: 10px;
+  font-weight: 900;
 }
 
 .btnSisa:active {
+  transform: scale(0.94);
+}
 
-  transform: scale(0.95);
-
+.btnBatal {
+  background: #555;
 }
 
 /* =====================================================
-   DATA
+   REGISTER
 ===================================================== */
 
-.dataGrid {
+.register {
+  flex: 0 0 auto;
+  min-width: 80px;
+  font-size: 17px;
+  font-weight: 900;
+}
 
-  display: grid;
+.registerOlah {
+  color: #176b38;
+}
 
-  grid-template-columns:
-    repeat(3, 1fr);
+.registerSisa {
+  color: #d97706;
+}
 
+/* =====================================================
+   DATA RINGKAS
+===================================================== */
+
+.dataRingkas {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
   gap: 6px;
 
-  margin-top: 10px;
-
+  overflow: hidden;
 }
 
-.dataBox {
-
-  background: #f5f5f5;
-
-  border-radius: 7px;
-
-  padding: 6px;
-
-}
-
-.dataLabel {
-
-  font-size: 10px;
-
-  color: #777;
-
+.data {
+  font-size: 13px;
   font-weight: bold;
-
+  white-space: nowrap;
 }
 
-.dataValue {
-
-  margin-top: 2px;
-
-  font-size: 14px;
-
-  font-weight: bold;
-
+.pemisah {
+  color: #aaa;
 }
 
 /* =====================================================
-   STATUS LABEL
+   STATUS KECIL
 ===================================================== */
 
-.statusLabel {
-
-  margin-top: 9px;
-
-  font-size: 12px;
-
+.statusKecil {
+  margin-top: 3px;
+  margin-left: 62px;
+  font-size: 9px;
   font-weight: bold;
-
 }
 
 .statusOlah {
-
   color: #16833a;
-
 }
 
 .statusSisa {
-
   color: #d97706;
-
 }
 
 /* =====================================================
-   KOSONG
+   LOADING / KOSONG
 ===================================================== */
 
 .kosong {
-
   background: white;
-
-  border-radius: 12px;
-
-  padding: 25px 15px;
-
+  border-radius: 10px;
+  padding: 25px 10px;
   text-align: center;
-
   color: #777;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-
+  font-size: 13px;
+  font-weight: bold;
 }
 
 /* =====================================================
    HP KECIL
 ===================================================== */
 
-@media(max-width:380px) {
+@media(max-width:400px) {
 
   body {
-
-    padding: 8px;
-
+    padding: 7px;
   }
 
   .logo {
-
-    width: 65px;
-
-    height: 58px;
-
+    width: 58px;
+    height: 50px;
   }
 
   .judul {
-
     font-size: 18px;
-
   }
 
   .subjudul {
-
-    font-size: 13px;
-
+    font-size: 12px;
   }
 
-  .summaryAngka {
-
-    font-size: 23px;
-
-  }
-
-  .summaryTeks {
-
-    font-size: 10px;
-
+  .ringkasAngka {
+    font-size: 20px;
   }
 
   .register {
-
-    font-size: 17px;
-
+    min-width: 74px;
+    font-size: 15px;
   }
 
-  .dataGrid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
+  .btnSisa {
+    flex-basis: 52px;
+    font-size: 9px;
   }
 
-}
+  .dataRingkas {
+    gap: 4px;
+  }
 
-/* =====================================================
-   LOADING
-===================================================== */
+  .data {
+    font-size: 11px;
+  }
 
-.loading {
-
-  text-align: center;
-
-  padding: 25px;
-
-  color: #666;
-
-  font-weight: bold;
+  .statusKecil {
+    margin-left: 58px;
+  }
 
 }
 
@@ -633,7 +368,7 @@ body {
 
   <div class="headerIsi">
 
-```
+
 <img
   class="logo"
   src="logo-perhutani.jpg"
@@ -651,7 +386,7 @@ body {
   </div>
 
 </div>
-```
+
 
   </div>
 
@@ -661,125 +396,85 @@ body {
      RINGKASAN
 =================================================== -->
 
-<div class="summary">
+<div class="ringkasan">
 
-  <div class="summaryBox totalBox">
+  <div class="ringkasBaris">
 
-```
-<div
-  id="totalBatang"
-  class="summaryAngka"
->
-  0
-</div>
 
-<div class="summaryTeks">
-  KAYU MASUK
-</div>
-```
+<div class="ringkasItem">
 
+  <div
+    id="jumlahMasuk"
+    class="ringkasAngka hijau"
+  >
+    0
   </div>
 
-  <div class="summaryBox olahanBox">
-
-```
-<div
-  id="totalOlah"
-  class="summaryAngka"
->
-  0
-</div>
-
-<div class="summaryTeks">
-  DIOLAH
-</div>
-```
-
-  </div>
-
-  <div class="summaryBox sisaBox">
-
-```
-<div
-  id="totalSisa"
-  class="summaryAngka"
->
-  0
-</div>
-
-<div class="summaryTeks">
-  SISA
-</div>
-```
-
+  <div class="ringkasLabel">
+    KAYU MASUK
   </div>
 
 </div>
 
-<!-- ===================================================
-     VOLUME
-=================================================== -->
 
-<div class="volumeCard">
+<div class="ringkasItem">
 
-  <div class="volumeJudul">
-    VOLUME KAYU YANG DIOLAH
+  <div
+    id="jumlahOlah"
+    class="ringkasAngka hijau"
+  >
+    0
+  </div>
+
+  <div class="ringkasLabel">
+    DIOLAH
+  </div>
+
+</div>
+
+
+<div class="ringkasItem">
+
+  <div
+    id="jumlahSisa"
+    class="ringkasAngka orange"
+  >
+    0
+  </div>
+
+  <div class="ringkasLabel">
+    SISA
+  </div>
+
+</div>
+
+
   </div>
 
   <div
     id="volumeOlah"
-    class="volumeAngka"
+    class="volume"
   >
-    0,000 M³
+    VOLUME DIOLAH: 0,000 M³
   </div>
 
 </div>
 
 <!-- ===================================================
-     INFO
-=================================================== -->
-
-<div class="info">
-
-<b>📌 CARA PENGGUNAAN</b><br>
-
-Semua kayu yang masuk otomatis dianggap <b>DIOLAH</b>.
-
-Jika ada kayu yang belum diolah,
-cukup tekan tombol <b>SISA</b>.
-
-Kayu yang ditandai SISA akan tetap tercatat
-sampai dibatalkan.
-
-</div>
-
-<!-- ===================================================
-     TOOLBAR
+     TOMBOL
 =================================================== -->
 
 <div class="toolbar">
 
 <button
-class="btnRefresh"
+class="refresh"
 onclick="muatData()"
 
 >
 
-```
+
 🔄 REFRESH DATA
-```
 
-  </button>
-
-<button
-class="btnSemua"
-onclick="tampilkanSemua()"
-
->
-
-```
-📋 SEMUA DATA
-```
 
   </button>
 
@@ -799,7 +494,7 @@ onclick="tampilkanSemua()"
 
 <div id="daftar">
 
-  <div class="loading">
+  <div class="kosong">
     ⏳ Memuat data...
   </div>
 
@@ -839,6 +534,7 @@ function requestJSONP(
       .toString(36)
       .substring(2,8);
 
+
   window[callbackName] =
     function(hasil) {
 
@@ -852,9 +548,7 @@ function requestJSONP(
         );
 
       if (script) {
-
         script.remove();
-
       }
 
       callback(
@@ -869,8 +563,10 @@ function requestJSONP(
       "script"
     );
 
+
   script.id =
     callbackName;
+
 
   let url =
     API_URL + "?";
@@ -934,7 +630,7 @@ function requestJSONP(
 
 
 /* =====================================================
-   LOAD DATA
+   MUAT DATA
 ===================================================== */
 
 function muatData() {
@@ -951,12 +647,12 @@ function muatData() {
 
 
   status.innerHTML =
-    "⏳ Mengambil data Google Sheets...";
+    "⏳ Mengambil data...";
 
 
   daftar.innerHTML =
     `
-      <div class="loading">
+      <div class="kosong">
         ⏳ Memuat data...
       </div>
     `;
@@ -1009,7 +705,7 @@ function muatData() {
         [];
 
 
-      tampilkanSemua();
+      tampilkanData();
 
     }
 
@@ -1019,15 +715,16 @@ function muatData() {
 
 
 /* =====================================================
-   TAMPIL SEMUA
+   TAMPIL DATA
 ===================================================== */
 
-function tampilkanSemua() {
+function tampilkanData() {
 
   const daftar =
     document.getElementById(
       "daftar"
     );
+
 
   daftar.innerHTML =
     "";
@@ -1070,24 +767,20 @@ function tampilkanSemua() {
   );
 
 
-  const total =
+  document.getElementById(
+    "jumlahMasuk"
+  ).innerHTML =
     semuaData.length;
 
 
   document.getElementById(
-    "totalBatang"
-  ).innerHTML =
-    total;
-
-
-  document.getElementById(
-    "totalOlah"
+    "jumlahOlah"
   ).innerHTML =
     jumlahOlah;
 
 
   document.getElementById(
-    "totalSisa"
+    "jumlahSisa"
   ).innerHTML =
     jumlahSisa;
 
@@ -1095,20 +788,17 @@ function tampilkanSemua() {
   document.getElementById(
     "volumeOlah"
   ).innerHTML =
+    "VOLUME DIOLAH: " +
     formatVolume(
       volumeOlah
     ) +
     " M³";
 
 
-  status.innerHTML =
-    "📊 " +
-    total +
-    " kayu masuk • " +
-    jumlahOlah +
-    " diolah • " +
-    jumlahSisa +
-    " sisa";
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "📊 Data diperbarui";
 
 
   if (
@@ -1118,7 +808,7 @@ function tampilkanSemua() {
     daftar.innerHTML =
       `
         <div class="kosong">
-          Tidak ada data kayu masuk.
+          Belum ada kayu masuk.
         </div>
       `;
 
@@ -1133,7 +823,7 @@ function tampilkanSemua() {
     .forEach(
       function(item) {
 
-        tambahItem(
+        buatItem(
           item
         );
 
@@ -1144,10 +834,10 @@ function tampilkanSemua() {
 
 
 /* =====================================================
-   TAMBAH ITEM
+   BUAT ITEM
 ===================================================== */
 
-function tambahItem(
+function buatItem(
   item
 ) {
 
@@ -1169,14 +859,11 @@ function tambahItem(
 
 
   div.className =
-    "item" +
-    (
-      sisa
-      ?
-      " itemSisa"
-      :
-      ""
-    );
+    sisa
+    ?
+    "item itemSisa"
+    :
+    "item";
 
 
   const register =
@@ -1223,36 +910,13 @@ function tambahItem(
 
   div.innerHTML = `
 
-    <div class="itemTop">
-
-      <div
-        class="register ${
-          sisa
-          ?
-          "registerSisa"
-          :
-          "registerDiolah"
-        }"
-      >
-
-        ${
-          sisa
-          ?
-          "🟠 "
-          :
-          "🟢 "
-        }
-
-        ${register}
-
-      </div>
-
+    <div class="barisUtama">
 
       <button
         class="btnSisa ${
           sisa
           ?
-          "btnBatalSisa"
+          "btnBatal"
           :
           ""
         }"
@@ -1274,112 +938,86 @@ function tambahItem(
         ${
           sisa
           ?
-          "↩ BATAL SISA"
+          "BATAL"
           :
           "SISA"
         }
 
       </button>
 
-    </div>
+
+      <div
+        class="register ${
+          sisa
+          ?
+          "registerSisa"
+          :
+          "registerOlah"
+        }"
+      >
+
+        ${register}
+
+      </div>
 
 
-    <div class="dataGrid">
+      <div class="dataRingkas">
 
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          PANJANG
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${panjang}
-        </div>
+        </span>
 
-      </div>
+        <span class="pemisah">×</span>
 
-
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          DIAMETER
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${diameter}
-        </div>
+        </span>
 
-      </div>
+        <span class="pemisah">|</span>
 
-
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          TPK
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${tpk}
-        </div>
+        </span>
 
-      </div>
+        <span class="pemisah">|</span>
 
-
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          TUMPUK
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${tumpuk}
-        </div>
+        </span>
 
-      </div>
+        <span class="pemisah">|</span>
 
-
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          MUTU
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${mutu}
-        </div>
+        </span>
 
-      </div>
+        <span class="pemisah">|</span>
 
-
-      <div class="dataBox">
-
-        <div class="dataLabel">
-          M³
-        </div>
-
-        <div class="dataValue">
+        <span class="data">
           ${m3}
-        </div>
+        </span>
 
       </div>
 
     </div>
 
 
-    <div class="statusLabel ${
-      sisa
-      ?
-      "statusSisa"
-      :
-      "statusOlah"
-    }">
+    <div
+      class="statusKecil ${
+        sisa
+        ?
+        "statusSisa"
+        :
+        "statusOlah"
+      }"
+    >
 
       ${
         sisa
         ?
-        "🟠 STATUS: SISA"
+        "🟠 SISA"
         :
-        "🟢 STATUS: OTOMATIS DIOLAH"
+        "🟢 OTOMATIS DIOLAH"
       }
 
     </div>
@@ -1404,7 +1042,7 @@ function tandaiSisa(
 
   const yakin =
     confirm(
-      "Tandai register " +
+      "Tandai " +
       register +
       " sebagai SISA?"
     );
@@ -1416,7 +1054,7 @@ function tandaiSisa(
   document.getElementById(
     "status"
   ).innerHTML =
-    "⏳ Menyimpan status SISA...";
+    "⏳ Menyimpan SISA...";
 
 
   requestJSONP(
@@ -1441,10 +1079,10 @@ function tandaiSisa(
 
         const item =
           semuaData.find(
-            function(data) {
+            function(x) {
 
               return (
-                data.register ===
+                x.register ===
                 register
               );
 
@@ -1460,7 +1098,7 @@ function tandaiSisa(
         }
 
 
-        tampilkanSemua();
+        tampilkanData();
 
       }
 
@@ -1475,12 +1113,6 @@ function tandaiSisa(
           "Gagal menyimpan SISA."
         );
 
-
-        document.getElementById(
-          "status"
-        ).innerHTML =
-          "❌ Gagal menyimpan.";
-
       }
 
     }
@@ -1491,7 +1123,7 @@ function tandaiSisa(
 
 
 /* =====================================================
-   BATAL SISA
+   BATALKAN SISA
 ===================================================== */
 
 function batalSisa(
@@ -1500,10 +1132,9 @@ function batalSisa(
 
   const yakin =
     confirm(
-      "Batalkan status SISA untuk " +
+      "Batalkan SISA " +
       register +
-      "?\n\n" +
-      "Register akan kembali dianggap DIOLAH."
+      "?"
     );
 
 
@@ -1538,10 +1169,10 @@ function batalSisa(
 
         const item =
           semuaData.find(
-            function(data) {
+            function(x) {
 
               return (
-                data.register ===
+                x.register ===
                 register
               );
 
@@ -1557,7 +1188,7 @@ function batalSisa(
         }
 
 
-        tampilkanSemua();
+        tampilkanData();
 
       }
 
@@ -1589,13 +1220,9 @@ function formatVolume(
   angka
 ) {
 
-  const nilai =
-    Number(
-      angka || 0
-    );
-
-
-  return nilai.toLocaleString(
+  return Number(
+    angka || 0
+  ).toLocaleString(
     "id-ID",
     {
       minimumFractionDigits: 3,
@@ -1673,7 +1300,7 @@ function escapeJS(
 
 
 /* =====================================================
-   LOAD AWAL
+   MULAI
 ===================================================== */
 
 muatData();
