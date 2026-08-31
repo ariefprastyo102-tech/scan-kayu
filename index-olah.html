@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -7,9 +7,8 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
 >
 
 <title>Data Olah - IK Saradan</title>
@@ -437,7 +436,9 @@ body {
 
 </head>
 
+
 <body>
+
 
 <!-- ===================================================
      HEADER
@@ -447,29 +448,28 @@ body {
 
   <div class="headerIsi">
 
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
 
-<img
-  class="logo"
-  src="logo-perhutani.jpg"
-  alt="Logo Perhutani"
->
+    <div class="judulBox">
 
-<div class="judulBox">
+      <div class="judul">
+        DATA OLAH
+      </div>
 
-  <div class="judul">
-    DATA OLAH
-  </div>
+      <div class="subjudul">
+        IK SARADAN
+      </div>
 
-  <div class="subjudul">
-    IK SARADAN
-  </div>
-
-</div>
-
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- ===================================================
      RINGKASAN
@@ -479,40 +479,39 @@ body {
 
   <div class="ringkasBaris">
 
+    <div class="ringkasItem">
 
-<div class="ringkasItem">
+      <div
+        id="jumlahHariIni"
+        class="ringkasAngka hijau"
+      >
+        0
+      </div>
 
-  <div
-    id="jumlahHariIni"
-    class="ringkasAngka hijau"
-  >
-    0
-  </div>
+      <div class="ringkasLabel">
+        KAYU MASUK HARI INI
+      </div>
 
-  <div class="ringkasLabel">
-    KAYU MASUK HARI INI
-  </div>
-
-</div>
+    </div>
 
 
-<div class="ringkasItem">
+    <div class="ringkasItem">
 
-  <div
-    id="jumlahSisa"
-    class="ringkasAngka orange"
-  >
-    0
-  </div>
+      <div
+        id="jumlahSisa"
+        class="ringkasAngka orange"
+      >
+        0
+      </div>
 
-  <div class="ringkasLabel">
-    SISA
-  </div>
+      <div class="ringkasLabel">
+        SISA
+      </div>
 
-</div>
-
+    </div>
 
   </div>
+
 
   <div
     id="volumeOlah"
@@ -523,19 +522,19 @@ body {
 
 </div>
 
+
 <!-- ===================================================
      SEARCH
 =================================================== -->
 
 <div class="searchBox">
 
-<input
-id="searchRegister"
-type="search"
-placeholder="🔎 Cari nomor register..."
-oninput="filterData()"
-
->
+  <input
+    id="searchRegister"
+    type="search"
+    placeholder="🔎 Cari nomor register..."
+    oninput="filterData()"
+  >
 
   <span class="searchIcon">
     🔎
@@ -543,37 +542,30 @@ oninput="filterData()"
 
 </div>
 
+
 <!-- ===================================================
      TOOLBAR
 =================================================== -->
 
 <div class="toolbar">
 
-<button
-class="refresh"
-onclick="muatData()"
-
->
-
-
-🔄 REFRESH
-
-
+  <button
+    class="refresh"
+    onclick="muatData()"
+  >
+    🔄 REFRESH
   </button>
 
-<button
-class="selesai"
-onclick="selesaiOlah()"
 
->
-
-
-✅ SELESAI
-
-
+  <button
+    class="selesai"
+    onclick="selesaiOlah()"
+  >
+    ✅ SELESAI
   </button>
 
 </div>
+
 
 <!-- ===================================================
      STATUS
@@ -583,6 +575,7 @@ onclick="selesaiOlah()"
   Memuat data...
 </div>
 
+
 <!-- ===================================================
      DATA HARI INI
 =================================================== -->
@@ -591,32 +584,30 @@ onclick="selesaiOlah()"
 
   <div class="judulBagian">
 
+    <div class="judulBagianAtas judulHariIni">
+      🟢 DATA MASUK HARI INI
+    </div>
 
-<div class="judulBagianAtas judulHariIni">
-  🟢 DATA MASUK HARI INI
-</div>
-
-<div
-  id="detailHariIni"
-  class="detailBagian"
->
-  0 batang • 0,000 M³
-</div>
-
+    <div
+      id="detailHariIni"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
 
   </div>
+
 
   <div id="daftarHariIni">
 
-
-<div class="kosong">
-  ⏳ Memuat data...
-</div>
-
+    <div class="kosong">
+      ⏳ Memuat data...
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- ===================================================
      DATA SISA
@@ -626,32 +617,30 @@ onclick="selesaiOlah()"
 
   <div class="judulBagian">
 
+    <div class="judulBagianAtas judulSisa">
+      🟠 SISA SEBELUMNYA
+    </div>
 
-<div class="judulBagianAtas judulSisa">
-  🟠 SISA KEMARIN
-</div>
-
-<div
-  id="detailSisa"
-  class="detailBagian"
->
-  0 batang • 0,000 M³
-</div>
-
+    <div
+      id="detailSisa"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
 
   </div>
+
 
   <div id="daftarSisa">
 
-
-<div class="kosong">
-  Belum ada sisa.
-</div>
-
+    <div class="kosong">
+      Belum ada sisa.
+    </div>
 
   </div>
 
 </div>
+
 
 <script>
 
@@ -670,7 +659,9 @@ const API_URL =
 
 let semuaData = [];
 
-let registerSisaDipilih = new Set();
+let sedangMemuat = false;
+
+let sedangMenyimpan = false;
 
 
 /* =====================================================
@@ -691,26 +682,39 @@ function requestJSONP(
       .substring(2,8);
 
 
+  let selesai = false;
+
+
+  function bersihkan() {
+
+    if (selesai) return;
+
+    selesai = true;
+
+    delete window[
+      callbackName
+    ];
+
+    const script =
+      document.getElementById(
+        callbackName
+      );
+
+    if (script) {
+      script.remove();
+    }
+
+  }
+
+
   window[callbackName] =
     function(hasil) {
 
-      delete window[
-        callbackName
-      ];
+      bersihkan();
 
-
-      const script =
-        document.getElementById(
-          callbackName
-        );
-
-
-      if (script) {
-        script.remove();
-      }
-
-
-      callback(hasil);
+      callback(
+        hasil
+      );
 
     };
 
@@ -760,13 +764,7 @@ function requestJSONP(
   script.onerror =
     function() {
 
-      delete window[
-        callbackName
-      ];
-
-
-      script.remove();
-
+      bersihkan();
 
       callback({
 
@@ -785,188 +783,35 @@ function requestJSONP(
     script
   );
 
-}
 
+  /*
+   * Pengaman supaya tulisan
+   * tidak berhenti selamanya
+   * kalau server tidak menjawab.
+   */
 
-/* =====================================================
-   TANGGAL HARI INI
-===================================================== */
+  setTimeout(
+    function() {
 
-function tanggalHariIni() {
+      if (!selesai) {
 
-  const sekarang =
-    new Date();
+        bersihkan();
 
+        callback({
 
-  const hari =
-    String(
-      sekarang.getDate()
-    ).padStart(
-      2,
-      "0"
-    );
+          status:
+            "error",
 
+          message:
+            "Server tidak memberikan jawaban."
 
-  const bulan =
-    String(
-      sekarang.getMonth() + 1
-    ).padStart(
-      2,
-      "0"
-    );
+        });
 
+      }
 
-  const tahun =
-    String(
-      sekarang.getFullYear()
-    );
-
-
-  return (
-    hari +
-    "-" +
-    bulan +
-    "-" +
-    tahun
+    },
+    20000
   );
-
-}
-
-
-/* =====================================================
-   NORMALISASI TANGGAL
-===================================================== */
-
-function normalisasiTanggal(
-  nilai
-) {
-
-  if (
-    nilai === null ||
-    nilai === undefined
-  ) {
-
-    return "";
-
-  }
-
-
-  let teks =
-    String(
-      nilai
-    )
-    .trim();
-
-
-  if (!teks) {
-    return "";
-  }
-
-
-  /*
-   * Format:
-   * DD-MM-YYYY
-   * DD/MM/YYYY
-   */
-
-  let cocok =
-    teks.match(
-      /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/
-    );
-
-
-  if (cocok) {
-
-    return (
-      String(
-        cocok[1]
-      ).padStart(2,"0") +
-      "-" +
-      String(
-        cocok[2]
-      ).padStart(2,"0") +
-      "-" +
-      cocok[3]
-    );
-
-  }
-
-
-  /*
-   * Format timestamp / tanggal lain.
-   */
-
-  const tanggal =
-    new Date(
-      teks
-    );
-
-
-  if (
-    !isNaN(
-      tanggal.getTime()
-    )
-  ) {
-
-    return (
-      String(
-        tanggal.getDate()
-      ).padStart(2,"0") +
-      "-" +
-      String(
-        tanggal.getMonth() + 1
-      ).padStart(2,"0") +
-      "-" +
-      String(
-        tanggal.getFullYear()
-      )
-    );
-
-  }
-
-
-  return teks;
-
-}
-
-
-/* =====================================================
-   TENTUKAN DATA HARI INI / SISA
-===================================================== */
-
-function tentukanSumber(
-  item
-) {
-
-  const hariIni =
-    tanggalHariIni();
-
-
-  const tanggalScan =
-    normalisasiTanggal(
-      item.tanggalScan
-    );
-
-
-  if (
-    tanggalScan ===
-    hariIni
-  ) {
-
-    return "HARI_INI";
-
-  }
-
-
-  /*
-   * Semua data SCAN yang tanggalnya
-   * bukan hari ini dianggap SISA.
-   *
-   * Ini yang membuat SISA kemarin
-   * tetap muncul besok.
-   */
-
-  return "SISA";
 
 }
 
@@ -976,6 +821,14 @@ function tentukanSumber(
 ===================================================== */
 
 function muatData() {
+
+  if (sedangMemuat) {
+    return;
+  }
+
+
+  sedangMemuat = true;
+
 
   document.getElementById(
     "status"
@@ -992,6 +845,9 @@ function muatData() {
 
     function(hasil) {
 
+      sedangMemuat = false;
+
+
       if (
         !hasil ||
         hasil.status !==
@@ -1004,10 +860,28 @@ function muatData() {
           "❌ Gagal mengambil data";
 
 
+        /*
+         * Jangan hapus data yang
+         * sebelumnya sudah tampil.
+         */
+
         return;
 
       }
 
+
+      /*
+       * INI BAGIAN PENTING.
+       *
+       * Apps Script yang lu kirim
+       * mengembalikan:
+       *
+       * hasil.data
+       *
+       * BUKAN:
+       * hasil.hariIni
+       * hasil.sisa
+       */
 
       semuaData =
         Array.isArray(
@@ -1019,86 +893,254 @@ function muatData() {
         [];
 
 
-      /*
-       * Tentukan sumber berdasarkan
-       * tanggal scan.
-       */
-
-      semuaData.forEach(
-        function(item) {
-
-          item.sumber =
-            tentukanSumber(
-              item
-            );
-
-        }
-      );
-
-
-      /*
-       * Jangan menghilangkan pilihan
-       * yang masih ada di data server.
-       */
-
-      const registerYangAda =
-        new Set(
-          semuaData.map(
-            function(item) {
-              return String(
-                item.register || ""
-              ).trim();
-            }
-          )
-        );
-
-
-      registerSisaDipilih =
-        new Set(
-          Array.from(
-            registerSisaDipilih
-          ).filter(
-            function(register) {
-
-              return registerYangAda.has(
-                register
-              );
-
-            }
-          )
-        );
-
-
-      /*
-       * Semua SISA lama otomatis dianggap
-       * sebagai SISA.
-       */
-
-      semuaData.forEach(
-        function(item) {
-
-          if (
-            item.sumber ===
-            "SISA"
-          ) {
-
-            registerSisaDipilih.add(
-              String(
-                item.register || ""
-              ).trim()
-            );
-
-          }
-
-        }
-      );
-
-
       tampilkanData();
+
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "📊 Data diperbarui";
 
     }
 
   );
+
+}
+
+
+/* =====================================================
+   TANGGAL HARI INI
+===================================================== */
+
+function tanggalSekarang() {
+
+  const sekarang =
+    new Date();
+
+
+  const d =
+    String(
+      sekarang.getDate()
+    )
+    .padStart(
+      2,
+      "0"
+    );
+
+
+  const m =
+    String(
+      sekarang.getMonth() + 1
+    )
+    .padStart(
+      2,
+      "0"
+    );
+
+
+  const y =
+    sekarang.getFullYear();
+
+
+  return (
+    d +
+    "-" +
+    m +
+    "-" +
+    y
+  );
+
+}
+
+
+/* =====================================================
+   CEK APAKAH TANGGAL DATA HARI INI
+===================================================== */
+
+function adalahHariIni(
+  nilai
+) {
+
+  if (
+    nilai === null ||
+    nilai === undefined
+  ) {
+
+    return false;
+
+  }
+
+
+  let teks =
+    String(
+      nilai
+    )
+    .trim();
+
+
+  if (!teks) {
+    return false;
+  }
+
+
+  /*
+   * Buang bagian jam jika ada.
+   */
+
+  teks =
+    teks
+      .replace(
+        /T/g,
+        " "
+      )
+      .split(" ")[0];
+
+
+  const hariIni =
+    tanggalSekarang();
+
+
+  /*
+   * dd-MM-yyyy
+   */
+
+  if (
+    teks ===
+    hariIni
+  ) {
+
+    return true;
+
+  }
+
+
+  /*
+   * dd/MM/yyyy
+   */
+
+  const bagianSlash =
+    teks.split("/");
+
+
+  if (
+    bagianSlash.length === 3
+  ) {
+
+    let d =
+      bagianSlash[0];
+
+    let m =
+      bagianSlash[1];
+
+    let y =
+      bagianSlash[2];
+
+
+    if (
+      y.length === 4 &&
+      d.length <= 2 &&
+      m.length <= 2
+    ) {
+
+      const normal =
+        String(d).padStart(2,"0") +
+        "-" +
+        String(m).padStart(2,"0") +
+        "-" +
+        y;
+
+
+      if (
+        normal ===
+        hariIni
+      ) {
+
+        return true;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * yyyy-MM-dd
+   */
+
+  const bagianStrip =
+    teks.split("-");
+
+
+  if (
+    bagianStrip.length === 3
+  ) {
+
+    if (
+      bagianStrip[0].length === 4
+    ) {
+
+      const normal =
+        String(
+          bagianStrip[2]
+        ).padStart(2,"0") +
+        "-" +
+        String(
+          bagianStrip[1]
+        ).padStart(2,"0") +
+        "-" +
+        bagianStrip[0];
+
+
+      if (
+        normal ===
+        hariIni
+      ) {
+
+        return true;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * Coba Date jika formatnya
+   * berupa format tanggal JS.
+   */
+
+  const tanggal =
+    new Date(
+      nilai
+    );
+
+
+  if (
+    !isNaN(
+      tanggal.getTime()
+    )
+  ) {
+
+    return (
+      tanggal.getFullYear()
+      ===
+      new Date().getFullYear()
+      &&
+      tanggal.getMonth()
+      ===
+      new Date().getMonth()
+      &&
+      tanggal.getDate()
+      ===
+      new Date().getDate()
+    );
+
+  }
+
+
+  return false;
 
 }
 
@@ -1109,13 +1151,23 @@ function muatData() {
 
 function tampilkanData() {
 
+  /*
+   * DATA DARI APPS SCRIPT
+   * SEMUANYA BERASAL DARI SCAN
+   *
+   * Yang tanggal scan-nya hari ini
+   * = DATA MASUK HARI INI
+   *
+   * Yang tanggal scan-nya bukan hari ini
+   * = SISA SEBELUMNYA
+   */
+
   const hariIni =
     semuaData.filter(
       function(item) {
 
-        return (
-          item.sumber ===
-          "HARI_INI"
+        return adalahHariIni(
+          item.tanggalScan
         );
 
       }
@@ -1126,14 +1178,17 @@ function tampilkanData() {
     semuaData.filter(
       function(item) {
 
-        return (
-          item.sumber ===
-          "SISA"
+        return !adalahHariIni(
+          item.tanggalScan
         );
 
       }
     );
 
+
+  /* ===================================================
+     JUMLAH
+  =================================================== */
 
   document.getElementById(
     "jumlahHariIni"
@@ -1146,6 +1201,10 @@ function tampilkanData() {
   ).innerHTML =
     sisa.length;
 
+
+  /* ===================================================
+     VOLUME HARI INI
+  =================================================== */
 
   let volumeHariIni =
     0;
@@ -1162,6 +1221,10 @@ function tampilkanData() {
     }
   );
 
+
+  /* ===================================================
+     VOLUME SISA
+  =================================================== */
 
   let volumeSisa =
     0;
@@ -1202,52 +1265,22 @@ function tampilkanData() {
 
 
   /*
-   * Volume yang akan diolah =
-   * semua data yang TIDAK ditandai SISA.
+   * Volume DIOLAH sementara:
+   *
+   * Semua data hari ini dianggap
+   * akan diolah.
+   *
+   * Setelah checkbox dicentang,
+   * volume tersebut dikurangi.
    */
 
-  let totalAkanDiolah =
-    0;
-
-
-  semuaData.forEach(
-    function(item) {
-
-      const register =
-        String(
-          item.register || ""
-        ).trim();
-
-
-      if (
-        !registerSisaDipilih.has(
-          register
-        )
-      ) {
-
-        totalAkanDiolah +=
-          Number(
-            item.volumeAngka || 0
-          );
-
-      }
-
-    }
+  hitungVolumeAkanDiolah(
+    hariIni,
+    sisa
   );
 
 
-  document.getElementById(
-    "volumeOlah"
-  ).innerHTML =
-    "TOTAL VOLUME DIOLAH: " +
-    formatVolume(
-      totalAkanDiolah
-    ) +
-    " M³";
-
-
   filterData();
-
 
 }
 
@@ -1276,13 +1309,20 @@ function filterData() {
     semuaData.filter(
       function(item) {
 
-        return (
-          item.sumber ===
-          "HARI_INI" &&
-          cocokSearch(
-            item,
-            kata
+        if (
+          !adalahHariIni(
+            item.tanggalScan
           )
+        ) {
+
+          return false;
+
+        }
+
+
+        return cocokSearch(
+          item,
+          kata
         );
 
       }
@@ -1293,13 +1333,20 @@ function filterData() {
     semuaData.filter(
       function(item) {
 
-        return (
-          item.sumber ===
-          "SISA" &&
-          cocokSearch(
-            item,
-            kata
+        if (
+          adalahHariIni(
+            item.tanggalScan
           )
+        ) {
+
+          return false;
+
+        }
+
+
+        return cocokSearch(
+          item,
+          kata
         );
 
       }
@@ -1315,6 +1362,42 @@ function filterData() {
   renderDaftar(
     sisa,
     "daftarSisa"
+  );
+
+
+  /*
+   * Setelah filter, hitung ulang
+   * volume berdasarkan semua data,
+   * bukan hanya hasil pencarian.
+   */
+
+  const semuaHariIni =
+    semuaData.filter(
+      function(item) {
+
+        return adalahHariIni(
+          item.tanggalScan
+        );
+
+      }
+    );
+
+
+  const semuaSisa =
+    semuaData.filter(
+      function(item) {
+
+        return !adalahHariIni(
+          item.tanggalScan
+        );
+
+      }
+    );
+
+
+  hitungVolumeAkanDiolah(
+    semuaHariIni,
+    semuaSisa
   );
 
 }
@@ -1346,7 +1429,7 @@ function cocokSearch(
 
 
 /* =====================================================
-   RENDER DAFTAR
+   RENDER
 ===================================================== */
 
 function renderDaftar(
@@ -1381,11 +1464,14 @@ function renderDaftar(
       </div>
       `;
 
-
     return;
 
   }
 
+
+  /*
+   * Data terbaru di atas.
+   */
 
   data
     .slice()
@@ -1413,20 +1499,9 @@ function buatItem(
   daftar
 ) {
 
-  const register =
-    String(
-      item.register || ""
-    ).trim();
-
-
-  /*
-   * SISA lama otomatis dicentang.
-   * Data hari ini mengikuti pilihan user.
-   */
-
-  const checked =
-    registerSisaDipilih.has(
-      register
+  const sisa =
+    !adalahHariIni(
+      item.tanggalScan
     );
 
 
@@ -1437,11 +1512,17 @@ function buatItem(
 
 
   div.className =
-    checked
+    sisa
     ?
     "item itemSisa"
     :
     "item";
+
+
+  const register =
+    escapeHTML(
+      item.register || ""
+    );
 
 
   const panjang =
@@ -1480,7 +1561,19 @@ function buatItem(
     );
 
 
-  div.innerHTML = `
+  /*
+   * SISA lama otomatis dicentang.
+   *
+   * Tetapi ini bukan centangan
+   * yang menentukan data server.
+   *
+   * Saat SELESAI:
+   * - dicentang = tidak dikirim
+   * - tidak dicentang = dikirim ke DATA OLAH
+   */
+
+  div.innerHTML =
+    `
 
     <div class="barisUtama">
 
@@ -1488,32 +1581,24 @@ function buatItem(
         type="checkbox"
         class="checkSisa"
         data-register="${escapeHTML(
-          register
+          item.register || ""
         )}"
-        ${
-          checked
-          ?
-          "checked"
-          :
-          ""
-        }
+        ${sisa ? "checked" : ""}
         onchange="ubahTampilanSisa(this)"
-        title="Centang jika kayu ini SISA"
+        title="Centang jika kayu ini tetap SISA"
       >
 
 
       <div
         class="register ${
-          checked
+          sisa
           ?
           "registerSisa"
           :
           "registerOlah"
         }"
       >
-        ${escapeHTML(
-          register
-        )}
+        ${register}
       </div>
 
 
@@ -1570,7 +1655,7 @@ function buatItem(
 
     <div
       class="statusKecil ${
-        checked
+        sisa
         ?
         "statusSisa"
         :
@@ -1579,16 +1664,16 @@ function buatItem(
     >
 
       ${
-        checked
+        sisa
         ?
-        "🟠 DICENTANG = SISA"
+        "🟠 DICENTANG = TETAP SISA"
         :
         "🟢 TIDAK DICENTANG = DIOLAH"
       }
 
     </div>
 
-  `;
+    `;
 
 
   daftar.appendChild(
@@ -1599,20 +1684,12 @@ function buatItem(
 
 
 /* =====================================================
-   UBAH SISA
+   UBAH TAMPILAN CHECKBOX
 ===================================================== */
 
 function ubahTampilanSisa(
   checkbox
 ) {
-
-  const register =
-    String(
-      checkbox.getAttribute(
-        "data-register"
-      ) || ""
-    ).trim();
-
 
   const item =
     checkbox.closest(
@@ -1626,7 +1703,7 @@ function ubahTampilanSisa(
     );
 
 
-  const registerEl =
+  const register =
     item.querySelector(
       ".register"
     );
@@ -1636,26 +1713,17 @@ function ubahTampilanSisa(
     checkbox.checked
   ) {
 
-    /*
-     * DICENTANG = SISA
-     */
-
-    registerSisaDipilih.add(
-      register
-    );
-
-
     item.classList.add(
       "itemSisa"
     );
 
 
-    registerEl.classList.remove(
+    register.classList.remove(
       "registerOlah"
     );
 
 
-    registerEl.classList.add(
+    register.classList.add(
       "registerSisa"
     );
 
@@ -1665,32 +1733,23 @@ function ubahTampilanSisa(
 
 
     status.innerHTML =
-      "🟠 DICENTANG = SISA";
+      "🟠 DICENTANG = TETAP SISA";
 
   }
 
   else {
-
-    /*
-     * TIDAK DICENTANG = DIOLAH
-     */
-
-    registerSisaDipilih.delete(
-      register
-    );
-
 
     item.classList.remove(
       "itemSisa"
     );
 
 
-    registerEl.classList.remove(
+    register.classList.remove(
       "registerSisa"
     );
 
 
-    registerEl.classList.add(
+    register.classList.add(
       "registerOlah"
     );
 
@@ -1706,38 +1765,131 @@ function ubahTampilanSisa(
 
 
   /*
-   * Update volume tanpa reload server.
+   * Perbarui volume langsung.
    */
+
+  hitungVolumeDariCheckbox();
+
+}
+
+
+/* =====================================================
+   VOLUME BERDASARKAN CHECKBOX
+===================================================== */
+
+function hitungVolumeDariCheckbox() {
 
   let total =
     0;
 
 
-  semuaData.forEach(
-    function(data) {
+  document
+    .querySelectorAll(
+      ".checkSisa"
+    )
+    .forEach(
+      function(checkbox) {
 
-      const nomor =
-        String(
-          data.register || ""
-        ).trim();
+        /*
+         * Checkbox dicentang =
+         * SISA
+         *
+         * Jadi tidak masuk volume olah.
+         */
+
+        if (
+          checkbox.checked
+        ) {
+
+          return;
+
+        }
 
 
-      if (
-        !registerSisaDipilih.has(
-          nomor
-        )
-      ) {
-
-        total +=
-          Number(
-            data.volumeAngka || 0
+        const register =
+          checkbox.getAttribute(
+            "data-register"
           );
 
+
+        const item =
+          semuaData.find(
+            function(data) {
+
+              return String(
+                data.register || ""
+              ) ===
+              String(
+                register || ""
+              );
+
+            }
+          );
+
+
+        if (item) {
+
+          total +=
+            Number(
+              item.volumeAngka || 0
+            );
+
+        }
+
       }
+    );
+
+
+  document.getElementById(
+    "volumeOlah"
+  ).innerHTML =
+    "TOTAL VOLUME DIOLAH: " +
+    formatVolume(
+      total
+    ) +
+    " M³";
+
+}
+
+
+/* =====================================================
+   VOLUME AWAL
+===================================================== */
+
+function hitungVolumeAkanDiolah(
+  hariIni,
+  sisa
+) {
+
+  let total =
+    0;
+
+
+  /*
+   * Semua hari ini awalnya
+   * dianggap akan diolah.
+   */
+
+  hariIni.forEach(
+    function(item) {
+
+      total +=
+        Number(
+          item.volumeAngka || 0
+        );
 
     }
   );
 
+
+  /*
+   * Sisa lama juga tetap dianggap
+   * akan diolah HANYA jika checkbox
+   * nantinya dibuka.
+   *
+   * Karena sisa lama otomatis checked,
+   * jangan masukkan dulu.
+   */
 
   document.getElementById(
     "volumeOlah"
@@ -1758,6 +1910,15 @@ function ubahTampilanSisa(
 function selesaiOlah() {
 
   if (
+    sedangMenyimpan
+  ) {
+
+    return;
+
+  }
+
+
+  if (
     semuaData.length === 0
   ) {
 
@@ -1770,6 +1931,12 @@ function selesaiOlah() {
   }
 
 
+  const semuaCheckbox =
+    document.querySelectorAll(
+      ".checkSisa"
+    );
+
+
   const daftarOlah =
     [];
 
@@ -1778,12 +1945,14 @@ function selesaiOlah() {
     [];
 
 
-  semuaData.forEach(
-    function(item) {
+  semuaCheckbox.forEach(
+    function(checkbox) {
 
       const register =
         String(
-          item.register || ""
+          checkbox.getAttribute(
+            "data-register"
+          ) || ""
         ).trim();
 
 
@@ -1793,13 +1962,16 @@ function selesaiOlah() {
 
 
       /*
-       * DICENTANG = SISA
+       * DICENTANG =
+       * SISA
+       *
+       * JANGAN dikirim ke server.
+       *
+       * Data tetap berada di SCAN.
        */
 
       if (
-        registerSisaDipilih.has(
-          register
-        )
+        checkbox.checked
       ) {
 
         daftarSisa.push(
@@ -1808,8 +1980,10 @@ function selesaiOlah() {
 
       }
 
+
       /*
-       * TIDAK DICENTANG = DIOLAH
+       * TIDAK DICENTANG =
+       * DIOLAH
        */
 
       else {
@@ -1824,13 +1998,20 @@ function selesaiOlah() {
   );
 
 
+  /*
+   * Tidak ada yang diolah.
+   *
+   * Berarti semua dipertahankan
+   * sebagai SISA.
+   */
+
   if (
     daftarOlah.length === 0
   ) {
 
     alert(
-      "Tidak ada kayu yang akan diolah.\n\n" +
-      "Semua data masih ditandai sebagai SISA."
+      "Tidak ada kayu yang diolah.\n\n" +
+      "Semua data tetap menjadi SISA."
     );
 
     return;
@@ -1851,9 +2032,9 @@ function selesaiOlah() {
       daftarSisa.length +
       " batang\n\n" +
 
-      "Yang TIDAK dicentang akan masuk DATA OLAH.\n" +
+      "Yang DICENTANG SISA tidak akan dimasukkan DATA OLAH.\n" +
 
-      "Yang DICENTANG tetap berada di SCAN dan akan muncul sebagai SISA."
+      "Yang TIDAK DICENTANG akan dimasukkan DATA OLAH."
 
     );
 
@@ -1863,25 +2044,30 @@ function selesaiOlah() {
   }
 
 
+  sedangMenyimpan =
+    true;
+
+
   document.getElementById(
     "status"
   ).innerHTML =
-    "⏳ Menyimpan hasil olah...";
+    "⏳ Menyimpan data olah...";
 
 
   /*
    * PENTING:
    *
-   * GS yang lu kasih menerima:
+   * Hanya daftarOlah yang dikirim.
    *
-   * registers = "123,124,125"
+   * Jangan kirim semuaData.
    *
-   * BUKAN JSON.stringify(array).
+   * Jangan kirim daftarSisa.
    *
-   * SISA TIDAK dikirim untuk ditulis
-   * ke DATA OLAH.
+   * Karena Apps Script lu yang sekarang
+   * hanya perlu menerima register yang
+   * benar-benar DIOLAH.
    *
-   * SISA tetap berada di SCAN.
+   * Register SISA tetap berada di SCAN.
    */
 
   requestJSONP(
@@ -1898,6 +2084,10 @@ function selesaiOlah() {
 
     function(hasil) {
 
+      sedangMenyimpan =
+        false;
+
+
       if (
         !hasil ||
         hasil.status !==
@@ -1911,7 +2101,7 @@ function selesaiOlah() {
           ?
           hasil.message
           :
-          "Gagal menyimpan hasil."
+          "Gagal menyimpan hasil olah."
 
         );
 
@@ -1934,30 +2124,24 @@ function selesaiOlah() {
         daftarOlah.length +
         " batang\n" +
 
-        "🟠 Tetap SISA: " +
+        "🟠 Tetap Sisa: " +
         daftarSisa.length +
         " batang\n\n" +
 
-        "Data SISA tetap berada di SCAN."
+        "Data SISA tidak dihapus dari SCAN."
 
       );
 
 
       /*
-       * Setelah data olah masuk,
-       * ambil ulang dari server.
+       * Ambil ulang data dari server.
        *
        * Yang sudah masuk DATA OLAH
-       * akan otomatis tidak ditampilkan
-       * oleh GS.
+       * otomatis tidak tampil lagi.
        *
-       * Yang SISA tetap ada di SCAN
-       * dan besok terbaca sebagai SISA.
+       * Yang SISA masih berada di SCAN
+       * sehingga tetap tampil.
        */
-
-      registerSisaDipilih =
-        new Set();
-
 
       muatData();
 
@@ -2033,5 +2217,5 @@ muatData();
 </script>
 
 </body>
-
 </html>
+
