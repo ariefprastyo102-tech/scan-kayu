@@ -268,6 +268,7 @@ body {
 
   box-shadow:
     0 4px 14px rgba(0,0,0,0.25);
+
 }
 
 #btnHistory:active {
@@ -304,6 +305,7 @@ body {
 
   box-shadow:
     0 4px 14px rgba(0,0,0,0.15);
+
 }
 
 #jumlah {
@@ -323,6 +325,7 @@ body {
   color: #176b38;
 
   line-height: 1;
+
 }
 
 #jumlah .angkaTotal {
@@ -332,6 +335,7 @@ body {
   font-weight: 900;
 
   line-height: 1;
+
 }
 
 #jumlah .teksBatang {
@@ -339,6 +343,7 @@ body {
   font-size: 25px;
 
   font-weight: 800;
+
 }
 
 #status {
@@ -350,6 +355,7 @@ body {
   line-height: 1.5;
 
   font-size: 14px;
+
 }
 
 /* ==============================
@@ -363,6 +369,7 @@ body {
   max-width: 500px;
 
   margin: 15px auto;
+
 }
 
 .item {
@@ -377,6 +384,7 @@ body {
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
+
 }
 
 .baris {
@@ -388,6 +396,7 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .nomor {
@@ -397,6 +406,7 @@ body {
   font-weight: bold;
 
   word-break: break-all;
+
 }
 
 .detailBtn {
@@ -422,6 +432,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 .detail {
@@ -437,6 +448,7 @@ body {
   font-size: 15px;
 
   line-height: 1.7;
+
 }
 
 .success {
@@ -462,6 +474,7 @@ body {
   width: 115px;
 
   font-weight: bold;
+
 }
 
 /* ==============================
@@ -477,6 +490,7 @@ body {
   max-width: 500px;
 
   margin: 15px auto;
+
 }
 
 .historyHeader {
@@ -499,6 +513,7 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .historyJudul {
@@ -508,6 +523,7 @@ body {
   font-weight: bold;
 
   color: #176b38;
+
 }
 
 .tutupHistory {
@@ -525,6 +541,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 /* ==============================
@@ -543,6 +560,7 @@ body {
 
   box-shadow:
     0 2px 8px rgba(0,0,0,0.07);
+
 }
 
 .historyTop {
@@ -554,6 +572,7 @@ body {
   justify-content: space-between;
 
   gap: 10px;
+
 }
 
 .historyNomor {
@@ -563,6 +582,7 @@ body {
   font-weight: 900;
 
   color: #176b38;
+
 }
 
 .historyTanggal {
@@ -572,6 +592,7 @@ body {
   font-size: 14px;
 
   color: #666;
+
 }
 
 .historyJumlah {
@@ -583,6 +604,7 @@ body {
   font-weight: 900;
 
   white-space: nowrap;
+
 }
 
 .historyDetail {
@@ -594,6 +616,7 @@ body {
   padding-top: 10px;
 
   border-top: 1px solid #ddd;
+
 }
 
 .historyRegister {
@@ -605,6 +628,7 @@ body {
   font-weight: bold;
 
   word-break: break-all;
+
 }
 
 .historyRegister.success {
@@ -636,6 +660,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 .btnHapusHistory {
@@ -657,6 +682,7 @@ body {
   font-weight: bold;
 
   cursor: pointer;
+
 }
 
 /* ==============================
@@ -716,6 +742,7 @@ body {
     padding: 0 13px;
 
     font-size: 14px;
+
   }
 
 }
@@ -759,10 +786,6 @@ body {
   }
 
 }
-
-/* ==============================
-   AREA BAWAH
-============================== */
 
 body {
   padding-bottom: 80px;
@@ -848,10 +871,6 @@ body {
   🔄 SCAN BARU
 </button>
 
-<!-- ==============================
-     HISTORY FLOATING
-============================== -->
-
 <button
   id="btnHistory"
   onclick="tampilkanHistory()"
@@ -883,10 +902,6 @@ body {
   </div>
 
 </div>
-
-<!-- ==============================
-     HASIL SCAN
-============================== -->
 
 <div id="daftar"></div>
 
@@ -951,7 +966,7 @@ let jumlahBerhasil = 0;
 let dataScanTersimpan = [];
 
 /* =====================================================
-   LOAD SESI
+   LOAD DATA
 ===================================================== */
 
 function muatDataTersimpan() {
@@ -984,6 +999,11 @@ function muatDataTersimpan() {
 
   catch (e) {
 
+    console.log(
+      "Gagal membaca data:",
+      e
+    );
+
     dataScanTersimpan = [];
 
   }
@@ -998,6 +1018,10 @@ function muatDataTersimpan() {
     ).length;
 
 }
+
+/* =====================================================
+   SIMPAN DATA
+===================================================== */
 
 function simpanData() {
 
@@ -1014,11 +1038,18 @@ function simpanData() {
 
   catch (e) {
 
-    console.log(e);
+    console.log(
+      "Gagal menyimpan data:",
+      e
+    );
 
   }
 
 }
+
+/* =====================================================
+   UPDATE JUMLAH
+===================================================== */
 
 function updateJumlah() {
 
@@ -1035,6 +1066,10 @@ function updateJumlah() {
   }
 
 }
+
+/* =====================================================
+   TAMPIL DATA
+===================================================== */
 
 function tampilkanDataTersimpan() {
 
@@ -1078,6 +1113,10 @@ function tampilkanDataTersimpan() {
 
 }
 
+/* =====================================================
+   LOAD AWAL
+===================================================== */
+
 muatDataTersimpan();
 
 updateJumlah();
@@ -1105,7 +1144,7 @@ function tampilkanIndikatorHijau() {
         "none";
 
     },
-    500
+    400
   );
 
 }
@@ -1137,7 +1176,7 @@ function bunyiBerhasil() {
       "sine";
 
     oscillator.frequency.setValueAtTime(
-      1300,
+      1400,
       audio.currentTime
     );
 
@@ -1153,7 +1192,7 @@ function bunyiBerhasil() {
 
     gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audio.currentTime + 0.12
+      audio.currentTime + 0.10
     );
 
     oscillator.connect(gain);
@@ -1165,7 +1204,7 @@ function bunyiBerhasil() {
     oscillator.start();
 
     oscillator.stop(
-      audio.currentTime + 0.13
+      audio.currentTime + 0.11
     );
 
     setTimeout(
@@ -1174,7 +1213,7 @@ function bunyiBerhasil() {
         audio.close();
 
       },
-      300
+      200
     );
 
   }
@@ -1195,95 +1234,81 @@ function getarBerhasil() {
 
   if (navigator.vibrate) {
 
-    navigator.vibrate([
-      100,
-      50,
-      100
-    ]);
+    navigator.vibrate(80);
 
   }
 
 }
 
 /* =====================================================
-   OPTIMALKAN KAMERA
+   OPTIMASI CAMERA
 ===================================================== */
 
 async function optimalkanKamera(video) {
 
   try {
 
-    const stream =
-      video.srcObject;
+    if (!video.srcObject) return;
 
-    if (!stream) return;
+    const tracks =
+      video.srcObject.getVideoTracks();
+
+    if (!tracks.length) return;
 
     const track =
-      stream.getVideoTracks()[0];
-
-    if (!track) return;
+      tracks[0];
 
     const capabilities =
-      track.getCapabilities();
+      track.getCapabilities
+      ?
+      track.getCapabilities()
+      :
+      {};
 
-    const settings = {};
+    const advanced = {};
 
-    /* ============================
-       AUTOFOCUS
-    ============================ */
+    /* AUTOFOCUS */
 
     if (
       capabilities.focusMode &&
-      capabilities.focusMode.includes(
-        "continuous"
-      )
+      capabilities.focusMode.includes("continuous")
     ) {
 
-      settings.focusMode =
+      advanced.focusMode =
         "continuous";
 
     }
 
-    /* ============================
-       EXPOSURE
-    ============================ */
+    /* EXPOSURE */
 
     if (
       capabilities.exposureMode &&
-      capabilities.exposureMode.includes(
-        "continuous"
-      )
+      capabilities.exposureMode.includes("continuous")
     ) {
 
-      settings.exposureMode =
+      advanced.exposureMode =
         "continuous";
 
     }
 
-    /* ============================
-       WHITE BALANCE
-    ============================ */
+    /* WHITE BALANCE */
 
     if (
       capabilities.whiteBalanceMode &&
-      capabilities.whiteBalanceMode.includes(
-        "continuous"
-      )
+      capabilities.whiteBalanceMode.includes("continuous")
     ) {
 
-      settings.whiteBalanceMode =
+      advanced.whiteBalanceMode =
         "continuous";
 
     }
 
     if (
-      Object.keys(settings).length
+      Object.keys(advanced).length
     ) {
 
       await track.applyConstraints({
-        advanced: [
-          settings
-        ]
+        advanced: [advanced]
       });
 
     }
@@ -1293,7 +1318,7 @@ async function optimalkanKamera(video) {
   catch (e) {
 
     console.log(
-      "Optimasi kamera:",
+      "Optimasi kamera tidak tersedia:",
       e
     );
 
@@ -1340,19 +1365,16 @@ async function mulaiKamera() {
       );
 
     /*
-     * READER BARU
+     * READER KHUSUS MULTI FORMAT
+     * Interval dibuat kecil supaya
+     * pemeriksaan frame lebih sering.
      */
 
     scannerReader =
-      new ZXingBrowser.BrowserMultiFormatReader();
-
-    /*
-     * RESOLUSI TINGGI
-     *
-     * Jangan terlalu dipaksa 1920x1080
-     * karena beberapa HP justru gagal
-     * mendapatkan stream stabil.
-     */
+      new ZXingBrowser.BrowserMultiFormatReader(
+        undefined,
+        80
+      );
 
     const constraints = {
 
@@ -1365,18 +1387,25 @@ async function mulaiKamera() {
         },
 
         width: {
-          ideal: 2560,
-          min: 1280
+          min: 640,
+          ideal: 1280,
+          max: 1920
         },
 
         height: {
-          ideal: 1440,
-          min: 720
+          min: 480,
+          ideal: 720,
+          max: 1080
         },
 
         frameRate: {
+          min: 15,
           ideal: 30,
-          min: 15
+          max: 60
+        },
+
+        focusMode: {
+          ideal: "continuous"
         }
 
       }
@@ -1398,48 +1427,22 @@ async function mulaiKamera() {
           error
         ) {
 
-          /*
-           * ERROR SCAN DIABAIKAN.
-           *
-           * ZXing memang menghasilkan
-           * banyak error ketika barcode
-           * belum berada di posisi tepat.
-           */
+          if (!result) return;
 
-          if (!result) {
-
-            return;
-
-          }
-
-          if (sedangProses) {
-
-            return;
-
-          }
+          if (sedangProses) return;
 
           const kode =
             String(
               result.getText() || ""
             ).trim();
 
-          if (!kode) {
-
-            return;
-
-          }
+          if (!kode) return;
 
           /*
-           * VALIDASI DASAR
+           * LANGSUNG KUNCI PROSES
+           * agar barcode yang sama
+           * tidak terbaca berkali-kali.
            */
-
-          if (
-            kode.length < 3
-          ) {
-
-            return;
-
-          }
 
           sedangProses = true;
 
@@ -1487,7 +1490,7 @@ async function mulaiKamera() {
           else {
 
             status.innerHTML =
-              "⚠️ Format tidak didukung<br>" +
+              "⚠️ Format barcode tidak didukung<br>" +
               kode;
 
             sedangProses = false;
@@ -1501,14 +1504,6 @@ async function mulaiKamera() {
     kameraAktif =
       true;
 
-    /*
-     * OPTIMALKAN FOCUS
-     */
-
-    await optimalkanKamera(
-      video
-    );
-
     tombol.innerHTML =
       "📷 KAMERA AKTIF";
 
@@ -1517,7 +1512,23 @@ async function mulaiKamera() {
 
     status.innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan barcode ke kotak hijau";
+      "Arahkan QR / CODE 128 ke kotak hijau";
+
+    /*
+     * TUNGGU VIDEO BENAR-BENAR
+     * AKTIF SEBELUM OPTIMASI
+     */
+
+    setTimeout(
+      function() {
+
+        optimalkanKamera(
+          video
+        );
+
+      },
+      500
+    );
 
   }
 
@@ -1527,9 +1538,6 @@ async function mulaiKamera() {
       false;
 
     scannerControls =
-      null;
-
-    scannerReader =
       null;
 
     tombol.innerHTML =
@@ -1597,7 +1605,8 @@ function cekQR(kode) {
       ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-      sedangProses = false;
+      sedangProses =
+        false;
 
       delete window[
         callbackName
@@ -1659,7 +1668,8 @@ function cekRegister(register) {
       ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-      sedangProses = false;
+      sedangProses =
+        false;
 
       delete window[
         callbackName
@@ -1684,14 +1694,6 @@ function prosesHasilScan(
   kode,
   callbackName
 ) {
-
-  if (!hasil) {
-
-    sedangProses = false;
-
-    return;
-
-  }
 
   if (
     hasil.status ===
@@ -1821,6 +1823,12 @@ function prosesHasilScan(
 
   }
 
+  /*
+   * SELESAI PROSES.
+   * KAMERA TETAP HIDUP DAN
+   * LANGSUNG SIAP SCAN BERIKUTNYA.
+   */
+
   sedangProses =
     false;
 
@@ -1846,10 +1854,12 @@ function prosesHasilScan(
 ===================================================== */
 
 function tambahHasil(
+
   data,
   tanggalScan,
   jamScan,
   tipe
+
 ) {
 
   if (!data) return;
@@ -2179,10 +2189,13 @@ function scanBaru() {
   try {
 
     localStorage.setItem(
+
       STORAGE_HISTORY,
+
       JSON.stringify(
         history
       )
+
     );
 
   }
@@ -2219,7 +2232,7 @@ function scanBaru() {
 }
 
 /* =====================================================
-   TAMPILKAN HISTORY
+   HISTORY
 ===================================================== */
 
 function tampilkanHistory() {
