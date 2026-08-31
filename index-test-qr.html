@@ -355,6 +355,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .detail {
@@ -795,12 +796,18 @@ let nomorRequest = 0;
 
 /* =====================================================
    POLLING
-   SEMUA HP AKAN CEK SERVER
 ===================================================== */
 
 let timerSinkronisasi = null;
 
 const INTERVAL_SINKRONISASI = 2000;
+
+
+/* =====================================================
+   SIMPAN DETAIL YANG SEDANG TERBUKA
+===================================================== */
+
+let detailTerbuka = new Set();
 
 
 /* =====================================================
@@ -934,14 +941,191 @@ function requestJSONP(
 
 
 /* =====================================================
-   AMBIL SESI AKTIF DARI GOOGLE SHEETS
+   FORMAT TANGGAL
+===================================================== */
+
+function formatTanggal(
+  nilai
+) {
+
+  if (!nilai)
+    return "";
+
+
+  let teks =
+    String(
+      nilai
+    ).trim();
+
+
+  /*
+   * Kalau bentuk ISO:
+   * 2026-08-28T00:00:00.000Z
+   */
+
+  if (
+    teks.includes("T")
+  ) {
+
+    const bagian =
+      teks.split("T")[0];
+
+    const p =
+      bagian.split("-");
+
+
+    if (
+      p.length === 3
+    ) {
+
+      return (
+        p[2] +
+        "-" +
+        p[1] +
+        "-" +
+        p[0]
+      );
+
+    }
+
+  }
+
+
+  /*
+   * Kalau sudah dd/MM/yyyy
+   */
+
+  if (
+    /^\d{2}\/\d{2}\/\d{4}$/.test(
+      teks
+    )
+  ) {
+
+    return teks.replace(
+      /\//g,
+      "-"
+    );
+
+  }
+
+
+  /*
+   * Kalau sudah dd-MM-yyyy
+   */
+
+  if (
+    /^\d{2}-\d{2}-\d{4}$/.test(
+      teks
+    )
+  ) {
+
+    return teks;
+
+  }
+
+
+  return teks;
+
+}
+
+
+/* =====================================================
+   FORMAT JAM
+===================================================== */
+
+function formatJam(
+  nilai
+) {
+
+  if (!nilai)
+    return "";
+
+
+  let teks =
+    String(
+      nilai
+    ).trim();
+
+
+  /*
+   * Buang bagian tanggal
+   * jika server mengirim ISO.
+   *
+   * Contoh:
+   * 2026-08-28T14:35:20.000Z
+   */
+
+  if (
+    teks.includes("T")
+  ) {
+
+    teks =
+      teks.split("T")[1] ||
+      "";
+
+  }
+
+
+  /*
+   * Buang Z
+   */
+
+  teks =
+    teks.replace(
+      /Z$/i,
+      ""
+    );
+
+
+  /*
+   * Buang pecahan detik
+   */
+
+  teks =
+    teks.split(".")[0];
+
+
+  /*
+   * Ambil HH:mm:ss
+   */
+
+  const cocok =
+    teks.match(
+      /(\d{2}):(\d{2})(?::(\d{2}))?/
+    );
+
+
+  if (cocok) {
+
+    return (
+      cocok[1] +
+      ":" +
+      cocok[2] +
+      ":" +
+      (
+        cocok[3] ||
+        "00"
+      )
+    );
+
+  }
+
+
+  return teks;
+
+}
+
+
+/* =====================================================
+   AMBIL SESI AKTIF
 ===================================================== */
 
 function muatDataSesiAktif(
   tampilStatus
 ) {
 
-  if (sedangMuatData) return;
+  if (sedangMuatData)
+    return;
 
   sedangMuatData = true;
 
@@ -992,18 +1176,10 @@ function muatDataSesiAktif(
       }
 
 
-      /*
-       * SIMPAN SESI SERVER
-       */
-
       sesiAktif =
         hasil.sesi ||
         "";
 
-
-      /*
-       * DATA DARI SERVER
-       */
 
       const dataServer =
         Array.isArray(
@@ -1033,23 +1209,28 @@ function muatDataSesiAktif(
         ).length;
 
 
-      /*
-       * UPDATE JUMLAH
-       */
-
       updateJumlah();
 
 
       /*
-       * TAMPILKAN DATA
+       * PENTING:
+       * Sebelum daftar dibangun ulang,
+       * simpan ID DETAIL yang sedang terbuka.
        */
+
+      simpanDetailTerbuka();
+
 
       tampilkanDataServer();
 
 
       /*
-       * STATUS
+       * Setelah daftar dibangun ulang,
+       * buka kembali DETAIL tadi.
        */
+
+      bukaKembaliDetail();
+
 
       if (tampilStatus) {
 
@@ -1084,6 +1265,97 @@ function muatDataSesiAktif(
 
 
 /* =====================================================
+   SIMPAN DETAIL TERBUKA
+===================================================== */
+
+function simpanDetailTerbuka() {
+
+  detailTerbuka =
+    new Set();
+
+
+  document
+    .querySelectorAll(
+      ".detail"
+    )
+    .forEach(
+      function(detail) {
+
+        if (
+          detail.style.display ===
+          "block"
+        ) {
+
+          const register =
+            detail.dataset.register;
+
+
+          if (register) {
+
+            detailTerbuka.add(
+              register
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =====================================================
+   BUKA KEMBALI DETAIL
+===================================================== */
+
+function bukaKembaliDetail() {
+
+  detailTerbuka.forEach(
+    function(register) {
+
+      const detail =
+        document.querySelector(
+          '.detail[data-register="' +
+          CSS.escape(register) +
+          '"]'
+        );
+
+
+      if (!detail)
+        return;
+
+
+      detail.style.display =
+        "block";
+
+
+      const tombol =
+        detail.previousElementSibling
+          ?
+        detail.previousElementSibling
+          .querySelector(
+            ".detailBtn"
+          )
+          :
+        null;
+
+
+      if (tombol) {
+
+        tombol.innerHTML =
+          "TUTUP";
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =====================================================
    SINKRONISASI OTOMATIS
 ===================================================== */
 
@@ -1102,11 +1374,6 @@ function mulaiSinkronisasi() {
     setInterval(
       function() {
 
-        /*
-         * Jangan mengambil data ketika
-         * sedang proses scan.
-         */
-
         if (
           sedangProses
         ) {
@@ -1114,6 +1381,7 @@ function mulaiSinkronisasi() {
           return;
 
         }
+
 
         muatDataSesiAktif(
           false
@@ -1136,6 +1404,7 @@ function updateJumlah() {
     document.querySelector(
       "#jumlah .angkaTotal"
     );
+
 
   if (angka) {
 
@@ -1163,18 +1432,14 @@ function tampilkanDataServer() {
     "";
 
 
-  /*
-   * Server mengirim urutan lama → baru.
-   * Kita tampilkan yang terbaru paling atas.
-   */
-
   dataScanTersimpan
     .slice()
     .reverse()
     .forEach(
       function(item) {
 
-        if (!item) return;
+        if (!item)
+          return;
 
 
         if (
@@ -1247,7 +1512,8 @@ function bunyiBerhasil() {
       window.webkitAudioContext;
 
 
-    if (!AudioContext) return;
+    if (!AudioContext)
+      return;
 
 
     const audio =
@@ -1820,16 +2086,6 @@ function prosesHasilScan(
     getarBerhasil();
 
 
-    /*
-     * PENTING:
-     *
-     * JANGAN menambah jumlah
-     * secara lokal.
-     *
-     * Ambil ulang dari
-     * GOOGLE SHEETS.
-     */
-
     setTimeout(
       function() {
 
@@ -1855,12 +2111,6 @@ function prosesHasilScan(
       hasil.message;
 
 
-    /*
-     * Tetap ambil data server
-     * supaya tampilan sama
-     * dengan perangkat lain.
-     */
-
     setTimeout(
       function() {
 
@@ -1885,11 +2135,6 @@ function prosesHasilScan(
       "⚠️ " +
       hasil.message;
 
-
-    /*
-     * Data tidak ditemukan
-     * tidak dimasukkan ke sesi.
-     */
 
     tambahHasilTidakDitemukan(
       kode
@@ -1935,7 +2180,9 @@ function tambahHasil(
 
 
   const register =
-    data[0] || "";
+    String(
+      data[0] || ""
+    );
 
 
   const item =
@@ -1980,6 +2227,18 @@ function tambahHasil(
     register;
 
 
+  const tanggal =
+    formatTanggal(
+      tanggalScan
+    );
+
+
+  const jam =
+    formatJam(
+      jamScan
+    );
+
+
   item.innerHTML = `
 
     <div class="baris">
@@ -2007,80 +2266,89 @@ function tambahHasil(
     <div
       id="${id}"
       class="detail"
+      data-register="${escapeHtml(register)}"
     >
 
       <div>
         <span class="label">
           REGISTER
         </span>
-        : ${data[0] || ""}
+        : ${escapeHtml(data[0] || "")}
       </div>
 
       <div>
         <span class="label">
           PANJANG
         </span>
-        : ${data[1] || ""}
+        : ${escapeHtml(data[1] || "")}
       </div>
 
       <div>
         <span class="label">
           DIAMETER
         </span>
-        : ${data[2] || ""}
+        : ${escapeHtml(data[2] || "")}
       </div>
 
       <div>
         <span class="label">
           TPK
         </span>
-        : ${data[3] || ""}
+        : ${escapeHtml(data[3] || "")}
       </div>
 
       <div>
         <span class="label">
           TUMPUK
         </span>
-        : ${data[4] || ""}
+        : ${escapeHtml(data[4] || "")}
       </div>
 
       <div>
         <span class="label">
           MUTU
         </span>
-        : ${data[5] || ""}
+        : ${escapeHtml(data[5] || "")}
       </div>
 
       <div>
         <span class="label">
           STATUS
         </span>
-        : ${data[6] || ""}
+        : ${escapeHtml(data[6] || "")}
       </div>
 
       <div>
         <span class="label">
           M3
         </span>
-        : ${data[7] || ""}
+        : ${escapeHtml(data[7] || "")}
       </div>
 
       ${
-        tanggalScan
+        tanggal
         ?
         `
         <div>
           <span class="label">
             TANGGAL
           </span>
-          : ${tanggalScan}
+          : ${escapeHtml(tanggal)}
         </div>
+        `
+        :
+        ""
+      }
 
+      ${
+        jam
+        ?
+        `
         <div>
           <span class="label">
             JAM
           </span>
-          : ${jamScan}
+          : ${escapeHtml(jam)}
         </div>
         `
         :
@@ -2104,6 +2372,41 @@ function tambahHasil(
 
 
 /* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+  nilai
+) {
+
+  return String(
+    nilai || ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+/* =====================================================
    TIDAK DITEMUKAN
 ===================================================== */
 
@@ -2116,12 +2419,6 @@ function tambahHasilTidakDitemukan(
       "daftar"
     );
 
-
-  /*
-   * Hindari menumpuk pesan yang
-   * sama terus-menerus akibat
-   * polling.
-   */
 
   const item =
     document.createElement(
@@ -2138,7 +2435,7 @@ function tambahHasilTidakDitemukan(
     <div class="baris">
 
       <div class="nomor notfound">
-        ⚠️ ${kode}
+        ⚠️ ${escapeHtml(kode)}
       </div>
 
       <div class="notfound">
@@ -2172,6 +2469,10 @@ function toggleDetail(
     );
 
 
+  if (!detail)
+    return;
+
+
   if (
     detail.style.display ===
     "block"
@@ -2184,6 +2485,11 @@ function toggleDetail(
     tombol.innerHTML =
       "DETAIL";
 
+
+    detailTerbuka.delete(
+      detail.dataset.register
+    );
+
   }
 
   else {
@@ -2194,6 +2500,11 @@ function toggleDetail(
 
     tombol.innerHTML =
       "TUTUP";
+
+
+    detailTerbuka.add(
+      detail.dataset.register
+    );
 
   }
 
@@ -2287,11 +2598,6 @@ function scanBaru() {
       }
 
 
-      /*
-       * Server sudah membuat
-       * SESI_AKTIF baru.
-       */
-
       sesiAktif =
         hasil.sesi ||
         "";
@@ -2305,9 +2611,9 @@ function scanBaru() {
         0;
 
 
-      /*
-       * Ambil ulang dari server.
-       */
+      detailTerbuka =
+        new Set();
+
 
       muatDataSesiAktif(
         false
@@ -2497,14 +2803,18 @@ function tampilkanHistory() {
 
                 <div class="historyTanggal">
                   📅 ${
-                    sesi.tanggal ||
+                    formatTanggal(
+                      sesi.tanggal
+                    ) ||
                     "-"
                   }
                 </div>
 
                 <div class="historyTanggal">
                   🕐 ${
-                    sesi.jam ||
+                    formatJam(
+                      sesi.jam
+                    ) ||
                     "-"
                   }
                 </div>
@@ -2583,7 +2893,9 @@ function tampilkanHistory() {
 
                 baris.innerHTML =
                   "✅ " +
-                  register;
+                  escapeHtml(
+                    register
+                  );
 
 
                 detail.appendChild(
@@ -2618,7 +2930,9 @@ function tampilkanHistory() {
 
                 baris.innerHTML =
                   "❌ " +
-                  register +
+                  escapeHtml(
+                    register
+                  ) +
                   " — DUPLIKAT";
 
 
@@ -2645,7 +2959,7 @@ function tampilkanHistory() {
 
                 baris.innerHTML =
                   "⚠️ " +
-                  (
+                  escapeHtml(
                     dataScan.kode ||
                     ""
                   ) +
@@ -2664,10 +2978,6 @@ function tampilkanHistory() {
         }
       );
 
-
-      /*
-       * TOMBOL HAPUS
-       */
 
       const tombolHapus =
         document.createElement(
@@ -2848,20 +3158,10 @@ document.addEventListener(
   "DOMContentLoaded",
   function() {
 
-    /*
-     * LANGSUNG AMBIL DATA
-     * DARI GOOGLE SHEETS.
-     */
-
     muatDataSesiAktif(
       true
     );
 
-
-    /*
-     * SETIAP 2 DETIK
-     * CEK PERUBAHAN DARI HP LAIN.
-     */
 
     mulaiSinkronisasi();
 
