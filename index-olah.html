@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -8,9 +9,13 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Data Olah BBI - IK Saradan</title>
+<title>Data Olah - IK Saradan</title>
 
 <style>
+
+/* =====================================================
+   DASAR
+===================================================== */
 
 * {
   box-sizing: border-box;
@@ -18,17 +23,24 @@ content="width=device-width, initial-scale=1.0">
 
 body {
 
-  font-family: Arial, sans-serif;
+  font-family:
+    Arial,
+    sans-serif;
 
-  background: #f3f6f4;
+  background:
+    #f3f6f4;
 
-  margin: 0;
+  margin:
+    0;
 
-  padding: 15px;
+  padding:
+    12px;
 
-  color: #222;
+  color:
+    #222;
 
-  padding-bottom: 40px;
+  padding-bottom:
+    30px;
 
 }
 
@@ -39,468 +51,680 @@ body {
 
 .header {
 
-  width: 100%;
+  width:
+    100%;
 
-  max-width: 700px;
+  max-width:
+    900px;
 
-  margin: 0 auto 15px;
+  margin:
+    0 auto 12px;
 
-  background: white;
+  background:
+    white;
 
-  border-radius: 14px;
+  border-radius:
+    14px;
 
-  padding: 12px 15px;
+  padding:
+    12px 15px;
 
   box-shadow:
-    0 3px 12px rgba(0,0,0,0.08);
+    0 3px 12px
+    rgba(0,0,0,0.08);
 
-  border-top: 4px solid #176b38;
+  border-top:
+    4px solid #176b38;
 
 }
 
 
 .headerIsi {
 
-  display: flex;
+  display:
+    flex;
 
-  align-items: center;
+  align-items:
+    center;
 
-  justify-content: center;
+  justify-content:
+    center;
 
-  gap: 10px;
+  gap:
+    10px;
 
 }
 
 
 .logo {
 
-  width: 85px;
+  width:
+    80px;
 
-  height: 75px;
+  height:
+    70px;
 
-  object-fit: contain;
+  object-fit:
+    contain;
 
-  flex-shrink: 0;
+  flex-shrink:
+    0;
 
 }
 
 
 .judulBox {
 
-  text-align: left;
+  text-align:
+    left;
 
 }
 
 
 .judul {
 
-  font-size: 23px;
+  font-size:
+    23px;
 
-  font-weight: 900;
+  font-weight:
+    900;
 
-  color: #176b38;
+  color:
+    #176b38;
 
-  line-height: 1.2;
-
-  white-space: nowrap;
+  line-height:
+    1.2;
 
 }
 
 
 .subjudul {
 
-  font-size: 16px;
+  font-size:
+    16px;
 
-  font-weight: bold;
+  font-weight:
+    bold;
 
-  color: #555;
+  color:
+    #555;
 
-  letter-spacing: 1.5px;
+  letter-spacing:
+    1.5px;
 
-  margin-top: 5px;
+  margin-top:
+    5px;
 
 }
 
 
 /* =====================================================
-   PENCARIAN
+   PANEL RINGKASAN
 ===================================================== */
 
-.search-card {
+.ringkasan {
 
-  width: 100%;
+  width:
+    100%;
 
-  max-width: 700px;
+  max-width:
+    900px;
 
-  margin: 0 auto 12px;
+  margin:
+    0 auto 12px;
 
-  background: white;
+  display:
+    grid;
 
-  border-radius: 14px;
+  grid-template-columns:
+    repeat(4,1fr);
 
-  padding: 14px;
+  gap:
+    8px;
+
+}
+
+
+.stat {
+
+  background:
+    white;
+
+  border-radius:
+    10px;
+
+  padding:
+    10px 6px;
+
+  text-align:
+    center;
 
   box-shadow:
-    0 3px 12px rgba(0,0,0,0.08);
+    0 2px 8px
+    rgba(0,0,0,0.07);
+
+  border:
+    2px solid #ddd;
+
+  cursor:
+    pointer;
 
 }
 
 
-.search-title {
+.stat:active {
 
-  font-size: 17px;
-
-  font-weight: 900;
-
-  color: #176b38;
-
-  margin-bottom: 8px;
+  transform:
+    scale(0.98);
 
 }
 
 
-#search {
+.stat.aktif {
 
-  width: 100%;
+  border-color:
+    #176b38;
 
-  padding: 14px;
-
-  border: 2px solid #ddd;
-
-  border-radius: 9px;
-
-  font-size: 18px;
-
-  outline: none;
+  background:
+    #f0fff5;
 
 }
 
 
-#search:focus {
+.statJudul {
 
-  border-color: #176b38;
+  font-size:
+    12px;
+
+  font-weight:
+    bold;
+
+  color:
+    #666;
 
 }
 
 
-#status {
+.statAngka {
 
-  margin-top: 9px;
+  margin-top:
+    4px;
 
-  font-size: 14px;
+  font-size:
+    28px;
 
-  font-weight: bold;
+  font-weight:
+    900;
 
-  color: #666;
+  color:
+    #176b38;
+
+}
+
+
+.statVolume {
+
+  font-size:
+    12px;
+
+  font-weight:
+    bold;
+
+  color:
+    #555;
+
+  margin-top:
+    2px;
 
 }
 
 
 /* =====================================================
-   HASIL PENCARIAN
-===================================================== */
-
-#hasilCari {
-
-  width: 100%;
-
-  max-width: 700px;
-
-  margin: 0 auto;
-
-}
-
-
-.hasilItem {
-
-  background: white;
-
-  border-radius: 10px;
-
-  padding: 12px;
-
-  margin-bottom: 8px;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-
-  border-left: 5px solid #176b38;
-
-  cursor: pointer;
-
-}
-
-
-.hasilItem:active {
-
-  transform: scale(0.99);
-
-}
-
-
-.hasilRegister {
-
-  font-size: 19px;
-
-  font-weight: 900;
-
-  color: #176b38;
-
-}
-
-
-.hasilInfo {
-
-  margin-top: 4px;
-
-  color: #666;
-
-  font-size: 14px;
-
-}
-
-
-/* =====================================================
-   TOTAL
+   TOTAL AKTIF
 ===================================================== */
 
 .totalCard {
 
-  width: 100%;
+  width:
+    100%;
 
-  max-width: 700px;
+  max-width:
+    900px;
 
-  margin: 15px auto;
+  margin:
+    0 auto 12px;
 
-  display: flex;
+  background:
+    white;
 
-  gap: 10px;
+  border:
+    2px solid #176b38;
 
-}
+  border-radius:
+    14px;
 
+  padding:
+    12px;
 
-.totalBox {
-
-  flex: 1;
-
-  background: white;
-
-  border: 2px solid #176b38;
-
-  border-radius: 12px;
-
-  padding: 12px;
-
-  text-align: center;
+  text-align:
+    center;
 
   box-shadow:
-    0 3px 10px rgba(0,0,0,0.08);
+    0 3px 12px
+    rgba(0,0,0,0.08);
 
 }
 
 
-.totalLabel {
+.totalJudul {
 
-  font-size: 13px;
+  font-size:
+    14px;
 
-  font-weight: bold;
+  font-weight:
+    bold;
 
-  color: #666;
+  color:
+    #666;
 
 }
 
 
-.totalValue {
+.totalAngka {
 
-  margin-top: 4px;
+  font-size:
+    42px;
 
-  font-size: 27px;
+  line-height:
+    1;
 
-  font-weight: 900;
+  font-weight:
+    900;
 
-  color: #176b38;
+  color:
+    #176b38;
+
+  margin-top:
+    4px;
+
+}
+
+
+.totalVolume {
+
+  margin-top:
+    5px;
+
+  font-size:
+    18px;
+
+  font-weight:
+    bold;
+
+  color:
+    #444;
 
 }
 
 
 /* =====================================================
-   TABEL
+   TOMBOL
 ===================================================== */
 
-.tableCard {
+.tombolArea {
 
-  width: 100%;
+  width:
+    100%;
 
-  max-width: 1000px;
+  max-width:
+    900px;
 
-  margin: 15px auto;
+  margin:
+    0 auto 12px;
 
-  background: white;
+  display:
+    flex;
 
-  border-radius: 14px;
+  gap:
+    8px;
 
-  padding: 8px;
+}
+
+
+.tombol {
+
+  flex:
+    1;
+
+  border:
+    none;
+
+  border-radius:
+    9px;
+
+  padding:
+    12px 8px;
+
+  font-size:
+    15px;
+
+  font-weight:
+    bold;
+
+  color:
+    white;
+
+  cursor:
+    pointer;
+
+}
+
+
+.btnRefresh {
+
+  background:
+    #1976d2;
+
+}
+
+
+.btnSemua {
+
+  background:
+    #555;
+
+}
+
+
+.tombol:active {
+
+  transform:
+    scale(0.98);
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+#status {
+
+  width:
+    100%;
+
+  max-width:
+    900px;
+
+  margin:
+    0 auto 10px;
+
+  text-align:
+    center;
+
+  font-size:
+    14px;
+
+  font-weight:
+    bold;
+
+  color:
+    #555;
+
+}
+
+
+/* =====================================================
+   TABEL DESKTOP
+===================================================== */
+
+.tableWrap {
+
+  width:
+    100%;
+
+  max-width:
+    900px;
+
+  margin:
+    0 auto;
+
+  background:
+    white;
+
+  border-radius:
+    12px;
 
   box-shadow:
-    0 3px 12px rgba(0,0,0,0.08);
+    0 2px 10px
+    rgba(0,0,0,0.08);
 
-  overflow-x: auto;
+  overflow:
+    auto;
 
 }
 
 
 table {
 
-  width: 100%;
+  width:
+    100%;
 
-  min-width: 700px;
+  border-collapse:
+    collapse;
 
-  border-collapse: collapse;
-
-}
-
-
-thead th {
-
-  background: #176b38;
-
-  color: white;
-
-  padding: 11px 8px;
-
-  font-size: 14px;
-
-  white-space: nowrap;
+  min-width:
+    720px;
 
 }
 
 
-tbody td {
+thead {
 
-  padding: 11px 8px;
+  background:
+    #176b38;
 
-  border-bottom: 1px solid #ddd;
+  color:
+    white;
 
-  text-align: center;
+}
 
-  font-size: 15px;
 
-  white-space: nowrap;
+th {
+
+  padding:
+    11px 7px;
+
+  font-size:
+    13px;
+
+  text-align:
+    center;
+
+  white-space:
+    nowrap;
+
+}
+
+
+td {
+
+  padding:
+    9px 7px;
+
+  border-bottom:
+    1px solid #eee;
+
+  font-size:
+    14px;
+
+  text-align:
+    center;
+
+  white-space:
+    nowrap;
 
 }
 
 
 tbody tr:nth-child(even) {
 
-  background: #f7f9f8;
+  background:
+    #fafafa;
 
 }
 
 
-tbody td:first-child {
+.register {
 
-  font-weight: 900;
+  font-weight:
+    900;
 
-  color: #176b38;
+  text-align:
+    left;
+
+}
+
+
+.volume {
+
+  font-weight:
+    bold;
+
+}
+
+
+.statusCell {
+
+  font-size:
+    12px;
+
+  font-weight:
+    900;
+
+}
+
+
+.statusBelum {
+
+  color:
+    #1976d2;
+
+}
+
+
+.statusSisa {
+
+  color:
+    #e67e00;
+
+}
+
+
+.statusDiolah {
+
+  color:
+    #16833a;
 
 }
 
 
 /* =====================================================
-   TOMBOL HAPUS PILIHAN
+   TOMBOL AKSI
 ===================================================== */
 
-.hapusBtn {
+.aksi {
 
-  border: none;
+  display:
+    flex;
 
-  background: #c62828;
+  gap:
+    5px;
 
-  color: white;
-
-  font-weight: bold;
-
-  padding: 6px 9px;
-
-  border-radius: 6px;
-
-  cursor: pointer;
+  justify-content:
+    center;
 
 }
 
 
-.hapusBtn:active {
+.btnAksi {
 
-  transform: scale(0.94);
+  border:
+    none;
+
+  border-radius:
+    6px;
+
+  padding:
+    7px 8px;
+
+  color:
+    white;
+
+  font-size:
+    11px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+
+.btnSisa {
+
+  background:
+    #e67e00;
+
+}
+
+
+.btnDiolah {
+
+  background:
+    #16833a;
+
+}
+
+
+.btnKembalikan {
+
+  background:
+    #1976d2;
+
+}
+
+
+.btnAksi:disabled {
+
+  opacity:
+    0.45;
+
+  cursor:
+    not-allowed;
 
 }
 
 
 /* =====================================================
-   TOMBOL BAWAH
+   LOADING
 ===================================================== */
 
-#btnKosongkan {
+.loading {
 
-  display: block;
+  padding:
+    30px;
 
-  width: 100%;
+  text-align:
+    center;
 
-  max-width: 700px;
+  color:
+    #777;
 
-  margin: 12px auto;
-
-  padding: 13px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: #555;
-
-  color: white;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
-}
-
-
-#btnMuat {
-
-  display: block;
-
-  width: 100%;
-
-  max-width: 700px;
-
-  margin: 12px auto;
-
-  padding: 13px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: #176b38;
-
-  color: white;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
-}
-
-
-button:active {
-
-  transform: scale(0.98);
+  font-weight:
+    bold;
 
 }
 
@@ -511,21 +735,29 @@ button:active {
 
 .kosong {
 
-  width: 100%;
+  background:
+    white;
 
-  max-width: 700px;
+  max-width:
+    900px;
 
-  margin: 20px auto;
+  margin:
+    10px auto;
 
-  background: white;
+  border-radius:
+    12px;
 
-  border-radius: 12px;
+  padding:
+    30px 15px;
 
-  padding: 20px;
+  text-align:
+    center;
 
-  text-align: center;
+  color:
+    #777;
 
-  color: #777;
+  font-weight:
+    bold;
 
 }
 
@@ -538,51 +770,86 @@ button:active {
 
   body {
 
-    padding: 10px;
+    padding:
+      8px;
 
   }
 
 
   .header {
 
-    padding: 10px 8px;
+    padding:
+      9px;
 
   }
 
 
   .headerIsi {
 
-    gap: 7px;
+    gap:
+      7px;
 
   }
 
 
   .logo {
 
-    width: 75px;
+    width:
+      65px;
 
-    height: 68px;
+    height:
+      60px;
 
   }
 
 
   .judul {
 
-    font-size: 20px;
+    font-size:
+      19px;
 
   }
 
 
   .subjudul {
 
-    font-size: 14px;
+    font-size:
+      14px;
 
   }
 
 
-  .totalValue {
+  .ringkasan {
 
-    font-size: 23px;
+    grid-template-columns:
+      repeat(2,1fr);
+
+  }
+
+
+  .statAngka {
+
+    font-size:
+      25px;
+
+  }
+
+
+  .totalAngka {
+
+    font-size:
+      38px;
+
+  }
+
+
+  .tombol {
+
+    font-size:
+      13px;
+
+    padding:
+      11px 5px;
 
   }
 
@@ -595,39 +862,37 @@ button:active {
 
 @media(max-width:380px) {
 
-  .logo {
-
-    width: 65px;
-
-    height: 58px;
-
-  }
-
-
   .judul {
 
-    font-size: 18px;
+    font-size:
+      17px;
 
   }
 
 
   .subjudul {
 
-    font-size: 13px;
+    font-size:
+      13px;
 
   }
 
 
-  .search-title {
+  .logo {
 
-    font-size: 16px;
+    width:
+      58px;
+
+    height:
+      55px;
 
   }
 
 
-  #search {
+  .totalAngka {
 
-    font-size: 16px;
+    font-size:
+      34px;
 
   }
 
@@ -637,181 +902,246 @@ button:active {
 
 </head>
 
-
 <body>
 
-
-<!-- =====================================================
+<!-- ===================================================
      HEADER
-===================================================== -->
+=================================================== -->
 
 <div class="header">
 
   <div class="headerIsi">
 
-    <img
-      class="logo"
-      src="logo-perhutani.jpg"
-      alt="Logo Perhutani"
-    >
+```
+<img
+  class="logo"
+  src="logo-perhutani.jpg"
+  alt="Logo Perhutani"
+>
 
-    <div class="judulBox">
+<div class="judulBox">
 
-      <div class="judul">
-        DATA OLAH BBI
-      </div>
+  <div class="judul">
+    DATA OLAH
+  </div>
 
-      <div class="subjudul">
-        IK SARADAN
-      </div>
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
-    </div>
+</div>
+```
 
   </div>
 
 </div>
 
+<!-- ===================================================
+     RINGKASAN
+=================================================== -->
 
-<!-- =====================================================
-     PENCARIAN
-===================================================== -->
+<div class="ringkasan">
 
-<div class="search-card">
-
-  <div class="search-title">
-    🔎 CARI NOMOR REGISTER
-  </div>
-
-
-  <input
-    type="text"
-    id="search"
-    placeholder="Ketik nomor register..."
-    autocomplete="off"
+  <div
+    class="stat aktif"
+    id="filterBelum"
+    onclick="pilihFilter('BELUM DIOLAH')"
   >
 
+```
+<div class="statJudul">
+  BELUM DIOLAH
+</div>
 
-  <div id="status">
-    ⏳ Memuat data...
+<div
+  class="statAngka"
+  id="jumlahBelum"
+>
+  0
+</div>
+
+<div
+  class="statVolume"
+  id="volumeBelum"
+>
+  0 M3
+</div>
+```
+
+  </div>
+
+  <div
+    class="stat"
+    id="filterSisa"
+    onclick="pilihFilter('SISA')"
+  >
+
+```
+<div class="statJudul">
+  SISA
+</div>
+
+<div
+  class="statAngka"
+  id="jumlahSisa"
+>
+  0
+</div>
+
+<div
+  class="statVolume"
+  id="volumeSisa"
+>
+  0 M3
+</div>
+```
+
+  </div>
+
+  <div
+    class="stat"
+    id="filterDiolah"
+    onclick="pilihFilter('SUDAH DIOLAH')"
+  >
+
+```
+<div class="statJudul">
+  SUDAH DIOLAH
+</div>
+
+<div
+  class="statAngka"
+  id="jumlahDiolah"
+>
+  0
+</div>
+
+<div
+  class="statVolume"
+  id="volumeDiolah"
+>
+  0 M3
+</div>
+```
+
+  </div>
+
+  <div
+    class="stat"
+    id="filterSemua"
+    onclick="pilihFilter('SEMUA')"
+  >
+
+```
+<div class="statJudul">
+  SEMUA
+</div>
+
+<div
+  class="statAngka"
+  id="jumlahSemua"
+>
+  0
+</div>
+
+<div
+  class="statVolume"
+  id="volumeSemua"
+>
+  0 M3
+</div>
+```
+
   </div>
 
 </div>
 
-
-<!-- =====================================================
-     HASIL PENCARIAN
-===================================================== -->
-
-<div id="hasilCari"></div>
-
-
-<!-- =====================================================
+<!-- ===================================================
      TOTAL
-===================================================== -->
+=================================================== -->
 
 <div class="totalCard">
 
-  <div class="totalBox">
-
-    <div class="totalLabel">
-      TOTAL BATANG
-    </div>
-
-    <div
-      class="totalValue"
-      id="totalBatang"
-    >
-      0
-    </div>
-
+  <div class="totalJudul">
+    DATA YANG DITAMPILKAN
   </div>
 
+  <div
+    class="totalAngka"
+    id="totalBatang"
+  >
+    0 BATANG
+  </div>
 
-  <div class="totalBox">
-
-    <div class="totalLabel">
-      TOTAL VOLUME
-    </div>
-
-    <div
-      class="totalValue"
-      id="totalVolume"
-    >
-      0,000 M³
-    </div>
-
+  <div
+    class="totalVolume"
+    id="totalM3"
+  >
+    0 M3
   </div>
 
 </div>
 
-
-<!-- =====================================================
-     TABEL DATA
-===================================================== -->
-
-<div class="tableCard">
-
-  <table>
-
-    <thead>
-
-      <tr>
-
-        <th>REGISTER</th>
-
-        <th>PANJANG</th>
-
-        <th>DIAMETER</th>
-
-        <th>TPK</th>
-
-        <th>TUMPUK</th>
-
-        <th>MUTU</th>
-
-        <th>M3</th>
-
-        <th>HAPUS</th>
-
-      </tr>
-
-    </thead>
-
-
-    <tbody id="tabelData">
-
-    </tbody>
-
-  </table>
-
-</div>
-
-
-<!-- =====================================================
+<!-- ===================================================
      TOMBOL
-===================================================== -->
+=================================================== -->
+
+<div class="tombolArea">
 
 <button
-  id="btnKosongkan"
-  onclick="kosongkanPilihan()"
->
-  🗑️ KOSONGKAN PILIHAN
-</button>
+class="tombol btnRefresh"
+onclick="ambilData()"
 
+>
+
+```
+🔄 REFRESH
+```
+
+  </button>
 
 <button
-  id="btnMuat"
-  onclick="muatData()"
->
-  🔄 MUAT ULANG DATA
-</button>
+class="tombol btnSemua"
+onclick="pilihFilter('SEMUA')"
 
+>
+
+```
+📋 SEMUA DATA
+```
+
+  </button>
+
+</div>
+
+<!-- ===================================================
+     STATUS
+=================================================== -->
+
+<div id="status">
+  Memuat data...
+</div>
+
+<!-- ===================================================
+     TABEL
+=================================================== -->
+
+<div
+  id="tableContainer"
+  class="tableWrap"
+>
+
+  <div class="loading">
+    ⏳ Mengambil data dari Google Sheets...
+  </div>
+
+</div>
 
 <script>
 
 
 /* =====================================================
-   URL APPS SCRIPT MODE OLAH
+   API
 ===================================================== */
 
 const API_URL =
@@ -824,52 +1154,80 @@ const API_URL =
 
 let semuaData = [];
 
-let dataTerpilih = [];
+let filterAktif =
+  "BELUM DIOLAH";
 
 
 /* =====================================================
-   ELEMENT
+   FORMAT ANGKA
 ===================================================== */
 
-const search =
-  document.getElementById(
-    "search"
+function formatAngka(angka) {
+
+  const nilai =
+    Number(angka) || 0;
+
+  return nilai.toLocaleString(
+    "id-ID",
+    {
+      maximumFractionDigits:
+        3
+    }
   );
 
-const hasilCari =
-  document.getElementById(
-    "hasilCari"
-  );
-
-const tabelData =
-  document.getElementById(
-    "tabelData"
-  );
-
-const status =
-  document.getElementById(
-    "status"
-  );
-
-const totalBatang =
-  document.getElementById(
-    "totalBatang"
-  );
-
-const totalVolume =
-  document.getElementById(
-    "totalVolume"
-  );
+}
 
 
 /* =====================================================
-   MUAT DATA DARI APPS SCRIPT
+   FORMAT VOLUME
 ===================================================== */
 
-function muatData() {
+function formatVolume(angka) {
+
+  const nilai =
+    Number(angka) || 0;
+
+  return nilai.toLocaleString(
+    "id-ID",
+    {
+      minimumFractionDigits:
+        3,
+
+      maximumFractionDigits:
+        3
+    }
+  );
+
+}
+
+
+/* =====================================================
+   AMBIL DATA
+===================================================== */
+
+function ambilData() {
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  const container =
+    document.getElementById(
+      "tableContainer"
+    );
+
 
   status.innerHTML =
     "⏳ Mengambil data dari Google Sheets...";
+
+
+  container.innerHTML =
+    `
+      <div class="loading">
+        ⏳ Memuat data...
+      </div>
+    `;
 
 
   const callbackName =
@@ -882,53 +1240,22 @@ function muatData() {
 
       try {
 
-        if (
-          !hasil ||
-          hasil.status !== "success"
-        ) {
-
-          throw new Error(
-            hasil &&
-            hasil.message
-            ?
-            hasil.message
-            :
-            "Gagal mengambil data"
-          );
-
-        }
-
-
-        semuaData =
-          Array.isArray(
-            hasil.data
-          )
-          ?
-          hasil.data
-          :
-          [];
-
-
-        status.innerHTML =
-          "✅ Data siap — " +
-          semuaData.length +
-          " batang masuk";
-
-
-      }
-
-      catch(error) {
-
-        status.innerHTML =
-          "❌ " +
-          error.message;
-
-        console.log(
-          error
+        prosesData(
+          hasil
         );
 
       }
 
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+        status.innerHTML =
+          "❌ Gagal memproses data";
+
+      }
 
       finally {
 
@@ -936,12 +1263,10 @@ function muatData() {
           callbackName
         ];
 
-
         const script =
           document.getElementById(
             callbackName
           );
-
 
         if (script) {
 
@@ -968,20 +1293,36 @@ function muatData() {
     API_URL +
     "?getDataOlah=1" +
     "&callback=" +
-    callbackName;
+    callbackName +
+    "&t=" +
+    Date.now();
 
 
   script.onerror =
     function() {
 
       status.innerHTML =
-        "❌ Gagal menghubungi Apps Script MODE OLAH";
+        "❌ Gagal menghubungi Google Sheets";
+
+
+      container.innerHTML =
+        `
+          <div class="kosong">
+
+            ❌ DATA GAGAL DIMUAT
+
+            <br><br>
+
+            Periksa koneksi internet
+            atau URL Apps Script.
+
+          </div>
+        `;
 
 
       delete window[
         callbackName
       ];
-
 
       script.remove();
 
@@ -996,207 +1337,91 @@ function muatData() {
 
 
 /* =====================================================
-   PENCARIAN REGISTER
+   PROSES DATA
 ===================================================== */
 
-search.addEventListener(
-  "input",
-  function() {
-
-    const kata =
-      this.value
-        .trim()
-        .toLowerCase();
-
-
-    hasilCari.innerHTML =
-      "";
-
-
-    if (!kata) {
-
-      return;
-
-    }
-
-
-    const ditemukan =
-      semuaData
-        .filter(
-          function(item) {
-
-            return String(
-              item.register || ""
-            )
-            .toLowerCase()
-            .includes(
-              kata
-            );
-
-          }
-        )
-        .slice(
-          0,
-          30
-        );
-
-
-    if (
-      ditemukan.length === 0
-    ) {
-
-      hasilCari.innerHTML = `
-
-        <div class="hasilItem">
-
-          <div class="hasilRegister">
-            ⚠️ REGISTER TIDAK DITEMUKAN
-          </div>
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    ditemukan.forEach(
-      function(item) {
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.className =
-          "hasilItem";
-
-
-        div.innerHTML = `
-
-          <div class="hasilRegister">
-            ${aman(item.register)}
-          </div>
-
-          <div class="hasilInfo">
-            Tumpuk:
-            ${aman(item.tumpuk || "-")}
-            &nbsp; | &nbsp;
-            M3:
-            ${aman(item.m3 || "0")}
-          </div>
-
-        `;
-
-
-        div.onclick =
-          function() {
-
-            pilihRegister(
-              item
-            );
-
-          };
-
-
-        hasilCari.appendChild(
-          div
-        );
-
-      }
-    );
-
-  }
-);
-
-
-/* =====================================================
-   PILIH REGISTER
-===================================================== */
-
-function pilihRegister(
-  item
+function prosesData(
+  hasil
 ) {
 
-  if (!item) return;
+  if (
+    !hasil ||
+    hasil.status !==
+    "success"
+  ) {
 
-
-  const sudahAda =
-    dataTerpilih.some(
-      function(data) {
-
-        return String(
-          data.register
-        ) ===
-        String(
-          item.register
-        );
-
-      }
+    throw new Error(
+      hasil &&
+      hasil.message
+      ?
+      hasil.message
+      :
+      "Data tidak valid"
     );
-
-
-  if (sudahAda) {
-
-    status.innerHTML =
-      "⚠️ Register " +
-      item.register +
-      " sudah dipilih";
-
-
-    search.value =
-      "";
-
-    hasilCari.innerHTML =
-      "";
-
-    return;
 
   }
 
 
-  dataTerpilih.push(
-    item
-  );
+  semuaData =
+    Array.isArray(
+      hasil.data
+    )
+    ?
+    hasil.data
+    :
+    [];
 
 
-  tampilkanTabel();
+  updateRingkasan();
 
 
-  search.value =
-    "";
-
-  hasilCari.innerHTML =
-    "";
+  tampilkanData();
 
 
-  status.innerHTML =
-    "✅ Register " +
-    item.register +
-    " ditambahkan";
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "✅ Data berhasil diperbarui • " +
+    new Date().toLocaleTimeString(
+      "id-ID"
+    );
 
 }
 
 
 /* =====================================================
-   TAMPILKAN TABEL
+   UPDATE RINGKASAN
 ===================================================== */
 
-function tampilkanTabel() {
+function updateRingkasan() {
 
-  tabelData.innerHTML =
-    "";
+  let jumlahBelum =
+    0;
 
+  let volumeBelum =
+    0;
 
-  let volumeTotal =
+  let jumlahSisa =
+    0;
+
+  let volumeSisa =
+    0;
+
+  let jumlahDiolah =
+    0;
+
+  let volumeDiolah =
+    0;
+
+  let jumlahSemua =
+    0;
+
+  let volumeSemua =
     0;
 
 
-  dataTerpilih.forEach(
-    function(item, index) {
+  semuaData.forEach(
+    function(item) {
 
       const volume =
         Number(
@@ -1204,197 +1429,780 @@ function tampilkanTabel() {
         ) || 0;
 
 
-      volumeTotal +=
+      jumlahSemua++;
+
+      volumeSemua +=
         volume;
 
 
-      const tr =
-        document.createElement(
-          "tr"
-        );
+      if (
+        item.statusOlah ===
+        "SISA"
+      ) {
 
+        jumlahSisa++;
 
-      tr.innerHTML = `
+        volumeSisa +=
+          volume;
 
-        <td>
-          ${aman(item.register)}
-        </td>
+      }
 
-        <td>
-          ${aman(item.panjang)}
-        </td>
+      else if (
+        item.statusOlah ===
+        "SUDAH DIOLAH"
+      ) {
 
-        <td>
-          ${aman(item.diameter)}
-        </td>
+        jumlahDiolah++;
 
-        <td>
-          ${aman(item.tpk)}
-        </td>
+        volumeDiolah +=
+          volume;
 
-        <td>
-          ${aman(item.tumpuk)}
-        </td>
+      }
 
-        <td>
-          ${aman(item.mutu)}
-        </td>
+      else {
 
-        <td>
-          ${aman(item.m3)}
-        </td>
+        jumlahBelum++;
 
-        <td>
+        volumeBelum +=
+          volume;
 
-          <button
-            class="hapusBtn"
-            onclick="hapusPilihan(${index})"
-          >
-            ✕
-          </button>
-
-        </td>
-
-      `;
-
-
-      tabelData.appendChild(
-        tr
-      );
+      }
 
     }
   );
 
 
-  totalBatang.innerHTML =
-    dataTerpilih.length;
-
-
-  totalVolume.innerHTML =
-    volumeTotal
-      .toFixed(3)
-      .replace(
-        ".",
-        ","
-      ) +
-    " M³";
-
-
-  if (
-    dataTerpilih.length === 0
-  ) {
-
-    tabelData.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="8"
-          style="
-            padding:25px;
-            color:#777;
-          "
-        >
-
-          Belum ada register yang dipilih.
-
-        </td>
-
-      </tr>
-
-    `;
-
-  }
-
-}
-
-
-/* =====================================================
-   HAPUS SATU PILIHAN
-===================================================== */
-
-function hapusPilihan(
-  index
-) {
-
-  if (
-    index < 0 ||
-    index >= dataTerpilih.length
-  ) {
-
-    return;
-
-  }
-
-
-  dataTerpilih.splice(
-    index,
-    1
-  );
-
-
-  tampilkanTabel();
-
-
-  status.innerHTML =
-    "Register dihapus dari daftar pilihan";
-
-}
-
-
-/* =====================================================
-   KOSONGKAN SEMUA PILIHAN
-===================================================== */
-
-function kosongkanPilihan() {
-
-  if (
-    dataTerpilih.length === 0
-  ) {
-
-    return;
-
-  }
-
-
-  const yakin =
-    confirm(
-      "Kosongkan semua register yang sudah dipilih?"
+  document.getElementById(
+    "jumlahBelum"
+  ).innerHTML =
+    formatAngka(
+      jumlahBelum
     );
 
 
-  if (!yakin) {
+  document.getElementById(
+    "volumeBelum"
+  ).innerHTML =
+    formatVolume(
+      volumeBelum
+    ) +
+    " M3";
+
+
+  document.getElementById(
+    "jumlahSisa"
+  ).innerHTML =
+    formatAngka(
+      jumlahSisa
+    );
+
+
+  document.getElementById(
+    "volumeSisa"
+  ).innerHTML =
+    formatVolume(
+      volumeSisa
+    ) +
+    " M3";
+
+
+  document.getElementById(
+    "jumlahDiolah"
+  ).innerHTML =
+    formatAngka(
+      jumlahDiolah
+    );
+
+
+  document.getElementById(
+    "volumeDiolah"
+  ).innerHTML =
+    formatVolume(
+      volumeDiolah
+    ) +
+    " M3";
+
+
+  document.getElementById(
+    "jumlahSemua"
+  ).innerHTML =
+    formatAngka(
+      jumlahSemua
+    );
+
+
+  document.getElementById(
+    "volumeSemua"
+  ).innerHTML =
+    formatVolume(
+      volumeSemua
+    ) +
+    " M3";
+
+}
+
+
+/* =====================================================
+   PILIH FILTER
+===================================================== */
+
+function pilihFilter(
+  filter
+) {
+
+  filterAktif =
+    filter;
+
+
+  document
+    .querySelectorAll(
+      ".stat"
+    )
+    .forEach(
+      function(element) {
+
+        element.classList.remove(
+          "aktif"
+        );
+
+      }
+    );
+
+
+  if (
+    filter ===
+    "BELUM DIOLAH"
+  ) {
+
+    document
+      .getElementById(
+        "filterBelum"
+      )
+      .classList.add(
+        "aktif"
+      );
+
+  }
+
+  else if (
+    filter ===
+    "SISA"
+  ) {
+
+    document
+      .getElementById(
+        "filterSisa"
+      )
+      .classList.add(
+        "aktif"
+      );
+
+  }
+
+  else if (
+    filter ===
+    "SUDAH DIOLAH"
+  ) {
+
+    document
+      .getElementById(
+        "filterDiolah"
+      )
+      .classList.add(
+        "aktif"
+      );
+
+  }
+
+  else {
+
+    document
+      .getElementById(
+        "filterSemua"
+      )
+      .classList.add(
+        "aktif"
+      );
+
+  }
+
+
+  tampilkanData();
+
+}
+
+
+/* =====================================================
+   DATA SESUAI FILTER
+===================================================== */
+
+function dataSesuaiFilter() {
+
+  if (
+    filterAktif ===
+    "SEMUA"
+  ) {
+
+    return semuaData;
+
+  }
+
+
+  return semuaData.filter(
+    function(item) {
+
+      if (
+        filterAktif ===
+        "SISA"
+      ) {
+
+        return item.statusOlah ===
+          "SISA";
+
+      }
+
+
+      if (
+        filterAktif ===
+        "SUDAH DIOLAH"
+      ) {
+
+        return item.statusOlah ===
+          "SUDAH DIOLAH";
+
+      }
+
+
+      return (
+        !item.statusOlah ||
+        item.statusOlah ===
+        "BELUM DIOLAH"
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   TAMPIL DATA
+===================================================== */
+
+function tampilkanData() {
+
+  const container =
+    document.getElementById(
+      "tableContainer"
+    );
+
+
+  const data =
+    dataSesuaiFilter();
+
+
+  let totalVolume =
+    0;
+
+
+  data.forEach(
+    function(item) {
+
+      totalVolume +=
+        Number(
+          item.volumeAngka
+        ) || 0;
+
+    }
+  );
+
+
+  document.getElementById(
+    "totalBatang"
+  ).innerHTML =
+    formatAngka(
+      data.length
+    ) +
+    " BATANG";
+
+
+  document.getElementById(
+    "totalM3"
+  ).innerHTML =
+    formatVolume(
+      totalVolume
+    ) +
+    " M3";
+
+
+  if (
+    data.length ===
+    0
+  ) {
+
+    container.innerHTML =
+      `
+        <div class="kosong">
+
+          📭 Tidak ada data
+          pada filter ini.
+
+        </div>
+      `;
 
     return;
 
   }
 
 
-  dataTerpilih =
-    [];
+  let html = "";
 
 
-  tampilkanTabel();
+  html +=
+    `
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>REGISTER</th>
+
+            <th>PANJANG</th>
+
+            <th>DIAMETER</th>
+
+            <th>TPK</th>
+
+            <th>TUMPUK</th>
+
+            <th>MUTU</th>
+
+            <th>M3</th>
+
+            <th>STATUS</th>
+
+            <th>AKSI</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+    `;
 
 
-  status.innerHTML =
-    "📋 Pilihan dikosongkan";
+  data.forEach(
+    function(item) {
 
+      const status =
+        item.statusOlah ||
+        "BELUM DIOLAH";
+
+
+      let statusClass =
+        "statusBelum";
+
+
+      if (
+        status ===
+        "SISA"
+      ) {
+
+        statusClass =
+          "statusSisa";
+
+      }
+
+      else if (
+        status ===
+        "SUDAH DIOLAH"
+      ) {
+
+        statusClass =
+          "statusDiolah";
+
+      }
+
+
+      html +=
+        `
+          <tr>
+
+            <td class="register">
+              ${escapeHTML(
+                item.register
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.panjang
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.diameter
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.tpk
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.tumpuk
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.mutu
+              )}
+            </td>
+
+            <td class="volume">
+              ${escapeHTML(
+                item.m3
+              )}
+            </td>
+
+            <td
+              class="statusCell ${statusClass}"
+            >
+              ${escapeHTML(
+                status
+              )}
+            </td>
+
+            <td>
+
+              <div class="aksi">
+
+                ${
+                  status !==
+                  "SISA"
+                  ?
+                  `
+                  <button
+                    class="btnAksi btnSisa"
+                    onclick="ubahStatus(
+                      '${escapeJS(item.register)}',
+                      'SISA'
+                    )"
+                  >
+                    SISA
+                  </button>
+                  `
+                  :
+                  ""
+                }
+
+
+                ${
+                  status !==
+                  "SUDAH DIOLAH"
+                  ?
+                  `
+                  <button
+                    class="btnAksi btnDiolah"
+                    onclick="ubahStatus(
+                      '${escapeJS(item.register)}',
+                      'SUDAH DIOLAH'
+                    )"
+                  >
+                    DIOLAH
+                  </button>
+                  `
+                  :
+                  ""
+                }
+
+
+                ${
+                  status !==
+                  "BELUM DIOLAH"
+                  ?
+                  `
+                  <button
+                    class="btnAksi btnKembalikan"
+                    onclick="ubahStatus(
+                      '${escapeJS(item.register)}',
+                      'BELUM DIOLAH'
+                    )"
+                  >
+                    KEMBALIKAN
+                  </button>
+                  `
+                  :
+                  ""
+                }
+
+              </div>
+
+            </td>
+
+          </tr>
+        `;
+
+    }
+  );
+
+
+  html +=
+    `
+        </tbody>
+
+      </table>
+    `;
+
+
+  container.innerHTML =
+    html;
 
 }
 
 
 /* =====================================================
-   AMANKAN TEKS
+   UBAH STATUS
 ===================================================== */
 
-function aman(
+function ubahStatus(
+  register,
+  statusBaru
+) {
+
+  let pertanyaan = "";
+
+
+  if (
+    statusBaru ===
+    "SISA"
+  ) {
+
+    pertanyaan =
+      "Tandai register " +
+      register +
+      " sebagai SISA?";
+
+  }
+
+  else if (
+    statusBaru ===
+    "SUDAH DIOLAH"
+  ) {
+
+    pertanyaan =
+      "Tandai register " +
+      register +
+      " sebagai SUDAH DIOLAH?";
+
+  }
+
+  else {
+
+    pertanyaan =
+      "Kembalikan " +
+      register +
+      " menjadi BELUM DIOLAH?";
+
+  }
+
+
+  if (
+    !confirm(
+      pertanyaan
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.innerHTML =
+    "⏳ Menyimpan status " +
+    register +
+    "...";
+
+
+  let parameter =
+    "";
+
+
+  if (
+    statusBaru ===
+    "SISA"
+  ) {
+
+    parameter =
+      "tandaiSisa=1";
+
+  }
+
+  else if (
+    statusBaru ===
+    "SUDAH DIOLAH"
+  ) {
+
+    parameter =
+      "tandaiDiolah=1";
+
+  }
+
+  else {
+
+    parameter =
+      "kembalikanBelum=1";
+
+  }
+
+
+  const callbackName =
+    "status_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(hasil) {
+
+      try {
+
+        if (
+          hasil &&
+          hasil.status ===
+          "success"
+        ) {
+
+          status.innerHTML =
+            "✅ " +
+            register +
+            " → " +
+            statusBaru;
+
+
+          ambilData();
+
+        }
+
+        else {
+
+          status.innerHTML =
+            "❌ " +
+            (
+              hasil &&
+              hasil.message
+              ?
+              hasil.message
+              :
+              "Gagal menyimpan status"
+            );
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+        status.innerHTML =
+          "❌ Terjadi kesalahan";
+
+      }
+
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+        const script =
+          document.getElementById(
+            callbackName
+          );
+
+        if (script) {
+
+          script.remove();
+
+        }
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.id =
+    callbackName;
+
+
+  script.src =
+    API_URL +
+    "?" +
+    parameter +
+    "&register=" +
+    encodeURIComponent(
+      register
+    ) +
+    "&callback=" +
+    callbackName +
+    "&t=" +
+    Date.now();
+
+
+  script.onerror =
+    function() {
+
+      status.innerHTML =
+        "❌ Gagal menghubungi Google Sheets";
+
+
+      delete window[
+        callbackName
+      ];
+
+      script.remove();
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
   nilai
 ) {
 
   return String(
-    nilai === null ||
-    nilai === undefined
+    nilai === undefined ||
+    nilai === null
     ?
     ""
     :
@@ -1425,13 +2233,42 @@ function aman(
 
 
 /* =====================================================
-   JALANKAN SAAT HALAMAN DIBUKA
+   ESCAPE JAVASCRIPT
 ===================================================== */
 
-tampilkanTabel();
+function escapeJS(
+  nilai
+) {
 
-muatData();
+  return String(
+    nilai === undefined ||
+    nilai === null
+    ?
+    ""
+    :
+    nilai
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  )
+  .replace(
+    /"/g,
+    '\\"'
+  );
 
+}
+
+
+/* =====================================================
+   LOAD PERTAMA
+===================================================== */
+
+ambilData();
 
 </script>
 
