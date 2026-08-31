@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Data Olah BBI - IK Saradan</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  font-family: Arial, sans-serif;
+
+  background: #f3f6f4;
+
+  margin: 0;
+
+  padding: 15px;
+
+  color: #222;
+
+  padding-bottom: 40px;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto 15px;
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 12px 15px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.08);
+
+  border-top: 4px solid #176b38;
+
+}
+
+
+.headerIsi {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+}
+
+
+.logo {
+
+  width: 85px;
+
+  height: 75px;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+
+}
+
+
+.judulBox {
+
+  text-align: left;
+
+}
+
+
+.judul {
+
+  font-size: 23px;
+
+  font-weight: 900;
+
+  color: #176b38;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+}
+
+
+.subjudul {
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  color: #555;
+
+  letter-spacing: 1.5px;
+
+  margin-top: 5px;
+
+}
+
+
+/* =====================================================
+   PENCARIAN
+===================================================== */
+
+.search-card {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto 12px;
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.08);
+
+}
+
+
+.search-title {
+
+  font-size: 17px;
+
+  font-weight: 900;
+
+  color: #176b38;
+
+  margin-bottom: 8px;
+
+}
+
+
+#search {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: 2px solid #ddd;
+
+  border-radius: 9px;
+
+  font-size: 18px;
+
+  outline: none;
+
+}
+
+
+#search:focus {
+
+  border-color: #176b38;
+
+}
+
+
+#status {
+
+  margin-top: 9px;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  color: #666;
+
+}
+
+
+/* =====================================================
+   HASIL PENCARIAN
+===================================================== */
+
+#hasilCari {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto;
+
+}
+
+
+.hasilItem {
+
+  background: white;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  margin-bottom: 8px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.07);
+
+  border-left: 5px solid #176b38;
+
+  cursor: pointer;
+
+}
+
+
+.hasilItem:active {
+
+  transform: scale(0.99);
+
+}
+
+
+.hasilRegister {
+
+  font-size: 19px;
+
+  font-weight: 900;
+
+  color: #176b38;
+
+}
+
+
+.hasilInfo {
+
+  margin-top: 4px;
+
+  color: #666;
+
+  font-size: 14px;
+
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.totalCard {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 15px auto;
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+.totalBox {
+
+  flex: 1;
+
+  background: white;
+
+  border: 2px solid #176b38;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  text-align: center;
+
+  box-shadow:
+    0 3px 10px rgba(0,0,0,0.08);
+
+}
+
+
+.totalLabel {
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  color: #666;
+
+}
+
+
+.totalValue {
+
+  margin-top: 4px;
+
+  font-size: 27px;
+
+  font-weight: 900;
+
+  color: #176b38;
+
+}
+
+
+/* =====================================================
+   TABEL
+===================================================== */
+
+.tableCard {
+
+  width: 100%;
+
+  max-width: 1000px;
+
+  margin: 15px auto;
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 8px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.08);
+
+  overflow-x: auto;
+
+}
+
+
+table {
+
+  width: 100%;
+
+  min-width: 700px;
+
+  border-collapse: collapse;
+
+}
+
+
+thead th {
+
+  background: #176b38;
+
+  color: white;
+
+  padding: 11px 8px;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+
+}
+
+
+tbody td {
+
+  padding: 11px 8px;
+
+  border-bottom: 1px solid #ddd;
+
+  text-align: center;
+
+  font-size: 15px;
+
+  white-space: nowrap;
+
+}
+
+
+tbody tr:nth-child(even) {
+
+  background: #f7f9f8;
+
+}
+
+
+tbody td:first-child {
+
+  font-weight: 900;
+
+  color: #176b38;
+
+}
+
+
+/* =====================================================
+   TOMBOL HAPUS PILIHAN
+===================================================== */
+
+.hapusBtn {
+
+  border: none;
+
+  background: #c62828;
+
+  color: white;
+
+  font-weight: bold;
+
+  padding: 6px 9px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+}
+
+
+.hapusBtn:active {
+
+  transform: scale(0.94);
+
+}
+
+
+/* =====================================================
+   TOMBOL BAWAH
+===================================================== */
+
+#btnKosongkan {
+
+  display: block;
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 12px auto;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #555;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+
+#btnMuat {
+
+  display: block;
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 12px auto;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #176b38;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+
+button:active {
+
+  transform: scale(0.98);
+
+}
+
+
+/* =====================================================
+   KOSONG
+===================================================== */
+
+.kosong {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 20px auto;
+
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  color: #777;
+
+}
+
+
+/* =====================================================
+   HP
+===================================================== */
+
+@media(max-width:600px) {
+
+  body {
+
+    padding: 10px;
+
+  }
+
+
+  .header {
+
+    padding: 10px 8px;
+
+  }
+
+
+  .headerIsi {
+
+    gap: 7px;
+
+  }
+
+
+  .logo {
+
+    width: 75px;
+
+    height: 68px;
+
+  }
+
+
+  .judul {
+
+    font-size: 20px;
+
+  }
+
+
+  .subjudul {
+
+    font-size: 14px;
+
+  }
+
+
+  .totalValue {
+
+    font-size: 23px;
+
+  }
+
+}
+
+
+/* =====================================================
+   HP KECIL
+===================================================== */
+
+@media(max-width:380px) {
+
+  .logo {
+
+    width: 65px;
+
+    height: 58px;
+
+  }
+
+
+  .judul {
+
+    font-size: 18px;
+
+  }
+
+
+  .subjudul {
+
+    font-size: 13px;
+
+  }
+
+
+  .search-title {
+
+    font-size: 16px;
+
+  }
+
+
+  #search {
+
+    font-size: 16px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+  <div class="headerIsi">
+
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
+
+    <div class="judulBox">
+
+      <div class="judul">
+        DATA OLAH BBI
+      </div>
+
+      <div class="subjudul">
+        IK SARADAN
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PENCARIAN
+===================================================== -->
+
+<div class="search-card">
+
+  <div class="search-title">
+    🔎 CARI NOMOR REGISTER
+  </div>
+
+
+  <input
+    type="text"
+    id="search"
+    placeholder="Ketik nomor register..."
+    autocomplete="off"
+  >
+
+
+  <div id="status">
+    ⏳ Memuat data...
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     HASIL PENCARIAN
+===================================================== -->
+
+<div id="hasilCari"></div>
+
+
+<!-- =====================================================
+     TOTAL
+===================================================== -->
+
+<div class="totalCard">
+
+  <div class="totalBox">
+
+    <div class="totalLabel">
+      TOTAL BATANG
+    </div>
+
+    <div
+      class="totalValue"
+      id="totalBatang"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <div class="totalBox">
+
+    <div class="totalLabel">
+      TOTAL VOLUME
+    </div>
+
+    <div
+      class="totalValue"
+      id="totalVolume"
+    >
+      0,000 M³
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABEL DATA
+===================================================== -->
+
+<div class="tableCard">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>REGISTER</th>
+
+        <th>PANJANG</th>
+
+        <th>DIAMETER</th>
+
+        <th>TPK</th>
+
+        <th>TUMPUK</th>
+
+        <th>MUTU</th>
+
+        <th>M3</th>
+
+        <th>HAPUS</th>
+
+      </tr>
+
+    </thead>
+
+
+    <tbody id="tabelData">
+
+    </tbody>
+
+  </table>
+
+</div>
+
+
+<!-- =====================================================
+     TOMBOL
+===================================================== -->
+
+<button
+  id="btnKosongkan"
+  onclick="kosongkanPilihan()"
+>
+  🗑️ KOSONGKAN PILIHAN
+</button>
+
+
+<button
+  id="btnMuat"
+  onclick="muatData()"
+>
+  🔄 MUAT ULANG DATA
+</button>
+
+
+<script>
+
+
+/* =====================================================
+   URL APPS SCRIPT MODE OLAH
+===================================================== */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbx3wriyYJKQAUWp_QMWR3J0TxwdjVL0Htigd2g59vawku1c4abcwORWT8rwHzdlsg/exec";
+
+
+/* =====================================================
+   VARIABEL
+===================================================== */
+
+let semuaData = [];
+
+let dataTerpilih = [];
+
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
+const search =
+  document.getElementById(
+    "search"
+  );
+
+const hasilCari =
+  document.getElementById(
+    "hasilCari"
+  );
+
+const tabelData =
+  document.getElementById(
+    "tabelData"
+  );
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+const totalBatang =
+  document.getElementById(
+    "totalBatang"
+  );
+
+const totalVolume =
+  document.getElementById(
+    "totalVolume"
+  );
+
+
+/* =====================================================
+   MUAT DATA DARI APPS SCRIPT
+===================================================== */
+
+function muatData() {
+
+  status.innerHTML =
+    "⏳ Mengambil data dari Google Sheets...";
+
+
+  const callbackName =
+    "olah_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(hasil) {
+
+      try {
+
+        if (
+          !hasil ||
+          hasil.status !== "success"
+        ) {
+
+          throw new Error(
+            hasil &&
+            hasil.message
+            ?
+            hasil.message
+            :
+            "Gagal mengambil data"
+          );
+
+        }
+
+
+        semuaData =
+          Array.isArray(
+            hasil.data
+          )
+          ?
+          hasil.data
+          :
+          [];
+
+
+        status.innerHTML =
+          "✅ Data siap — " +
+          semuaData.length +
+          " batang masuk";
+
+
+      }
+
+      catch(error) {
+
+        status.innerHTML =
+          "❌ " +
+          error.message;
+
+        console.log(
+          error
+        );
+
+      }
+
+
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+
+        const script =
+          document.getElementById(
+            callbackName
+          );
+
+
+        if (script) {
+
+          script.remove();
+
+        }
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.id =
+    callbackName;
+
+
+  script.src =
+    API_URL +
+    "?getDataOlah=1" +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      status.innerHTML =
+        "❌ Gagal menghubungi Apps Script MODE OLAH";
+
+
+      delete window[
+        callbackName
+      ];
+
+
+      script.remove();
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =====================================================
+   PENCARIAN REGISTER
+===================================================== */
+
+search.addEventListener(
+  "input",
+  function() {
+
+    const kata =
+      this.value
+        .trim()
+        .toLowerCase();
+
+
+    hasilCari.innerHTML =
+      "";
+
+
+    if (!kata) {
+
+      return;
+
+    }
+
+
+    const ditemukan =
+      semuaData
+        .filter(
+          function(item) {
+
+            return String(
+              item.register || ""
+            )
+            .toLowerCase()
+            .includes(
+              kata
+            );
+
+          }
+        )
+        .slice(
+          0,
+          30
+        );
+
+
+    if (
+      ditemukan.length === 0
+    ) {
+
+      hasilCari.innerHTML = `
+
+        <div class="hasilItem">
+
+          <div class="hasilRegister">
+            ⚠️ REGISTER TIDAK DITEMUKAN
+          </div>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    ditemukan.forEach(
+      function(item) {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "hasilItem";
+
+
+        div.innerHTML = `
+
+          <div class="hasilRegister">
+            ${aman(item.register)}
+          </div>
+
+          <div class="hasilInfo">
+            Tumpuk:
+            ${aman(item.tumpuk || "-")}
+            &nbsp; | &nbsp;
+            M3:
+            ${aman(item.m3 || "0")}
+          </div>
+
+        `;
+
+
+        div.onclick =
+          function() {
+
+            pilihRegister(
+              item
+            );
+
+          };
+
+
+        hasilCari.appendChild(
+          div
+        );
+
+      }
+    );
+
+  }
+);
+
+
+/* =====================================================
+   PILIH REGISTER
+===================================================== */
+
+function pilihRegister(
+  item
+) {
+
+  if (!item) return;
+
+
+  const sudahAda =
+    dataTerpilih.some(
+      function(data) {
+
+        return String(
+          data.register
+        ) ===
+        String(
+          item.register
+        );
+
+      }
+    );
+
+
+  if (sudahAda) {
+
+    status.innerHTML =
+      "⚠️ Register " +
+      item.register +
+      " sudah dipilih";
+
+
+    search.value =
+      "";
+
+    hasilCari.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  dataTerpilih.push(
+    item
+  );
+
+
+  tampilkanTabel();
+
+
+  search.value =
+    "";
+
+  hasilCari.innerHTML =
+    "";
+
+
+  status.innerHTML =
+    "✅ Register " +
+    item.register +
+    " ditambahkan";
+
+}
+
+
+/* =====================================================
+   TAMPILKAN TABEL
+===================================================== */
+
+function tampilkanTabel() {
+
+  tabelData.innerHTML =
+    "";
+
+
+  let volumeTotal =
+    0;
+
+
+  dataTerpilih.forEach(
+    function(item, index) {
+
+      const volume =
+        Number(
+          item.volumeAngka
+        ) || 0;
+
+
+      volumeTotal +=
+        volume;
+
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${aman(item.register)}
+        </td>
+
+        <td>
+          ${aman(item.panjang)}
+        </td>
+
+        <td>
+          ${aman(item.diameter)}
+        </td>
+
+        <td>
+          ${aman(item.tpk)}
+        </td>
+
+        <td>
+          ${aman(item.tumpuk)}
+        </td>
+
+        <td>
+          ${aman(item.mutu)}
+        </td>
+
+        <td>
+          ${aman(item.m3)}
+        </td>
+
+        <td>
+
+          <button
+            class="hapusBtn"
+            onclick="hapusPilihan(${index})"
+          >
+            ✕
+          </button>
+
+        </td>
+
+      `;
+
+
+      tabelData.appendChild(
+        tr
+      );
+
+    }
+  );
+
+
+  totalBatang.innerHTML =
+    dataTerpilih.length;
+
+
+  totalVolume.innerHTML =
+    volumeTotal
+      .toFixed(3)
+      .replace(
+        ".",
+        ","
+      ) +
+    " M³";
+
+
+  if (
+    dataTerpilih.length === 0
+  ) {
+
+    tabelData.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="8"
+          style="
+            padding:25px;
+            color:#777;
+          "
+        >
+
+          Belum ada register yang dipilih.
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================================
+   HAPUS SATU PILIHAN
+===================================================== */
+
+function hapusPilihan(
+  index
+) {
+
+  if (
+    index < 0 ||
+    index >= dataTerpilih.length
+  ) {
+
+    return;
+
+  }
+
+
+  dataTerpilih.splice(
+    index,
+    1
+  );
+
+
+  tampilkanTabel();
+
+
+  status.innerHTML =
+    "Register dihapus dari daftar pilihan";
+
+}
+
+
+/* =====================================================
+   KOSONGKAN SEMUA PILIHAN
+===================================================== */
+
+function kosongkanPilihan() {
+
+  if (
+    dataTerpilih.length === 0
+  ) {
+
+    return;
+
+  }
+
+
+  const yakin =
+    confirm(
+      "Kosongkan semua register yang sudah dipilih?"
+    );
+
+
+  if (!yakin) {
+
+    return;
+
+  }
+
+
+  dataTerpilih =
+    [];
+
+
+  tampilkanTabel();
+
+
+  status.innerHTML =
+    "📋 Pilihan dikosongkan";
+
+
+}
+
+
+/* =====================================================
+   AMANKAN TEKS
+===================================================== */
+
+function aman(
+  nilai
+) {
+
+  return String(
+    nilai === null ||
+    nilai === undefined
+    ?
+    ""
+    :
+    nilai
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+/* =====================================================
+   JALANKAN SAAT HALAMAN DIBUKA
+===================================================== */
+
+tampilkanTabel();
+
+muatData();
+
+
+</script>
+
+</body>
+
+</html>
