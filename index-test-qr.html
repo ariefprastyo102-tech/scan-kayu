@@ -787,10 +787,6 @@ body {
 
 }
 
-/* ==============================
-   AREA BAWAH
-============================== */
-
 body {
   padding-bottom: 80px;
 }
@@ -875,10 +871,6 @@ body {
   🔄 SCAN BARU
 </button>
 
-<!-- ==============================
-     HISTORY FLOATING
-============================== -->
-
 <button
   id="btnHistory"
   onclick="tampilkanHistory()"
@@ -910,10 +902,6 @@ body {
   </div>
 
 </div>
-
-<!-- ==============================
-     HASIL SCAN SESI AKTIF
-============================== -->
 
 <div id="daftar"></div>
 
@@ -967,6 +955,8 @@ const STORAGE_HISTORY =
 
 let scannerControls = null;
 
+let scannerReader = null;
+
 let kameraAktif = false;
 
 let sedangProses = false;
@@ -975,16 +965,8 @@ let jumlahBerhasil = 0;
 
 let dataScanTersimpan = [];
 
-/*
- * Menyimpan kode yang sedang dicek.
- * Ini mencegah kamera membaca barcode
- * yang sama berkali-kali sebelum API selesai.
- */
-
-let kodeSedangDicek = "";
-
 /* =====================================================
-   LOAD SESI AKTIF
+   LOAD DATA
 ===================================================== */
 
 function muatDataTersimpan() {
@@ -1038,7 +1020,7 @@ function muatDataTersimpan() {
 }
 
 /* =====================================================
-   SIMPAN SESI AKTIF
+   SIMPAN DATA
 ===================================================== */
 
 function simpanData() {
@@ -1046,13 +1028,10 @@ function simpanData() {
   try {
 
     localStorage.setItem(
-
       STORAGE_DATA,
-
       JSON.stringify(
         dataScanTersimpan
       )
-
     );
 
   }
@@ -1069,7 +1048,7 @@ function simpanData() {
 }
 
 /* =====================================================
-   UPDATE TOTAL
+   UPDATE JUMLAH
 ===================================================== */
 
 function updateJumlah() {
@@ -1089,7 +1068,7 @@ function updateJumlah() {
 }
 
 /* =====================================================
-   TAMPILKAN SESI AKTIF
+   TAMPIL DATA
 ===================================================== */
 
 function tampilkanDataTersimpan() {
@@ -1145,7 +1124,7 @@ updateJumlah();
 tampilkanDataTersimpan();
 
 /* =====================================================
-   INDIKATOR HIJAU
+   INDIKATOR
 ===================================================== */
 
 function tampilkanIndikatorHijau() {
@@ -1165,7 +1144,7 @@ function tampilkanIndikatorHijau() {
         "none";
 
     },
-    350
+    400
   );
 
 }
@@ -1187,45 +1166,45 @@ function bunyiBerhasil() {
     const audio =
       new AudioContext();
 
-    const oscillator1 =
+    const oscillator =
       audio.createOscillator();
 
-    const gain1 =
+    const gain =
       audio.createGain();
 
-    oscillator1.type =
+    oscillator.type =
       "sine";
 
-    oscillator1.frequency.setValueAtTime(
-      1300,
+    oscillator.frequency.setValueAtTime(
+      1400,
       audio.currentTime
     );
 
-    gain1.gain.setValueAtTime(
+    gain.gain.setValueAtTime(
       0.001,
       audio.currentTime
     );
 
-    gain1.gain.exponentialRampToValueAtTime(
+    gain.gain.exponentialRampToValueAtTime(
       0.35,
       audio.currentTime + 0.01
     );
 
-    gain1.gain.exponentialRampToValueAtTime(
+    gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audio.currentTime + 0.12
+      audio.currentTime + 0.10
     );
 
-    oscillator1.connect(gain1);
+    oscillator.connect(gain);
 
-    gain1.connect(
+    gain.connect(
       audio.destination
     );
 
-    oscillator1.start();
+    oscillator.start();
 
-    oscillator1.stop(
-      audio.currentTime + 0.13
+    oscillator.stop(
+      audio.currentTime + 0.11
     );
 
     setTimeout(
@@ -1234,7 +1213,7 @@ function bunyiBerhasil() {
         audio.close();
 
       },
-      300
+      200
     );
 
   }
@@ -1262,7 +1241,93 @@ function getarBerhasil() {
 }
 
 /* =====================================================
-   MULAI KAMERA ZXING
+   OPTIMASI CAMERA
+===================================================== */
+
+async function optimalkanKamera(video) {
+
+  try {
+
+    if (!video.srcObject) return;
+
+    const tracks =
+      video.srcObject.getVideoTracks();
+
+    if (!tracks.length) return;
+
+    const track =
+      tracks[0];
+
+    const capabilities =
+      track.getCapabilities
+      ?
+      track.getCapabilities()
+      :
+      {};
+
+    const advanced = {};
+
+    /* AUTOFOCUS */
+
+    if (
+      capabilities.focusMode &&
+      capabilities.focusMode.includes("continuous")
+    ) {
+
+      advanced.focusMode =
+        "continuous";
+
+    }
+
+    /* EXPOSURE */
+
+    if (
+      capabilities.exposureMode &&
+      capabilities.exposureMode.includes("continuous")
+    ) {
+
+      advanced.exposureMode =
+        "continuous";
+
+    }
+
+    /* WHITE BALANCE */
+
+    if (
+      capabilities.whiteBalanceMode &&
+      capabilities.whiteBalanceMode.includes("continuous")
+    ) {
+
+      advanced.whiteBalanceMode =
+        "continuous";
+
+    }
+
+    if (
+      Object.keys(advanced).length
+    ) {
+
+      await track.applyConstraints({
+        advanced: [advanced]
+      });
+
+    }
+
+  }
+
+  catch (e) {
+
+    console.log(
+      "Optimasi kamera tidak tersedia:",
+      e
+    );
+
+  }
+
+}
+
+/* =====================================================
+   MULAI KAMERA
 ===================================================== */
 
 async function mulaiKamera() {
@@ -1299,8 +1364,17 @@ async function mulaiKamera() {
         "video"
       );
 
-    const reader =
-      new ZXingBrowser.BrowserMultiFormatReader();
+    /*
+     * READER KHUSUS MULTI FORMAT
+     * Interval dibuat kecil supaya
+     * pemeriksaan frame lebih sering.
+     */
+
+    scannerReader =
+      new ZXingBrowser.BrowserMultiFormatReader(
+        undefined,
+        80
+      );
 
     const constraints = {
 
@@ -1313,16 +1387,25 @@ async function mulaiKamera() {
         },
 
         width: {
-          ideal: 1920
+          min: 640,
+          ideal: 1280,
+          max: 1920
         },
 
         height: {
-          ideal: 1080
+          min: 480,
+          ideal: 720,
+          max: 1080
         },
 
         frameRate: {
+          min: 15,
           ideal: 30,
           max: 60
+        },
+
+        focusMode: {
+          ideal: "continuous"
         }
 
       }
@@ -1333,7 +1416,7 @@ async function mulaiKamera() {
       "⏳ Meminta akses kamera...";
 
     scannerControls =
-      await reader.decodeFromConstraints(
+      await scannerReader.decodeFromConstraints(
 
         constraints,
 
@@ -1346,6 +1429,8 @@ async function mulaiKamera() {
 
           if (!result) return;
 
+          if (sedangProses) return;
+
           const kode =
             String(
               result.getText() || ""
@@ -1354,29 +1439,12 @@ async function mulaiKamera() {
           if (!kode) return;
 
           /*
-           * LANGSUNG BLOK SCAN BERIKUTNYA
-           * SAAT BARCODE TERBACA.
+           * LANGSUNG KUNCI PROSES
+           * agar barcode yang sama
+           * tidak terbaca berkali-kali.
            */
-
-          if (sedangProses) return;
-
-          /*
-           * Pengaman tambahan agar barcode
-           * yang sama tidak dikirim dua kali.
-           */
-
-          if (
-            kode === kodeSedangDicek
-          ) {
-
-            return;
-
-          }
 
           sedangProses = true;
-
-          kodeSedangDicek =
-            kode;
 
           tampilkanIndikatorHijau();
 
@@ -1390,20 +1458,10 @@ async function mulaiKamera() {
             "...";
 
           /*
-           * LANGSUNG CEK.
-           * Tidak ada setTimeout / delay.
+           * CODE 128
            */
 
           if (
-            format ===
-            ZXingBrowser.BarcodeFormat.QR_CODE
-          ) {
-
-            cekQR(kode);
-
-          }
-
-          else if (
             format ===
             ZXingBrowser.BarcodeFormat.CODE_128
           ) {
@@ -1412,6 +1470,23 @@ async function mulaiKamera() {
 
           }
 
+          /*
+           * QR
+           */
+
+          else if (
+            format ===
+            ZXingBrowser.BarcodeFormat.QR_CODE
+          ) {
+
+            cekQR(kode);
+
+          }
+
+          /*
+           * FORMAT LAIN
+           */
+
           else {
 
             status.innerHTML =
@@ -1419,8 +1494,6 @@ async function mulaiKamera() {
               kode;
 
             sedangProses = false;
-
-            kodeSedangDicek = "";
 
           }
 
@@ -1441,12 +1514,31 @@ async function mulaiKamera() {
       "📷 KAMERA AKTIF<br>" +
       "Arahkan QR / CODE 128 ke kotak hijau";
 
+    /*
+     * TUNGGU VIDEO BENAR-BENAR
+     * AKTIF SEBELUM OPTIMASI
+     */
+
+    setTimeout(
+      function() {
+
+        optimalkanKamera(
+          video
+        );
+
+      },
+      500
+    );
+
   }
 
   catch (error) {
 
     kameraAktif =
       false;
+
+    scannerControls =
+      null;
 
     tombol.innerHTML =
       "📷 BUKA KAMERA";
@@ -1513,9 +1605,8 @@ function cekQR(kode) {
       ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-      sedangProses = false;
-
-      kodeSedangDicek = "";
+      sedangProses =
+        false;
 
       delete window[
         callbackName
@@ -1577,9 +1668,8 @@ function cekRegister(register) {
       ).innerHTML =
         "❌ Gagal menghubungi DATABASE";
 
-      sedangProses = false;
-
-      kodeSedangDicek = "";
+      sedangProses =
+        false;
 
       delete window[
         callbackName
@@ -1605,17 +1695,7 @@ function prosesHasilScan(
   callbackName
 ) {
 
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-  /*
-   * HASIL SUKSES
-   */
-
   if (
-    hasil &&
     hasil.status ===
     "success"
   ) {
@@ -1624,7 +1704,9 @@ function prosesHasilScan(
 
     updateJumlah();
 
-    status.innerHTML =
+    document.getElementById(
+      "status"
+    ).innerHTML =
       "✅ " +
       hasil.data[0];
 
@@ -1660,17 +1742,14 @@ function prosesHasilScan(
 
   }
 
-  /*
-   * DUPLIKAT
-   */
-
   else if (
-    hasil &&
     hasil.status ===
     "duplicate"
   ) {
 
-    status.innerHTML =
+    document.getElementById(
+      "status"
+    ).innerHTML =
       "❌ " +
       hasil.message;
 
@@ -1701,17 +1780,14 @@ function prosesHasilScan(
 
   }
 
-  /*
-   * TIDAK DITEMUKAN
-   */
-
   else if (
-    hasil &&
     hasil.status ===
     "not_found"
   ) {
 
-    status.innerHTML =
+    document.getElementById(
+      "status"
+    ).innerHTML =
       "⚠️ " +
       hasil.message;
 
@@ -1734,34 +1810,27 @@ function prosesHasilScan(
 
   }
 
-  /*
-   * RESPONSE LAIN
-   */
-
   else {
 
-    status.innerHTML =
+    document.getElementById(
+      "status"
+    ).innerHTML =
       "⚠️ " +
       (
-        hasil &&
-        hasil.message
-        ?
-        hasil.message
-        :
-        "Response DATABASE tidak dikenal"
+        hasil.message ||
+        "Terjadi kesalahan"
       );
 
   }
 
   /*
-   * LANGSUNG SIAP SCAN BERIKUTNYA
+   * SELESAI PROSES.
+   * KAMERA TETAP HIDUP DAN
+   * LANGSUNG SIAP SCAN BERIKUTNYA.
    */
 
   sedangProses =
     false;
-
-  kodeSedangDicek =
-    "";
 
   delete window[
     callbackName
@@ -2163,7 +2232,7 @@ function scanBaru() {
 }
 
 /* =====================================================
-   TAMPILKAN HISTORY
+   HISTORY
 ===================================================== */
 
 function tampilkanHistory() {
@@ -2501,7 +2570,7 @@ function toggleHistoryDetail(
 }
 
 /* =====================================================
-   HAPUS SEMUA HISTORY
+   HAPUS HISTORY
 ===================================================== */
 
 function hapusSemuaHistory() {
