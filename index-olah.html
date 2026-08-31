@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 
 <html lang="id">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Olah - IK Saradan</title>
 
 <style>
@@ -115,13 +110,17 @@ body {
   color: #d97706;
 }
 
+/* =====================================================
+   TOTAL VOLUME
+===================================================== */
+
 .volume {
   border-top: 1px solid #ddd;
   margin-top: 7px;
-  padding-top: 7px;
+  padding-top: 9px;
   text-align: center;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 19px;
+  font-weight: 900;
   color: #176b38;
 }
 
@@ -330,6 +329,10 @@ body {
     font-size: 20px;
   }
 
+  .volume {
+    font-size: 19px;
+  }
+
   .register {
     min-width: 74px;
     font-size: 15px;
@@ -368,7 +371,7 @@ body {
 
   <div class="headerIsi">
 
-
+```
 <img
   class="logo"
   src="logo-perhutani.jpg"
@@ -386,7 +389,7 @@ body {
   </div>
 
 </div>
-
+```
 
   </div>
 
@@ -400,7 +403,7 @@ body {
 
   <div class="ringkasBaris">
 
-
+```
 <div class="ringkasItem">
 
   <div
@@ -447,7 +450,7 @@ body {
   </div>
 
 </div>
-
+```
 
   </div>
 
@@ -455,7 +458,7 @@ body {
     id="volumeOlah"
     class="volume"
   >
-    VOLUME DIOLAH: 0,000 M³
+    TOTAL VOLUME DIOLAH: 0,000 M³
   </div>
 
 </div>
@@ -472,9 +475,9 @@ onclick="muatData()"
 
 >
 
-
+```
 🔄 REFRESH DATA
-
+```
 
   </button>
 
@@ -788,7 +791,7 @@ function tampilkanData() {
   document.getElementById(
     "volumeOlah"
   ).innerHTML =
-    "VOLUME DIOLAH: " +
+    "TOTAL VOLUME DIOLAH: " +
     formatVolume(
       volumeOlah
     ) +
@@ -1151,7 +1154,7 @@ function batalSisa(
 
     {
 
-      batalkanSisa:
+      kembalikanBelum:
         "1",
 
       register:
@@ -1308,5 +1311,4 @@ muatData();
 </script>
 
 </body>
-
 </html>
