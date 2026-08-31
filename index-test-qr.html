@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -24,6 +25,7 @@ body {
   margin: 0;
   padding: 15px;
   color: #222;
+  padding-bottom: 80px;
 }
 
 /* ==============================
@@ -95,7 +97,7 @@ body {
 .camera-wrapper {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 340px;
   border-radius: 10px;
   overflow: hidden;
   background: black;
@@ -103,7 +105,7 @@ body {
 
 #video {
   width: 100%;
-  height: 300px;
+  height: 340px;
   object-fit: cover;
   display: block;
 }
@@ -116,8 +118,8 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 250px;
-  height: 250px;
+  width: 290px;
+  height: 210px;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 10;
@@ -160,6 +162,38 @@ body {
 }
 
 /* ==============================
+   GARIS TENGAH
+============================== */
+
+.scan-line {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 50%;
+  height: 2px;
+  background: #00e676;
+  box-shadow: 0 0 8px rgba(0,230,118,0.9);
+  opacity: 0.8;
+  animation: scanLine 1.5s linear infinite;
+}
+
+@keyframes scanLine {
+
+  0% {
+    transform: translateY(-75px);
+  }
+
+  50% {
+    transform: translateY(75px);
+  }
+
+  100% {
+    transform: translateY(-75px);
+  }
+
+}
+
+/* ==============================
    INDIKATOR BERHASIL
 ============================== */
 
@@ -167,8 +201,8 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 250px;
-  height: 250px;
+  width: 290px;
+  height: 210px;
   transform: translate(-50%, -50%);
   border: 6px solid #00e676;
   border-radius: 12px;
@@ -203,6 +237,7 @@ body {
 
 #btnScan,
 #btnScanBaru {
+
   display: block;
   width: 100%;
   max-width: 500px;
@@ -214,23 +249,32 @@ body {
   border-radius: 10px;
   color: white;
   cursor: pointer;
+
 }
 
 #btnScan {
+
   background: #1976d2;
+
   box-shadow:
     0 3px 8px rgba(25,118,210,0.25);
+
 }
 
 #btnScanBaru {
+
   background: #c62828;
+
   box-shadow:
     0 3px 8px rgba(198,40,40,0.20);
+
 }
 
 #btnScan:active,
 #btnScanBaru:active {
+
   transform: scale(0.98);
+
 }
 
 /* ==============================
@@ -272,7 +316,9 @@ body {
 }
 
 #btnHistory:active {
+
   transform: scale(0.94);
+
 }
 
 /* ==============================
@@ -331,9 +377,7 @@ body {
 #jumlah .angkaTotal {
 
   font-size: 56px;
-
   font-weight: 900;
-
   line-height: 1;
 
 }
@@ -341,7 +385,6 @@ body {
 #jumlah .teksBatang {
 
   font-size: 25px;
-
   font-weight: 800;
 
 }
@@ -365,9 +408,7 @@ body {
 #daftar {
 
   width: 100%;
-
   max-width: 500px;
-
   margin: 15px auto;
 
 }
@@ -402,9 +443,7 @@ body {
 .nomor {
 
   font-size: 20px;
-
   font-weight: bold;
-
   word-break: break-all;
 
 }
@@ -412,7 +451,6 @@ body {
 .detailBtn {
 
   width: auto;
-
   min-width: 80px;
 
   padding: 8px 12px;
@@ -470,9 +508,7 @@ body {
 .label {
 
   display: inline-block;
-
   width: 115px;
-
   font-weight: bold;
 
 }
@@ -486,7 +522,6 @@ body {
   display: none;
 
   width: 100%;
-
   max-width: 500px;
 
   margin: 15px auto;
@@ -519,9 +554,7 @@ body {
 .historyJudul {
 
   font-size: 20px;
-
   font-weight: bold;
-
   color: #176b38;
 
 }
@@ -543,10 +576,6 @@ body {
   cursor: pointer;
 
 }
-
-/* ==============================
-   SATU SESI HISTORY
-============================== */
 
 .historyItem {
 
@@ -578,9 +607,7 @@ body {
 .historyNomor {
 
   font-size: 18px;
-
   font-weight: 900;
-
   color: #176b38;
 
 }
@@ -590,7 +617,6 @@ body {
   margin-top: 4px;
 
   font-size: 14px;
-
   color: #666;
 
 }
@@ -600,7 +626,6 @@ body {
   color: #176b38;
 
   font-size: 27px;
-
   font-weight: 900;
 
   white-space: nowrap;
@@ -700,13 +725,19 @@ body {
   }
 
   .headerIsi {
+
     gap: 8px;
-    transform: translateX(-8px);
+
+    transform:
+      translateX(-8px);
+
   }
 
   .logo {
+
     width: 95px;
     height: 85px;
+
   }
 
   .judul {
@@ -719,7 +750,9 @@ body {
 
   .camera-wrapper,
   #video {
-    height: 300px;
+
+    height: 340px;
+
   }
 
   #jumlah .angkaTotal {
@@ -768,13 +801,13 @@ body {
 
   .camera-wrapper,
   #video {
-    height: 280px;
+    height: 300px;
   }
 
   .qr-frame,
   #scanBerhasil {
-    width: 220px;
-    height: 220px;
+    width: 250px;
+    height: 190px;
   }
 
   #jumlah .angkaTotal {
@@ -785,10 +818,6 @@ body {
     font-size: 21px;
   }
 
-}
-
-body {
-  padding-bottom: 80px;
 }
 
 </style>
@@ -805,23 +834,25 @@ body {
 
   <div class="headerIsi">
 
-    <img
-      class="logo"
-      src="logo-perhutani.jpg"
-      alt="Logo Perhutani"
-    >
+```
+<img
+  class="logo"
+  src="logo-perhutani.jpg"
+  alt="Logo Perhutani"
+>
 
-    <div class="judulBox">
+<div class="judulBox">
 
-      <div class="judul">
-        SCAN REGISTER BBI
-      </div>
+  <div class="judul">
+    SCAN REGISTER BBI
+  </div>
 
-      <div class="subjudul">
-        IK SARADAN
-      </div>
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
-    </div>
+</div>
+```
 
   </div>
 
@@ -835,65 +866,70 @@ body {
 
   <div class="camera-wrapper">
 
-    <video
-      id="video"
-      autoplay
-      muted
-      playsinline
-    ></video>
+```
+<video
+  id="video"
+  autoplay
+  muted
+  playsinline
+></video>
 
-    <div class="qr-frame">
+<div class="qr-frame">
 
-      <div class="corner tl"></div>
-      <div class="corner tr"></div>
-      <div class="corner bl"></div>
-      <div class="corner br"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
 
-    </div>
+  <div class="scan-line"></div>
 
-    <div id="scanBerhasil"></div>
+</div>
+
+<div id="scanBerhasil"></div>
+```
 
   </div>
 
 </div>
 
 <button
-  id="btnScan"
-  onclick="mulaiKamera()"
+id="btnScan"
+onclick="mulaiKamera()"
+
 >
-  📷 BUKA KAMERA
-</button>
+
+📷 BUKA KAMERA </button>
 
 <button
-  id="btnScanBaru"
-  onclick="scanBaru()"
+id="btnScanBaru"
+onclick="scanBaru()"
+
 >
-  🔄 SCAN BARU
-</button>
+
+🔄 SCAN BARU </button>
 
 <button
-  id="btnHistory"
-  onclick="tampilkanHistory()"
-  title="History Scan"
->
-  📋 HISTORY
-</button>
+id="btnHistory"
+onclick="tampilkanHistory()"
+title="History Scan"
 
-<!-- ==============================
-     TOTAL
-============================== -->
+>
+
+📋 HISTORY </button>
 
 <div class="status-card">
 
   <div id="jumlah">
 
-    <span class="angkaTotal">
-      0
-    </span>
+```
+<span class="angkaTotal">
+  0
+</span>
 
-    <span class="teksBatang">
-      BATANG
-    </span>
+<span class="teksBatang">
+  BATANG
+</span>
+```
 
   </div>
 
@@ -905,24 +941,22 @@ body {
 
 <div id="daftar"></div>
 
-<!-- ==============================
-     HISTORY
-============================== -->
-
 <div id="historyPanel">
 
   <div class="historyHeader">
 
-    <div class="historyJudul">
-      📋 HISTORY SCAN
-    </div>
+```
+<div class="historyJudul">
+  📋 HISTORY SCAN
+</div>
 
-    <button
-      class="tutupHistory"
-      onclick="tutupHistory()"
-    >
-      TUTUP
-    </button>
+<button
+  class="tutupHistory"
+  onclick="tutupHistory()"
+>
+  TUTUP
+</button>
+```
 
   </div>
 
@@ -955,7 +989,7 @@ const STORAGE_HISTORY =
 
 let scannerControls = null;
 
-let scannerReader = null;
+let reader = null;
 
 let kameraAktif = false;
 
@@ -964,6 +998,10 @@ let sedangProses = false;
 let jumlahBerhasil = 0;
 
 let dataScanTersimpan = [];
+
+let lastKodeTerbaca = "";
+
+let lastWaktuTerbaca = 0;
 
 /* =====================================================
    LOAD DATA
@@ -999,11 +1037,6 @@ function muatDataTersimpan() {
 
   catch (e) {
 
-    console.log(
-      "Gagal membaca data:",
-      e
-    );
-
     dataScanTersimpan = [];
 
   }
@@ -1012,44 +1045,37 @@ function muatDataTersimpan() {
     dataScanTersimpan.filter(
       function(item) {
 
-        return item.tipe === "success";
+        return item.tipe ===
+          "success";
 
       }
     ).length;
 
 }
 
-/* =====================================================
-   SIMPAN DATA
-===================================================== */
-
 function simpanData() {
 
   try {
 
     localStorage.setItem(
+
       STORAGE_DATA,
+
       JSON.stringify(
         dataScanTersimpan
       )
+
     );
 
   }
 
   catch (e) {
 
-    console.log(
-      "Gagal menyimpan data:",
-      e
-    );
+    console.log(e);
 
   }
 
 }
-
-/* =====================================================
-   UPDATE JUMLAH
-===================================================== */
 
 function updateJumlah() {
 
@@ -1068,7 +1094,7 @@ function updateJumlah() {
 }
 
 /* =====================================================
-   TAMPIL DATA
+   TAMPILKAN DATA
 ===================================================== */
 
 function tampilkanDataTersimpan() {
@@ -1113,10 +1139,6 @@ function tampilkanDataTersimpan() {
 
 }
 
-/* =====================================================
-   LOAD AWAL
-===================================================== */
-
 muatDataTersimpan();
 
 updateJumlah();
@@ -1144,7 +1166,7 @@ function tampilkanIndikatorHijau() {
         "none";
 
     },
-    400
+    450
   );
 
 }
@@ -1176,7 +1198,7 @@ function bunyiBerhasil() {
       "sine";
 
     oscillator.frequency.setValueAtTime(
-      1400,
+      1300,
       audio.currentTime
     );
 
@@ -1192,7 +1214,7 @@ function bunyiBerhasil() {
 
     gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audio.currentTime + 0.10
+      audio.currentTime + 0.12
     );
 
     oscillator.connect(gain);
@@ -1204,7 +1226,7 @@ function bunyiBerhasil() {
     oscillator.start();
 
     oscillator.stop(
-      audio.currentTime + 0.11
+      audio.currentTime + 0.13
     );
 
     setTimeout(
@@ -1213,7 +1235,7 @@ function bunyiBerhasil() {
         audio.close();
 
       },
-      200
+      300
     );
 
   }
@@ -1232,26 +1254,37 @@ function bunyiBerhasil() {
 
 function getarBerhasil() {
 
-  if (navigator.vibrate) {
+  if (
+    navigator.vibrate
+  ) {
 
-    navigator.vibrate(80);
+    navigator.vibrate([
+      80,
+      40,
+      80
+    ]);
 
   }
 
 }
 
 /* =====================================================
-   OPTIMASI CAMERA
+   OPTIMALKAN KAMERA
 ===================================================== */
 
-async function optimalkanKamera(video) {
+async function optimalkanKamera(
+  video
+) {
 
   try {
 
-    if (!video.srcObject) return;
+    const stream =
+      video.srcObject;
+
+    if (!stream) return;
 
     const tracks =
-      video.srcObject.getVideoTracks();
+      stream.getVideoTracks();
 
     if (!tracks.length) return;
 
@@ -1267,11 +1300,15 @@ async function optimalkanKamera(video) {
 
     const advanced = {};
 
-    /* AUTOFOCUS */
+    /* ==============================
+       AUTOFOCUS
+    ============================== */
 
     if (
       capabilities.focusMode &&
-      capabilities.focusMode.includes("continuous")
+      capabilities.focusMode.includes(
+        "continuous"
+      )
     ) {
 
       advanced.focusMode =
@@ -1279,11 +1316,64 @@ async function optimalkanKamera(video) {
 
     }
 
-    /* EXPOSURE */
+    /* ==============================
+       ZOOM
+    ============================== */
+
+    if (
+      capabilities.zoom
+    ) {
+
+      const minZoom =
+        Number(
+          capabilities.zoom.min || 1
+        );
+
+      const maxZoom =
+        Number(
+          capabilities.zoom.max || 1
+        );
+
+      if (
+        maxZoom > minZoom
+      ) {
+
+        /*
+         * Jangan langsung maksimum.
+         * Ambil sekitar 1.6x agar
+         * barcode bisa dibaca lebih
+         * jauh tetapi area kamera
+         * masih cukup luas.
+         */
+
+        let zoom =
+          minZoom + 0.6;
+
+        if (
+          zoom > maxZoom
+        ) {
+
+          zoom =
+            maxZoom;
+
+        }
+
+        advanced.zoom =
+          zoom;
+
+      }
+
+    }
+
+    /* ==============================
+       EXPOSURE
+    ============================== */
 
     if (
       capabilities.exposureMode &&
-      capabilities.exposureMode.includes("continuous")
+      capabilities.exposureMode.includes(
+        "continuous"
+      )
     ) {
 
       advanced.exposureMode =
@@ -1291,11 +1381,15 @@ async function optimalkanKamera(video) {
 
     }
 
-    /* WHITE BALANCE */
+    /* ==============================
+       WHITE BALANCE
+    ============================== */
 
     if (
       capabilities.whiteBalanceMode &&
-      capabilities.whiteBalanceMode.includes("continuous")
+      capabilities.whiteBalanceMode.includes(
+        "continuous"
+      )
     ) {
 
       advanced.whiteBalanceMode =
@@ -1304,22 +1398,28 @@ async function optimalkanKamera(video) {
     }
 
     if (
-      Object.keys(advanced).length
+      Object.keys(
+        advanced
+      ).length > 0
     ) {
 
       await track.applyConstraints({
-        advanced: [advanced]
+
+        advanced: [
+          advanced
+        ]
+
       });
 
     }
 
   }
 
-  catch (e) {
+  catch (error) {
 
     console.log(
       "Optimasi kamera tidak tersedia:",
-      e
+      error
     );
 
   }
@@ -1345,7 +1445,7 @@ async function mulaiKamera() {
     );
 
   status.innerHTML =
-    "⏳ Membuka kamera...";
+    "⏳ Menyiapkan kamera...";
 
   try {
 
@@ -1365,16 +1465,19 @@ async function mulaiKamera() {
       );
 
     /*
-     * READER KHUSUS MULTI FORMAT
-     * Interval dibuat kecil supaya
-     * pemeriksaan frame lebih sering.
+     * Reader dibuat satu kali.
      */
 
-    scannerReader =
-      new ZXingBrowser.BrowserMultiFormatReader(
-        undefined,
-        80
-      );
+    reader =
+      new ZXingBrowser.BrowserMultiFormatReader();
+
+    /*
+     * Resolusi tinggi.
+     *
+     * Lebih banyak detail barcode
+     * sehingga barcode tidak harus
+     * didekatkan ke kamera.
+     */
 
     const constraints = {
 
@@ -1387,26 +1490,29 @@ async function mulaiKamera() {
         },
 
         width: {
-          min: 640,
-          ideal: 1280,
-          max: 1920
+          min: 1280,
+          ideal: 2560,
+          max: 3840
         },
 
         height: {
-          min: 480,
-          ideal: 720,
-          max: 1080
+          min: 720,
+          ideal: 1440,
+          max: 2160
         },
 
         frameRate: {
-          min: 15,
+          min: 20,
           ideal: 30,
           max: 60
         },
 
-        focusMode: {
-          ideal: "continuous"
-        }
+        /*
+         * Meminta continuous autofocus
+         * bila perangkat mendukung.
+         */
+
+        focusMode: "continuous"
 
       }
 
@@ -1416,7 +1522,7 @@ async function mulaiKamera() {
       "⏳ Meminta akses kamera...";
 
     scannerControls =
-      await scannerReader.decodeFromConstraints(
+      await reader.decodeFromConstraints(
 
         constraints,
 
@@ -1427,9 +1533,12 @@ async function mulaiKamera() {
           error
         ) {
 
-          if (!result) return;
+          /*
+           * ZXing memanggil callback
+           * berkali-kali setiap frame.
+           */
 
-          if (sedangProses) return;
+          if (!result) return;
 
           const kode =
             String(
@@ -1439,10 +1548,38 @@ async function mulaiKamera() {
           if (!kode) return;
 
           /*
-           * LANGSUNG KUNCI PROSES
-           * agar barcode yang sama
-           * tidak terbaca berkali-kali.
+           * Jika barcode yang sama
+           * terbaca berkali-kali dalam
+           * waktu sangat singkat,
+           * abaikan.
            */
+
+          const sekarang =
+            Date.now();
+
+          if (
+            kode ===
+              lastKodeTerbaca &&
+            sekarang -
+              lastWaktuTerbaca <
+              1200
+          ) {
+
+            return;
+
+          }
+
+          lastKodeTerbaca =
+            kode;
+
+          lastWaktuTerbaca =
+            sekarang;
+
+          /*
+           * Sedang proses ke database.
+           */
+
+          if (sedangProses) return;
 
           sedangProses = true;
 
@@ -1453,9 +1590,8 @@ async function mulaiKamera() {
 
           status.innerHTML =
             "⏳ BARCODE TERBACA<br>" +
-            "Mengecek " +
             kode +
-            "...";
+            "<br>Mengecek DATABASE...";
 
           /*
            * CODE 128
@@ -1466,7 +1602,9 @@ async function mulaiKamera() {
             ZXingBrowser.BarcodeFormat.CODE_128
           ) {
 
-            cekRegister(kode);
+            cekRegister(
+              kode
+            );
 
           }
 
@@ -1479,21 +1617,20 @@ async function mulaiKamera() {
             ZXingBrowser.BarcodeFormat.QR_CODE
           ) {
 
-            cekQR(kode);
+            cekQR(
+              kode
+            );
 
           }
-
-          /*
-           * FORMAT LAIN
-           */
 
           else {
 
             status.innerHTML =
-              "⚠️ Format barcode tidak didukung<br>" +
+              "⚠️ FORMAT TIDAK DIDUKUNG<br>" +
               kode;
 
-            sedangProses = false;
+            sedangProses =
+              false;
 
           }
 
@@ -1512,11 +1649,11 @@ async function mulaiKamera() {
 
     status.innerHTML =
       "📷 KAMERA AKTIF<br>" +
-      "Arahkan QR / CODE 128 ke kotak hijau";
+      "Arahkan barcode ke kotak hijau";
 
     /*
-     * TUNGGU VIDEO BENAR-BENAR
-     * AKTIF SEBELUM OPTIMASI
+     * Tunggu kamera benar-benar
+     * mendapatkan stream.
      */
 
     setTimeout(
@@ -1527,7 +1664,7 @@ async function mulaiKamera() {
         );
 
       },
-      500
+      700
     );
 
   }
@@ -1536,9 +1673,6 @@ async function mulaiKamera() {
 
     kameraAktif =
       false;
-
-    scannerControls =
-      null;
 
     tombol.innerHTML =
       "📷 BUKA KAMERA";
@@ -1626,7 +1760,9 @@ function cekQR(kode) {
    CEK CODE 128
 ===================================================== */
 
-function cekRegister(register) {
+function cekRegister(
+  register
+) {
 
   const callbackName =
     "scan_" +
@@ -1716,9 +1852,11 @@ function prosesHasilScan(
 
     dataScanTersimpan.push({
 
-      tipe: "success",
+      tipe:
+        "success",
 
-      data: hasil.data,
+      data:
+        hasil.data,
 
       tanggalScan:
         hasil.tanggalScan || "",
@@ -1755,14 +1893,18 @@ function prosesHasilScan(
 
     dataScanTersimpan.push({
 
-      tipe: "duplicate",
+      tipe:
+        "duplicate",
 
       data:
-        hasil.data || [kode],
+        hasil.data ||
+        [kode],
 
-      tanggalScan: "",
+      tanggalScan:
+        "",
 
-      jamScan: "",
+      jamScan:
+        "",
 
       waktuSimpan:
         new Date().toISOString()
@@ -1772,9 +1914,13 @@ function prosesHasilScan(
     simpanData();
 
     tambahHasil(
-      hasil.data || [kode],
+      hasil.data ||
+      [kode],
+
       "",
+
       "",
+
       "duplicate"
     );
 
@@ -1793,9 +1939,11 @@ function prosesHasilScan(
 
     dataScanTersimpan.push({
 
-      tipe: "notfound",
+      tipe:
+        "notfound",
 
-      kode: kode,
+      kode:
+        kode,
 
       waktuSimpan:
         new Date().toISOString()
@@ -1822,12 +1970,6 @@ function prosesHasilScan(
       );
 
   }
-
-  /*
-   * SELESAI PROSES.
-   * KAMERA TETAP HIDUP DAN
-   * LANGSUNG SIAP SCAN BERIKUTNYA.
-   */
 
   sedangProses =
     false;
@@ -2079,7 +2221,8 @@ function toggleDetail(
 function scanBaru() {
 
   if (
-    dataScanTersimpan.length === 0
+    dataScanTersimpan.length ===
+    0
   ) {
 
     alert(
@@ -2141,7 +2284,9 @@ function scanBaru() {
       );
 
     if (
-      !Array.isArray(history)
+      !Array.isArray(
+        history
+      )
     ) {
 
       history = [];
@@ -2260,7 +2405,9 @@ function tampilkanHistory() {
       );
 
     if (
-      !Array.isArray(history)
+      !Array.isArray(
+        history
+      )
     ) {
 
       history = [];
@@ -2278,7 +2425,8 @@ function tampilkanHistory() {
   isi.innerHTML = "";
 
   if (
-    history.length === 0
+    history.length ===
+    0
   ) {
 
     isi.innerHTML = `
@@ -2314,7 +2462,10 @@ function tampilkanHistory() {
     .slice()
     .reverse()
     .forEach(
-      function(sesi, index) {
+      function(
+        sesi,
+        index
+      ) {
 
         const item =
           document.createElement(
