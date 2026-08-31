@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>Data Olah - IK Saradan</title>
 
 <style>
@@ -19,6 +25,7 @@ body {
   padding: 10px;
   color: #222;
 }
+
 
 /* =====================================================
    HEADER
@@ -65,6 +72,7 @@ body {
   margin-top: 2px;
 }
 
+
 /* =====================================================
    RINGKASAN
 ===================================================== */
@@ -110,8 +118,9 @@ body {
   color: #d97706;
 }
 
+
 /* =====================================================
-   TOTAL VOLUME
+   VOLUME
 ===================================================== */
 
 .volume {
@@ -119,10 +128,42 @@ body {
   margin-top: 7px;
   padding-top: 9px;
   text-align: center;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
   color: #176b38;
 }
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.searchBox {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 8px;
+  position: relative;
+}
+
+.searchBox input {
+  width: 100%;
+  border: none;
+  background: white;
+  border-radius: 9px;
+  padding: 11px 40px 11px 14px;
+  font-size: 14px;
+  font-weight: bold;
+  outline: none;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.07);
+}
+
+.searchIcon {
+  position: absolute;
+  right: 13px;
+  top: 9px;
+  font-size: 19px;
+}
+
 
 /* =====================================================
    TOOLBAR
@@ -140,15 +181,21 @@ body {
   flex: 1;
   border: none;
   border-radius: 8px;
-  padding: 10px;
+  padding: 11px;
   color: white;
   font-size: 13px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .refresh {
   background: #1976d2;
 }
+
+.selesai {
+  background: #176b38;
+}
+
 
 /* =====================================================
    STATUS
@@ -164,15 +211,55 @@ body {
   color: #666;
 }
 
+
+/* =====================================================
+   BAGIAN
+===================================================== */
+
+.bagian {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 10px;
+}
+
+.judulBagian {
+  background: white;
+  border-radius: 9px;
+  padding: 9px 10px;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+.judulBagianAtas {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.judulHariIni {
+  color: #176b38;
+}
+
+.judulSisa {
+  color: #d97706;
+}
+
+.detailBagian {
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #666;
+}
+
+
 /* =====================================================
    DAFTAR
 ===================================================== */
 
-#daftar {
+#daftarHariIni,
+#daftarSisa {
   width: 100%;
-  max-width: 600px;
-  margin: auto;
 }
+
 
 /* =====================================================
    ITEM
@@ -191,6 +278,7 @@ body {
   border-left: 4px solid #d97706;
 }
 
+
 /* =====================================================
    BARIS UTAMA
 ===================================================== */
@@ -201,29 +289,19 @@ body {
   gap: 7px;
 }
 
+
 /* =====================================================
-   TOMBOL SISA
+   CHECKBOX
 ===================================================== */
 
-.btnSisa {
-  flex: 0 0 55px;
-  height: 30px;
-  padding: 0 5px;
-  border: none;
-  border-radius: 6px;
-  background: #d97706;
-  color: white;
-  font-size: 10px;
-  font-weight: 900;
+.checkSisa {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  accent-color: #d97706;
+  cursor: pointer;
 }
 
-.btnSisa:active {
-  transform: scale(0.94);
-}
-
-.btnBatal {
-  background: #555;
-}
 
 /* =====================================================
    REGISTER
@@ -244,8 +322,9 @@ body {
   color: #d97706;
 }
 
+
 /* =====================================================
-   DATA RINGKAS
+   DATA
 ===================================================== */
 
 .dataRingkas {
@@ -269,13 +348,14 @@ body {
   color: #aaa;
 }
 
+
 /* =====================================================
-   STATUS KECIL
+   STATUS
 ===================================================== */
 
 .statusKecil {
   margin-top: 3px;
-  margin-left: 62px;
+  margin-left: 35px;
   font-size: 9px;
   font-weight: bold;
 }
@@ -288,19 +368,22 @@ body {
   color: #d97706;
 }
 
+
 /* =====================================================
-   LOADING / KOSONG
+   KOSONG
 ===================================================== */
 
 .kosong {
   background: white;
   border-radius: 10px;
-  padding: 25px 10px;
+  padding: 22px 10px;
   text-align: center;
   color: #777;
   font-size: 13px;
   font-weight: bold;
+  margin-bottom: 8px;
 }
+
 
 /* =====================================================
    HP KECIL
@@ -330,17 +413,12 @@ body {
   }
 
   .volume {
-    font-size: 19px;
+    font-size: 17px;
   }
 
   .register {
-    min-width: 74px;
+    min-width: 70px;
     font-size: 15px;
-  }
-
-  .btnSisa {
-    flex-basis: 52px;
-    font-size: 9px;
   }
 
   .dataRingkas {
@@ -351,17 +429,15 @@ body {
     font-size: 11px;
   }
 
-  .statusKecil {
-    margin-left: 58px;
-  }
-
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <!-- ===================================================
      HEADER
@@ -371,29 +447,28 @@ body {
 
   <div class="headerIsi">
 
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
 
-<img
-  class="logo"
-  src="logo-perhutani.jpg"
-  alt="Logo Perhutani"
->
+    <div class="judulBox">
 
-<div class="judulBox">
+      <div class="judul">
+        DATA OLAH
+      </div>
 
-  <div class="judul">
-    DATA OLAH
-  </div>
+      <div class="subjudul">
+        IK SARADAN
+      </div>
 
-  <div class="subjudul">
-    IK SARADAN
-  </div>
-
-</div>
-
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- ===================================================
      RINGKASAN
@@ -403,56 +478,39 @@ body {
 
   <div class="ringkasBaris">
 
+    <div class="ringkasItem">
 
-<div class="ringkasItem">
+      <div
+        id="jumlahHariIni"
+        class="ringkasAngka hijau"
+      >
+        0
+      </div>
 
-  <div
-    id="jumlahMasuk"
-    class="ringkasAngka hijau"
-  >
-    0
-  </div>
+      <div class="ringkasLabel">
+        KAYU MASUK HARI INI
+      </div>
 
-  <div class="ringkasLabel">
-    KAYU MASUK
-  </div>
-
-</div>
-
-
-<div class="ringkasItem">
-
-  <div
-    id="jumlahOlah"
-    class="ringkasAngka hijau"
-  >
-    0
-  </div>
-
-  <div class="ringkasLabel">
-    DIOLAH
-  </div>
-
-</div>
+    </div>
 
 
-<div class="ringkasItem">
+    <div class="ringkasItem">
 
-  <div
-    id="jumlahSisa"
-    class="ringkasAngka orange"
-  >
-    0
-  </div>
+      <div
+        id="jumlahSisa"
+        class="ringkasAngka orange"
+      >
+        0
+      </div>
 
-  <div class="ringkasLabel">
-    SISA
-  </div>
+      <div class="ringkasLabel">
+        SISA
+      </div>
 
-</div>
-
+    </div>
 
   </div>
+
 
   <div
     id="volumeOlah"
@@ -463,25 +521,50 @@ body {
 
 </div>
 
+
 <!-- ===================================================
-     TOMBOL
+     SEARCH
+=================================================== -->
+
+<div class="searchBox">
+
+  <input
+    id="searchRegister"
+    type="search"
+    placeholder="🔎 Cari nomor register..."
+    oninput="filterData()"
+  >
+
+  <span class="searchIcon">
+    🔎
+  </span>
+
+</div>
+
+
+<!-- ===================================================
+     TOOLBAR
 =================================================== -->
 
 <div class="toolbar">
 
-<button
-class="refresh"
-onclick="muatData()"
-
->
-
-
-🔄 REFRESH DATA
+  <button
+    class="refresh"
+    onclick="muatData()"
+  >
+    🔄 REFRESH
+  </button>
 
 
+  <button
+    class="selesai"
+    onclick="selesaiOlah()"
+  >
+    ✅ SELESAI
   </button>
 
 </div>
+
 
 <!-- ===================================================
      STATUS
@@ -491,19 +574,75 @@ onclick="muatData()"
   Memuat data...
 </div>
 
+
 <!-- ===================================================
-     DAFTAR
+     DATA HARI INI
 =================================================== -->
 
-<div id="daftar">
+<div class="bagian">
 
-  <div class="kosong">
-    ⏳ Memuat data...
+  <div class="judulBagian">
+
+    <div class="judulBagianAtas judulHariIni">
+      🟢 DATA MASUK HARI INI
+    </div>
+
+    <div
+      id="detailHariIni"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
+
+  </div>
+
+
+  <div id="daftarHariIni">
+
+    <div class="kosong">
+      ⏳ Memuat data...
+    </div>
+
   </div>
 
 </div>
 
+
+<!-- ===================================================
+     DATA SISA
+=================================================== -->
+
+<div class="bagian">
+
+  <div class="judulBagian">
+
+    <div class="judulBagianAtas judulSisa">
+      🟠 SISA SEBELUMNYA
+    </div>
+
+    <div
+      id="detailSisa"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
+
+  </div>
+
+
+  <div id="daftarSisa">
+
+    <div class="kosong">
+      Belum ada sisa.
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
+
 
 /* =====================================================
    API
@@ -554,9 +693,7 @@ function requestJSONP(
         script.remove();
       }
 
-      callback(
-        hasil
-      );
+      callback(hasil);
 
     };
 
@@ -638,27 +775,10 @@ function requestJSONP(
 
 function muatData() {
 
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-  const daftar =
-    document.getElementById(
-      "daftar"
-    );
-
-
-  status.innerHTML =
+  document.getElementById(
+    "status"
+  ).innerHTML =
     "⏳ Mengambil data...";
-
-
-  daftar.innerHTML =
-    `
-      <div class="kosong">
-        ⏳ Memuat data...
-      </div>
-    `;
 
 
   requestJSONP(
@@ -676,22 +796,10 @@ function muatData() {
         "success"
       ) {
 
-        status.innerHTML =
+        document.getElementById(
+          "status"
+        ).innerHTML =
           "❌ Gagal mengambil data";
-
-        daftar.innerHTML =
-          `
-            <div class="kosong">
-              ${
-                hasil &&
-                hasil.message
-                ?
-                hasil.message
-                :
-                "Data tidak dapat dimuat."
-              }
-            </div>
-          `;
 
         return;
 
@@ -723,9 +831,242 @@ function muatData() {
 
 function tampilkanData() {
 
+  const hariIni =
+    semuaData.filter(
+      function(item) {
+
+        return (
+          item.sumber ===
+          "HARI_INI"
+        );
+
+      }
+    );
+
+
+  const sisa =
+    semuaData.filter(
+      function(item) {
+
+        return (
+          item.sumber ===
+          "SISA"
+        );
+
+      }
+    );
+
+
+  // ===================================================
+  // JUMLAH
+  // ===================================================
+
+  document.getElementById(
+    "jumlahHariIni"
+  ).innerHTML =
+    hariIni.length;
+
+
+  document.getElementById(
+    "jumlahSisa"
+  ).innerHTML =
+    sisa.length;
+
+
+  // ===================================================
+  // VOLUME HARI INI
+  // ===================================================
+
+  let volumeHariIni = 0;
+
+  hariIni.forEach(
+    function(item) {
+
+      volumeHariIni +=
+        Number(
+          item.volumeAngka || 0
+        );
+
+    }
+  );
+
+
+  // ===================================================
+  // VOLUME SISA
+  // ===================================================
+
+  let volumeSisa = 0;
+
+  sisa.forEach(
+    function(item) {
+
+      volumeSisa +=
+        Number(
+          item.volumeAngka || 0
+        );
+
+    }
+  );
+
+
+  document.getElementById(
+    "detailHariIni"
+  ).innerHTML =
+    hariIni.length +
+    " batang • " +
+    formatVolume(
+      volumeHariIni
+    ) +
+    " M³";
+
+
+  document.getElementById(
+    "detailSisa"
+  ).innerHTML =
+    sisa.length +
+    " batang • " +
+    formatVolume(
+      volumeSisa
+    ) +
+    " M³";
+
+
+  /*
+   * TOTAL VOLUME DIOLAH
+   *
+   * Di halaman ini hanya data yang
+   * SUDAH DITANDAI DIOLAH yang masuk
+   * ke DATA OLAH.
+   *
+   * Karena GS menyimpan data olah
+   * hanya berdasarkan register,
+   * volume dihitung dari data yang
+   * tersedia di SCAN.
+   */
+
+  hitungTotalVolumeOlah();
+
+
+  filterData();
+
+}
+
+
+/* =====================================================
+   FILTER / SEARCH REGISTER
+===================================================== */
+
+function filterData() {
+
+  const input =
+    document.getElementById(
+      "searchRegister"
+    );
+
+  const kata =
+    String(
+      input.value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  const hariIni =
+    semuaData.filter(
+      function(item) {
+
+        if (
+          item.sumber !==
+          "HARI_INI"
+        ) {
+
+          return false;
+
+        }
+
+        return cocokSearch(
+          item,
+          kata
+        );
+
+      }
+    );
+
+
+  const sisa =
+    semuaData.filter(
+      function(item) {
+
+        if (
+          item.sumber !==
+          "SISA"
+        ) {
+
+          return false;
+
+        }
+
+        return cocokSearch(
+          item,
+          kata
+        );
+
+      }
+    );
+
+
+  renderDaftar(
+    hariIni,
+    "daftarHariIni"
+  );
+
+
+  renderDaftar(
+    sisa,
+    "daftarSisa"
+  );
+
+}
+
+
+/* =====================================================
+   COCOK SEARCH
+===================================================== */
+
+function cocokSearch(
+  item,
+  kata
+) {
+
+  if (!kata) {
+
+    return true;
+
+  }
+
+  return String(
+    item.register || ""
+  )
+  .toLowerCase()
+  .includes(
+    kata
+  );
+
+}
+
+
+/* =====================================================
+   RENDER DAFTAR
+===================================================== */
+
+function renderDaftar(
+  data,
+  id
+) {
+
   const daftar =
     document.getElementById(
-      "daftar"
+      id
     );
 
 
@@ -733,86 +1074,21 @@ function tampilkanData() {
     "";
 
 
-  let jumlahSisa =
-    0;
-
-  let jumlahOlah =
-    0;
-
-  let volumeOlah =
-    0;
-
-
-  semuaData.forEach(
-    function(item) {
-
-      if (
-        item.statusOlah ===
-        "SISA"
-      ) {
-
-        jumlahSisa++;
-
-      }
-
-      else {
-
-        jumlahOlah++;
-
-        volumeOlah +=
-          Number(
-            item.volumeAngka || 0
-          );
-
-      }
-
-    }
-  );
-
-
-  document.getElementById(
-    "jumlahMasuk"
-  ).innerHTML =
-    semuaData.length;
-
-
-  document.getElementById(
-    "jumlahOlah"
-  ).innerHTML =
-    jumlahOlah;
-
-
-  document.getElementById(
-    "jumlahSisa"
-  ).innerHTML =
-    jumlahSisa;
-
-
-  document.getElementById(
-    "volumeOlah"
-  ).innerHTML =
-    "TOTAL VOLUME DIOLAH: " +
-    formatVolume(
-      volumeOlah
-    ) +
-    " M³";
-
-
-  document.getElementById(
-    "status"
-  ).innerHTML =
-    "📊 Data diperbarui";
-
-
   if (
-    semuaData.length === 0
+    data.length === 0
   ) {
 
     daftar.innerHTML =
       `
-        <div class="kosong">
-          Belum ada kayu masuk.
-        </div>
+      <div class="kosong">
+        ${
+          id === "daftarSisa"
+          ?
+          "Tidak ada SISA."
+          :
+          "Tidak ada data masuk hari ini."
+        }
+      </div>
       `;
 
     return;
@@ -820,14 +1096,15 @@ function tampilkanData() {
   }
 
 
-  semuaData
+  data
     .slice()
     .reverse()
     .forEach(
       function(item) {
 
         buatItem(
-          item
+          item,
+          daftar
         );
 
       }
@@ -841,17 +1118,12 @@ function tampilkanData() {
 ===================================================== */
 
 function buatItem(
-  item
+  item,
+  daftar
 ) {
 
-  const daftar =
-    document.getElementById(
-      "daftar"
-    );
-
-
   const sisa =
-    item.statusOlah ===
+    item.sumber ===
     "SISA";
 
 
@@ -915,38 +1187,22 @@ function buatItem(
 
     <div class="barisUtama">
 
-      <button
-        class="btnSisa ${
-          sisa
-          ?
-          "btnBatal"
-          :
-          ""
-        }"
-        onclick="
-          ${
-            sisa
-            ?
-            "batalSisa"
-            :
-            "tandaiSisa"
-          }(
-            '${escapeJS(
-              item.register || ""
-            )}'
-          )
-        "
-      >
-
+      <input
+        type="checkbox"
+        class="checkSisa"
+        data-register="${escapeHTML(
+          item.register || ""
+        )}"
         ${
           sisa
           ?
-          "BATAL"
+          "checked"
           :
-          "SISA"
+          ""
         }
-
-      </button>
+        onchange="ubahTampilanSisa(this)"
+        title="Centang jika kayu ini SISA"
+      >
 
 
       <div
@@ -958,9 +1214,7 @@ function buatItem(
           "registerOlah"
         }"
       >
-
         ${register}
-
       </div>
 
 
@@ -1018,9 +1272,9 @@ function buatItem(
       ${
         sisa
         ?
-        "🟠 SISA"
+        "🟠 DICENTANG = SISA"
         :
-        "🟢 OTOMATIS DIOLAH"
+        "🟢 TIDAK DICENTANG = DIOLAH"
       }
 
     </div>
@@ -1036,18 +1290,167 @@ function buatItem(
 
 
 /* =====================================================
-   TANDAI SISA
+   UBAH TAMPILAN SAAT CHECKBOX
 ===================================================== */
 
-function tandaiSisa(
-  register
+function ubahTampilanSisa(
+  checkbox
 ) {
+
+  const item =
+    checkbox.closest(
+      ".item"
+    );
+
+
+  const status =
+    item.querySelector(
+      ".statusKecil"
+    );
+
+
+  const register =
+    item.querySelector(
+      ".register"
+    );
+
+
+  if (
+    checkbox.checked
+  ) {
+
+    item.classList.add(
+      "itemSisa"
+    );
+
+    register.classList.remove(
+      "registerOlah"
+    );
+
+    register.classList.add(
+      "registerSisa"
+    );
+
+    status.className =
+      "statusKecil statusSisa";
+
+    status.innerHTML =
+      "🟠 DICENTANG = SISA";
+
+  }
+
+  else {
+
+    item.classList.remove(
+      "itemSisa"
+    );
+
+    register.classList.remove(
+      "registerSisa"
+    );
+
+    register.classList.add(
+      "registerOlah"
+    );
+
+    status.className =
+      "statusKecil statusOlah";
+
+    status.innerHTML =
+      "🟢 TIDAK DICENTANG = DIOLAH";
+
+  }
+
+}
+
+
+/* =====================================================
+   SELESAI
+===================================================== */
+
+function selesaiOlah() {
+
+  if (
+    semuaData.length === 0
+  ) {
+
+    alert(
+      "Tidak ada data untuk diproses."
+    );
+
+    return;
+
+  }
+
+
+  const semuaCheckbox =
+    document.querySelectorAll(
+      ".checkSisa"
+    );
+
+
+  const daftarOlah = [];
+
+  const daftarSisa = [];
+
+
+  semuaCheckbox.forEach(
+    function(checkbox) {
+
+      const register =
+        checkbox.getAttribute(
+          "data-register"
+        );
+
+
+      if (!register) return;
+
+
+      /*
+       * DICENTANG = SISA
+       */
+
+      if (
+        checkbox.checked
+      ) {
+
+        daftarSisa.push(
+          register
+        );
+
+      }
+
+      /*
+       * TIDAK DICENTANG = DIOLAH
+       */
+
+      else {
+
+        daftarOlah.push(
+          register
+        );
+
+      }
+
+    }
+  );
+
 
   const yakin =
     confirm(
-      "Tandai " +
-      register +
-      " sebagai SISA?"
+
+      "SELESAIKAN DATA?\n\n" +
+
+      "🟢 Akan DIOLAH: " +
+      daftarOlah.length +
+      " batang\n" +
+
+      "🟠 Akan menjadi SISA: " +
+      daftarSisa.length +
+      " batang\n\n" +
+
+      "Tanggal DATA OLAH akan mengikuti tanggal saat tombol SELESAI ditekan."
+
     );
 
 
@@ -1057,55 +1460,35 @@ function tandaiSisa(
   document.getElementById(
     "status"
   ).innerHTML =
-    "⏳ Menyimpan SISA...";
+    "⏳ Menyimpan hasil olah...";
 
 
   requestJSONP(
 
     {
 
-      tandaiSisa:
+      selesaiOlah:
         "1",
 
-      register:
-        register
+      registers:
+        JSON.stringify(
+          daftarOlah
+        ),
+
+      sisaRegisters:
+        JSON.stringify(
+          daftarSisa
+        )
 
     },
 
     function(hasil) {
 
       if (
-        hasil &&
-        hasil.status ===
+        !hasil ||
+        hasil.status !==
         "success"
       ) {
-
-        const item =
-          semuaData.find(
-            function(x) {
-
-              return (
-                x.register ===
-                register
-              );
-
-            }
-          );
-
-
-        if (item) {
-
-          item.statusOlah =
-            "SISA";
-
-        }
-
-
-        tampilkanData();
-
-      }
-
-      else {
 
         alert(
           hasil &&
@@ -1113,10 +1496,47 @@ function tandaiSisa(
           ?
           hasil.message
           :
-          "Gagal menyimpan SISA."
+          "Gagal menyimpan hasil."
         );
 
+        document.getElementById(
+          "status"
+        ).innerHTML =
+          "❌ Gagal menyimpan";
+
+        return;
+
       }
+
+
+      alert(
+
+        "SELESAI.\n\n" +
+
+        "🟢 Diolah: " +
+        (
+          hasil.jumlahOlah || 0
+        ) +
+        " batang\n" +
+
+        "🟠 Sisa: " +
+        (
+          hasil.jumlahSisa || 0
+        ) +
+        " batang"
+
+      );
+
+
+      /*
+       * Ambil ulang dari server.
+       *
+       * Ini penting supaya SISA benar-benar
+       * mengikuti data server, bukan cuma
+       * tampilan HP.
+       */
+
+      muatData();
 
     }
 
@@ -1126,91 +1546,63 @@ function tandaiSisa(
 
 
 /* =====================================================
-   BATALKAN SISA
+   TOTAL VOLUME OLAH
 ===================================================== */
 
-function batalSisa(
-  register
-) {
+function hitungTotalVolumeOlah() {
 
-  const yakin =
-    confirm(
-      "Batalkan SISA " +
-      register +
-      "?"
-    );
+  /*
+   * Karena halaman DATA OLAH tidak mengambil
+   * seluruh isi DATA OLAH + SCAN lama sekaligus,
+   * nilai volume olah yang tampil di halaman
+   * dihitung dari data yang sudah tidak lagi
+   * menjadi SISA pada data yang tersedia.
+   *
+   * SCAN tetap tidak disentuh.
+   */
 
-
-  if (!yakin) return;
-
-
-  document.getElementById(
-    "status"
-  ).innerHTML =
-    "⏳ Mengubah status...";
+  let total = 0;
 
 
-  requestJSONP(
-
-    {
-
-      kembalikanBelum:
-        "1",
-
-      register:
-        register
-
-    },
-
-    function(hasil) {
+  semuaData.forEach(
+    function(item) {
 
       if (
-        hasil &&
-        hasil.status ===
-        "success"
+        item.sumber ===
+        "HARI_INI"
       ) {
 
-        const item =
-          semuaData.find(
-            function(x) {
+        /*
+         * Yang belum dicentang saat ini
+         * dianggap akan diolah.
+         *
+         * Tetapi jangan menganggap ini
+         * sebagai data final sebelum
+         * tombol SELESAI.
+         */
 
-              return (
-                x.register ===
-                register
-              );
-
-            }
+        total +=
+          Number(
+            item.volumeAngka || 0
           );
-
-
-        if (item) {
-
-          item.statusOlah =
-            "BELUM DIOLAH";
-
-        }
-
-
-        tampilkanData();
-
-      }
-
-      else {
-
-        alert(
-          hasil &&
-          hasil.message
-          ?
-          hasil.message
-          :
-          "Gagal mengubah status."
-        );
 
       }
 
     }
-
   );
+
+
+  /*
+   * Untuk sementara volume ini menunjukkan
+   * volume data yang tersedia untuk diolah.
+   */
+
+  document.getElementById(
+    "volumeOlah"
+  ).innerHTML =
+    "TOTAL VOLUME DIOLAH: " +
+    formatVolume(total) +
+    " M³";
 
 }
 
@@ -1266,37 +1658,6 @@ function escapeHTML(
   .replace(
     /'/g,
     "&#039;"
-  );
-
-}
-
-
-/* =====================================================
-   ESCAPE JS
-===================================================== */
-
-function escapeJS(
-  teks
-) {
-
-  return String(
-    teks
-  )
-  .replace(
-    /\\/g,
-    "\\\\"
-  )
-  .replace(
-    /'/g,
-    "\\'"
-  )
-  .replace(
-    /\n/g,
-    "\\n"
-  )
-  .replace(
-    /\r/g,
-    "\\r"
   );
 
 }
