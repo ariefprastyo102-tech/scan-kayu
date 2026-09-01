@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 
@@ -26,11 +25,6 @@ body {
   padding: 10px;
   color: #222;
 }
-
-
-/* =====================================================
-   HEADER
-===================================================== */
 
 .header {
   width: 100%;
@@ -73,11 +67,6 @@ body {
   margin-top: 2px;
 }
 
-
-/* =====================================================
-   RINGKASAN
-===================================================== */
-
 .ringkasan {
   width: 100%;
   max-width: 600px;
@@ -119,11 +108,6 @@ body {
   color: #d97706;
 }
 
-
-/* =====================================================
-   VOLUME
-===================================================== */
-
 .volume {
   border-top: 1px solid #ddd;
   margin-top: 7px;
@@ -133,11 +117,6 @@ body {
   font-weight: 900;
   color: #176b38;
 }
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
 
 .searchBox {
   width: 100%;
@@ -164,11 +143,6 @@ body {
   top: 9px;
   font-size: 19px;
 }
-
-
-/* =====================================================
-   TOOLBAR
-===================================================== */
 
 .toolbar {
   width: 100%;
@@ -197,11 +171,6 @@ body {
   background: #176b38;
 }
 
-
-/* =====================================================
-   STATUS
-===================================================== */
-
 #status {
   width: 100%;
   max-width: 600px;
@@ -211,11 +180,6 @@ body {
   font-weight: bold;
   color: #666;
 }
-
-
-/* =====================================================
-   BAGIAN
-===================================================== */
 
 .bagian {
   width: 100%;
@@ -251,20 +215,10 @@ body {
   color: #666;
 }
 
-
-/* =====================================================
-   DAFTAR
-===================================================== */
-
 #daftarHariIni,
 #daftarSisa {
   width: 100%;
 }
-
-
-/* =====================================================
-   ITEM
-===================================================== */
 
 .item {
   background: white;
@@ -279,21 +233,11 @@ body {
   border-left: 4px solid #d97706;
 }
 
-
-/* =====================================================
-   BARIS UTAMA
-===================================================== */
-
 .barisUtama {
   display: flex;
   align-items: center;
   gap: 7px;
 }
-
-
-/* =====================================================
-   CHECKBOX
-===================================================== */
 
 .checkSisa {
   flex: 0 0 28px;
@@ -302,11 +246,6 @@ body {
   accent-color: #d97706;
   cursor: pointer;
 }
-
-
-/* =====================================================
-   REGISTER
-===================================================== */
 
 .register {
   flex: 0 0 auto;
@@ -323,19 +262,12 @@ body {
   color: #d97706;
 }
 
-
-/* =====================================================
-   DATA
-===================================================== */
-
 .dataRingkas {
   flex: 1;
   min-width: 0;
-
   display: flex;
   align-items: center;
   gap: 6px;
-
   overflow: hidden;
 }
 
@@ -348,11 +280,6 @@ body {
 .pemisah {
   color: #aaa;
 }
-
-
-/* =====================================================
-   STATUS
-===================================================== */
 
 .statusKecil {
   margin-top: 3px;
@@ -369,11 +296,6 @@ body {
   color: #d97706;
 }
 
-
-/* =====================================================
-   KOSONG
-===================================================== */
-
 .kosong {
   background: white;
   border-radius: 10px;
@@ -384,11 +306,6 @@ body {
   font-weight: bold;
   margin-bottom: 8px;
 }
-
-
-/* =====================================================
-   HP KECIL
-===================================================== */
 
 @media(max-width:400px) {
 
@@ -436,13 +353,7 @@ body {
 
 </head>
 
-
 <body>
-
-
-<!-- ===================================================
-     HEADER
-=================================================== -->
 
 <div class="header">
 
@@ -471,10 +382,6 @@ body {
 </div>
 
 
-<!-- ===================================================
-     RINGKASAN
-=================================================== -->
-
 <div class="ringkasan">
 
   <div class="ringkasBaris">
@@ -489,7 +396,7 @@ body {
       </div>
 
       <div class="ringkasLabel">
-        KAYU MASUK / SESI
+        KAYU MASUK SESI
       </div>
 
     </div>
@@ -523,10 +430,6 @@ body {
 </div>
 
 
-<!-- ===================================================
-     SEARCH
-=================================================== -->
-
 <div class="searchBox">
 
   <input
@@ -543,10 +446,6 @@ body {
 </div>
 
 
-<!-- ===================================================
-     TOOLBAR
-=================================================== -->
-
 <div class="toolbar">
 
   <button
@@ -555,7 +454,6 @@ body {
   >
     🔄 REFRESH
   </button>
-
 
   <button
     class="selesai"
@@ -567,25 +465,17 @@ body {
 </div>
 
 
-<!-- ===================================================
-     STATUS
-=================================================== -->
-
 <div id="status">
   Memuat data...
 </div>
 
-
-<!-- ===================================================
-     DATA SESI OLAH
-=================================================== -->
 
 <div class="bagian">
 
   <div class="judulBagian">
 
     <div class="judulBagianAtas judulHariIni">
-      🟢 DATA SESI OLAH
+      🟢 AKAN DIOLAH
     </div>
 
     <div
@@ -609,16 +499,12 @@ body {
 </div>
 
 
-<!-- ===================================================
-     DATA SISA
-=================================================== -->
-
 <div class="bagian">
 
   <div class="judulBagian">
 
     <div class="judulBagianAtas judulSisa">
-      🟠 SISA SEBELUMNYA
+      🟠 SISA SESI
     </div>
 
     <div
@@ -644,29 +530,22 @@ body {
 
 <script>
 
-
-/* =====================================================
-   API
-===================================================== */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbx3wriyYJKQAUWp_QMWR3J0TxwdjVL0Htigd2g59vawku1c4abcwORWT8rwHzdlsg/exec";
 
 
-/* =====================================================
-   DATA
-===================================================== */
-
 let semuaData = [];
+
+let sesiAktif = "";
 
 let sedangMemuat = false;
 
 let sedangMenyimpan = false;
 
 
-/* =====================================================
-   JSONP
-===================================================== */
+// =====================================================
+// JSONP
+// =====================================================
 
 function requestJSONP(
   parameter,
@@ -695,10 +574,12 @@ function requestJSONP(
       callbackName
     ];
 
+
     const script =
       document.getElementById(
         callbackName
       );
+
 
     if (script) {
       script.remove();
@@ -810,9 +691,9 @@ function requestJSONP(
 }
 
 
-/* =====================================================
-   MUAT DATA
-===================================================== */
+// =====================================================
+// MUAT DATA
+// =====================================================
 
 function muatData() {
 
@@ -821,13 +702,14 @@ function muatData() {
   }
 
 
-  sedangMemuat = true;
+  sedangMemuat =
+    true;
 
 
   document.getElementById(
     "status"
   ).innerHTML =
-    "⏳ Mengambil data...";
+    "⏳ Mengambil SESI AKTIF...";
 
 
   requestJSONP(
@@ -839,7 +721,8 @@ function muatData() {
 
     function(hasil) {
 
-      sedangMemuat = false;
+      sedangMemuat =
+        false;
 
 
       if (
@@ -858,6 +741,11 @@ function muatData() {
       }
 
 
+      sesiAktif =
+        hasil.sesi ||
+        "";
+
+
       semuaData =
         Array.isArray(
           hasil.data
@@ -874,7 +762,8 @@ function muatData() {
       document.getElementById(
         "status"
       ).innerHTML =
-        "📊 Data diperbarui";
+        "📊 SESI AKTIF: " +
+        sesiAktif;
 
     }
 
@@ -883,66 +772,52 @@ function muatData() {
 }
 
 
-/* =====================================================
-   TAMPIL DATA
-===================================================== */
+// =====================================================
+// TAMPIL DATA
+//
+// TIDAK ADA LAGI CEK TANGGAL.
+//
+// TIPE:
+// success = data baru / akan diolah
+// sisa    = sisa dari sesi sebelumnya
+// =====================================================
 
 function tampilkanData() {
 
-  /*
-   * PENTING:
-   *
-   * TIDAK ADA LAGI PEMISAHAN
-   * BERDASARKAN TANGGAL SCAN.
-   *
-   * SEMUA DATA YANG DIKIRIM
-   * APPS SCRIPT = SESI OLAH.
-   *
-   * Jadi:
-   *
-   * 29 kemarin
-   * +
-   * 12 hari ini
-   * =
-   * 41 SESI OLAH
-   *
-   * Tidak peduli tanggal scan.
-   */
-
-
-  const dataOlah =
+  const akanDiolah =
     semuaData.filter(
       function(item) {
 
-        return !item.isSisa;
+        return (
+          String(
+            item.tipe || ""
+          ).toLowerCase() !==
+          "sisa"
+        );
 
       }
     );
 
-
-  /*
-   * SISA HANYA DATA YANG
-   * MEMANG DITANDAI SISA.
-   */
 
   const sisa =
     semuaData.filter(
       function(item) {
 
-        return item.isSisa === true;
+        return (
+          String(
+            item.tipe || ""
+          ).toLowerCase() ===
+          "sisa"
+        );
 
       }
     );
 
 
-  /*
-   * JUMLAH SESI OLAH
-   */
-
   document.getElementById(
     "jumlahHariIni"
   ).innerHTML =
-    dataOlah.length;
+    semuaData.length;
 
 
   document.getElementById(
@@ -951,29 +826,26 @@ function tampilkanData() {
     sisa.length;
 
 
-  /*
-   * VOLUME SESI OLAH
-   */
-
   let volumeOlah =
     0;
 
 
-  dataOlah.forEach(
+  akanDiolah.forEach(
     function(item) {
 
       volumeOlah +=
         Number(
-          item.volumeAngka || 0
+          item.data &&
+          item.data[7]
+          ?
+          item.data[7]
+          :
+          0
         );
 
     }
   );
 
-
-  /*
-   * VOLUME SISA
-   */
 
   let volumeSisa =
     0;
@@ -984,7 +856,12 @@ function tampilkanData() {
 
       volumeSisa +=
         Number(
-          item.volumeAngka || 0
+          item.data &&
+          item.data[7]
+          ?
+          item.data[7]
+          :
+          0
         );
 
     }
@@ -994,7 +871,7 @@ function tampilkanData() {
   document.getElementById(
     "detailHariIni"
   ).innerHTML =
-    dataOlah.length +
+    akanDiolah.length +
     " batang • " +
     formatVolume(
       volumeOlah
@@ -1013,39 +890,24 @@ function tampilkanData() {
     " M³";
 
 
-  /*
-   * DATA OLAH
-   */
-
-  renderDaftar(
-    dataOlah,
-    "daftarHariIni"
-  );
-
-
-  /*
-   * DATA SISA
-   */
-
-  renderDaftar(
-    sisa,
-    "daftarSisa"
-  );
+  document.getElementById(
+    "volumeOlah"
+  ).innerHTML =
+    "TOTAL VOLUME DIOLAH: " +
+    formatVolume(
+      volumeOlah
+    ) +
+    " M³";
 
 
-  /*
-   * Hitung volume berdasarkan
-   * checkbox.
-   */
-
-  hitungVolumeDariCheckbox();
+  filterData();
 
 }
 
 
-/* =====================================================
-   FILTER
-===================================================== */
+// =====================================================
+// FILTER
+// =====================================================
 
 function filterData() {
 
@@ -1063,12 +925,15 @@ function filterData() {
     .toLowerCase();
 
 
-  const dataOlah =
+  const akanDiolah =
     semuaData.filter(
       function(item) {
 
         if (
-          item.isSisa === true
+          String(
+            item.tipe || ""
+          ).toLowerCase() ===
+          "sisa"
         ) {
 
           return false;
@@ -1090,7 +955,10 @@ function filterData() {
       function(item) {
 
         if (
-          item.isSisa !== true
+          String(
+            item.tipe || ""
+          ).toLowerCase() !==
+          "sisa"
         ) {
 
           return false;
@@ -1108,7 +976,7 @@ function filterData() {
 
 
   renderDaftar(
-    dataOlah,
+    akanDiolah,
     "daftarHariIni"
   );
 
@@ -1118,15 +986,12 @@ function filterData() {
     "daftarSisa"
   );
 
-
-  hitungVolumeDariCheckbox();
-
 }
 
 
-/* =====================================================
-   SEARCH
-===================================================== */
+// =====================================================
+// SEARCH
+// =====================================================
 
 function cocokSearch(
   item,
@@ -1139,7 +1004,12 @@ function cocokSearch(
 
 
   return String(
-    item.register || ""
+    item.register ||
+    (
+      item.data &&
+      item.data[0]
+    ) ||
+    ""
   )
   .toLowerCase()
   .includes(
@@ -1149,9 +1019,9 @@ function cocokSearch(
 }
 
 
-/* =====================================================
-   RENDER
-===================================================== */
+// =====================================================
+// RENDER
+// =====================================================
 
 function renderDaftar(
   data,
@@ -1180,7 +1050,7 @@ function renderDaftar(
           ?
           "Tidak ada SISA."
           :
-          "Tidak ada data dalam SESI OLAH."
+          "Tidak ada data yang akan diolah."
         }
       </div>
       `;
@@ -1207,24 +1077,80 @@ function renderDaftar(
 }
 
 
-/* =====================================================
-   BUAT ITEM
-===================================================== */
+// =====================================================
+// BUAT ITEM
+// =====================================================
 
 function buatItem(
   item,
   daftar
 ) {
 
-  /*
-   * STATUS TIDAK LAGI DITENTUKAN
-   * OLEH TANGGAL SCAN.
-   *
-   * HANYA berdasarkan isSisa.
-   */
+  const isSisa =
+    String(
+      item.tipe || ""
+    ).toLowerCase() ===
+    "sisa";
 
-  const sisa =
-    item.isSisa === true;
+
+  const data =
+    Array.isArray(
+      item.data
+    )
+    ?
+    item.data
+    :
+    [];
+
+
+  const register =
+    escapeHTML(
+      item.register ||
+      data[0] ||
+      ""
+    );
+
+
+  const panjang =
+    escapeHTML(
+      data[1] ||
+      "-"
+    );
+
+
+  const diameter =
+    escapeHTML(
+      data[2] ||
+      "-"
+    );
+
+
+  const tpk =
+    escapeHTML(
+      data[3] ||
+      "-"
+    );
+
+
+  const tumpuk =
+    escapeHTML(
+      data[4] ||
+      "-"
+    );
+
+
+  const mutu =
+    escapeHTML(
+      data[5] ||
+      "-"
+    );
+
+
+  const m3 =
+    escapeHTML(
+      data[7] ||
+      "-"
+    );
 
 
   const div =
@@ -1234,62 +1160,12 @@ function buatItem(
 
 
   div.className =
-    sisa
+    isSisa
     ?
     "item itemSisa"
     :
     "item";
 
-
-  const register =
-    escapeHTML(
-      item.register || ""
-    );
-
-
-  const panjang =
-    escapeHTML(
-      item.panjang || "-"
-    );
-
-
-  const diameter =
-    escapeHTML(
-      item.diameter || "-"
-    );
-
-
-  const tpk =
-    escapeHTML(
-      item.tpk || "-"
-    );
-
-
-  const tumpuk =
-    escapeHTML(
-      item.tumpuk || "-"
-    );
-
-
-  const mutu =
-    escapeHTML(
-      item.mutu || "-"
-    );
-
-
-  const m3 =
-    escapeHTML(
-      item.m3 || "-"
-    );
-
-
-  /*
-   * SEMUA DATA SESI AWALNYA
-   * TIDAK DICENTANG.
-   *
-   * Checkbox hanya menjadi pilihan
-   * user untuk menentukan SISA.
-   */
 
   div.innerHTML =
     `
@@ -1300,9 +1176,9 @@ function buatItem(
         type="checkbox"
         class="checkSisa"
         data-register="${escapeHTML(
-          item.register || ""
+          register
         )}"
-        ${sisa ? "checked" : ""}
+        ${isSisa ? "checked" : ""}
         onchange="ubahTampilanSisa(this)"
         title="Centang jika kayu ini tetap SISA"
       >
@@ -1310,7 +1186,7 @@ function buatItem(
 
       <div
         class="register ${
-          sisa
+          isSisa
           ?
           "registerSisa"
           :
@@ -1374,7 +1250,7 @@ function buatItem(
 
     <div
       class="statusKecil ${
-        sisa
+        isSisa
         ?
         "statusSisa"
         :
@@ -1383,7 +1259,7 @@ function buatItem(
     >
 
       ${
-        sisa
+        isSisa
         ?
         "🟠 DICENTANG = TETAP SISA"
         :
@@ -1402,9 +1278,9 @@ function buatItem(
 }
 
 
-/* =====================================================
-   UBAH TAMPILAN CHECKBOX
-===================================================== */
+// =====================================================
+// CHECKBOX
+// =====================================================
 
 function ubahTampilanSisa(
   checkbox
@@ -1488,9 +1364,9 @@ function ubahTampilanSisa(
 }
 
 
-/* =====================================================
-   VOLUME CHECKBOX
-===================================================== */
+// =====================================================
+// HITUNG VOLUME CHECKBOX
+// =====================================================
 
 function hitungVolumeDariCheckbox() {
 
@@ -1504,11 +1380,6 @@ function hitungVolumeDariCheckbox() {
     )
     .forEach(
       function(checkbox) {
-
-        /*
-         * YANG TIDAK DICENTANG
-         * = DIOLAH
-         */
 
         if (
           checkbox.checked
@@ -1530,24 +1401,39 @@ function hitungVolumeDariCheckbox() {
             function(data) {
 
               return String(
-                data.register || ""
+                data.register ||
+                (
+                  data.data &&
+                  data.data[0]
+                ) ||
+                ""
               ) ===
               String(
-                register || ""
+                register
               );
 
             }
           );
 
 
-        if (item) {
-
-          total +=
-            Number(
-              item.volumeAngka || 0
-            );
-
+        if (!item) {
+          return;
         }
+
+
+        const volume =
+          Number(
+            item.data &&
+            item.data[7]
+            ?
+            item.data[7]
+            :
+            0
+          );
+
+
+        total +=
+          volume;
 
       }
     );
@@ -1565,9 +1451,9 @@ function hitungVolumeDariCheckbox() {
 }
 
 
-/* =====================================================
-   SELESAI
-===================================================== */
+// =====================================================
+// SELESAI
+// =====================================================
 
 function selesaiOlah() {
 
@@ -1623,10 +1509,6 @@ function selesaiOlah() {
       }
 
 
-      /*
-       * DICENTANG = SISA
-       */
-
       if (
         checkbox.checked
       ) {
@@ -1636,11 +1518,6 @@ function selesaiOlah() {
         );
 
       }
-
-
-      /*
-       * TIDAK DICENTANG = DIOLAH
-       */
 
       else {
 
@@ -1654,30 +1531,34 @@ function selesaiOlah() {
   );
 
 
-  /*
-   * Kalau semua dicentang,
-   * berarti semuanya SISA.
-   *
-   * Ini sekarang BOLEH.
-   *
-   * Karena user memang sengaja
-   * menentukan semuanya sebagai SISA.
-   */
+  if (
+    daftarOlah.length === 0
+  ) {
+
+    alert(
+      "Tidak ada kayu yang diolah.\n\n" +
+      "Semua data tetap menjadi SISA."
+    );
+
+    return;
+
+  }
+
 
   const yakin =
     confirm(
 
-      "SELESAIKAN DATA?\n\n" +
+      "SELESAIKAN SESI?\n\n" +
 
-      "🟢 Akan DIOLAH: " +
+      "🟢 DIOLAH: " +
       daftarOlah.length +
       " batang\n\n" +
 
-      "🟠 Akan menjadi SISA: " +
+      "🟠 SISA: " +
       daftarSisa.length +
       " batang\n\n" +
 
-      "Lanjutkan?"
+      "Data yang dicentang akan dibawa ke sesi berikutnya sebagai SISA."
 
     );
 
@@ -1694,15 +1575,8 @@ function selesaiOlah() {
   document.getElementById(
     "status"
   ).innerHTML =
-    "⏳ Menyimpan data olah...";
+    "⏳ Menyelesaikan sesi...";
 
-
-  /*
-   * KIRIM KEDUANYA.
-   *
-   * registers      = yang benar-benar DIOLAH
-   * sisaRegisters  = yang benar-benar SISA
-   */
 
   requestJSONP(
 
@@ -1712,22 +1586,11 @@ function selesaiOlah() {
         "1",
 
       registers:
-        JSON.stringify(
-          daftarOlah
-        ),
-
-      sisaRegisters:
-        JSON.stringify(
-          daftarSisa
-        )
+        daftarOlah.join(",")
 
     },
 
     function(hasil) {
-
-      sedangMenyimpan =
-        false;
-
 
       if (
         !hasil ||
@@ -1735,48 +1598,89 @@ function selesaiOlah() {
         "success"
       ) {
 
-        alert(
+        sedangMenyimpan =
+          false;
 
+
+        alert(
           hasil &&
           hasil.message
           ?
           hasil.message
           :
-          "Gagal menyimpan hasil olah."
-
+          "Gagal menyelesaikan sesi."
         );
 
 
         document.getElementById(
           "status"
         ).innerHTML =
-          "❌ Gagal menyimpan";
+          "❌ Gagal menyelesaikan";
 
         return;
 
       }
 
 
-      alert(
+      // ===============================================
+      // SETELAH SELESAI:
+      // BUAT SESI BARU DAN BAWA SISA
+      // ===============================================
 
-        "SELESAI.\n\n" +
+      requestJSONP(
 
-        "🟢 Diolah: " +
-        daftarOlah.length +
-        " batang\n" +
+        {
+          mulaiSesiBaru:
+            "1"
+        },
 
-        "🟠 Sisa: " +
-        daftarSisa.length +
-        " batang"
+        function(sesiBaru) {
+
+          sedangMenyimpan =
+            false;
+
+
+          if (
+            !sesiBaru ||
+            sesiBaru.status !==
+            "success"
+          ) {
+
+            alert(
+              "Sesi lama berhasil diselesaikan,\n" +
+              "tetapi gagal membuat sesi baru."
+            );
+
+
+            muatData();
+
+            return;
+
+          }
+
+
+          alert(
+
+            "SELESAI.\n\n" +
+
+            "🟢 Diolah: " +
+            hasil.jumlahOlah +
+            " batang\n" +
+
+            "🟠 Sisa: " +
+            hasil.jumlahSisa +
+            " batang\n\n" +
+
+            "SISA otomatis dibawa ke SESI BARU."
+
+          );
+
+
+          muatData();
+
+        }
 
       );
-
-
-      /*
-       * Ambil ulang data.
-       */
-
-      muatData();
 
     }
 
@@ -1785,9 +1689,9 @@ function selesaiOlah() {
 }
 
 
-/* =====================================================
-   FORMAT VOLUME
-===================================================== */
+// =====================================================
+// FORMAT VOLUME
+// =====================================================
 
 function formatVolume(
   angka
@@ -1806,9 +1710,9 @@ function formatVolume(
 }
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+// =====================================================
+// ESCAPE
+// =====================================================
 
 function escapeHTML(
   teks
@@ -1841,9 +1745,9 @@ function escapeHTML(
 }
 
 
-/* =====================================================
-   MULAI
-===================================================== */
+// =====================================================
+// MULAI
+// =====================================================
 
 muatData();
 
@@ -1851,4 +1755,3 @@ muatData();
 
 </body>
 </html>
-```
