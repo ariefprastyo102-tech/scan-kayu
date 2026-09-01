@@ -96,8 +96,6 @@ button{
     font-size:15px;
 }
 
-/* INPUT REGISTER BISA BANYAK */
-
 #filterRegister{
     min-height:44px;
 }
@@ -154,19 +152,9 @@ button{
     font-size:14px;
 }
 
-
-/* =====================================================
-   AREA CETAK
-===================================================== */
-
 .areaCetak{
     display:none;
 }
-
-
-/* =====================================================
-   CETAK F4 - EPSON L210
-===================================================== */
 
 @media print{
 
@@ -198,11 +186,6 @@ button{
         width:215.9mm;
     }
 
-
-    /* =================================================
-       SATU LEMBAR F4
-    ================================================= */
-
     .lembar{
 
         width:215.9mm;
@@ -223,13 +206,6 @@ button{
 
         row-gap:0;
 
-        /*
-         * POSISI TENGAH HORIZONTAL
-         *
-         * 3 x 70 = 210 mm
-         * Sisa F4 = 5.9 mm
-         */
-
         padding-left:2.95mm;
         padding-right:2.95mm;
 
@@ -241,15 +217,9 @@ button{
         overflow:hidden;
     }
 
-
     .lembar:last-child{
         page-break-after:auto;
     }
-
-
-    /* =================================================
-       KOTAK LABEL
-    ================================================= */
 
     .labelCetak{
 
@@ -267,11 +237,6 @@ button{
         display:block;
     }
 
-
-    /* =================================================
-       KOMPENSASI EPSON
-    ================================================= */
-
     .labelBarcode{
 
         position:absolute;
@@ -287,7 +252,6 @@ button{
         overflow:hidden;
     }
 
-
     .labelBarcode svg{
 
         display:block;
@@ -297,11 +261,6 @@ button{
         height:21mm !important;
 
     }
-
-
-    /* =================================================
-       ANGKA
-    ================================================= */
 
     .angkaCetak{
 
@@ -337,11 +296,6 @@ button{
 
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
 @media(max-width:700px){
 
     .filter{
@@ -359,10 +313,6 @@ button{
 </head>
 
 <body>
-
-<!-- =====================================================
-     KONTROL
-===================================================== -->
 
 <div class="kontrol">
 
@@ -470,15 +420,7 @@ Dipilih: 0
 
 </div>
 
-<!-- =====================================================
-     GRID WEB
-===================================================== -->
-
 <div id="grid"></div>
-
-<!-- =====================================================
-     AREA CETAK
-===================================================== -->
 
 <div
     id="areaCetak"
@@ -487,25 +429,10 @@ Dipilih: 0
 
 <script>
 
-
-/* =====================================================
-   API DATABASE
-===================================================== */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
-
-/* =====================================================
-   DATABASE
-===================================================== */
-
 let database=[];
-
-
-/* =====================================================
-   AMBIL DATABASE
-===================================================== */
 
 function ambilDatabase(){
 
@@ -515,13 +442,10 @@ function ambilDatabase(){
     status.innerHTML =
         "⏳ Mengambil DATABASE...";
 
-
     const callback =
         "database_"+Date.now();
 
-
     let script=null;
-
 
     window[callback] =
         function(hasil){
@@ -540,13 +464,10 @@ function ambilDatabase(){
 
             }
 
-
             database=[];
-
 
             const data =
                 hasil.data || [];
-
 
             data.forEach(function(item){
 
@@ -555,29 +476,34 @@ function ambilDatabase(){
                         item.register || ""
                     ).trim();
 
+                const panjang =
+                    String(
+                        item.panjang || ""
+                    ).trim();
+
+                const diameter =
+                    String(
+                        item.diameter || ""
+                    ).trim();
 
                 const tumpuk =
                     String(
                         item.tumpuk || ""
                     ).trim();
 
-
                 if(!register){
-
                     return;
-
                 }
-
 
                 database.push({
 
                     register:register,
 
-    panjang:String(item.panjang || "").trim(),
+                    panjang:panjang,
 
-    diameter:String(item.diameter || "").trim(),
+                    diameter:diameter,
 
-    tumpuk:tumpuk,
+                    tumpuk:tumpuk,
 
                     dipilih:true
 
@@ -585,32 +511,25 @@ function ambilDatabase(){
 
             });
 
-
             tampilkan();
-
 
             updateJumlah();
 
-
             status.innerHTML =
                 "✅ DATABASE berhasil diambil";
-
 
             bersihkan();
 
         };
 
-
     script =
         document.createElement("script");
-
 
     script.src =
         API_URL +
         "?getDatabase=1" +
         "&callback=" +
         callback;
-
 
     script.onerror =
         function(){
@@ -622,11 +541,9 @@ function ambilDatabase(){
 
         };
 
-
     document.body.appendChild(
         script
     );
-
 
     function bersihkan(){
 
@@ -634,21 +551,13 @@ function ambilDatabase(){
             callback
         ];
 
-
         if(script){
-
             script.remove();
-
         }
 
     }
 
 }
-
-
-/* =====================================================
-   TAMPILKAN DATABASE
-===================================================== */
 
 function tampilkan(){
 
@@ -657,9 +566,7 @@ function tampilkan(){
             "grid"
         );
 
-
     grid.innerHTML="";
-
 
     database.forEach(
         function(data,index){
@@ -669,38 +576,28 @@ function tampilkan(){
                     "div"
                 );
 
-
             item.className =
                 "item";
-
 
             item.dataset.index =
                 index;
 
-
             item.dataset.register =
                 data.register.toLowerCase();
 
-
             item.dataset.tumpuk =
                 data.tumpuk.toLowerCase();
-
-
-            /* CHECKBOX */
 
             const check =
                 document.createElement(
                     "input"
                 );
 
-
             check.type =
                 "checkbox";
 
-
             check.checked =
                 data.dipilih;
-
 
             check.onchange =
                 function(){
@@ -708,20 +605,13 @@ function tampilkan(){
                     data.dipilih =
                         this.checked;
 
-
                     updateJumlah();
 
                 };
 
-
             item.appendChild(
                 check
             );
-
-
-            /* =================================================
-               SVG BARCODE WEB
-            ================================================= */
 
             const svg =
                 document.createElementNS(
@@ -729,11 +619,9 @@ function tampilkan(){
                     "svg"
                 );
 
-
             item.appendChild(
                 svg
             );
-
 
             JsBarcode(
 
@@ -762,53 +650,55 @@ function tampilkan(){
 
             );
 
-
-            /* INFO */
-
             const info =
                 document.createElement(
                     "div"
                 );
 
-
             info.className =
                 "info";
-
 
             const register =
                 document.createElement(
                     "span"
                 );
 
-
             register.textContent =
                 data.register;
 
+            const ukuran =
+                document.createElement(
+                    "span"
+                );
+
+            ukuran.textContent =
+                data.panjang +
+                "/" +
+                data.diameter;
 
             const tumpuk =
                 document.createElement(
                     "span"
                 );
 
-
             tumpuk.textContent =
                 data.tumpuk;
-
 
             info.appendChild(
                 register
             );
 
+            info.appendChild(
+                ukuran
+            );
 
             info.appendChild(
                 tumpuk
             );
 
-
             item.appendChild(
                 info
             );
-
 
             grid.appendChild(
                 item
@@ -818,12 +708,6 @@ function tampilkan(){
     );
 
 }
-
-
-/* =====================================================
-   FILTER DATA
-   BISA BANYAK NOMOR REGISTER
-===================================================== */
 
 function filterData(){
 
@@ -835,7 +719,6 @@ function filterData(){
         .value
         .trim();
 
-
     const tumpuk =
         document
         .getElementById(
@@ -844,16 +727,6 @@ function filterData(){
         .value
         .trim()
         .toLowerCase();
-
-
-    /*
-     * REGISTER BISA DIPISAH:
-     *
-     * ENTER
-     * SPASI
-     * KOMA
-     * TITIK KOMA
-     */
 
     const daftarRegister =
         registerInput
@@ -871,20 +744,13 @@ function filterData(){
 
         });
 
-
-    /*
-     * HAPUS DUPLIKAT
-     */
-
     const registerUnik =
         [...new Set(
             daftarRegister
         )];
 
-
     let jumlahCocok =
         0;
-
 
     document
     .querySelectorAll(".item")
@@ -893,14 +759,11 @@ function filterData(){
         const nilaiRegister =
             item.dataset.register;
 
-
         const nilaiTumpuk =
             item.dataset.tumpuk;
 
-
         let cocokRegister =
             registerUnik.length === 0;
-
 
         if(
             registerUnik.length > 0
@@ -913,11 +776,9 @@ function filterData(){
 
         }
 
-
         const cocokTumpuk =
             tumpuk === "" ||
             nilaiTumpuk === tumpuk;
-
 
         if(
             cocokRegister &&
@@ -941,7 +802,6 @@ function filterData(){
         }
 
     });
-
 
     if(
         registerUnik.length > 0
@@ -982,22 +842,15 @@ function filterData(){
 
 }
 
-
-/* =====================================================
-   TAMPILKAN SEMUA
-===================================================== */
-
 function tampilkanSemua(){
 
     document.getElementById(
         "filterRegister"
     ).value="";
 
-
     document.getElementById(
         "filterTumpuk"
     ).value="";
-
 
     document
     .querySelectorAll(".item")
@@ -1009,18 +862,12 @@ function tampilkanSemua(){
 
     });
 
-
     document.getElementById(
         "status"
     ).innerHTML =
         "✅ Semua DATABASE ditampilkan";
 
 }
-
-
-/* =====================================================
-   PILIH HASIL FILTER
-===================================================== */
 
 function pilihHasilFilter(){
 
@@ -1038,15 +885,12 @@ function pilihHasilFilter(){
 
         }
 
-
         const index =
             Number(
                 item.dataset.index
             );
 
-
         database[index].dipilih=true;
-
 
         item.querySelector(
             "input"
@@ -1054,15 +898,9 @@ function pilihHasilFilter(){
 
     });
 
-
     updateJumlah();
 
 }
-
-
-/* =====================================================
-   BATAL HASIL FILTER
-===================================================== */
 
 function batalHasilFilter(){
 
@@ -1080,15 +918,12 @@ function batalHasilFilter(){
 
         }
 
-
         const index =
             Number(
                 item.dataset.index
             );
 
-
         database[index].dipilih=false;
-
 
         item.querySelector(
             "input"
@@ -1096,15 +931,9 @@ function batalHasilFilter(){
 
     });
 
-
     updateJumlah();
 
 }
-
-
-/* =====================================================
-   PILIH SEMUA
-===================================================== */
 
 function pilihSemua(){
 
@@ -1116,7 +945,6 @@ function pilihSemua(){
         }
     );
 
-
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -1127,15 +955,9 @@ function pilihSemua(){
 
     });
 
-
     updateJumlah();
 
 }
-
-
-/* =====================================================
-   BATAL SEMUA
-===================================================== */
 
 function batalSemua(){
 
@@ -1147,7 +969,6 @@ function batalSemua(){
         }
     );
 
-
     document
     .querySelectorAll(".item")
     .forEach(function(item){
@@ -1158,21 +979,14 @@ function batalSemua(){
 
     });
 
-
     updateJumlah();
 
 }
-
-
-/* =====================================================
-   UPDATE JUMLAH
-===================================================== */
 
 function updateJumlah(){
 
     const jumlah =
         database.length;
-
 
     const dipilih =
         database.filter(
@@ -1183,13 +997,11 @@ function updateJumlah(){
             }
         ).length;
 
-
     document.getElementById(
         "jumlah"
     ).innerHTML =
         "Jumlah barcode: " +
         jumlah;
-
 
     document.getElementById(
         "dipilih"
@@ -1199,15 +1011,9 @@ function updateJumlah(){
 
 }
 
-
-/* =====================================================
-   CETAK F4
-===================================================== */
-
 function cetakF4(){
 
     const daftar=[];
-
 
     database.forEach(
         function(data){
@@ -1223,7 +1029,6 @@ function cetakF4(){
         }
     );
 
-
     if(
         daftar.length === 0
     ){
@@ -1235,24 +1040,6 @@ function cetakF4(){
         return;
 
     }
-
-
-    /*
-     * =================================================
-     * URUT TUMPUK KECIL → BESAR
-     * =================================================
-     *
-     * Contoh:
-     * 1
-     * 2
-     * 3
-     * 4
-     * 10
-     * 11
-     *
-     * Nomor register tetap mengikuti urutan data
-     * di dalam tumpuk yang sama.
-     */
 
     daftar.sort(
         function(a,b){
@@ -1277,14 +1064,12 @@ function cetakF4(){
                     )
                 );
 
-
             const nilaiA =
                 isNaN(
                     angkaA
                 )
                 ? Infinity
                 : angkaA;
-
 
             const nilaiB =
                 isNaN(
@@ -1293,31 +1078,20 @@ function cetakF4(){
                 ? Infinity
                 : angkaB;
 
-
             return nilaiA - nilaiB;
 
         }
     );
-
 
     const area =
         document.getElementById(
             "areaCetak"
         );
 
-
     area.innerHTML="";
-
-
-    /*
-     * 33 BARCODE / LEMBAR
-     *
-     * 3 KOLOM × 11 BARIS
-     */
 
     const PER_LEMBAR =
         33;
-
 
     for(
         let awal=0;
@@ -1330,17 +1104,14 @@ function cetakF4(){
                 "div"
             );
 
-
         lembar.className =
             "lembar";
-
 
         const bagian =
             daftar.slice(
                 awal,
                 awal+PER_LEMBAR
             );
-
 
         bagian.forEach(
             function(data){
@@ -1350,24 +1121,16 @@ function cetakF4(){
                         "div"
                     );
 
-
                 label.className =
                     "labelCetak";
-
-
-                /* =====================================
-                   BARCODE
-                ===================================== */
 
                 const barcodeBox =
                     document.createElement(
                         "div"
                     );
 
-
                 barcodeBox.className =
                     "labelBarcode";
-
 
                 const svg =
                     document.createElementNS(
@@ -1375,11 +1138,9 @@ function cetakF4(){
                         "svg"
                     );
 
-
                 barcodeBox.appendChild(
                     svg
                 );
-
 
                 JsBarcode(
 
@@ -1408,40 +1169,30 @@ function cetakF4(){
 
                 );
 
-
                 label.appendChild(
                     barcodeBox
                 );
-
-
-                /* =====================================
-                   ANGKA REGISTER + TUMPUK
-                ===================================== */
 
                 const angka =
                     document.createElement(
                         "div"
                     );
 
-
                 angka.className =
                     "angkaCetak";
 
-
                 angka.textContent =
-    data.register +
-    " " +
-    data.panjang +
-    "/" +
-    data.diameter +
-    " " +
-    data.tumpuk;
-
+                    data.register +
+                    " " +
+                    data.panjang +
+                    "/" +
+                    data.diameter +
+                    " " +
+                    data.tumpuk;
 
                 label.appendChild(
                     angka
                 );
-
 
                 lembar.appendChild(
                     label
@@ -1450,13 +1201,11 @@ function cetakF4(){
             }
         );
 
-
         area.appendChild(
             lembar
         );
 
     }
-
 
     document.getElementById(
         "status"
@@ -1469,7 +1218,6 @@ function cetakF4(){
         ) +
         " lembar";
 
-
     setTimeout(
         function(){
 
@@ -1481,11 +1229,6 @@ function cetakF4(){
 
 }
 
-
-/* =====================================================
-   SELESAI PRINT
-===================================================== */
-
 window.addEventListener(
     "afterprint",
     function(){
@@ -1495,12 +1238,10 @@ window.addEventListener(
                 "areaCetak"
             );
 
-
         area.innerHTML="";
 
     }
 );
-
 
 </script>
 
