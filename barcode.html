@@ -573,7 +573,11 @@ function ambilDatabase(){
 
                     register:register,
 
-                    tumpuk:tumpuk,
+    panjang:String(item.panjang || "").trim(),
+
+    diameter:String(item.diameter || "").trim(),
+
+    tumpuk:tumpuk,
 
                     dipilih:true
 
@@ -1425,9 +1429,13 @@ function cetakF4(){
 
 
                 angka.textContent =
-                    data.register +
-                    " " +
-                    data.tumpuk;
+    data.register +
+    " " +
+    data.panjang +
+    "/" +
+    data.diameter +
+    " " +
+    data.tumpuk;
 
 
                 label.appendChild(
