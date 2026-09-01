@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -43,7 +42,7 @@ body {
   margin-bottom: 10px;
   background: white;
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
   border-top: 4px solid #176b38;
 }
@@ -52,12 +51,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .logo {
-  width: 65px;
-  height: 55px;
+  width: 70px;
+  height: 60px;
   object-fit: contain;
 }
 
@@ -66,23 +65,28 @@ body {
 }
 
 .judul {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
   color: #176b38;
 }
 
 .subjudul {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   color: #666;
-  margin-top: 2px;
+  margin-top: 3px;
 }
+
+
+/* =====================================================
+   RINGKASAN
+===================================================== */
 
 .ringkasan {
   margin-bottom: 10px;
   background: white;
   border-radius: 10px;
-  padding: 8px;
+  padding: 12px 10px;
   box-shadow: 0 2px 7px rgba(0,0,0,.07);
 }
 
@@ -95,18 +99,20 @@ body {
 
 .ringkasItem {
   flex: 1;
+  padding: 3px;
 }
 
 .ringkasAngka {
-  font-size: 23px;
+  font-size: 30px;
   font-weight: 900;
+  line-height: 1.1;
 }
 
 .ringkasLabel {
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 900;
   color: #666;
-  margin-top: 2px;
+  margin-top: 5px;
 }
 
 .hijau {
@@ -117,15 +123,25 @@ body {
   color: #d97706;
 }
 
+
+/* =====================================================
+   TOTAL VOLUME
+===================================================== */
+
 .volume {
   border-top: 1px solid #ddd;
-  margin-top: 7px;
-  padding-top: 9px;
+  margin-top: 10px;
+  padding-top: 11px;
   text-align: center;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 900;
   color: #176b38;
 }
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
 
 .searchBox {
   margin-bottom: 8px;
@@ -137,8 +153,8 @@ body {
   border: none;
   background: white;
   border-radius: 9px;
-  padding: 11px 40px 11px 14px;
-  font-size: 14px;
+  padding: 12px 42px 12px 14px;
+  font-size: 15px;
   font-weight: bold;
   outline: none;
   box-shadow: 0 2px 7px rgba(0,0,0,.07);
@@ -147,9 +163,14 @@ body {
 .searchIcon {
   position: absolute;
   right: 13px;
-  top: 9px;
-  font-size: 19px;
+  top: 10px;
+  font-size: 20px;
 }
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
 
 .toolbar {
   margin-bottom: 8px;
@@ -161,9 +182,9 @@ body {
   flex: 1;
   border: none;
   border-radius: 8px;
-  padding: 11px;
+  padding: 12px;
   color: white;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -176,13 +197,23 @@ body {
   background: #176b38;
 }
 
+
+/* =====================================================
+   STATUS
+===================================================== */
+
 #status {
   margin-bottom: 8px;
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   color: #666;
 }
+
+
+/* =====================================================
+   BAGIAN
+===================================================== */
 
 .bagian {
   margin-bottom: 10px;
@@ -191,13 +222,13 @@ body {
 .judulBagian {
   background: white;
   border-radius: 9px;
-  padding: 9px 10px;
+  padding: 11px 12px;
   margin-bottom: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,.07);
 }
 
 .judulBagianAtas {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 900;
 }
 
@@ -209,18 +240,29 @@ body {
   color: #d97706;
 }
 
+
+/* =====================================================
+   DETAIL BATANG + VOLUME
+===================================================== */
+
 .detailBagian {
-  margin-top: 3px;
-  font-size: 11px;
-  font-weight: bold;
-  color: #666;
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #555;
+  line-height: 1.35;
 }
+
+
+/* =====================================================
+   ITEM
+===================================================== */
 
 .item {
   background: white;
   border-radius: 8px;
   margin-bottom: 6px;
-  padding: 7px 8px;
+  padding: 8px 9px;
   box-shadow: 0 1px 5px rgba(0,0,0,.07);
 }
 
@@ -237,21 +279,31 @@ body {
 .barisUtama {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
 .checkSisa {
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
   accent-color: #d97706;
   cursor: pointer;
 }
 
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
 .register {
   flex: 0 0 auto;
-  min-width: 80px;
-  font-size: 17px;
+  min-width: 85px;
+  font-size: 18px;
   font-weight: 900;
 }
 
@@ -263,17 +315,22 @@ body {
   color: #d97706;
 }
 
+
+/* =====================================================
+   DATA RINGKAS
+===================================================== */
+
 .dataRingkas {
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   overflow: hidden;
 }
 
 .data {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
 }
@@ -282,10 +339,15 @@ body {
   color: #aaa;
 }
 
+
+/* =====================================================
+   STATUS ITEM
+===================================================== */
+
 .statusKecil {
-  margin-top: 3px;
-  margin-left: 35px;
-  font-size: 9px;
+  margin-top: 4px;
+  margin-left: 38px;
+  font-size: 10px;
   font-weight: bold;
 }
 
@@ -297,16 +359,26 @@ body {
   color: #d97706;
 }
 
+
+/* =====================================================
+   KOSONG
+===================================================== */
+
 .kosong {
   background: white;
   border-radius: 10px;
-  padding: 22px 10px;
+  padding: 24px 10px;
   text-align: center;
   color: #777;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   margin-bottom: 8px;
 }
+
+
+/* =====================================================
+   HP KECIL
+===================================================== */
 
 @media(max-width:400px) {
 
@@ -315,38 +387,100 @@ body {
   }
 
   .logo {
-    width: 58px;
-    height: 50px;
+    width: 62px;
+    height: 52px;
   }
 
   .judul {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .subjudul {
-    font-size: 12px;
+    font-size: 13px;
+  }
+
+  .ringkasan {
+    padding: 11px 7px;
   }
 
   .ringkasAngka {
-    font-size: 20px;
+    font-size: 27px;
+  }
+
+  .ringkasLabel {
+    font-size: 11px;
   }
 
   .volume {
-    font-size: 17px;
+    font-size: 19px;
+  }
+
+  .judulBagianAtas {
+    font-size: 16px;
+  }
+
+  .detailBagian {
+    font-size: 14px;
   }
 
   .register {
-    min-width: 70px;
-    font-size: 15px;
+    min-width: 72px;
+    font-size: 16px;
   }
 
   .dataRingkas {
-    gap: 4px;
+    gap: 5px;
+  }
+
+  .data {
+    font-size: 12px;
+  }
+
+  .checkSisa {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .statusKecil {
+    margin-left: 35px;
+    font-size: 9px;
+  }
+
+}
+
+
+/* =====================================================
+   HP SANGAT KECIL
+===================================================== */
+
+@media(max-width:350px) {
+
+  .ringkasAngka {
+    font-size: 25px;
+  }
+
+  .ringkasLabel {
+    font-size: 10px;
+  }
+
+  .volume {
+    font-size: 18px;
+  }
+
+  .detailBagian {
+    font-size: 13px;
+  }
+
+  .register {
+    min-width: 65px;
+    font-size: 15px;
   }
 
   .data {
     font-size: 11px;
   }
+
 }
 
 </style>
@@ -354,6 +488,11 @@ body {
 </head>
 
 <body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <div class="header">
 
@@ -382,6 +521,10 @@ body {
 </div>
 
 
+<!-- =====================================================
+     RINGKASAN
+===================================================== -->
+
 <div class="ringkasan">
 
   <div class="ringkasBaris">
@@ -401,6 +544,7 @@ body {
 
     </div>
 
+
     <div class="ringkasItem">
 
       <div
@@ -418,6 +562,7 @@ body {
 
   </div>
 
+
   <div
     id="volumeOlah"
     class="volume"
@@ -427,6 +572,10 @@ body {
 
 </div>
 
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
 <div class="searchBox">
 
@@ -443,6 +592,10 @@ body {
 
 </div>
 
+
+<!-- =====================================================
+     TOOLBAR
+===================================================== -->
 
 <div class="toolbar">
 
@@ -463,10 +616,18 @@ body {
 </div>
 
 
+<!-- =====================================================
+     STATUS
+===================================================== -->
+
 <div id="status">
   Memuat data...
 </div>
 
+
+<!-- =====================================================
+     DATA BARU
+===================================================== -->
 
 <div class="bagian">
 
@@ -485,6 +646,7 @@ body {
 
   </div>
 
+
   <div id="daftarHariIni">
 
     <div class="kosong">
@@ -495,6 +657,10 @@ body {
 
 </div>
 
+
+<!-- =====================================================
+     SISA
+===================================================== -->
 
 <div class="bagian">
 
@@ -513,6 +679,7 @@ body {
 
   </div>
 
+
   <div id="daftarSisa">
 
     <div class="kosong">
@@ -526,8 +693,14 @@ body {
 
 <script>
 
+
+// =====================================================
+// API
+// =====================================================
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbx3wriyYJKQAUWp_QMWR3J0TxwdjVL0Htigd2g59vawku1c4abcwORWT8rwHzdlsg/exec";
+
 
 let semuaData = [];
 
@@ -555,6 +728,7 @@ function requestJSONP(
 
   let selesai = false;
 
+
   function bersihkan() {
 
     if (selesai) return;
@@ -563,15 +737,19 @@ function requestJSONP(
 
     delete window[callbackName];
 
+
     const script =
       document.getElementById(
         callbackName
       );
 
+
     if (script) {
       script.remove();
     }
+
   }
+
 
   window[callbackName] =
     function(hasil) {
@@ -579,16 +757,21 @@ function requestJSONP(
       bersihkan();
 
       callback(hasil);
+
     };
+
 
   const script =
     document.createElement("script");
 
+
   script.id =
     callbackName;
 
+
   let url =
     API_URL + "?";
+
 
   Object.keys(parameter)
     .forEach(function(key) {
@@ -603,13 +786,16 @@ function requestJSONP(
 
     });
 
+
   url +=
     "callback=" +
     encodeURIComponent(
       callbackName
     );
 
+
   script.src = url;
+
 
   script.onerror =
     function() {
@@ -623,12 +809,16 @@ function requestJSONP(
 
         message:
           "Gagal menghubungi server."
+
       });
+
     };
+
 
   document.body.appendChild(
     script
   );
+
 
   setTimeout(function() {
 
@@ -643,10 +833,13 @@ function requestJSONP(
 
         message:
           "Server tidak memberikan jawaban."
+
       });
+
     }
 
   },20000);
+
 }
 
 
@@ -660,12 +853,15 @@ function muatData() {
     return;
   }
 
+
   sedangMemuat = true;
+
 
   document.getElementById(
     "status"
   ).innerHTML =
     "⏳ Mengambil data...";
+
 
   requestJSONP(
 
@@ -674,9 +870,11 @@ function muatData() {
         "1"
     },
 
+
     function(hasil) {
 
       sedangMemuat = false;
+
 
       if (
         !hasil ||
@@ -692,6 +890,7 @@ function muatData() {
         return;
       }
 
+
       semuaData =
         Array.isArray(
           hasil.data
@@ -701,7 +900,9 @@ function muatData() {
         :
         [];
 
+
       tampilkanData();
+
 
       document.getElementById(
         "status"
@@ -709,7 +910,9 @@ function muatData() {
         "📊 Data diperbarui";
 
     }
+
   );
+
 }
 
 
@@ -726,22 +929,17 @@ function parseVolume(
     nilai === undefined ||
     nilai === ""
   ) {
+
     return 0;
+
   }
+
 
   let teks =
     String(nilai)
       .trim()
-      .replace(/\s/g, "");
+      .replace(/\s/g,"");
 
-  /*
-   * Data DATABASE menggunakan koma
-   * sebagai desimal:
-   *
-   * 0,14
-   * 0,09
-   * 1,25
-   */
 
   teks =
     teks.replace(
@@ -749,12 +947,15 @@ function parseVolume(
       "."
     );
 
+
   const angka =
     parseFloat(teks);
+
 
   return isNaN(angka)
     ? 0
     : angka;
+
 }
 
 
@@ -764,14 +965,6 @@ function parseVolume(
 
 function tampilkanData() {
 
-  /*
-   * STATUS DARI SESI_AKTIF
-   *
-   * BARU = masuk setelah selesai sebelumnya
-   *
-   * SISA = sisa dari sesi sebelumnya
-   */
-
   const baru =
     semuaData.filter(
       item =>
@@ -780,6 +973,7 @@ function tampilkanData() {
         ).toUpperCase() ===
         "BARU"
     );
+
 
   const sisa =
     semuaData.filter(
@@ -834,12 +1028,6 @@ function tampilkanData() {
     " M³";
 
 
-  /*
-   * TOTAL VOLUME
-   *
-   * DATA BARU + SISA
-   */
-
   document.getElementById(
     "volumeOlah"
   ).innerHTML =
@@ -849,6 +1037,7 @@ function tampilkanData() {
 
 
   filterData();
+
 }
 
 
@@ -862,6 +1051,7 @@ function filterData() {
     document.getElementById(
       "searchRegister"
     );
+
 
   const kata =
     String(
@@ -917,6 +1107,7 @@ function filterData() {
     sisa,
     "daftarSisa"
   );
+
 }
 
 
@@ -933,6 +1124,7 @@ function cocokSearch(
     return true;
   }
 
+
   return String(
     item.register ||
     (
@@ -945,6 +1137,7 @@ function cocokSearch(
   .includes(
     kata
   );
+
 }
 
 
@@ -960,7 +1153,9 @@ function renderDaftar(
   const daftar =
     document.getElementById(id);
 
+
   daftar.innerHTML = "";
+
 
   if (
     data.length === 0
@@ -968,6 +1163,7 @@ function renderDaftar(
 
     daftar.innerHTML =
       `<div class="kosong">
+
         ${
           id === "daftarSisa"
           ?
@@ -975,9 +1171,11 @@ function renderDaftar(
           :
           "Tidak ada data baru."
         }
+
       </div>`;
 
     return;
+
   }
 
 
@@ -992,6 +1190,7 @@ function renderDaftar(
       );
 
     });
+
 }
 
 
@@ -1011,11 +1210,14 @@ function buatItem(
     .trim()
     .toUpperCase();
 
+
   const isSisa =
     status === "SISA";
 
+
   const div =
     document.createElement("div");
+
 
   div.className =
     isSisa
@@ -1036,42 +1238,42 @@ function buatItem(
       ""
     );
 
+
   const panjang =
     escapeHTML(
       data[1] || "-"
     );
+
 
   const diameter =
     escapeHTML(
       data[2] || "-"
     );
 
+
   const tpk =
     escapeHTML(
       data[3] || "-"
     );
+
 
   const tumpuk =
     escapeHTML(
       data[4] || "-"
     );
 
+
   const mutu =
     escapeHTML(
       data[5] || "-"
     );
+
 
   const m3 =
     escapeHTML(
       data[7] || "-"
     );
 
-
-  /*
-   * SISA = checked
-   *
-   * BARU = unchecked
-   */
 
   div.innerHTML = `
 
@@ -1085,6 +1287,7 @@ function buatItem(
         onchange="ubahTampilanSisa(this)"
       >
 
+
       <div
         class="register ${
           isSisa
@@ -1097,47 +1300,58 @@ function buatItem(
         ${register}
       </div>
 
+
       <div class="dataRingkas">
 
         <span class="data">
           ${panjang}
         </span>
 
+
         <span class="pemisah">
           ×
         </span>
+
 
         <span class="data">
           ${diameter}
         </span>
 
+
         <span class="pemisah">
           |
         </span>
+
 
         <span class="data">
           ${tpk}
         </span>
 
+
         <span class="pemisah">
           |
         </span>
+
 
         <span class="data">
           ${tumpuk}
         </span>
 
+
         <span class="pemisah">
           |
         </span>
+
 
         <span class="data">
           ${mutu}
         </span>
 
+
         <span class="pemisah">
           |
         </span>
+
 
         <span class="data">
           ${m3}
@@ -1146,6 +1360,7 @@ function buatItem(
       </div>
 
     </div>
+
 
     <div
       class="statusKecil ${
@@ -1156,6 +1371,7 @@ function buatItem(
         "statusOlah"
       }"
     >
+
       ${
         isSisa
         ?
@@ -1163,11 +1379,14 @@ function buatItem(
         :
         "🟢 TIDAK DICENTANG = DIOLAH"
       }
+
     </div>
 
   `;
 
+
   daftar.appendChild(div);
+
 }
 
 
@@ -1184,10 +1403,12 @@ function ubahTampilanSisa(
       ".item"
     );
 
+
   const status =
     item.querySelector(
       ".statusKecil"
     );
+
 
   const register =
     item.querySelector(
@@ -1203,20 +1424,25 @@ function ubahTampilanSisa(
       "itemBaru"
     );
 
+
     item.classList.add(
       "itemSisa"
     );
+
 
     register.classList.remove(
       "registerOlah"
     );
 
+
     register.classList.add(
       "registerSisa"
     );
 
+
     status.className =
       "statusKecil statusSisa";
+
 
     status.innerHTML =
       "🟠 DICENTANG = TETAP SISA";
@@ -1229,27 +1455,34 @@ function ubahTampilanSisa(
       "itemSisa"
     );
 
+
     item.classList.add(
       "itemBaru"
     );
+
 
     register.classList.remove(
       "registerSisa"
     );
 
+
     register.classList.add(
       "registerOlah"
     );
 
+
     status.className =
       "statusKecil statusOlah";
 
+
     status.innerHTML =
       "🟢 TIDAK DICENTANG = DIOLAH";
+
   }
 
 
   hitungVolumeDariCheckbox();
+
 }
 
 
@@ -1261,6 +1494,7 @@ function hitungVolumeDariCheckbox() {
 
   let total = 0;
 
+
   document
     .querySelectorAll(
       ".checkSisa"
@@ -1270,13 +1504,17 @@ function hitungVolumeDariCheckbox() {
       if (
         checkbox.checked
       ) {
+
         return;
+
       }
+
 
       const register =
         checkbox.getAttribute(
           "data-register"
         );
+
 
       const item =
         semuaData.find(function(data) {
@@ -1299,19 +1537,12 @@ function hitungVolumeDariCheckbox() {
         const data =
           item.data || [];
 
-        /*
-         * DATABASE kolom M3
-         * berada di index 7.
-         *
-         * Gunakan parseVolume()
-         * karena data bisa berupa
-         * 0,14 / 0,09 / 0,25
-         */
 
         total +=
           parseVolume(
             data[7]
           );
+
       }
 
     });
@@ -1323,6 +1554,7 @@ function hitungVolumeDariCheckbox() {
     "TOTAL VOLUME DIOLAH: " +
     formatVolume(total) +
     " M³";
+
 }
 
 
@@ -1335,7 +1567,9 @@ function selesaiOlah() {
   if (
     sedangMenyimpan
   ) {
+
     return;
+
   }
 
 
@@ -1348,6 +1582,7 @@ function selesaiOlah() {
     );
 
     return;
+
   }
 
 
@@ -1374,7 +1609,9 @@ function selesaiOlah() {
 
 
       if (!register) {
+
         return;
+
       }
 
 
@@ -1437,7 +1674,9 @@ function selesaiOlah() {
 
 
   if (!yakin) {
+
     return;
+
   }
 
 
@@ -1465,6 +1704,7 @@ function selesaiOlah() {
 
     },
 
+
     function(hasil) {
 
       sedangMenyimpan = false;
@@ -1485,12 +1725,15 @@ function selesaiOlah() {
           "Gagal menyimpan."
         );
 
+
         document.getElementById(
           "status"
         ).innerHTML =
           "❌ Gagal menyimpan";
 
+
         return;
+
       }
 
 
@@ -1516,7 +1759,9 @@ function selesaiOlah() {
       muatData();
 
     }
+
   );
+
 }
 
 
@@ -1530,21 +1775,12 @@ function hitungVolume(
 
   let total = 0;
 
+
   data.forEach(function(item) {
 
     const d =
       item.data || [];
 
-    /*
-     * INDEX 7 = M3
-     *
-     * Bisa berupa:
-     * 0,14
-     * 0,09
-     * 0,25
-     *
-     * Harus lewat parseVolume()
-     */
 
     total +=
       parseVolume(
@@ -1553,7 +1789,9 @@ function hitungVolume(
 
   });
 
+
   return total;
+
 }
 
 
@@ -1574,6 +1812,7 @@ function formatVolume(
       maximumFractionDigits: 3
     }
   );
+
 }
 
 
@@ -1608,6 +1847,7 @@ function escapeHTML(
     /'/g,
     "&#039;"
   );
+
 }
 
 
@@ -1621,4 +1861,3 @@ muatData();
 
 </body>
 </html>
-
