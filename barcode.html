@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -38,6 +39,33 @@ h2{
     text-align:center;
     margin-top:0;
 }
+
+
+/* =====================================================
+   JUDUL + LOGO PERHUTANI
+===================================================== */
+
+.judulBarcode{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-bottom:15px;
+}
+
+.judulBarcode img{
+    width:28px !important;
+    height:28px !important;
+    max-width:28px !important;
+    max-height:28px !important;
+    object-fit:contain;
+    display:block;
+}
+
+.judulBarcode h2{
+    margin:0;
+}
+
 
 button{
     border:none;
@@ -155,6 +183,11 @@ button{
 .areaCetak{
     display:none;
 }
+
+
+/* =====================================================
+   CETAK F4
+===================================================== */
 
 @media print{
 
@@ -296,6 +329,11 @@ button{
 
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
 @media(max-width:700px){
 
     .filter{
@@ -316,7 +354,6 @@ button{
 
 <div class="kontrol">
 
-
 <div class="judulBarcode">
 
     <img
@@ -329,32 +366,6 @@ button{
     </h2>
 
 </div>
-
-
-Lalu tambahkan CSS ini:
-
-
-.judulBarcode{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    margin-bottom:15px;
-}
-
-.judulBarcode img{
-    width:28px !important;
-    height:28px !important;
-    max-width:28px !important;
-    max-height:28px !important;
-    object-fit:contain;
-    display:block;
-}
-
-.judulBarcode h2{
-    margin:0;
-}
-
 
 
 <button
@@ -470,6 +481,11 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 let database=[];
+
+
+/* =====================================================
+   AMBIL DATABASE
+===================================================== */
 
 function ambilDatabase(){
 
@@ -595,6 +611,11 @@ function ambilDatabase(){
     }
 
 }
+
+
+/* =====================================================
+   TAMPILKAN DATABASE
+===================================================== */
 
 function tampilkan(){
 
@@ -746,6 +767,11 @@ function tampilkan(){
 
 }
 
+
+/* =====================================================
+   FILTER DATA
+===================================================== */
+
 function filterData(){
 
     const registerInput =
@@ -879,6 +905,11 @@ function filterData(){
 
 }
 
+
+/* =====================================================
+   TAMPILKAN SEMUA
+===================================================== */
+
 function tampilkanSemua(){
 
     document.getElementById(
@@ -905,6 +936,11 @@ function tampilkanSemua(){
         "✅ Semua DATABASE ditampilkan";
 
 }
+
+
+/* =====================================================
+   PILIH HASIL FILTER
+===================================================== */
 
 function pilihHasilFilter(){
 
@@ -939,6 +975,11 @@ function pilihHasilFilter(){
 
 }
 
+
+/* =====================================================
+   BATAL HASIL FILTER
+===================================================== */
+
 function batalHasilFilter(){
 
     document
@@ -972,6 +1013,11 @@ function batalHasilFilter(){
 
 }
 
+
+/* =====================================================
+   PILIH SEMUA
+===================================================== */
+
 function pilihSemua(){
 
     database.forEach(
@@ -996,6 +1042,11 @@ function pilihSemua(){
 
 }
 
+
+/* =====================================================
+   BATAL SEMUA
+===================================================== */
+
 function batalSemua(){
 
     database.forEach(
@@ -1019,6 +1070,11 @@ function batalSemua(){
     updateJumlah();
 
 }
+
+
+/* =====================================================
+   UPDATE JUMLAH
+===================================================== */
 
 function updateJumlah(){
 
@@ -1047,6 +1103,11 @@ function updateJumlah(){
         dipilih;
 
 }
+
+
+/* =====================================================
+   CETAK F4
+===================================================== */
 
 function cetakF4(){
 
@@ -1266,6 +1327,11 @@ function cetakF4(){
 
 }
 
+
+/* =====================================================
+   SELESAI PRINT
+===================================================== */
+
 window.addEventListener(
     "afterprint",
     function(){
@@ -1285,3 +1351,4 @@ window.addEventListener(
 </body>
 
 </html>
+
