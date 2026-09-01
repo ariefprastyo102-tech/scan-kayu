@@ -126,6 +126,49 @@ body {
   color: #176b38;
 }
 
+.volumeRingkasan {
+  border-top: 1px solid #ddd;
+  margin-top: 7px;
+  padding-top: 7px;
+  text-align: center;
+}
+
+.volumeBaris {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+}
+
+.volumeItem {
+  flex: 1;
+}
+
+.volumeAngka {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.volumeLabel {
+  font-size: 9px;
+  font-weight: bold;
+  color: #666;
+  margin-top: 2px;
+}
+
+.volumeBaru {
+  color: #176b38;
+}
+
+.volumeSisa {
+  color: #d97706;
+}
+
+.volumeTotal {
+  color: #176b38;
+}
+
 .searchBox {
   margin-bottom: 8px;
   position: relative;
@@ -334,6 +377,14 @@ body {
     font-size: 17px;
   }
 
+  .volumeAngka {
+    font-size: 13px;
+  }
+
+  .volumeLabel {
+    font-size: 8px;
+  }
+
   .register {
     min-width: 70px;
     font-size: 15px;
@@ -416,6 +467,67 @@ body {
     </div>
 
   </div>
+
+
+  <!-- =================================================
+       RINGKASAN VOLUME
+  ================================================== -->
+
+  <div class="volumeRingkasan">
+
+    <div class="volumeBaris">
+
+      <div class="volumeItem">
+
+        <div
+          id="volumeDataBaru"
+          class="volumeAngka volumeBaru"
+        >
+          0,000 M³
+        </div>
+
+        <div class="volumeLabel">
+          VOLUME DATA BARU
+        </div>
+
+      </div>
+
+
+      <div class="volumeItem">
+
+        <div
+          id="volumeDataSisa"
+          class="volumeAngka volumeSisa"
+        >
+          0,000 M³
+        </div>
+
+        <div class="volumeLabel">
+          VOLUME SISA
+        </div>
+
+      </div>
+
+
+      <div class="volumeItem">
+
+        <div
+          id="volumeTotal"
+          class="volumeAngka volumeTotal"
+        >
+          0,000 M³
+        </div>
+
+        <div class="volumeLabel">
+          TOTAL BARU + SISA
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 
   <div
     id="volumeOlah"
@@ -763,6 +875,50 @@ function tampilkanData() {
 
   const volumeSisa =
     hitungVolume(sisa);
+
+
+  const volumeTotal =
+    volumeBaru +
+    volumeSisa;
+
+
+  /*
+   * VOLUME DATA BARU
+   */
+
+  document.getElementById(
+    "volumeDataBaru"
+  ).innerHTML =
+    formatVolume(
+      volumeBaru
+    ) +
+    " M³";
+
+
+  /*
+   * VOLUME SISA
+   */
+
+  document.getElementById(
+    "volumeDataSisa"
+  ).innerHTML =
+    formatVolume(
+      volumeSisa
+    ) +
+    " M³";
+
+
+  /*
+   * TOTAL VOLUME BARU + SISA
+   */
+
+  document.getElementById(
+    "volumeTotal"
+  ).innerHTML =
+    formatVolume(
+      volumeTotal
+    ) +
+    " M³";
 
 
   document.getElementById(
