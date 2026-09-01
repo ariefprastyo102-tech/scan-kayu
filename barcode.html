@@ -335,13 +335,20 @@ Lalu tambahkan CSS ini:
 
 
 .judulBarcode{
-    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-bottom:15px;
 }
 
 .judulBarcode img{
-    width:28px;
-    height:28px;
+    width:28px !important;
+    height:28px !important;
+    max-width:28px !important;
+    max-height:28px !important;
     object-fit:contain;
+    display:block;
 }
 
 .judulBarcode h2{
