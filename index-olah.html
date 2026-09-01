@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -121,46 +122,9 @@ body {
   margin-top: 7px;
   padding-top: 9px;
   text-align: center;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 900;
   color: #176b38;
-}
-
-.volumeBaris {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-  gap: 5px;
-}
-
-.volumeItem {
-  flex: 1;
-}
-
-.volumeAngka {
-  font-size: 16px;
-  font-weight: 900;
-}
-
-.volumeLabel {
-  font-size: 9px;
-  font-weight: bold;
-  color: #666;
-  margin-top: 2px;
-}
-
-.volumeBaru {
-  color: #176b38;
-}
-
-.volumeSisa {
-  color: #d97706;
-}
-
-.volumeTotal {
-  color: #222;
-  border-left: 1px solid #ddd;
 }
 
 .searchBox {
@@ -367,12 +331,8 @@ body {
     font-size: 20px;
   }
 
-  .volumeAngka {
-    font-size: 13px;
-  }
-
-  .volumeLabel {
-    font-size: 8px;
+  .volume {
+    font-size: 17px;
   }
 
   .register {
@@ -458,64 +418,11 @@ body {
 
   </div>
 
-
-  <!-- =================================================
-       RINGKASAN VOLUME
-  ================================================== -->
-
-  <div class="volume">
-
-    <div class="volumeBaris">
-
-      <div class="volumeItem">
-
-        <div
-          id="volumeBaru"
-          class="volumeAngka volumeBaru"
-        >
-          0,000 M³
-        </div>
-
-        <div class="volumeLabel">
-          VOLUME DATA BARU
-        </div>
-
-      </div>
-
-
-      <div class="volumeItem">
-
-        <div
-          id="volumeSisa"
-          class="volumeAngka volumeSisa"
-        >
-          0,000 M³
-        </div>
-
-        <div class="volumeLabel">
-          VOLUME SISA
-        </div>
-
-      </div>
-
-
-      <div class="volumeItem volumeTotal">
-
-        <div
-          id="volumeTotal"
-          class="volumeAngka"
-        >
-          0,000 M³
-        </div>
-
-        <div class="volumeLabel">
-          TOTAL BARU + SISA
-        </div>
-
-      </div>
-
-    </div>
-
+  <div
+    id="volumeOlah"
+    class="volume"
+  >
+    TOTAL VOLUME: 0,000 M³
   </div>
 
 </div>
@@ -807,6 +714,51 @@ function muatData() {
 
 
 // =====================================================
+// PARSE VOLUME INDONESIA
+// =====================================================
+
+function parseVolume(
+  nilai
+) {
+
+  if (
+    nilai === null ||
+    nilai === undefined ||
+    nilai === ""
+  ) {
+    return 0;
+  }
+
+  let teks =
+    String(nilai)
+      .trim()
+      .replace(/\s/g, "");
+
+  /*
+   * Data DATABASE menggunakan koma
+   * sebagai desimal:
+   *
+   * 0,14
+   * 0,09
+   * 1,25
+   */
+
+  teks =
+    teks.replace(
+      ",",
+      "."
+    );
+
+  const angka =
+    parseFloat(teks);
+
+  return isNaN(angka)
+    ? 0
+    : angka;
+}
+
+
+// =====================================================
 // TAMPIL DATA
 // =====================================================
 
@@ -859,18 +811,10 @@ function tampilkanData() {
     hitungVolume(sisa);
 
 
-  /*
-   * TOTAL = DATA BARU + SISA
-   */
-
   const volumeTotal =
     volumeBaru +
     volumeSisa;
 
-
-  /*
-   * JUMLAH + VOLUME DATA BARU
-   */
 
   document.getElementById(
     "detailHariIni"
@@ -880,10 +824,6 @@ function tampilkanData() {
     formatVolume(volumeBaru) +
     " M³";
 
-
-  /*
-   * JUMLAH + VOLUME SISA
-   */
 
   document.getElementById(
     "detailSisa"
@@ -895,26 +835,15 @@ function tampilkanData() {
 
 
   /*
-   * RINGKASAN VOLUME ATAS
+   * TOTAL VOLUME
+   *
+   * DATA BARU + SISA
    */
 
   document.getElementById(
-    "volumeBaru"
+    "volumeOlah"
   ).innerHTML =
-    formatVolume(volumeBaru) +
-    " M³";
-
-
-  document.getElementById(
-    "volumeSisa"
-  ).innerHTML =
-    formatVolume(volumeSisa) +
-    " M³";
-
-
-  document.getElementById(
-    "volumeTotal"
-  ).innerHTML =
+    "TOTAL VOLUME: " +
     formatVolume(volumeTotal) +
     " M³";
 
@@ -1373,26 +1302,27 @@ function hitungVolumeDariCheckbox() {
         /*
          * DATABASE kolom M3
          * berada di index 7.
+         *
+         * Gunakan parseVolume()
+         * karena data bisa berupa
+         * 0,14 / 0,09 / 0,25
          */
 
         total +=
-          Number(
-            data[7] || 0
+          parseVolume(
+            data[7]
           );
       }
 
     });
 
 
-  /*
-   * HANYA TOTAL YANG DIUBAH
-   * BERDASARKAN CHECKBOX.
-   *
-   * VOLUME DATA BARU DAN
-   * VOLUME SISA DI ATAS TETAP
-   * MENUNJUKKAN DATA ASLI.
-   */
-
+  document.getElementById(
+    "volumeOlah"
+  ).innerHTML =
+    "TOTAL VOLUME DIOLAH: " +
+    formatVolume(total) +
+    " M³";
 }
 
 
@@ -1594,7 +1524,9 @@ function selesaiOlah() {
 // VOLUME
 // =====================================================
 
-function hitungVolume(data) {
+function hitungVolume(
+  data
+) {
 
   let total = 0;
 
@@ -1603,9 +1535,20 @@ function hitungVolume(data) {
     const d =
       item.data || [];
 
+    /*
+     * INDEX 7 = M3
+     *
+     * Bisa berupa:
+     * 0,14
+     * 0,09
+     * 0,25
+     *
+     * Harus lewat parseVolume()
+     */
+
     total +=
-      Number(
-        d[7] || 0
+      parseVolume(
+        d[7]
       );
 
   });
@@ -1678,3 +1621,4 @@ muatData();
 
 </body>
 </html>
+
