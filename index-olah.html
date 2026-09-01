@@ -121,16 +121,9 @@ body {
   margin-top: 7px;
   padding-top: 9px;
   text-align: center;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 900;
   color: #176b38;
-}
-
-.volumeRingkasan {
-  border-top: 1px solid #ddd;
-  margin-top: 7px;
-  padding-top: 7px;
-  text-align: center;
 }
 
 .volumeBaris {
@@ -146,7 +139,7 @@ body {
 }
 
 .volumeAngka {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 900;
 }
 
@@ -166,7 +159,8 @@ body {
 }
 
 .volumeTotal {
-  color: #176b38;
+  color: #222;
+  border-left: 1px solid #ddd;
 }
 
 .searchBox {
@@ -373,10 +367,6 @@ body {
     font-size: 20px;
   }
 
-  .volume {
-    font-size: 17px;
-  }
-
   .volumeAngka {
     font-size: 13px;
   }
@@ -473,14 +463,14 @@ body {
        RINGKASAN VOLUME
   ================================================== -->
 
-  <div class="volumeRingkasan">
+  <div class="volume">
 
     <div class="volumeBaris">
 
       <div class="volumeItem">
 
         <div
-          id="volumeDataBaru"
+          id="volumeBaru"
           class="volumeAngka volumeBaru"
         >
           0,000 M³
@@ -496,7 +486,7 @@ body {
       <div class="volumeItem">
 
         <div
-          id="volumeDataSisa"
+          id="volumeSisa"
           class="volumeAngka volumeSisa"
         >
           0,000 M³
@@ -509,11 +499,11 @@ body {
       </div>
 
 
-      <div class="volumeItem">
+      <div class="volumeItem volumeTotal">
 
         <div
           id="volumeTotal"
-          class="volumeAngka volumeTotal"
+          class="volumeAngka"
         >
           0,000 M³
         </div>
@@ -526,14 +516,6 @@ body {
 
     </div>
 
-  </div>
-
-
-  <div
-    id="volumeOlah"
-    class="volume"
-  >
-    TOTAL VOLUME DIOLAH: 0,000 M³
   </div>
 
 </div>
@@ -877,49 +859,18 @@ function tampilkanData() {
     hitungVolume(sisa);
 
 
+  /*
+   * TOTAL = DATA BARU + SISA
+   */
+
   const volumeTotal =
     volumeBaru +
     volumeSisa;
 
 
   /*
-   * VOLUME DATA BARU
+   * JUMLAH + VOLUME DATA BARU
    */
-
-  document.getElementById(
-    "volumeDataBaru"
-  ).innerHTML =
-    formatVolume(
-      volumeBaru
-    ) +
-    " M³";
-
-
-  /*
-   * VOLUME SISA
-   */
-
-  document.getElementById(
-    "volumeDataSisa"
-  ).innerHTML =
-    formatVolume(
-      volumeSisa
-    ) +
-    " M³";
-
-
-  /*
-   * TOTAL VOLUME BARU + SISA
-   */
-
-  document.getElementById(
-    "volumeTotal"
-  ).innerHTML =
-    formatVolume(
-      volumeTotal
-    ) +
-    " M³";
-
 
   document.getElementById(
     "detailHariIni"
@@ -929,6 +880,10 @@ function tampilkanData() {
     formatVolume(volumeBaru) +
     " M³";
 
+
+  /*
+   * JUMLAH + VOLUME SISA
+   */
 
   document.getElementById(
     "detailSisa"
@@ -940,15 +895,27 @@ function tampilkanData() {
 
 
   /*
-   * BARU otomatis diolah.
-   * SISA tidak masuk volume olah.
+   * RINGKASAN VOLUME ATAS
    */
 
   document.getElementById(
-    "volumeOlah"
+    "volumeBaru"
   ).innerHTML =
-    "TOTAL VOLUME DIOLAH: " +
     formatVolume(volumeBaru) +
+    " M³";
+
+
+  document.getElementById(
+    "volumeSisa"
+  ).innerHTML =
+    formatVolume(volumeSisa) +
+    " M³";
+
+
+  document.getElementById(
+    "volumeTotal"
+  ).innerHTML =
+    formatVolume(volumeTotal) +
     " M³";
 
 
@@ -1417,12 +1384,15 @@ function hitungVolumeDariCheckbox() {
     });
 
 
-  document.getElementById(
-    "volumeOlah"
-  ).innerHTML =
-    "TOTAL VOLUME DIOLAH: " +
-    formatVolume(total) +
-    " M³";
+  /*
+   * HANYA TOTAL YANG DIUBAH
+   * BERDASARKAN CHECKBOX.
+   *
+   * VOLUME DATA BARU DAN
+   * VOLUME SISA DI ATAS TETAP
+   * MENUNJUKKAN DATA ASLI.
+   */
+
 }
 
 
@@ -1508,11 +1478,6 @@ function selesaiOlah() {
       "Tidak ada kayu yang diolah.\n\n" +
       "Semua data akan tetap menjadi SISA."
     );
-
-    /*
-     * Kalau semuanya sisa,
-     * tetap boleh disimpan.
-     */
 
   }
 
