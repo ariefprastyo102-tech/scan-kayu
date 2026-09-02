@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -6,8 +7,9 @@
 <meta charset="UTF-8">
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>Data Olah - IK Saradan</title>
@@ -489,7 +491,6 @@ body {
 
 <body>
 
-
 <!-- =====================================================
      HEADER
 ===================================================== -->
@@ -498,28 +499,29 @@ body {
 
   <div class="headerIsi">
 
-    <img
-      class="logo"
-      src="logo-perhutani.jpg"
-      alt="Logo Perhutani"
-    >
+```
+<img
+  class="logo"
+  src="logo-perhutani.jpg"
+  alt="Logo Perhutani"
+>
 
-    <div class="judulBox">
+<div class="judulBox">
 
-      <div class="judul">
-        DATA OLAH
-      </div>
+  <div class="judul">
+    DATA OLAH
+  </div>
 
-      <div class="subjudul">
-        IK SARADAN
-      </div>
+  <div class="subjudul">
+    IK SARADAN
+  </div>
 
-    </div>
+</div>
+```
 
   </div>
 
 </div>
-
 
 <!-- =====================================================
      RINGKASAN
@@ -529,39 +531,40 @@ body {
 
   <div class="ringkasBaris">
 
-    <div class="ringkasItem">
+```
+<div class="ringkasItem">
 
-      <div
-        id="jumlahHariIni"
-        class="ringkasAngka hijau"
-      >
-        0
-      </div>
-
-      <div class="ringkasLabel">
-        KAYU MASUK BARU
-      </div>
-
-    </div>
-
-
-    <div class="ringkasItem">
-
-      <div
-        id="jumlahSisa"
-        class="ringkasAngka orange"
-      >
-        0
-      </div>
-
-      <div class="ringkasLabel">
-        SISA
-      </div>
-
-    </div>
-
+  <div
+    id="jumlahHariIni"
+    class="ringkasAngka hijau"
+  >
+    0
   </div>
 
+  <div class="ringkasLabel">
+    KAYU MASUK BARU
+  </div>
+
+</div>
+
+
+<div class="ringkasItem">
+
+  <div
+    id="jumlahSisa"
+    class="ringkasAngka orange"
+  >
+    0
+  </div>
+
+  <div class="ringkasLabel">
+    SISA
+  </div>
+
+</div>
+```
+
+  </div>
 
   <div
     id="volumeOlah"
@@ -572,19 +575,19 @@ body {
 
 </div>
 
-
 <!-- =====================================================
      SEARCH
 ===================================================== -->
 
 <div class="searchBox">
 
-  <input
-    id="searchRegister"
-    type="search"
-    placeholder="🔎 Cari nomor register..."
-    oninput="filterData()"
-  >
+<input
+id="searchRegister"
+type="search"
+placeholder="🔎 Cari nomor register..."
+oninput="filterData()"
+
+>
 
   <span class="searchIcon">
     🔎
@@ -592,29 +595,37 @@ body {
 
 </div>
 
-
 <!-- =====================================================
      TOOLBAR
 ===================================================== -->
 
 <div class="toolbar">
 
-  <button
-    class="refresh"
-    onclick="muatData()"
-  >
-    🔄 REFRESH
+<button
+class="refresh"
+onclick="muatData()"
+
+>
+
+```
+🔄 REFRESH
+```
+
   </button>
 
-  <button
-    class="selesai"
-    onclick="selesaiOlah()"
-  >
-    ✅ SELESAI
+<button
+class="selesai"
+onclick="selesaiOlah()"
+
+>
+
+```
+✅ SELESAI
+```
+
   </button>
 
 </div>
-
 
 <!-- =====================================================
      STATUS
@@ -624,7 +635,6 @@ body {
   Memuat data...
 </div>
 
-
 <!-- =====================================================
      DATA BARU
 ===================================================== -->
@@ -633,30 +643,32 @@ body {
 
   <div class="judulBagian">
 
-    <div class="judulBagianAtas judulHariIni">
-      🟢 DATA BARU
-    </div>
+```
+<div class="judulBagianAtas judulHariIni">
+  🟢 DATA BARU
+</div>
 
-    <div
-      id="detailHariIni"
-      class="detailBagian"
-    >
-      0 batang • 0,000 M³
-    </div>
+<div
+  id="detailHariIni"
+  class="detailBagian"
+>
+  0 batang • 0,000 M³
+</div>
+```
 
   </div>
 
-
   <div id="daftarHariIni">
 
-    <div class="kosong">
-      ⏳ Memuat data...
-    </div>
+```
+<div class="kosong">
+  ⏳ Memuat data...
+</div>
+```
 
   </div>
 
 </div>
-
 
 <!-- =====================================================
      SISA
@@ -666,30 +678,32 @@ body {
 
   <div class="judulBagian">
 
-    <div class="judulBagianAtas judulSisa">
-      🟠 SISA SEBELUMNYA
-    </div>
+```
+<div class="judulBagianAtas judulSisa">
+  🟠 SISA SEBELUMNYA
+</div>
 
-    <div
-      id="detailSisa"
-      class="detailBagian"
-    >
-      0 batang • 0,000 M³
-    </div>
+<div
+  id="detailSisa"
+  class="detailBagian"
+>
+  0 batang • 0,000 M³
+</div>
+```
 
   </div>
 
-
   <div id="daftarSisa">
 
-    <div class="kosong">
-      Belum ada sisa.
-    </div>
+```
+<div class="kosong">
+  Belum ada sisa.
+</div>
+```
 
   </div>
 
 </div>
-
 
 <script>
 
@@ -1860,4 +1874,5 @@ muatData();
 </script>
 
 </body>
+
 </html>
