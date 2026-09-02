@@ -240,19 +240,29 @@ body {
   gap: 8px;
 }
 
+/* =====================================================
+   CHECKBOX / CENTANG
+   ===================================================== */
+
 .checkSisa {
   flex: 0 0 30px;
   width: 30px;
   height: 30px;
+  margin: 0;
   accent-color: #d97706;
   cursor: pointer;
 }
+
+/* =====================================================
+   REGISTER
+   ===================================================== */
 
 .register {
   flex: 0 0 auto;
   min-width: 85px;
   font-size: 18px;
   font-weight: 900;
+  white-space: nowrap;
 }
 
 .registerOlah {
@@ -310,33 +320,42 @@ body {
 
 
 /* =====================================================
-   TOMBOL HISTORY MELAYANG
+   TOMBOL HISTORY KECIL
    ===================================================== */
 
 .historyFloat {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
+
+  right: 12px;
+  bottom: 12px;
+
   z-index: 9998;
 
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
   border: none;
-  border-radius: 30px;
+  border-radius: 50%;
 
   background: #176b38;
   color: white;
 
-  padding: 10px 15px;
-
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 900;
 
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,.22);
 
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .historyFloat:active {
-  transform: scale(.96);
+  transform: scale(.94);
 }
 
 
@@ -583,8 +602,9 @@ body {
   .historyFloat {
     right: 10px;
     bottom: 10px;
-    padding: 9px 13px;
-    font-size: 11px;
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
   }
 
   .historyPopup {
@@ -640,8 +660,9 @@ body {
   }
 
   .historyFloat {
-    padding: 8px 11px;
-    font-size: 10px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .historyHead {
@@ -837,14 +858,15 @@ body {
 
 
 <!-- =====================================================
-     TOMBOL HISTORY MELAYANG
+     TOMBOL HISTORY KECIL
      ===================================================== -->
 
 <button
   class="historyFloat"
-  onclick="bukaHistory()">
+  onclick="bukaHistory()"
+  title="History Olah">
 
-  📊 HISTORY
+  📊
 
 </button>
 
@@ -1076,11 +1098,6 @@ function muatData() {
 
       tampilkanData();
 
-
-      /*
-       * HISTORY JUGA DIRELOAD
-       * SETELAH DATA UTAMA SELESAI
-       */
 
       muatHistoryOlah();
 
@@ -1341,6 +1358,10 @@ function buatItem(item, daftar) {
     item.data || [];
 
 
+  /* ===================================================
+     REGISTER DIKEMBALIKAN
+     =================================================== */
+
   const register =
     escapeHTML(
       item.register ||
@@ -1385,6 +1406,10 @@ function buatItem(item, daftar) {
     );
 
 
+  /* ===================================================
+     CHECKBOX + REGISTER
+     =================================================== */
+
   div.innerHTML = `
 
     <div class="barisUtama">
@@ -1392,7 +1417,7 @@ function buatItem(item, daftar) {
       <input
         type="checkbox"
         class="checkSisa"
-        data-register="${escapeHTML(register)}"
+        data-register="${register}"
         ${isSisa ? "checked" : ""}
         onchange="ubahTampilanSisa(this)">
 
@@ -1701,9 +1726,7 @@ function selesaiOlah() {
       "Setelah selesai:\n" +
 
       "• DIOLAH menjadi data selesai\n" +
-
       "• SISA dibawa ke sesi berikutnya\n" +
-
       "• Scan baru berikutnya akan muncul sebagai DATA BARU"
 
     );
@@ -1775,7 +1798,6 @@ function selesaiOlah() {
         " batang\n\n" +
 
         "Sekarang data tersebut sudah menjadi batas sesi selesai.\n" +
-
         "Kalau ada scan baru, otomatis muncul sebagai DATA BARU."
 
       );
@@ -2023,10 +2045,6 @@ function bukaHistory() {
     "aktif"
   );
 
-
-  /*
-   * REFRESH HISTORY SAAT POPUP DIBUKA
-   */
 
   muatHistoryOlah();
 
