@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -8,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-   content="width=device-width, initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 <title>Barcode Kayu</title>
 
@@ -356,21 +355,22 @@ button{
 
 <div class="judulBarcode">
 
-    <img
-        src="logo-perhutani.jpg"
-        alt="Logo Perhutani"
-    >
+```
+<img
+    src="logo-perhutani.jpg"
+    alt="Logo Perhutani"
+>
 
-    <h2>
-        CETAK BARCODE BBI IK SARADAN
-    </h2>
+<h2>
+    CETAK BARCODE BBI IK SARADAN
+</h2>
+```
 
 </div>
 
-
 <button
- class="btnAmbil"
- onclick="ambilDatabase()">
+class="btnAmbil"
+onclick="ambilDatabase()">
 
 🔄 AMBIL DATA REGISTER
 
@@ -379,62 +379,62 @@ button{
 <div class="filter">
 
 <input
- id="filterRegister"
- type="text"
- placeholder="Cari nomor register (bisa banyak)">
+id="filterRegister"
+type="text"
+placeholder="Cari nomor register (bisa banyak)">
 
 <input
- id="filterTumpuk"
- type="text"
- placeholder="Nomor tumpuk, contoh: 1">
+id="filterTumpuk"
+type="text"
+placeholder="Nomor tumpuk, contoh: 1">
 
 </div>
 
 <div>
 
 <button
- class="btnFilter"
- onclick="filterData()">
+class="btnFilter"
+onclick="filterData()">
 
 🔎 FILTER
 
 </button>
 
 <button
- class="btnSemua"
- onclick="tampilkanSemua()">
+class="btnSemua"
+onclick="tampilkanSemua()">
 
 🔄 TAMPILKAN SEMUA
 
 </button>
 
 <button
- class="btnPilih"
- onclick="pilihHasilFilter()">
+class="btnPilih"
+onclick="pilihHasilFilter()">
 
 ☑️ PILIH HASIL FILTER
 
 </button>
 
 <button
- class="btnBatal"
- onclick="batalHasilFilter()">
+class="btnBatal"
+onclick="batalHasilFilter()">
 
 ❌ BATAL HASIL FILTER
 
 </button>
 
 <button
- class="btnPilih"
- onclick="pilihSemua()">
+class="btnPilih"
+onclick="pilihSemua()">
 
 ☑️ PILIH SEMUA
 
 </button>
 
 <button
- class="btnBatal"
- onclick="batalSemua()">
+class="btnBatal"
+onclick="batalSemua()">
 
 ❌ BATAL SEMUA
 
@@ -443,8 +443,8 @@ button{
 </div>
 
 <button
- class="btnDownload"
- onclick="cetakF4()">
+class="btnDownload"
+onclick="cetakF4()">
 
 🖨️ CETAK F4 — 33 BARCODE / LEMBAR
 
@@ -693,7 +693,7 @@ function tampilkan(){
                         "CODE128",
 
                     width:
-                        2.5,
+                        1.5,
 
                     height:
                         55,
@@ -1252,7 +1252,7 @@ function cetakF4(){
                             "CODE128",
 
                         width:
-                            2.5,
+                            1.5,
 
                         height:
                             55,
@@ -1351,4 +1351,3 @@ window.addEventListener(
 </body>
 
 </html>
-
