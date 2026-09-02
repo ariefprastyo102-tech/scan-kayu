@@ -9,7 +9,6 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
-
 >
 
 <title>Data Olah - IK Saradan</title>
@@ -379,6 +378,73 @@ body {
 
 
 /* =====================================================
+   HISTORY OLAH
+===================================================== */
+
+.historyBox {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 7px rgba(0,0,0,.07);
+  overflow: hidden;
+}
+
+.historyHeader {
+  padding: 11px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.historyJudul {
+  font-size: 17px;
+  font-weight: 900;
+  color: #176b38;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historyTable th {
+  background: #f2f7f4;
+  padding: 10px 8px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #555;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.historyTable td {
+  padding: 10px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+.historyTable td:nth-child(1) {
+  text-align: left;
+}
+
+.historyTable td:nth-child(2),
+.historyTable td:nth-child(3) {
+  text-align: right;
+}
+
+.historyTable tr:last-child td {
+  border-bottom: none;
+}
+
+.historyTotal {
+  padding: 11px 12px;
+  border-top: 1px solid #ddd;
+  font-size: 13px;
+  font-weight: 900;
+  color: #176b38;
+  text-align: right;
+}
+
+
+/* =====================================================
    HP KECIL
 ===================================================== */
 
@@ -449,6 +515,14 @@ body {
     font-size: 9px;
   }
 
+  .historyTable th {
+    font-size: 11px;
+  }
+
+  .historyTable td {
+    font-size: 13px;
+  }
+
 }
 
 
@@ -491,6 +565,7 @@ body {
 
 <body>
 
+
 <!-- =====================================================
      HEADER
 ===================================================== -->
@@ -499,29 +574,28 @@ body {
 
   <div class="headerIsi">
 
-```
-<img
-  class="logo"
-  src="logo-perhutani.jpg"
-  alt="Logo Perhutani"
->
+    <img
+      class="logo"
+      src="logo-perhutani.jpg"
+      alt="Logo Perhutani"
+    >
 
-<div class="judulBox">
+    <div class="judulBox">
 
-  <div class="judul">
-    DATA OLAH
-  </div>
+      <div class="judul">
+        DATA OLAH
+      </div>
 
-  <div class="subjudul">
-    IK SARADAN
-  </div>
+      <div class="subjudul">
+        IK SARADAN
+      </div>
 
-</div>
-```
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- =====================================================
      RINGKASAN
@@ -531,40 +605,39 @@ body {
 
   <div class="ringkasBaris">
 
-```
-<div class="ringkasItem">
+    <div class="ringkasItem">
 
-  <div
-    id="jumlahHariIni"
-    class="ringkasAngka hijau"
-  >
-    0
-  </div>
+      <div
+        id="jumlahHariIni"
+        class="ringkasAngka hijau"
+      >
+        0
+      </div>
 
-  <div class="ringkasLabel">
-    KAYU MASUK BARU
-  </div>
+      <div class="ringkasLabel">
+        KAYU MASUK BARU
+      </div>
 
-</div>
+    </div>
 
 
-<div class="ringkasItem">
+    <div class="ringkasItem">
 
-  <div
-    id="jumlahSisa"
-    class="ringkasAngka orange"
-  >
-    0
-  </div>
+      <div
+        id="jumlahSisa"
+        class="ringkasAngka orange"
+      >
+        0
+      </div>
 
-  <div class="ringkasLabel">
-    SISA
-  </div>
+      <div class="ringkasLabel">
+        SISA
+      </div>
 
-</div>
-```
+    </div>
 
   </div>
+
 
   <div
     id="volumeOlah"
@@ -575,19 +648,19 @@ body {
 
 </div>
 
+
 <!-- =====================================================
      SEARCH
 ===================================================== -->
 
 <div class="searchBox">
 
-<input
-id="searchRegister"
-type="search"
-placeholder="🔎 Cari nomor register..."
-oninput="filterData()"
-
->
+  <input
+    id="searchRegister"
+    type="search"
+    placeholder="🔎 Cari nomor register..."
+    oninput="filterData()"
+  >
 
   <span class="searchIcon">
     🔎
@@ -595,37 +668,30 @@ oninput="filterData()"
 
 </div>
 
+
 <!-- =====================================================
      TOOLBAR
 ===================================================== -->
 
 <div class="toolbar">
 
-<button
-class="refresh"
-onclick="muatData()"
-
->
-
-```
-🔄 REFRESH
-```
-
+  <button
+    class="refresh"
+    onclick="muatData()"
+  >
+    🔄 REFRESH
   </button>
 
-<button
-class="selesai"
-onclick="selesaiOlah()"
 
->
-
-```
-✅ SELESAI
-```
-
+  <button
+    class="selesai"
+    onclick="selesaiOlah()"
+  >
+    ✅ SELESAI
   </button>
 
 </div>
+
 
 <!-- =====================================================
      STATUS
@@ -635,6 +701,7 @@ onclick="selesaiOlah()"
   Memuat data...
 </div>
 
+
 <!-- =====================================================
      DATA BARU
 ===================================================== -->
@@ -643,32 +710,30 @@ onclick="selesaiOlah()"
 
   <div class="judulBagian">
 
-```
-<div class="judulBagianAtas judulHariIni">
-  🟢 DATA BARU
-</div>
+    <div class="judulBagianAtas judulHariIni">
+      🟢 DATA BARU
+    </div>
 
-<div
-  id="detailHariIni"
-  class="detailBagian"
->
-  0 batang • 0,000 M³
-</div>
-```
+    <div
+      id="detailHariIni"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
 
   </div>
+
 
   <div id="daftarHariIni">
 
-```
-<div class="kosong">
-  ⏳ Memuat data...
-</div>
-```
+    <div class="kosong">
+      ⏳ Memuat data...
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- =====================================================
      SISA
@@ -678,32 +743,60 @@ onclick="selesaiOlah()"
 
   <div class="judulBagian">
 
-```
-<div class="judulBagianAtas judulSisa">
-  🟠 SISA SEBELUMNYA
-</div>
+    <div class="judulBagianAtas judulSisa">
+      🟠 SISA SEBELUMNYA
+    </div>
 
-<div
-  id="detailSisa"
-  class="detailBagian"
->
-  0 batang • 0,000 M³
-</div>
-```
+    <div
+      id="detailSisa"
+      class="detailBagian"
+    >
+      0 batang • 0,000 M³
+    </div>
 
   </div>
+
 
   <div id="daftarSisa">
 
-```
-<div class="kosong">
-  Belum ada sisa.
-</div>
-```
+    <div class="kosong">
+      Belum ada sisa.
+    </div>
 
   </div>
 
 </div>
+
+
+<!-- =====================================================
+     HISTORY OLAH PERTANGGAL
+===================================================== -->
+
+<div class="bagian">
+
+  <div class="historyBox">
+
+    <div class="historyHeader">
+
+      <div class="historyJudul">
+        📊 HISTORY OLAH PERTANGGAL
+      </div>
+
+    </div>
+
+
+    <div id="historyOlah">
+
+      <div class="kosong">
+        ⏳ Memuat history...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
 
@@ -740,6 +833,7 @@ function requestJSONP(
       .toString(36)
       .substring(2,8);
 
+
   let selesai = false;
 
 
@@ -759,7 +853,9 @@ function requestJSONP(
 
 
     if (script) {
+
       script.remove();
+
     }
 
   }
@@ -808,13 +904,15 @@ function requestJSONP(
     );
 
 
-  script.src = url;
+  script.src =
+    url;
 
 
   script.onerror =
     function() {
 
       bersihkan();
+
 
       callback({
 
@@ -840,6 +938,7 @@ function requestJSONP(
 
       bersihkan();
 
+
       callback({
 
         status:
@@ -864,7 +963,9 @@ function requestJSONP(
 function muatData() {
 
   if (sedangMemuat) {
+
     return;
+
   }
 
 
@@ -901,7 +1002,9 @@ function muatData() {
         ).innerHTML =
           "❌ Gagal mengambil data";
 
+
         return;
+
       }
 
 
@@ -927,6 +1030,204 @@ function muatData() {
 
   );
 
+
+  muatHistoryOlah();
+
+}
+
+
+// =====================================================
+// HISTORY OLAH
+// =====================================================
+
+function muatHistoryOlah() {
+
+  requestJSONP(
+
+    {
+      getHistoryOlah:
+        "1"
+    },
+
+
+    function(hasil) {
+
+      if (
+        !hasil ||
+        hasil.status !==
+        "success"
+      ) {
+
+        document.getElementById(
+          "historyOlah"
+        ).innerHTML =
+
+          `<div class="kosong">
+            ❌ Gagal mengambil history.
+          </div>`;
+
+        return;
+
+      }
+
+
+      const data =
+        Array.isArray(
+          hasil.data
+        )
+        ?
+        hasil.data
+        :
+        [];
+
+
+      tampilkanHistoryOlah(
+        data
+      );
+
+    }
+
+  );
+
+}
+
+
+// =====================================================
+// TAMPIL HISTORY
+// =====================================================
+
+function tampilkanHistoryOlah(
+  data
+) {
+
+  const container =
+    document.getElementById(
+      "historyOlah"
+    );
+
+
+  if (
+    data.length === 0
+  ) {
+
+    container.innerHTML =
+
+      `<div class="kosong">
+        Belum ada history olah.
+      </div>`;
+
+    return;
+
+  }
+
+
+  let totalBatang =
+    0;
+
+
+  let totalVolume =
+    0;
+
+
+  let html =
+
+    `<table class="historyTable">
+
+      <thead>
+
+        <tr>
+
+          <th>
+            TANGGAL
+          </th>
+
+          <th>
+            BATANG
+          </th>
+
+          <th>
+            VOLUME
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>`;
+
+
+  data.forEach(
+    function(item) {
+
+      const tanggal =
+        escapeHTML(
+          item.tanggal || "-"
+        );
+
+
+      const batang =
+        Number(
+          item.batang || 0
+        );
+
+
+      const volume =
+        parseVolume(
+          item.volume
+        );
+
+
+      totalBatang +=
+        batang;
+
+
+      totalVolume +=
+        volume;
+
+
+      html +=
+
+        `<tr>
+
+          <td>
+            ${tanggal}
+          </td>
+
+          <td>
+            ${batang.toLocaleString("id-ID")}
+          </td>
+
+          <td>
+            ${formatVolume(volume)}
+          </td>
+
+        </tr>`;
+
+    }
+  );
+
+
+  html +=
+
+      `</tbody>
+
+    </table>
+
+    <div class="historyTotal">
+
+      TOTAL:
+      ${totalBatang.toLocaleString("id-ID")}
+      BATANG
+      •
+      ${formatVolume(totalVolume)}
+      M³
+
+    </div>`;
+
+
+  container.innerHTML =
+    html;
+
 }
 
 
@@ -945,6 +1246,17 @@ function parseVolume(
   ) {
 
     return 0;
+
+  }
+
+
+  if (
+    typeof nilai === "number"
+  ) {
+
+    return isFinite(nilai)
+      ? nilai
+      : 0;
 
   }
 
@@ -1135,7 +1447,9 @@ function cocokSearch(
 ) {
 
   if (!kata) {
+
     return true;
+
   }
 
 
@@ -1168,7 +1482,8 @@ function renderDaftar(
     document.getElementById(id);
 
 
-  daftar.innerHTML = "";
+  daftar.innerHTML =
+    "";
 
 
   if (
@@ -1176,6 +1491,7 @@ function renderDaftar(
   ) {
 
     daftar.innerHTML =
+
       `<div class="kosong">
 
         ${
@@ -1506,7 +1822,8 @@ function ubahTampilanSisa(
 
 function hitungVolumeDariCheckbox() {
 
-  let total = 0;
+  let total =
+    0;
 
 
   document
@@ -1594,6 +1911,7 @@ function selesaiOlah() {
     alert(
       "Tidak ada data untuk diproses."
     );
+
 
     return;
 
@@ -1694,7 +2012,8 @@ function selesaiOlah() {
   }
 
 
-  sedangMenyimpan = true;
+  sedangMenyimpan =
+    true;
 
 
   document.getElementById(
@@ -1721,7 +2040,8 @@ function selesaiOlah() {
 
     function(hasil) {
 
-      sedangMenyimpan = false;
+      sedangMenyimpan =
+        false;
 
 
       if (
@@ -1787,7 +2107,8 @@ function hitungVolume(
   data
 ) {
 
-  let total = 0;
+  let total =
+    0;
 
 
   data.forEach(function(item) {
