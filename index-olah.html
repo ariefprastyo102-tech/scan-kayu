@@ -1086,13 +1086,14 @@ function muatData() {
 
 
       /*
-       * PENTING:
        * Pilihan sementara TIDAK disimpan di server.
-       * Semua keputusan sementara hanya ada di object
-       * item._statusSementara.
        *
-       * Saat data baru dimuat dari server, status sementara
-       * yang masih ada pada object lama tidak ikut terbawa.
+       * Status sementara hanya berada di:
+       *
+       * item._statusSementara
+       *
+       * Saat refresh dari server,
+       * pilihan sementara akan hilang.
        */
 
 
@@ -1159,11 +1160,8 @@ function parseVolume(nilai) {
 function statusTampilan(item) {
 
   /*
-   * Kalau user sudah mengubah checkbox,
-   * gunakan keputusan sementara.
-   *
-   * Kalau belum diubah,
-   * gunakan status asli dari server.
+   * Kalau ada pilihan sementara,
+   * gunakan pilihan tersebut.
    */
 
   if (
@@ -1180,11 +1178,40 @@ function statusTampilan(item) {
   }
 
 
-  return String(
-    item.status || ""
-  )
-  .trim()
-  .toUpperCase();
+  /*
+   * Default berdasarkan status server:
+   *
+   * BARU = DIOLAH
+   * SISA = SISA
+   */
+
+  const statusAsli =
+    String(
+      item.status || ""
+    )
+    .trim()
+    .toUpperCase();
+
+
+  if (
+    statusAsli === "BARU"
+  ) {
+
+    return "DIOLAH";
+
+  }
+
+
+  if (
+    statusAsli === "SISA"
+  ) {
+
+    return "SISA";
+
+  }
+
+
+  return statusAsli;
 
 }
 
@@ -1196,67 +1223,37 @@ function statusTampilan(item) {
 function tampilkanData() {
 
   /*
-   * DATA BARU:
-   * - status asli BARU
-   * - atau SISA yang sementara dipilih DIOLAH
+   * SEMUA DATA DITENTUKAN DARI
+   * STATUS YANG SEDANG DIPILIH.
+   *
+   * DIOLAH → DATA BARU / AKAN DIOLAH
+   * SISA   → SISA SEBELUMNYA
    */
 
   const baru =
     semuaData.filter(function(item) {
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
-      const statusSekarang =
-        statusTampilan(item);
-
-
       return (
-        statusAsli === "BARU" ||
-        (
-          statusAsli === "SISA" &&
-          statusSekarang === "DIOLAH"
-        )
+        statusTampilan(item) ===
+        "DIOLAH"
       );
 
     });
 
-
-  /*
-   * SISA:
-   * Hanya SISA yang masih dipilih sebagai SISA.
-   */
 
   const sisa =
     semuaData.filter(function(item) {
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
-      const statusSekarang =
-        statusTampilan(item);
-
-
       return (
-        statusAsli === "SISA" &&
-        statusSekarang === "SISA"
+        statusTampilan(item) ===
+        "SISA"
       );
 
     });
 
 
   /*
-   * JUMLAH DATA BARU / AKAN DIOLAH
+   * JUMLAH DATA AKAN DIOLAH
    */
 
   document.getElementById(
@@ -1266,7 +1263,7 @@ function tampilkanData() {
 
 
   /*
-   * JUMLAH SISA YANG MASIH TINGGAL
+   * JUMLAH SISA
    */
 
   document.getElementById(
@@ -1276,7 +1273,7 @@ function tampilkanData() {
 
 
   /*
-   * Volume DATA BARU + SISA yang dipilih DIOLAH
+   * VOLUME AKAN DIOLAH
    */
 
   const volumeBaru =
@@ -1284,12 +1281,16 @@ function tampilkanData() {
 
 
   /*
-   * Volume SISA yang masih dipertahankan
+   * VOLUME SISA
    */
 
   const volumeSisa =
     hitungVolume(sisa);
 
+
+  /*
+   * TOTAL VOLUME
+   */
 
   const volumeTotal =
     volumeBaru +
@@ -1357,28 +1358,9 @@ function filterData() {
   const baru =
     semuaData.filter(function(item) {
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
-      const statusSekarang =
-        statusTampilan(item);
-
-
-      const masukBagianBaru =
-        statusAsli === "BARU" ||
-        (
-          statusAsli === "SISA" &&
-          statusSekarang === "DIOLAH"
-        );
-
-
       return (
-        masukBagianBaru &&
+        statusTampilan(item) ===
+        "DIOLAH" &&
         cocokSearch(
           item,
           kata
@@ -1395,25 +1377,9 @@ function filterData() {
   const sisa =
     semuaData.filter(function(item) {
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
-      const statusSekarang =
-        statusTampilan(item);
-
-
-      const masukBagianSisa =
-        statusAsli === "SISA" &&
-        statusSekarang === "SISA";
-
-
       return (
-        masukBagianSisa &&
+        statusTampilan(item) ===
+        "SISA" &&
         cocokSearch(
           item,
           kata
@@ -1604,41 +1570,101 @@ function buatItem(
 
 
   /*
+   * =================================================
+   * CHECKBOX UNTUK SEMUA DATA
+   * =================================================
+   *
    * DATA BARU:
-   * checkbox tidak diperlukan sebagai keputusan.
-   * Dia otomatis DIOLAH.
+   *   default tidak dicentang
+   *   centang → SISA
    *
    * SISA:
-   * checkbox aktif untuk memilih:
-   * ☑ SISA
-   * ☐ DIOLAH
+   *   default dicentang
+   *   lepas → DIOLAH
+   *
    */
 
-  const checkboxHTML =
-    String(
-      item.status || ""
-    )
-    .trim()
-    .toUpperCase() === "SISA"
+  const checkboxHTML = `
 
-      ? `
-        <input
-          type="checkbox"
-          class="checkSisa"
-          data-register="${escapeHTML(registerRaw)}"
-          ${isSisa ? "checked" : ""}
-          onchange="ubahTampilanSisa(this)">
-      `
+    <input
+      type="checkbox"
+      class="checkSisa"
+      data-register="${escapeHTML(registerRaw)}"
+      ${isSisa ? "checked" : ""}
+      onchange="ubahStatusSementara(this)">
 
-      : `
-        <div
-          class="checkSisa"
-          style="
-            visibility:hidden;
-            pointer-events:none;
-          ">
-        </div>
-      `;
+  `;
+
+
+  /*
+   * KETERANGAN STATUS
+   */
+
+  let keteranganStatus = "";
+
+
+  if (
+    isSisa
+  ) {
+
+    /*
+     * Baik SISA lama maupun DATA BARU
+     * yang sementara dipindahkan ke SISA.
+     */
+
+    const statusAsli =
+      String(
+        item.status || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    if (
+      statusAsli === "SISA"
+    ) {
+
+      keteranganStatus =
+        "🟠 DICENTANG = TETAP SISA";
+
+    }
+
+    else {
+
+      keteranganStatus =
+        "🟠 DICENTANG = JADI SISA";
+
+    }
+
+  }
+
+  else {
+
+    const statusAsli =
+      String(
+        item.status || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    if (
+      statusAsli === "SISA"
+    ) {
+
+      keteranganStatus =
+        "🟢 TIDAK DICENTANG = IKUT DIOLAH";
+
+    }
+
+    else {
+
+      keteranganStatus =
+        "🟢 TIDAK DICENTANG = IKUT DIOLAH";
+
+    }
+
+  }
 
 
   div.innerHTML = `
@@ -1717,21 +1743,7 @@ function buatItem(
           : "statusOlah"
       }">
 
-      ${
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase() === "SISA"
-
-          ? (
-              isSisa
-                ? "🟠 DICENTANG = TETAP SISA"
-                : "🟢 CENTANG DIHILANGKAN = IKUT DIOLAH"
-            )
-
-          : "🟢 DATA BARU = OTOMATIS DIOLAH"
-      }
+      ${keteranganStatus}
 
     </div>
 
@@ -1746,10 +1758,10 @@ function buatItem(
 
 
 // =====================================================
-// UBAH SISA SEMENTARA
+// UBAH STATUS SEMENTARA
 // =====================================================
 
-function ubahTampilanSisa(
+function ubahStatusSementara(
   checkbox
 ) {
 
@@ -1796,34 +1808,20 @@ function ubahTampilanSisa(
 
 
   /*
-   * HANYA DATA ASLI SISA yang
-   * boleh menggunakan keputusan ini.
-   */
-
-  const statusAsli =
-    String(
-      item.status || ""
-    )
-    .trim()
-    .toUpperCase();
-
-
-  if (
-    statusAsli !== "SISA"
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-   * CENTANG:
-   * tetap SISA
+   * =================================================
+   * INI INTI LOGIKA BARU
+   * =================================================
    *
-   * HILANGKAN CENTANG:
-   * sementara DIOLAH
+   * CENTANG     → SISA
+   * TIDAK CENTANG → DIOLAH
+   *
+   * Berlaku untuk:
+   *
+   * - DATA BARU
+   * - SISA SEBELUMNYA
+   *
    */
+
 
   item._statusSementara =
     checkbox.checked
@@ -1832,27 +1830,59 @@ function ubahTampilanSisa(
 
 
   /*
-   * Render ulang.
-   *
-   * Inilah bagian penting:
-   * kalau checkbox dihilangkan,
-   * item langsung keluar dari SISA
-   * dan masuk ke DATA BARU / AKAN DIOLAH.
+   * Render ulang supaya data langsung
+   * berpindah bagian.
    */
 
   tampilkanData();
 
 
   /*
-   * Beri informasi sementara.
+   * Pesan sementara.
    */
 
-  document.getElementById(
-    "status"
-  ).innerHTML =
+  if (
     checkbox.checked
-      ? "🟠 Data dikembalikan ke SISA sementara"
-      : "🟢 Data dipindahkan ke DATA BARU sementara";
+  ) {
+
+    const statusAsli =
+      String(
+        item.status || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    if (
+      statusAsli === "BARU"
+    ) {
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "🟠 DATA BARU dipindahkan ke SISA sementara";
+
+    }
+
+    else {
+
+      document.getElementById(
+        "status"
+      ).innerHTML =
+        "🟠 Data dipertahankan sebagai SISA sementara";
+
+    }
+
+  }
+
+  else {
+
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "🟢 Data dipindahkan ke DATA BARU sementara";
+
+  }
 
 }
 
@@ -1869,35 +1899,22 @@ function hitungVolumeDariCheckbox() {
   semuaData.forEach(
     function(item) {
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
       const statusSekarang =
         statusTampilan(item);
 
 
       /*
-       * DATA BARU selalu DIOLAH.
-       *
-       * SISA hanya DIOLAH kalau
-       * checkbox sudah dihilangkan.
+       * Hanya yang status akhirnya
+       * sementara DIOLAH.
        */
 
-      const diolah =
-        statusAsli === "BARU" ||
-        (
-          statusAsli === "SISA" &&
-          statusSekarang === "DIOLAH"
-        );
+      if (
+        statusSekarang !==
+        "DIOLAH"
+      ) {
 
-
-      if (!diolah) {
         return;
+
       }
 
 
@@ -1954,16 +1971,19 @@ function selesaiOlah() {
 
 
   /*
-   * JANGAN lagi mengambil keputusan dari checkbox DOM.
+   * =================================================
+   * KEPUTUSAN DIAMBIL DARI STATUS SEMENTARA
+   * =================================================
    *
-   * Gunakan keputusan sementara yang tersimpan
-   * pada setiap item.
+   * Tidak peduli data asalnya BARU atau SISA.
    *
-   * Ini penting supaya:
-   * - search tidak menghilangkan data
-   * - pindah SISA → DATA BARU tetap terbaca
-   * - keputusan yang terlihat di layar = keputusan yang disimpan
+   * Yang penting:
+   *
+   * DIOLAH → DATA OLAH
+   * SISA   → SISA
+   *
    */
+
 
   const daftarOlah = [];
 
@@ -1989,25 +2009,19 @@ function selesaiOlah() {
       }
 
 
-      const statusAsli =
-        String(
-          item.status || ""
-        )
-        .trim()
-        .toUpperCase();
-
-
       const statusSekarang =
         statusTampilan(item);
 
 
       /*
-       * DATA BARU:
-       * selalu masuk DATA OLAH.
+       * STATUS AKHIR:
+       *
+       * DIOLAH
        */
 
       if (
-        statusAsli === "BARU"
+        statusSekarang ===
+        "DIOLAH"
       ) {
 
         daftarOlah.push(
@@ -2020,33 +2034,19 @@ function selesaiOlah() {
 
 
       /*
-       * SISA:
+       * STATUS AKHIR:
        *
-       * sementara SISA  → SISA
-       * sementara DIOLAH → DATA OLAH
+       * SISA
        */
 
       if (
-        statusAsli === "SISA"
+        statusSekarang ===
+        "SISA"
       ) {
 
-        if (
-          statusSekarang === "SISA"
-        ) {
-
-          daftarSisa.push(
-            register
-          );
-
-        }
-
-        else {
-
-          daftarOlah.push(
-            register
-          );
-
-        }
+        daftarSisa.push(
+          register
+        );
 
       }
 
@@ -2076,11 +2076,9 @@ function selesaiOlah() {
 
       "Setelah klik OK:\n" +
 
-      "• DATA BARU → DATA OLAH\n" +
+      "• ⬜ TIDAK DICENTANG → DATA OLAH\n" +
 
-      "• SISA yang dipilih DIOLAH → DATA OLAH\n" +
-
-      "• SISA yang tetap dicentang → SISA\n\n" +
+      "• ☑️ DICENTANG → SISA\n\n" +
 
       "Lanjutkan?"
 
