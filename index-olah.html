@@ -308,11 +308,6 @@ body {
   margin-bottom: 8px;
 }
 
-
-/* =====================================================
-   TOMBOL HISTORY KECIL
-   ===================================================== */
-
 .historyFloat {
   position: fixed;
   right: 12px;
@@ -341,11 +336,6 @@ body {
 .historyFloat:active {
   transform: scale(.94);
 }
-
-
-/* =====================================================
-   POPUP HISTORY
-   ===================================================== */
 
 .historyOverlay {
   display: none;
@@ -505,7 +495,6 @@ body {
   color: #176b38;
 }
 
-
 @media(max-width:400px) {
 
   body {
@@ -608,7 +597,6 @@ body {
 
 }
 
-
 @media(max-width:350px) {
 
   .ringkasAngka {
@@ -657,9 +645,7 @@ body {
 
 </head>
 
-
 <body>
-
 
 <div class="header">
 
@@ -686,7 +672,6 @@ body {
 
 </div>
 
-
 <div class="ringkasan">
 
   <div class="ringkasBaris">
@@ -705,7 +690,6 @@ body {
 
     </div>
 
-
     <div class="ringkasItem">
 
       <div
@@ -722,7 +706,6 @@ body {
 
   </div>
 
-
   <div
     id="volumeOlah"
     class="volume">
@@ -732,7 +715,6 @@ body {
   </div>
 
 </div>
-
 
 <div class="searchBox">
 
@@ -748,7 +730,6 @@ body {
 
 </div>
 
-
 <div class="toolbar">
 
   <button
@@ -758,7 +739,6 @@ body {
     🔄 REFRESH
 
   </button>
-
 
   <button
     class="selesai"
@@ -770,18 +750,16 @@ body {
 
 </div>
 
-
 <div id="status">
   Memuat data...
 </div>
-
 
 <div class="bagian">
 
   <div class="judulBagian">
 
     <div class="judulBagianAtas judulHariIni">
-      🟢 DATA BARU
+      🟢 DATA BARU / AKAN DIOLAH
     </div>
 
     <div
@@ -794,7 +772,6 @@ body {
 
   </div>
 
-
   <div id="daftarHariIni">
 
     <div class="kosong">
@@ -804,7 +781,6 @@ body {
   </div>
 
 </div>
-
 
 <div class="bagian">
 
@@ -824,7 +800,6 @@ body {
 
   </div>
 
-
   <div id="daftarSisa">
 
     <div class="kosong">
@@ -835,11 +810,6 @@ body {
 
 </div>
 
-
-<!-- ===================================================
-     TOMBOL HISTORY
-     =================================================== -->
-
 <button
   class="historyFloat"
   onclick="bukaHistory()"
@@ -848,11 +818,6 @@ body {
   📊
 
 </button>
-
-
-<!-- ===================================================
-     POPUP HISTORY
-     =================================================== -->
 
 <div
   id="historyOverlay"
@@ -867,7 +832,6 @@ body {
         📊 HISTORY OLAH PERTANGGAL
       </div>
 
-
       <button
         class="historyTutup"
         onclick="tutupHistory()">
@@ -877,7 +841,6 @@ body {
       </button>
 
     </div>
-
 
     <div class="historyIsi">
 
@@ -899,7 +862,6 @@ body {
 
         </div>
 
-
         <div id="historyOlah">
 
           <div class="kosong">
@@ -916,9 +878,7 @@ body {
 
 </div>
 
-
 <script>
-
 
 // =====================================================
 // API
@@ -1125,6 +1085,17 @@ function muatData() {
         : [];
 
 
+      /*
+       * PENTING:
+       * Pilihan sementara TIDAK disimpan di server.
+       * Semua keputusan sementara hanya ada di object
+       * item._statusSementara.
+       *
+       * Saat data baru dimuat dari server, status sementara
+       * yang masih ada pada object lama tidak ikut terbawa.
+       */
+
+
       tampilkanData();
 
 
@@ -1182,35 +1153,111 @@ function parseVolume(nilai) {
 
 
 // =====================================================
+// STATUS TAMPILAN SEMENTARA
+// =====================================================
+
+function statusTampilan(item) {
+
+  /*
+   * Kalau user sudah mengubah checkbox,
+   * gunakan keputusan sementara.
+   *
+   * Kalau belum diubah,
+   * gunakan status asli dari server.
+   */
+
+  if (
+    item &&
+    item._statusSementara
+  ) {
+
+    return String(
+      item._statusSementara
+    )
+    .trim()
+    .toUpperCase();
+
+  }
+
+
+  return String(
+    item.status || ""
+  )
+  .trim()
+  .toUpperCase();
+
+}
+
+
+// =====================================================
 // TAMPILKAN DATA
 // =====================================================
 
 function tampilkanData() {
 
+  /*
+   * DATA BARU:
+   * - status asli BARU
+   * - atau SISA yang sementara dipilih DIOLAH
+   */
 
   const baru =
     semuaData.filter(function(item) {
 
-      return String(
-        item.status || ""
-      )
-      .trim()
-      .toUpperCase() === "BARU";
+      const statusAsli =
+        String(
+          item.status || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+      const statusSekarang =
+        statusTampilan(item);
+
+
+      return (
+        statusAsli === "BARU" ||
+        (
+          statusAsli === "SISA" &&
+          statusSekarang === "DIOLAH"
+        )
+      );
 
     });
 
+
+  /*
+   * SISA:
+   * Hanya SISA yang masih dipilih sebagai SISA.
+   */
 
   const sisa =
     semuaData.filter(function(item) {
 
-      return String(
-        item.status || ""
-      )
-      .trim()
-      .toUpperCase() === "SISA";
+      const statusAsli =
+        String(
+          item.status || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+      const statusSekarang =
+        statusTampilan(item);
+
+
+      return (
+        statusAsli === "SISA" &&
+        statusSekarang === "SISA"
+      );
 
     });
 
+
+  /*
+   * JUMLAH DATA BARU / AKAN DIOLAH
+   */
 
   document.getElementById(
     "jumlahHariIni"
@@ -1218,15 +1265,27 @@ function tampilkanData() {
     baru.length;
 
 
+  /*
+   * JUMLAH SISA YANG MASIH TINGGAL
+   */
+
   document.getElementById(
     "jumlahSisa"
   ).innerHTML =
     sisa.length;
 
 
+  /*
+   * Volume DATA BARU + SISA yang dipilih DIOLAH
+   */
+
   const volumeBaru =
     hitungVolume(baru);
 
+
+  /*
+   * Volume SISA yang masih dipertahankan
+   */
 
   const volumeSisa =
     hitungVolume(sisa);
@@ -1273,14 +1332,9 @@ function tampilkanData() {
 
 // =====================================================
 // FILTER DATA
-//
-// FIX PENTING:
-// return HARUS SATU BARIS DENGAN EXPRESSION
-// supaya tidak terkena automatic semicolon insertion.
 // =====================================================
 
 function filterData() {
-
 
   const input =
     document.getElementById(
@@ -1296,24 +1350,75 @@ function filterData() {
     .toLowerCase();
 
 
+  /*
+   * DATA BARU / AKAN DIOLAH
+   */
+
   const baru =
     semuaData.filter(function(item) {
 
-      return String(item.status || "")
+      const statusAsli =
+        String(
+          item.status || ""
+        )
         .trim()
-        .toUpperCase() === "BARU" &&
-        cocokSearch(item, kata);
+        .toUpperCase();
+
+
+      const statusSekarang =
+        statusTampilan(item);
+
+
+      const masukBagianBaru =
+        statusAsli === "BARU" ||
+        (
+          statusAsli === "SISA" &&
+          statusSekarang === "DIOLAH"
+        );
+
+
+      return (
+        masukBagianBaru &&
+        cocokSearch(
+          item,
+          kata
+        )
+      );
 
     });
 
 
+  /*
+   * SISA
+   */
+
   const sisa =
     semuaData.filter(function(item) {
 
-      return String(item.status || "")
+      const statusAsli =
+        String(
+          item.status || ""
+        )
         .trim()
-        .toUpperCase() === "SISA" &&
-        cocokSearch(item, kata);
+        .toUpperCase();
+
+
+      const statusSekarang =
+        statusTampilan(item);
+
+
+      const masukBagianSisa =
+        statusAsli === "SISA" &&
+        statusSekarang === "SISA";
+
+
+      return (
+        masukBagianSisa &&
+        cocokSearch(
+          item,
+          kata
+        )
+      );
 
     });
 
@@ -1369,7 +1474,6 @@ function renderDaftar(
   id
 ) {
 
-
   const daftar =
     document.getElementById(
       id
@@ -1423,13 +1527,8 @@ function buatItem(
   daftar
 ) {
 
-
   const status =
-    String(
-      item.status || ""
-    )
-    .trim()
-    .toUpperCase();
+    statusTampilan(item);
 
 
   const isSisa =
@@ -1504,16 +1603,49 @@ function buatItem(
     );
 
 
+  /*
+   * DATA BARU:
+   * checkbox tidak diperlukan sebagai keputusan.
+   * Dia otomatis DIOLAH.
+   *
+   * SISA:
+   * checkbox aktif untuk memilih:
+   * ☑ SISA
+   * ☐ DIOLAH
+   */
+
+  const checkboxHTML =
+    String(
+      item.status || ""
+    )
+    .trim()
+    .toUpperCase() === "SISA"
+
+      ? `
+        <input
+          type="checkbox"
+          class="checkSisa"
+          data-register="${escapeHTML(registerRaw)}"
+          ${isSisa ? "checked" : ""}
+          onchange="ubahTampilanSisa(this)">
+      `
+
+      : `
+        <div
+          class="checkSisa"
+          style="
+            visibility:hidden;
+            pointer-events:none;
+          ">
+        </div>
+      `;
+
+
   div.innerHTML = `
 
     <div class="barisUtama">
 
-      <input
-        type="checkbox"
-        class="checkSisa"
-        data-register="${escapeHTML(registerRaw)}"
-        ${isSisa ? "checked" : ""}
-        onchange="ubahTampilanSisa(this)">
+      ${checkboxHTML}
 
       <div
         class="register ${
@@ -1586,9 +1718,19 @@ function buatItem(
       }">
 
       ${
-        isSisa
-          ? "🟠 DICENTANG = TETAP SISA"
-          : "🟢 TIDAK DICENTANG = DIOLAH"
+        String(
+          item.status || ""
+        )
+        .trim()
+        .toUpperCase() === "SISA"
+
+          ? (
+              isSisa
+                ? "🟠 DICENTANG = TETAP SISA"
+                : "🟢 CENTANG DIHILANGKAN = IKUT DIOLAH"
+            )
+
+          : "🟢 DATA BARU = OTOMATIS DIOLAH"
       }
 
     </div>
@@ -1604,166 +1746,172 @@ function buatItem(
 
 
 // =====================================================
-// UBAH TAMPILAN CHECKBOX
+// UBAH SISA SEMENTARA
 // =====================================================
 
 function ubahTampilanSisa(
   checkbox
 ) {
 
+  const register =
+    String(
+      checkbox.getAttribute(
+        "data-register"
+      ) || ""
+    ).trim();
+
+
+  if (!register) {
+    return;
+  }
+
+
+  /*
+   * Cari data asli.
+   */
 
   const item =
-    checkbox.closest(
-      ".item"
+    semuaData.find(
+      function(data) {
+
+        return String(
+          data.register ||
+          (
+            data.data &&
+            data.data[0]
+          ) ||
+          ""
+        )
+        .trim()
+        ===
+        register;
+
+      }
     );
 
 
-  const status =
-    item.querySelector(
-      ".statusKecil"
-    );
+  if (!item) {
+    return;
+  }
 
 
-  const register =
-    item.querySelector(
-      ".register"
-    );
+  /*
+   * HANYA DATA ASLI SISA yang
+   * boleh menggunakan keputusan ini.
+   */
+
+  const statusAsli =
+    String(
+      item.status || ""
+    )
+    .trim()
+    .toUpperCase();
 
 
   if (
-    checkbox.checked
+    statusAsli !== "SISA"
   ) {
 
-    item.classList.remove(
-      "itemBaru"
-    );
-
-    item.classList.add(
-      "itemSisa"
-    );
-
-
-    register.classList.remove(
-      "registerOlah"
-    );
-
-    register.classList.add(
-      "registerSisa"
-    );
-
-
-    status.className =
-      "statusKecil statusSisa";
-
-
-    status.innerHTML =
-      "🟠 DICENTANG = TETAP SISA";
+    return;
 
   }
 
 
-  else {
+  /*
+   * CENTANG:
+   * tetap SISA
+   *
+   * HILANGKAN CENTANG:
+   * sementara DIOLAH
+   */
 
-    item.classList.remove(
-      "itemSisa"
-    );
-
-    item.classList.add(
-      "itemBaru"
-    );
-
-
-    register.classList.remove(
-      "registerSisa"
-    );
-
-    register.classList.add(
-      "registerOlah"
-    );
+  item._statusSementara =
+    checkbox.checked
+      ? "SISA"
+      : "DIOLAH";
 
 
-    status.className =
-      "statusKecil statusOlah";
+  /*
+   * Render ulang.
+   *
+   * Inilah bagian penting:
+   * kalau checkbox dihilangkan,
+   * item langsung keluar dari SISA
+   * dan masuk ke DATA BARU / AKAN DIOLAH.
+   */
+
+  tampilkanData();
 
 
-    status.innerHTML =
-      "🟢 TIDAK DICENTANG = DIOLAH";
+  /*
+   * Beri informasi sementara.
+   */
 
-  }
-
-
-  hitungVolumeDariCheckbox();
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    checkbox.checked
+      ? "🟠 Data dikembalikan ke SISA sementara"
+      : "🟢 Data dipindahkan ke DATA BARU sementara";
 
 }
 
 
 // =====================================================
-// HITUNG VOLUME BERDASARKAN CHECKBOX
+// HITUNG VOLUME BERDASARKAN KEPUTUSAN SEMENTARA
 // =====================================================
 
 function hitungVolumeDariCheckbox() {
 
-
   let total = 0;
 
 
-  document
-    .querySelectorAll(
-      ".checkSisa"
-    )
-    .forEach(function(checkbox) {
+  semuaData.forEach(
+    function(item) {
+
+      const statusAsli =
+        String(
+          item.status || ""
+        )
+        .trim()
+        .toUpperCase();
 
 
-      if (
-        checkbox.checked
-      ) {
+      const statusSekarang =
+        statusTampilan(item);
 
+
+      /*
+       * DATA BARU selalu DIOLAH.
+       *
+       * SISA hanya DIOLAH kalau
+       * checkbox sudah dihilangkan.
+       */
+
+      const diolah =
+        statusAsli === "BARU" ||
+        (
+          statusAsli === "SISA" &&
+          statusSekarang === "DIOLAH"
+        );
+
+
+      if (!diolah) {
         return;
-
       }
 
 
-      const register =
-        checkbox.getAttribute(
-          "data-register"
+      const data =
+        item.data || [];
+
+
+      total +=
+        parseVolume(
+          data[7]
         );
 
-
-      const item =
-        semuaData.find(
-          function(data) {
-
-            return String(
-              data.register ||
-              (
-                data.data &&
-                data.data[0]
-              ) ||
-              ""
-            ).trim()
-            ===
-            String(
-              register
-            ).trim();
-
-          }
-        );
-
-
-      if (item) {
-
-        const data =
-          item.data || [];
-
-
-        total +=
-          parseVolume(
-            data[7]
-          );
-
-      }
-
-    });
+    }
+  );
 
 
   document.getElementById(
@@ -1782,7 +1930,6 @@ function hitungVolumeDariCheckbox() {
 // =====================================================
 
 function selesaiOlah() {
-
 
   if (
     sedangMenyimpan
@@ -1806,26 +1953,34 @@ function selesaiOlah() {
   }
 
 
-  const semuaCheckbox =
-    document.querySelectorAll(
-      ".checkSisa"
-    );
-
+  /*
+   * JANGAN lagi mengambil keputusan dari checkbox DOM.
+   *
+   * Gunakan keputusan sementara yang tersimpan
+   * pada setiap item.
+   *
+   * Ini penting supaya:
+   * - search tidak menghilangkan data
+   * - pindah SISA → DATA BARU tetap terbaca
+   * - keputusan yang terlihat di layar = keputusan yang disimpan
+   */
 
   const daftarOlah = [];
 
   const daftarSisa = [];
 
 
-  semuaCheckbox.forEach(
-    function(checkbox) {
-
+  semuaData.forEach(
+    function(item) {
 
       const register =
         String(
-          checkbox.getAttribute(
-            "data-register"
-          ) || ""
+          item.register ||
+          (
+            item.data &&
+            item.data[0]
+          ) ||
+          ""
         ).trim();
 
 
@@ -1834,22 +1989,64 @@ function selesaiOlah() {
       }
 
 
+      const statusAsli =
+        String(
+          item.status || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+      const statusSekarang =
+        statusTampilan(item);
+
+
+      /*
+       * DATA BARU:
+       * selalu masuk DATA OLAH.
+       */
+
       if (
-        checkbox.checked
+        statusAsli === "BARU"
       ) {
-
-        daftarSisa.push(
-          register
-        );
-
-      }
-
-
-      else {
 
         daftarOlah.push(
           register
         );
+
+        return;
+
+      }
+
+
+      /*
+       * SISA:
+       *
+       * sementara SISA  → SISA
+       * sementara DIOLAH → DATA OLAH
+       */
+
+      if (
+        statusAsli === "SISA"
+      ) {
+
+        if (
+          statusSekarang === "SISA"
+        ) {
+
+          daftarSisa.push(
+            register
+          );
+
+        }
+
+        else {
+
+          daftarOlah.push(
+            register
+          );
+
+        }
 
       }
 
@@ -1857,19 +2054,9 @@ function selesaiOlah() {
   );
 
 
-  if (
-    daftarOlah.length === 0
-  ) {
-
-    alert(
-
-      "Tidak ada kayu yang diolah.\n\n" +
-      "Semua data akan tetap menjadi SISA."
-
-    );
-
-  }
-
+  /*
+   * Konfirmasi sebelum benar-benar menyimpan.
+   */
 
   const yakin =
     confirm(
@@ -1884,13 +2071,18 @@ function selesaiOlah() {
       daftarSisa.length +
       " batang\n\n" +
 
-      "Setelah selesai:\n" +
+      "Data yang tampil di atas adalah\n" +
+      "keputusan sementara yang sudah lu pilih.\n\n" +
 
-      "• DIOLAH menjadi data selesai\n" +
+      "Setelah klik OK:\n" +
 
-      "• SISA dibawa ke sesi berikutnya\n" +
+      "• DATA BARU → DATA OLAH\n" +
 
-      "• Scan baru berikutnya akan muncul sebagai DATA BARU"
+      "• SISA yang dipilih DIOLAH → DATA OLAH\n" +
+
+      "• SISA yang tetap dicentang → SISA\n\n" +
+
+      "Lanjutkan?"
 
     );
 
@@ -1961,6 +2153,20 @@ function selesaiOlah() {
       }
 
 
+      /*
+       * Setelah benar-benar tersimpan,
+       * hapus keputusan sementara.
+       */
+
+      semuaData.forEach(
+        function(item) {
+
+          delete item._statusSementara;
+
+        }
+      );
+
+
       alert(
 
         "SELESAI.\n\n" +
@@ -1973,7 +2179,7 @@ function selesaiOlah() {
         hasil.sisa +
         " batang\n\n" +
 
-        "Sekarang data tersebut sudah menjadi batas sesi selesai.\n" +
+        "Sekarang data tersebut sudah menjadi batas sesi selesai.\n\n" +
 
         "Kalau ada scan baru, otomatis muncul sebagai DATA BARU."
 
@@ -1997,13 +2203,11 @@ function hitungVolume(
   data
 ) {
 
-
   let total = 0;
 
 
   data.forEach(
     function(item) {
-
 
       const d =
         item.data || [];
@@ -2043,6 +2247,7 @@ function formatVolume(
       maximumFractionDigits: 3
 
     }
+
   );
 
 }
@@ -2089,7 +2294,6 @@ function escapeHTML(
 
 function muatHistoryOlah() {
 
-
   requestJSONP(
 
     {
@@ -2097,9 +2301,7 @@ function muatHistoryOlah() {
         "1"
     },
 
-
     function(hasil) {
-
 
       if (
         !hasil ||
@@ -2113,7 +2315,6 @@ function muatHistoryOlah() {
           '<div class="kosong">' +
           '❌ Gagal mengambil history olah.' +
           '</div>';
-
 
         return;
 
@@ -2145,7 +2346,6 @@ function renderHistoryOlah(
   data
 ) {
 
-
   const el =
     document.getElementById(
       "historyOlah"
@@ -2162,7 +2362,6 @@ function renderHistoryOlah(
       'Belum ada history olah.' +
       '</div>';
 
-
     return;
 
   }
@@ -2173,7 +2372,6 @@ function renderHistoryOlah(
 
   data.forEach(
     function(item) {
-
 
       const row =
         document.createElement(
@@ -2260,7 +2458,6 @@ function renderHistoryOlah(
 
 function bukaHistory() {
 
-
   const overlay =
     document.getElementById(
       "historyOverlay"
@@ -2287,7 +2484,6 @@ function bukaHistory() {
 
 function tutupHistory() {
 
-
   const overlay =
     document.getElementById(
       "historyOverlay"
@@ -2313,7 +2509,6 @@ function klikLuarHistory(
   event
 ) {
 
-
   if (
     event.target.id ===
     "historyOverlay"
@@ -2332,9 +2527,7 @@ function klikLuarHistory(
 
 muatData();
 
-
 </script>
-
 
 </body>
 
