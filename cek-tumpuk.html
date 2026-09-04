@@ -10,8 +10,15 @@ content="width=device-width, initial-scale=1.0">
 
 <title>CEK TUMPUK</title>
 
-<script src="https://unpkg.com/html5-qrcode"
-crossorigin="anonymous"></script>
+<!-- =====================================================
+     ZXING
+     SAMA SEPERTI SCAN REGISTER
+===================================================== -->
+
+<script
+src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js">
+</script>
+
 
 <style>
 
@@ -34,6 +41,7 @@ body{
     padding:16px;
 }
 
+
 /* =====================================================
    HEADER
 ===================================================== */
@@ -42,9 +50,27 @@ body{
     background:#0f172a;
     color:white;
     border-radius:18px;
-    padding:20px;
+    padding:16px 18px;
     margin-bottom:15px;
     box-shadow:0 5px 15px rgba(0,0,0,.12);
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.header-logo{
+    width:58px;
+    height:58px;
+    object-fit:contain;
+    flex-shrink:0;
+    background:white;
+    border-radius:12px;
+    padding:5px;
+}
+
+.header-content{
+    min-width:0;
 }
 
 .header-title{
@@ -59,6 +85,7 @@ body{
     margin-top:5px;
 }
 
+
 /* =====================================================
    SCANNER
 ===================================================== */
@@ -71,65 +98,159 @@ body{
     box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-#reader{
+
+/* =====================================================
+   CAMERA
+   ZXING - SAMA SEPERTI SCAN REGISTER
+===================================================== */
+
+.camera-wrapper{
+    position:relative;
     width:100%;
     overflow:hidden;
     border-radius:14px;
+    background:#000;
 }
 
-/*
-   =====================================================
-   TAMPILAN KAMERA
-   =====================================================
-
-   Kamera dibuat 16:9 supaya proporsional.
-   Jangan dipaksa menjadi 2.5 atau rasio aneh.
-*/
-
-#reader__scan_region{
-    width:100% !important;
-    min-height:0 !important;
+#video{
+    width:100%;
+    height:auto;
+    aspect-ratio:16 / 9;
+    object-fit:cover;
+    display:block;
+    background:#000;
 }
 
-#reader video{
-    width:100% !important;
-    height:auto !important;
-    aspect-ratio:16 / 9 !important;
-    object-fit:cover !important;
-    display:block !important;
+
+/* =====================================================
+   FRAME SCAN
+   BESAR DAN HORIZONTAL
+===================================================== */
+
+.scan-frame{
+    position:absolute;
+    left:4%;
+    top:27%;
+    width:92%;
+    height:46%;
+    pointer-events:none;
 }
 
-/*
-   Area scan CODE 128:
-   LEBAR dan BESAR.
 
-   Bukan kotak kecil.
-*/
+/* =====================================================
+   SUDUT FRAME
+===================================================== */
 
-#qr-shaded-region{
-    border-radius:12px !important;
+.corner{
+    position:absolute;
+    width:34px;
+    height:34px;
+    border-color:#22c55e;
+    border-style:solid;
 }
 
-/* Dashboard scanner */
-
-#reader__dashboard{
-    padding-top:8px;
+.corner.tl{
+    top:0;
+    left:0;
+    border-width:4px 0 0 4px;
+    border-radius:8px 0 0 0;
 }
 
-#reader__dashboard_section{
-    margin-top:5px;
+.corner.tr{
+    top:0;
+    right:0;
+    border-width:4px 4px 0 0;
+    border-radius:0 8px 0 0;
 }
 
-#reader__dashboard_section_csr{
-    margin-top:5px;
+.corner.bl{
+    bottom:0;
+    left:0;
+    border-width:0 0 4px 4px;
+    border-radius:0 0 0 8px;
 }
+
+.corner.br{
+    bottom:0;
+    right:0;
+    border-width:0 4px 4px 0;
+    border-radius:0 0 8px 0;
+}
+
+
+/* =====================================================
+   INDIKATOR SCAN
+===================================================== */
+
+.scan-line{
+    position:absolute;
+    left:0;
+    right:0;
+    top:50%;
+    height:2px;
+    background:#22c55e;
+    box-shadow:
+        0 0 8px #22c55e,
+        0 0 15px #22c55e;
+    animation:
+        scanMove 2s ease-in-out infinite;
+}
+
+@keyframes scanMove{
+
+    0%{
+        top:15%;
+    }
+
+    50%{
+        top:85%;
+    }
+
+    100%{
+        top:15%;
+    }
+
+}
+
+
+/* =====================================================
+   INDIKATOR BERHASIL
+===================================================== */
+
+#scanBerhasil{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(34,197,94,.20);
+    color:white;
+    font-size:18px;
+    font-weight:900;
+    z-index:5;
+}
+
+#scanBerhasil.show{
+    display:flex;
+}
+
+
+/* =====================================================
+   STATUS SCAN
+===================================================== */
 
 .scan-status{
     text-align:center;
     font-size:13px;
     margin-top:10px;
     color:#64748b;
+    line-height:1.5;
 }
+
+
+/* =====================================================
+   MANUAL
+===================================================== */
 
 .manual-box{
     display:flex;
@@ -151,6 +272,11 @@ body{
 .manual-box input:focus{
     border-color:#2563eb;
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 button{
     border:0;
@@ -191,6 +317,7 @@ button{
     flex:1;
 }
 
+
 /* =====================================================
    LOADING
 ===================================================== */
@@ -225,6 +352,7 @@ button{
     }
 }
 
+
 /* =====================================================
    ERROR
 ===================================================== */
@@ -245,6 +373,7 @@ button{
     display:block;
 }
 
+
 /* =====================================================
    HASIL
 ===================================================== */
@@ -264,6 +393,7 @@ button{
     margin-bottom:15px;
     box-shadow:0 5px 15px rgba(0,0,0,.09);
 }
+
 
 /* =====================================================
    JUDUL
@@ -286,6 +416,7 @@ button{
     color:#64748b;
     font-weight:700;
 }
+
 
 /* =====================================================
    JUMLAH BATANG
@@ -322,6 +453,7 @@ button{
     font-weight:700;
 }
 
+
 /* =====================================================
    INFO
 ===================================================== */
@@ -353,9 +485,9 @@ button{
     font-weight:900;
 }
 
+
 /* =====================================================
    RINCIAN TPK
-   KHUSUS TUMPUK 29
 ===================================================== */
 
 .tpk-detail-box{
@@ -409,6 +541,7 @@ button{
     text-align:right;
 }
 
+
 /* =====================================================
    SECTION
 ===================================================== */
@@ -433,6 +566,7 @@ button{
     border-radius:20px;
     color:#475569;
 }
+
 
 /* =====================================================
    REGISTER
@@ -486,6 +620,7 @@ button{
     white-space:nowrap;
 }
 
+
 /* =====================================================
    EMPTY
 ===================================================== */
@@ -498,6 +633,7 @@ button{
     border-radius:12px;
     font-size:14px;
 }
+
 
 /* =====================================================
    HISTORY
@@ -577,6 +713,7 @@ button{
     border-bottom:0;
 }
 
+
 /* =====================================================
    BOTTOM BUTTON
 ===================================================== */
@@ -591,6 +728,7 @@ button{
     flex:1;
 }
 
+
 /* =====================================================
    FOOTER
 ===================================================== */
@@ -601,6 +739,7 @@ button{
     color:#94a3b8;
     padding:5px 0 20px;
 }
+
 
 /* =====================================================
    RESPONSIVE
@@ -613,7 +752,12 @@ button{
     }
 
     .header{
-        padding:16px;
+        padding:14px;
+    }
+
+    .header-logo{
+        width:52px;
+        height:52px;
     }
 
     .header-title{
@@ -647,9 +791,11 @@ button{
 
 </head>
 
+
 <body>
 
 <div class="container">
+
 
     <!-- =================================================
          HEADER
@@ -657,12 +803,22 @@ button{
 
     <div class="header">
 
-        <div class="header-title">
-            CEK TUMPUK
-        </div>
+        <img
+            class="header-logo"
+            src="https://www.perhutani.co.id/wp-content/uploads/2022/09/logo-perhutani.png"
+            alt="Logo Perhutani"
+            onerror="this.style.display='none';">
 
-        <div class="header-sub">
-            Scan barcode tumpuk untuk melihat data terbaru
+        <div class="header-content">
+
+            <div class="header-title">
+                CEK TUMPUK
+            </div>
+
+            <div class="header-sub">
+                Scan barcode tumpuk untuk melihat data terbaru
+            </div>
+
         </div>
 
     </div>
@@ -674,11 +830,49 @@ button{
 
     <div class="scanner-box">
 
-        <div id="reader"></div>
 
-        <div class="scan-status"
-             id="scanStatus">
+        <!-- =================================================
+             CAMERA ZXING
+        ================================================= -->
+
+        <div class="camera-wrapper">
+
+            <video
+                id="video"
+                autoplay
+                muted
+                playsinline>
+            </video>
+
+
+            <div class="scan-frame">
+
+                <div class="corner tl"></div>
+
+                <div class="corner tr"></div>
+
+                <div class="corner bl"></div>
+
+                <div class="corner br"></div>
+
+                <div class="scan-line"></div>
+
+            </div>
+
+
+            <div id="scanBerhasil">
+                ✓ BARCODE TERBACA
+            </div>
+
+        </div>
+
+
+        <div
+            class="scan-status"
+            id="scanStatus">
+
             Arahkan barcode CODE 128 ke area scan
+
         </div>
 
 
@@ -764,6 +958,7 @@ button{
 
         <div class="stack-card">
 
+
             <!-- =========================================
                  JUDUL
             ========================================= -->
@@ -773,13 +968,17 @@ button{
                 <div
                     class="tumpuk"
                     id="tumpukTitle">
+
                     TUMPUK
+
                 </div>
 
                 <div
                     class="tpk"
                     id="tpkTitle">
+
                     TPK ASAL :
+
                 </div>
 
             </div>
@@ -798,7 +997,9 @@ button{
                 <div
                     class="value"
                     id="jumlahAwal">
+
                     0
+
                 </div>
 
                 <div class="unit">
@@ -823,7 +1024,9 @@ button{
                     <div
                         class="value"
                         id="volumeAwal">
+
                         0 m³
+
                     </div>
 
                 </div>
@@ -838,7 +1041,9 @@ button{
                     <div
                         class="value"
                         id="jumlahCek">
+
                         0
+
                     </div>
 
                 </div>
@@ -882,7 +1087,9 @@ button{
                     <span
                         class="section-count"
                         id="registerBadge">
+
                         0 REGISTER
+
                     </span>
 
                 </div>
@@ -910,7 +1117,9 @@ button{
                     <span
                         class="section-count"
                         id="historyBadge">
+
                         0
+
                     </span>
 
                 </div>
@@ -961,6 +1170,7 @@ button{
 
 <script>
 
+
 /* =====================================================
    KONFIGURASI BACKEND
 ===================================================== */
@@ -973,9 +1183,13 @@ const API_URL =
    VARIABEL
 ===================================================== */
 
-let html5QrCode = null;
+let scannerControls = null;
 
-let scannerRunning = false;
+let scannerReader = null;
+
+let kameraAktif = false;
+
+let sedangProses = false;
 
 let currentTPK = "";
 
@@ -1015,138 +1229,358 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
-   KHUSUS CODE 128
+   SAMA DENGAN SCAN REGISTER
 ===================================================== */
 
 async function mulaiScanner(){
 
     hideError();
 
-    if(scannerRunning){
+
+    if(kameraAktif){
         return;
     }
-
-    const reader =
-        document.getElementById("reader");
-
-    reader.innerHTML = "";
-
-
-    /*
-       =================================================
-       CODE 128
-       =================================================
-
-       Scanner dibatasi ke CODE 128.
-
-       Ini penting karena barcode kita
-       bukan QR Code.
-    */
-
-    html5QrCode =
-        new Html5Qrcode(
-            "reader",
-            {
-                formatsToSupport:[
-                    Html5QrcodeSupportedFormats.CODE_128
-                ]
-            }
-        );
-
-
-    /*
-       =================================================
-       KONFIGURASI KAMERA
-       =================================================
-
-       Kamera:
-       16:9
-
-       Area scan:
-       92% lebar kamera
-       55% tinggi kamera
-
-       Jadi area scan TIDAK KECIL.
-       Tetap besar tetapi horizontal.
-    */
-
-    const config = {
-
-        fps:10,
-
-        aspectRatio:16 / 9,
-
-        qrbox:function(
-            width,
-            height
-        ){
-
-            const scanWidth =
-                Math.floor(
-                    width * 0.92
-                );
-
-
-            const scanHeight =
-                Math.floor(
-                    height * 0.55
-                );
-
-
-            return {
-                width:scanWidth,
-                height:scanHeight
-            };
-
-        }
-
-    };
 
 
     try{
 
-        await html5QrCode.start(
+        if(!window.ZXingBrowser){
 
-            {
-                facingMode:"environment"
-            },
+            throw new Error(
+                "ZXing belum berhasil dimuat"
+            );
 
-            config,
+        }
 
-            function(decodedText){
 
-                hasilScan(decodedText);
+        const video =
+            document.getElementById(
+                "video"
+            );
 
-            },
 
-            function(errorMessage){
+        scannerReader =
+            new ZXingBrowser
+                .BrowserMultiFormatReader(
+                    undefined,
+                    80
+                );
 
-                // Abaikan error frame scan
+
+        const constraints = {
+
+            audio:false,
+
+            video:{
+
+                facingMode:{
+                    ideal:"environment"
+                },
+
+                width:{
+                    min:640,
+                    ideal:1280,
+                    max:1920
+                },
+
+                height:{
+                    min:480,
+                    ideal:720,
+                    max:1080
+                },
+
+                frameRate:{
+                    min:15,
+                    ideal:30,
+                    max:60
+                },
+
+                focusMode:{
+                    ideal:"continuous"
+                }
 
             }
 
-        );
-
-
-        scannerRunning = true;
+        };
 
 
         document
             .getElementById("scanStatus")
-            .textContent =
-            "Arahkan barcode CODE 128 ke area scan";
+            .innerHTML =
+            "⏳ Meminta akses kamera...";
 
+
+        scannerControls =
+            await scannerReader
+                .decodeFromConstraints(
+
+                    constraints,
+
+                    video,
+
+                    function(
+                        result,
+                        error
+                    ){
+
+                        if(!result){
+                            return;
+                        }
+
+
+                        if(sedangProses){
+                            return;
+                        }
+
+
+                        const kode =
+                            String(
+                                result.getText() || ""
+                            ).trim();
+
+
+                        if(!kode){
+                            return;
+                        }
+
+
+                        const format =
+                            result.getBarcodeFormat();
+
+
+                        /*
+                           HANYA CODE 128
+                        */
+
+                        if(
+                            format !==
+                            ZXingBrowser
+                                .BarcodeFormat
+                                .CODE_128
+                        ){
+
+                            return;
+
+                        }
+
+
+                        sedangProses = true;
+
+
+                        tampilkanIndikatorHijau();
+
+
+                        document
+                            .getElementById(
+                                "scanStatus"
+                            )
+                            .innerHTML =
+                            "⏳ BARCODE TERBACA<br>" +
+                            "Mengecek " +
+                            escapeHtml(kode) +
+                            "...";
+
+
+                        /*
+                           STOP DULU
+                        */
+
+                        stopScanner();
+
+
+                        /*
+                           LALU PROSES
+                        */
+
+                        prosesKodeTumpuk(
+                            kode
+                        );
+
+                    }
+
+                );
+
+
+        kameraAktif = true;
+
+
+        document
+            .getElementById(
+                "scanStatus"
+            )
+            .innerHTML =
+            "📷 KAMERA AKTIF<br>" +
+            "Arahkan CODE 128 ke kotak hijau";
+
+
+        setTimeout(
+            function(){
+
+                optimalkanKamera(
+                    video
+                );
+
+            },
+            500
+        );
 
     }
     catch(error){
 
-        console.error(error);
+        kameraAktif = false;
+
+        scannerControls = null;
+
+
+        console.error(
+            "ZXing error:",
+            error
+        );
 
 
         document
-            .getElementById("scanStatus")
-            .textContent =
-            "Kamera tidak dapat digunakan. Gunakan pencarian TUMPUK.";
+            .getElementById(
+                "scanStatus"
+            )
+            .innerHTML =
+            "❌ Kamera gagal dibuka.<br>" +
+            "Gunakan pencarian TUMPUK.";
+
+    }
+
+}
+
+
+/* =====================================================
+   INDIKATOR HIJAU
+===================================================== */
+
+function tampilkanIndikatorHijau(){
+
+    const indikator =
+        document.getElementById(
+            "scanBerhasil"
+        );
+
+
+    indikator.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        function(){
+
+            indikator.classList.remove(
+                "show"
+            );
+
+        },
+        700
+    );
+
+}
+
+
+/* =====================================================
+   OPTIMALKAN KAMERA
+   SAMA DENGAN SCAN REGISTER
+===================================================== */
+
+async function optimalkanKamera(
+    video
+){
+
+    try{
+
+        if(!video.srcObject){
+            return;
+        }
+
+
+        const tracks =
+            video.srcObject
+            .getVideoTracks();
+
+
+        if(!tracks.length){
+            return;
+        }
+
+
+        const track =
+            tracks[0];
+
+
+        const capabilities =
+            track.getCapabilities
+            ?
+            track.getCapabilities()
+            :
+            {};
+
+
+        const advanced = {};
+
+
+        if(
+            capabilities.focusMode &&
+            capabilities.focusMode.includes(
+                "continuous"
+            )
+        ){
+
+            advanced.focusMode =
+                "continuous";
+
+        }
+
+
+        if(
+            capabilities.exposureMode &&
+            capabilities.exposureMode.includes(
+                "continuous"
+            )
+        ){
+
+            advanced.exposureMode =
+                "continuous";
+
+        }
+
+
+        if(
+            capabilities.whiteBalanceMode &&
+            capabilities.whiteBalanceMode.includes(
+                "continuous"
+            )
+        ){
+
+            advanced.whiteBalanceMode =
+                "continuous";
+
+        }
+
+
+        if(
+            Object.keys(advanced).length
+        ){
+
+            await track.applyConstraints({
+                advanced:[
+                    advanced
+                ]
+            });
+
+        }
+
+    }
+    catch(e){
+
+        console.log(
+            "Optimasi kamera tidak tersedia:",
+            e
+        );
 
     }
 
@@ -1157,27 +1591,76 @@ async function mulaiScanner(){
    STOP SCANNER
 ===================================================== */
 
-async function stopScanner(){
+function stopScanner(){
 
-    if(
-        html5QrCode &&
-        scannerRunning
-    ){
+    try{
 
-        try{
+        if(scannerControls){
 
-            await html5QrCode.stop();
+            scannerControls.stop();
 
-        }
-        catch(error){
-
-            console.log(error);
+            scannerControls = null;
 
         }
 
-        scannerRunning = false;
+
+        if(scannerReader){
+
+            if(
+                scannerReader.stopContinuousDecode
+            ){
+
+                scannerReader
+                    .stopContinuousDecode();
+
+            }
+
+        }
+
+
+        const video =
+            document.getElementById(
+                "video"
+            );
+
+
+        if(
+            video &&
+            video.srcObject
+        ){
+
+            const tracks =
+                video.srcObject
+                .getTracks();
+
+
+            tracks.forEach(
+                function(track){
+
+                    track.stop();
+
+                }
+            );
+
+
+            video.srcObject = null;
+
+        }
 
     }
+    catch(error){
+
+        console.log(
+            "Stop scanner:",
+            error
+        );
+
+    }
+
+
+    kameraAktif = false;
+
+    sedangProses = false;
 
 }
 
@@ -1186,7 +1669,9 @@ async function stopScanner(){
    HASIL SCAN
 ===================================================== */
 
-function hasilScan(decodedText){
+function hasilScan(
+    decodedText
+){
 
     if(!decodedText){
         return;
@@ -1241,21 +1726,6 @@ function prosesManual(){
     }
 
 
-    /*
-       Kalau user memasukkan:
-
-       29
-
-       langsung cari TUMPUK 29.
-
-       Kalau ternyata user memasukkan
-       barcode lengkap seperti:
-
-       SARADAN|29
-
-       tetap kita dukung.
-    */
-
     if(
         nomor.indexOf("|") !== -1
     ){
@@ -1268,14 +1738,6 @@ function prosesManual(){
 
     }
 
-
-    /*
-       Bersihkan kalau user mengetik:
-
-       TUMPUK 29
-       TUMPUK29
-       T29
-    */
 
     nomor =
         nomor
@@ -1539,7 +2001,9 @@ function cariTumpukDenganNomor(
    PARSE BARCODE
 ===================================================== */
 
-function prosesKodeTumpuk(kode){
+function prosesKodeTumpuk(
+    kode
+){
 
     hideError();
 
@@ -1551,12 +2015,6 @@ function prosesKodeTumpuk(kode){
     let parts =
         kode.split("|");
 
-
-    /*
-       FORMAT:
-
-       SARADAN|10
-    */
 
     if(parts.length >= 2){
 
@@ -1575,12 +2033,6 @@ function prosesKodeTumpuk(kode){
 
 
     else{
-
-        /*
-           FORMAT:
-
-           SARADAN-T10
-        */
 
         const match =
             kode.match(
@@ -1603,13 +2055,6 @@ function prosesKodeTumpuk(kode){
 
 
         else{
-
-            /*
-               Kalau barcode hanya berisi
-               nomor TUMPUK:
-
-               29
-            */
 
             if(
                 /^\d+$/.test(kode)
@@ -1647,10 +2092,6 @@ function prosesKodeTumpuk(kode){
 
     }
 
-
-    /*
-       TUMPUK 29 adalah SATU TUMPUK.
-    */
 
     if(
         String(currentTumpuk) === "29"
@@ -1899,10 +2340,6 @@ function tampilkanData(data){
         .add("show");
 
 
-    /*
-       TUMPUK
-    */
-
     document
         .getElementById("tumpukTitle")
         .textContent =
@@ -1915,10 +2352,6 @@ function tampilkanData(data){
             "-"
         );
 
-
-    /*
-       TPK
-    */
 
     document
         .getElementById("tpkTitle")
@@ -1933,10 +2366,6 @@ function tampilkanData(data){
         );
 
 
-    /*
-       JUMLAH BATANG
-    */
-
     document
         .getElementById("jumlahAwal")
         .textContent =
@@ -1948,10 +2377,6 @@ function tampilkanData(data){
             data.jumlahAwal
         );
 
-
-    /*
-       VOLUME
-    */
 
     document
         .getElementById("volumeAwal")
@@ -1965,19 +2390,10 @@ function tampilkanData(data){
         );
 
 
-    /*
-       RINCIAN TPK
-       HANYA 29
-    */
-
     tampilkanRincianTPK(
         data
     );
 
-
-    /*
-       REGISTER
-    */
 
     const registers =
         Array.isArray(data.registers)
@@ -1999,10 +2415,6 @@ function tampilkanData(data){
         data
     );
 
-
-    /*
-       HISTORY
-    */
 
     const history =
         Array.isArray(data.history)
@@ -2073,7 +2485,6 @@ function updateJumlahCek(){
 
 /* =====================================================
    RINCIAN TPK
-   KHUSUS 29
 ===================================================== */
 
 function tampilkanRincianTPK(data){
@@ -3003,6 +3414,9 @@ function kembaliScan(){
     currentStackId = "";
 
     currentRegisters = [];
+
+
+    sedangProses = false;
 
 
     mulaiScanner();
