@@ -229,7 +229,7 @@ button{
 
 /*
    F4
-   215.9mm x 330.2mm
+   215.9 mm x 330.2 mm
 
    8 LABEL
    2 KOLOM
@@ -284,10 +284,11 @@ button{
 
 /* =====================================================
    TUMPUK
+   DIBESARKAN
 ===================================================== */
 
 .label-tumpuk{
-    font-size:12mm;
+    font-size:14mm;
     font-weight:900;
     line-height:1;
 
@@ -299,18 +300,23 @@ button{
 
 /* =====================================================
    TPK
+   TETAP SATU BARIS
 ===================================================== */
 
 .label-tpk{
-    font-size:9mm;
+    font-size:8mm;
     font-weight:900;
     line-height:1;
 
-    margin-bottom:5mm;
+    margin-bottom:4mm;
 
     white-space:nowrap;
 
     max-width:100%;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
 }
 
 
@@ -329,15 +335,18 @@ button{
 
     gap:6mm;
 
-    margin-top:1mm;
+    margin-top:2mm;
 }
 
 
-/* QR DIPINGGIR */
+/* =====================================================
+   QR
+   LEBIH KECIL DAN AGAK KE BAWAH
+===================================================== */
 
 .label-qr-box{
-    width:32mm;
-    height:32mm;
+    width:30mm;
+    height:30mm;
 
     background:white;
 
@@ -354,8 +363,8 @@ button{
 }
 
 .label-qr{
-    width:29mm;
-    height:29mm;
+    width:27mm;
+    height:27mm;
 
     display:flex;
 
@@ -364,13 +373,13 @@ button{
 }
 
 .label-qr img{
-    width:29mm !important;
-    height:29mm !important;
+    width:27mm !important;
+    height:27mm !important;
 }
 
 .label-qr canvas{
-    width:29mm !important;
-    height:29mm !important;
+    width:27mm !important;
+    height:27mm !important;
 }
 
 
@@ -380,8 +389,8 @@ button{
 ===================================================== */
 
 .label-empty-box{
-    width:48mm;
-    height:18mm;
+    width:50mm;
+    height:16mm;
 
     background:white;
 
@@ -471,9 +480,7 @@ button{
     </h1>
 
 
-    <!-- =================================================
-         SEARCH CUMA TUMPUK
-    ================================================== -->
+    <!-- SEARCH CUMA TUMPUK -->
 
     <div class="filter-area">
 
@@ -487,7 +494,7 @@ button{
                 type="text"
                 id="filterTumpuk"
                 placeholder="Contoh: 29"
-                oninput="tampilkanData"
+                oninput="tampilkanData()"
             >
 
         </div>
@@ -832,10 +839,6 @@ function tampilkanData(){
                     .toLowerCase();
 
 
-                /*
-                   TUMPUK EXACT
-                */
-
                 if(
                     filterTumpuk &&
                     tumpuk !== filterTumpuk
@@ -979,12 +982,6 @@ function tampilkanData(){
             );
 
 
-            /*
-               ISI QR
-
-               TPK|TUMPUK
-            */
-
             const qrValue =
                 String(
                     item.stackId ||
@@ -1115,10 +1112,6 @@ function cetakBarcode(){
     }
 
 
-    /*
-       URUTKAN TPK -> TUMPUK
-    */
-
     data.sort(
         function(a,b){
 
@@ -1197,10 +1190,6 @@ function cetakBarcode(){
     printArea.innerHTML = "";
 
 
-    /*
-       8 LABEL PER F4
-    */
-
     for(
         let i=0;
         i<data.length;
@@ -1235,8 +1224,6 @@ function cetakBarcode(){
                     "label";
 
 
-                /* TUMPUK */
-
                 const tumpuk =
                     document.createElement(
                         "div"
@@ -1251,8 +1238,6 @@ function cetakBarcode(){
                         item.tumpuk || ""
                     );
 
-
-                /* TPK */
 
                 const tpk =
                     document.createElement(
@@ -1269,8 +1254,6 @@ function cetakBarcode(){
                     );
 
 
-                /* BAGIAN BAWAH */
-
                 const bottom =
                     document.createElement(
                         "div"
@@ -1279,8 +1262,6 @@ function cetakBarcode(){
                 bottom.className =
                     "label-bottom";
 
-
-                /* QR */
 
                 const qrBox =
                     document.createElement(
@@ -1305,8 +1286,6 @@ function cetakBarcode(){
                 );
 
 
-                /* KOTAK KOSONG */
-
                 const emptyBox =
                     document.createElement(
                         "div"
@@ -1325,8 +1304,6 @@ function cetakBarcode(){
                 );
 
 
-                /* MASUKKAN */
-
                 label.appendChild(
                     tumpuk
                 );
@@ -1344,12 +1321,6 @@ function cetakBarcode(){
                     label
                 );
 
-
-                /*
-                   QR VALUE
-
-                   TPK|TUMPUK
-                */
 
                 const qrValue =
                     String(
@@ -1394,10 +1365,6 @@ function cetakBarcode(){
         );
 
 
-        /*
-           KOSONGKAN SLOT SAMPAI 8
-        */
-
         while(
             lembar.children.length < 8
         ){
@@ -1426,10 +1393,6 @@ function cetakBarcode(){
 
     }
 
-
-    /*
-       TUNGGU QR SELESAI
-    */
 
     setTimeout(
         function(){
