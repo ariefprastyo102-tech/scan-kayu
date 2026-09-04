@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -675,7 +676,6 @@ button{
 
 <div class="container">
 
-```
 <div class="header">
 
     <div class="header-logo">
@@ -981,7 +981,6 @@ button{
 <div class="footer">
     Sistem CEK TUMPUK
 </div>
-```
 
 </div>
 
@@ -1046,7 +1045,7 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
-   ENGINE MENGIKUTI SCAN REGISTER
+   ENGINE SAMA SEPERTI SCAN REGISTER BBI
 ===================================================== */
 
 async function mulaiScanner(){
@@ -1064,9 +1063,9 @@ async function mulaiScanner(){
             "scanStatus"
         );
 
-    const video =
-        document.getElementById(
-            "video"
+    const tombol =
+        document.querySelector(
+            '.scan-buttons .btn-secondary'
         );
 
     status.innerHTML =
@@ -1083,12 +1082,17 @@ async function mulaiScanner(){
         }
 
 
+        const video =
+            document.getElementById(
+                "video"
+            );
+
+
         scannerReader =
-            new ZXingBrowser
-                .BrowserMultiFormatReader(
-                    undefined,
-                    80
-                );
+            new ZXingBrowser.BrowserMultiFormatReader(
+                undefined,
+                80
+            );
 
 
         const constraints = {
@@ -1133,94 +1137,86 @@ async function mulaiScanner(){
 
 
         scannerControls =
-            await scannerReader
-                .decodeFromConstraints(
+            await scannerReader.decodeFromConstraints(
 
-                    constraints,
+                constraints,
 
-                    video,
+                video,
 
-                    function(
-                        result,
-                        error
-                    ){
+                function(
+                    result,
+                    error
+                ){
 
-                        if(!result){
+                    if(!result){
 
-                            return;
-
-                        }
-
-
-                        if(sedangProses){
-
-                            return;
-
-                        }
-
-
-                        const kode =
-                            String(
-                                result.getText() ||
-                                ""
-                            ).trim();
-
-
-                        if(!kode){
-
-                            return;
-
-                        }
-
-
-                        sedangProses =
-                            true;
-
-
-                        tampilkanIndikatorHijau();
-
-
-                        /*
-                         * BEEP
-                         * SAMA SEPERTI
-                         * SCAN REGISTER
-                         */
-
-                        bunyiBerhasil();
-
-
-                        /*
-                         * GETAR
-                         * SAMA SEPERTI
-                         * SCAN REGISTER
-                         */
-
-                        getarBerhasil();
-
-
-                        status.innerHTML =
-                            "⏳ BARCODE TERBACA<br>" +
-                            "Mengecek " +
-                            escapeHtml(kode) +
-                            "...";
-
-
-                        /*
-                         * TETAP PAKAI LOGIKA
-                         * TUMPUK YANG SUDAH ADA
-                         */
-
-                        prosesKodeTumpuk(
-                            kode
-                        );
+                        return;
 
                     }
 
-                );
+
+                    if(sedangProses){
+
+                        return;
+
+                    }
+
+
+                    const kode =
+                        String(
+                            result.getText() || ""
+                        ).trim();
+
+
+                    if(!kode){
+
+                        return;
+
+                    }
+
+
+                    sedangProses =
+                        true;
+
+
+                    tampilkanIndikatorHijau();
+
+
+                    bunyiBerhasil();
+
+
+                    getarBerhasil();
+
+
+                    status.innerHTML =
+                        "⏳ BARCODE TERBACA<br>" +
+                        "Mengecek " +
+                        escapeHtml(kode) +
+                        "...";
+
+
+                    prosesKodeTumpuk(
+                        kode
+                    );
+
+                }
+
+            );
 
 
         kameraAktif =
             true;
+
+
+        if(tombol){
+
+            tombol.innerHTML =
+                "📷 KAMERA AKTIF";
+
+            tombol.style.background =
+                "#555";
+
+        }
 
 
         status.innerHTML =
@@ -1242,11 +1238,6 @@ async function mulaiScanner(){
     }
     catch(error){
 
-        console.error(
-            "ZXing error:",
-            error
-        );
-
         kameraAktif =
             false;
 
@@ -1256,12 +1247,29 @@ async function mulaiScanner(){
         scannerReader =
             null;
 
+
+        if(tombol){
+
+            tombol.innerHTML =
+                "📷 BUKA KAMERA";
+
+            tombol.style.background =
+                "#1976d2";
+
+        }
+
+
         status.innerHTML =
             "❌ Kamera gagal dibuka<br>" +
             escapeHtml(
-                error.message ||
-                "Kesalahan kamera"
+                error.message
             );
+
+
+        console.log(
+            "ZXing error:",
+            error
+        );
 
     }
 
@@ -1414,9 +1422,7 @@ function bunyiBerhasil(){
 
 function getarBerhasil(){
 
-    if(
-        navigator.vibrate
-    ){
+    if(navigator.vibrate){
 
         navigator.vibrate(
             80
@@ -1439,7 +1445,8 @@ function stopScanner(){
 
             scannerControls.stop();
 
-            scannerControls = null;
+            scannerControls =
+                null;
 
         }
 
@@ -3526,3 +3533,4 @@ function cleanupJSONP(
 </body>
 
 </html>
+
