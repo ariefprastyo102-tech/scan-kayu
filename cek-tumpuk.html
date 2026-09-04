@@ -78,19 +78,39 @@ body{
 }
 
 /*
-   AREA SCAN MEMANJANG
-   Cocok untuk barcode TUMPUK yang panjang
+   =====================================================
+   TAMPILAN KAMERA
+   =====================================================
+
+   Kamera dibuat 16:9 supaya proporsional.
+   Jangan dipaksa menjadi 2.5 atau rasio aneh.
 */
 
 #reader__scan_region{
-    min-height:150px !important;
+    width:100% !important;
+    min-height:0 !important;
 }
 
 #reader video{
     width:100% !important;
     height:auto !important;
+    aspect-ratio:16 / 9 !important;
     object-fit:cover !important;
+    display:block !important;
 }
+
+/*
+   Area scan CODE 128:
+   LEBAR dan BESAR.
+
+   Bukan kotak kecil.
+*/
+
+#qr-shaded-region{
+    border-radius:12px !important;
+}
+
+/* Dashboard scanner */
 
 #reader__dashboard{
     padding-top:8px;
@@ -658,7 +678,7 @@ button{
 
         <div class="scan-status"
              id="scanStatus">
-            Arahkan barcode panjang ke area scan
+            Arahkan barcode CODE 128 ke area scan
         </div>
 
 
@@ -995,6 +1015,7 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
+   KHUSUS CODE 128
 ===================================================== */
 
 async function mulaiScanner(){
@@ -1010,22 +1031,50 @@ async function mulaiScanner(){
 
     reader.innerHTML = "";
 
+
+    /*
+       =================================================
+       CODE 128
+       =================================================
+
+       Scanner dibatasi ke CODE 128.
+
+       Ini penting karena barcode kita
+       bukan QR Code.
+    */
+
     html5QrCode =
-        new Html5Qrcode("reader");
+        new Html5Qrcode(
+            "reader",
+            {
+                formatsToSupport:[
+                    Html5QrcodeSupportedFormats.CODE_128
+                ]
+            }
+        );
 
 
     /*
-       BARCODE MEMANJANG
+       =================================================
+       KONFIGURASI KAMERA
+       =================================================
 
-       Lebar besar
-       Tinggi kecil
+       Kamera:
+       16:9
 
-       Jadi area scan tidak kotak lagi.
+       Area scan:
+       92% lebar kamera
+       55% tinggi kamera
+
+       Jadi area scan TIDAK KECIL.
+       Tetap besar tetapi horizontal.
     */
 
     const config = {
 
         fps:10,
+
+        aspectRatio:16 / 9,
 
         qrbox:function(
             width,
@@ -1034,25 +1083,22 @@ async function mulaiScanner(){
 
             const scanWidth =
                 Math.floor(
-                    width * 0.90
+                    width * 0.92
                 );
+
 
             const scanHeight =
                 Math.floor(
-                    Math.min(
-                        130,
-                        height * 0.35
-                    )
+                    height * 0.55
                 );
+
 
             return {
                 width:scanWidth,
                 height:scanHeight
             };
 
-        },
-
-        aspectRatio:2.5
+        }
 
     };
 
@@ -1088,7 +1134,7 @@ async function mulaiScanner(){
         document
             .getElementById("scanStatus")
             .textContent =
-            "Arahkan barcode panjang ke garis scan";
+            "Arahkan barcode CODE 128 ke area scan";
 
 
     }
@@ -1320,16 +1366,6 @@ function cariTumpukDenganNomor(
                     [];
 
 
-                /*
-                   Cari nomor TUMPUK.
-
-                   String dipakai supaya:
-                   29
-                   "29"
-
-                   tetap sama.
-                */
-
                 const target =
                     String(nomor)
                     .trim();
@@ -1364,22 +1400,6 @@ function cariTumpukDenganNomor(
                 }
 
 
-                /*
-                   TUMPUK 29:
-
-                   tpk yang ada di list
-                   sudah berupa:
-
-                   TPK A, TPK B, TPK C
-
-                   Tapi untuk mengambil
-                   detail, backend cukup
-                   diberi tumpuk = 29.
-
-                   TPK tidak perlu dipaksa
-                   menjadi satu TPK.
-                */
-
                 currentTumpuk =
                     target;
 
@@ -1396,7 +1416,9 @@ function cariTumpukDenganNomor(
                     currentTPK =
                         String(
                             ditemukan.tpk || ""
-                        ).split(",")[0].trim();
+                        )
+                        .split(",")[0]
+                        .trim();
 
                 }
 
@@ -1587,8 +1609,6 @@ function prosesKodeTumpuk(kode){
                nomor TUMPUK:
 
                29
-
-               langsung dianggap nomor Tumpuk.
             */
 
             if(
@@ -1700,21 +1720,6 @@ function ambilDataTumpuk(){
 
                 }
 
-
-                /*
-                   BACKEND:
-
-                   {
-                       success:true,
-                       data:{
-                           ...
-                       }
-                   }
-
-                   Jadi gunakan:
-
-                   response.data
-                */
 
                 if(
                     !response.data ||
@@ -1849,10 +1854,6 @@ function ambilDataTumpuk(){
 
 function tampilkanData(data){
 
-    /*
-       Ambil STACK ID dari backend.
-    */
-
     currentStackId =
         data.stackId ||
         (
@@ -1881,10 +1882,6 @@ function tampilkanData(data){
 
     }
 
-
-    /*
-       Simpan register saat ini.
-    */
 
     currentRegisters =
         Array.isArray(
@@ -2026,10 +2023,6 @@ function tampilkanData(data){
     );
 
 
-    /*
-       Hitung jumlah CEK.
-    */
-
     updateJumlahCek();
 
 
@@ -2102,11 +2095,6 @@ function tampilkanRincianTPK(data){
         "show"
     );
 
-
-    /*
-       Selain 29:
-       JANGAN TAMPILKAN RINCIAN TPK.
-    */
 
     if(
         String(data.tumpuk) !== "29"
@@ -2291,10 +2279,6 @@ function tampilkanRegister(
             }
 
 
-            /*
-               Status CEK dari backend.
-            */
-
             const checked =
                 item.checked === true ||
                 String(
@@ -2351,10 +2335,6 @@ function tampilkanRegister(
             checkbox.addEventListener(
                 "change",
                 function(){
-
-                    /*
-                       JUMLAH CEK langsung berubah.
-                    */
 
                     updateJumlahCek();
 
