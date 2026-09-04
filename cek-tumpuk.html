@@ -12,13 +12,10 @@ content="width=device-width, initial-scale=1.0">
 
 <!-- =====================================================
      ZXING
-     SAMA SEPERTI SCAN REGISTER
+     SAMA DENGAN SCAN REGISTER
 ===================================================== -->
 
-<script
-src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js">
-</script>
-
+<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
 
@@ -41,7 +38,6 @@ body{
     padding:16px;
 }
 
-
 /* =====================================================
    HEADER
 ===================================================== */
@@ -62,14 +58,23 @@ body{
 .header-logo{
     width:58px;
     height:58px;
-    object-fit:contain;
     flex-shrink:0;
     background:white;
     border-radius:12px;
-    padding:5px;
+    padding:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
 }
 
-.header-content{
+.header-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.header-text{
     min-width:0;
 }
 
@@ -77,14 +82,15 @@ body{
     font-size:25px;
     font-weight:800;
     margin:0;
+    line-height:1.1;
 }
 
 .header-sub{
     font-size:13px;
     opacity:.75;
     margin-top:5px;
+    font-weight:600;
 }
-
 
 /* =====================================================
    SCANNER
@@ -98,44 +104,59 @@ body{
     box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-
 /* =====================================================
-   CAMERA
-   ZXING - SAMA SEPERTI SCAN REGISTER
+   CAMERA ZXING
 ===================================================== */
+
+.camera-card{
+    width:100%;
+    background:#000;
+    border-radius:14px;
+    overflow:hidden;
+}
 
 .camera-wrapper{
     position:relative;
     width:100%;
-    overflow:hidden;
-    border-radius:14px;
     background:#000;
+    overflow:hidden;
 }
+
+/*
+   Kamera mengikuti mekanisme SCAN REGISTER.
+
+   Rasio kamera tetap besar.
+   Tidak dibuat kotak kecil.
+*/
 
 #video{
     width:100%;
     height:auto;
-    aspect-ratio:16 / 9;
-    object-fit:cover;
+    min-height:320px;
     display:block;
+    object-fit:cover;
     background:#000;
 }
 
-
 /* =====================================================
    FRAME SCAN
-   BESAR DAN HORIZONTAL
 ===================================================== */
 
-.scan-frame{
+.qr-frame{
     position:absolute;
-    left:4%;
-    top:27%;
-    width:92%;
-    height:46%;
+
+    left:5%;
+    right:5%;
+
+    top:31%;
+    height:38%;
+
+    border:2px solid rgba(255,255,255,.9);
+
+    border-radius:10px;
+
     pointer-events:none;
 }
-
 
 /* =====================================================
    SUDUT FRAME
@@ -143,100 +164,74 @@ body{
 
 .corner{
     position:absolute;
-    width:34px;
-    height:34px;
+
+    width:32px;
+    height:32px;
+
     border-color:#22c55e;
     border-style:solid;
 }
 
 .corner.tl{
-    top:0;
-    left:0;
+    top:-2px;
+    left:-2px;
+
     border-width:4px 0 0 4px;
+
     border-radius:8px 0 0 0;
 }
 
 .corner.tr{
-    top:0;
-    right:0;
+    top:-2px;
+    right:-2px;
+
     border-width:4px 4px 0 0;
+
     border-radius:0 8px 0 0;
 }
 
 .corner.bl{
-    bottom:0;
-    left:0;
+    bottom:-2px;
+    left:-2px;
+
     border-width:0 0 4px 4px;
+
     border-radius:0 0 0 8px;
 }
 
 .corner.br{
-    bottom:0;
-    right:0;
+    bottom:-2px;
+    right:-2px;
+
     border-width:0 4px 4px 0;
+
     border-radius:0 0 8px 0;
 }
 
-
 /* =====================================================
-   INDIKATOR SCAN
-===================================================== */
-
-.scan-line{
-    position:absolute;
-    left:0;
-    right:0;
-    top:50%;
-    height:2px;
-    background:#22c55e;
-    box-shadow:
-        0 0 8px #22c55e,
-        0 0 15px #22c55e;
-    animation:
-        scanMove 2s ease-in-out infinite;
-}
-
-@keyframes scanMove{
-
-    0%{
-        top:15%;
-    }
-
-    50%{
-        top:85%;
-    }
-
-    100%{
-        top:15%;
-    }
-
-}
-
-
-/* =====================================================
-   INDIKATOR BERHASIL
+   INDIKATOR SCAN BERHASIL
 ===================================================== */
 
 #scanBerhasil{
     position:absolute;
+
     inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(34,197,94,.20);
-    color:white;
-    font-size:18px;
-    font-weight:900;
-    z-index:5;
+
+    pointer-events:none;
+
+    border-radius:14px;
+
+    transition:.15s;
 }
 
-#scanBerhasil.show{
-    display:flex;
+.scan-success{
+    box-shadow:
+        inset 0 0 0 5px #22c55e,
+        inset 0 0 35px rgba(34,197,94,.5);
 }
-
 
 /* =====================================================
-   STATUS SCAN
+   STATUS
 ===================================================== */
 
 .scan-status{
@@ -247,9 +242,8 @@ body{
     line-height:1.5;
 }
 
-
 /* =====================================================
-   MANUAL
+   MANUAL SEARCH
 ===================================================== */
 
 .manual-box{
@@ -262,21 +256,20 @@ body{
     flex:1;
     min-width:0;
     height:46px;
+
     border:1px solid #cbd5e1;
     border-radius:10px;
+
     padding:0 12px;
+
     font-size:16px;
+
     outline:none;
 }
 
 .manual-box input:focus{
     border-color:#2563eb;
 }
-
-
-/* =====================================================
-   BUTTON
-===================================================== */
 
 button{
     border:0;
@@ -317,7 +310,6 @@ button{
     flex:1;
 }
 
-
 /* =====================================================
    LOADING
 ===================================================== */
@@ -339,10 +331,14 @@ button{
 .spinner{
     width:28px;
     height:28px;
+
     border:3px solid #cbd5e1;
     border-top-color:#2563eb;
+
     border-radius:50%;
+
     margin:0 auto 10px;
+
     animation:spin .8s linear infinite;
 }
 
@@ -352,19 +348,24 @@ button{
     }
 }
 
-
 /* =====================================================
    ERROR
 ===================================================== */
 
 .error-box{
     display:none;
+
     background:#fee2e2;
     color:#991b1b;
+
     border:1px solid #fecaca;
+
     border-radius:14px;
+
     padding:14px;
+
     margin-bottom:15px;
+
     font-size:14px;
     line-height:1.5;
 }
@@ -372,7 +373,6 @@ button{
 .error-box.show{
     display:block;
 }
-
 
 /* =====================================================
    HASIL
@@ -388,12 +388,15 @@ button{
 
 .stack-card{
     background:white;
+
     border-radius:20px;
+
     padding:20px;
+
     margin-bottom:15px;
+
     box-shadow:0 5px 15px rgba(0,0,0,.09);
 }
-
 
 /* =====================================================
    JUDUL
@@ -417,42 +420,55 @@ button{
     font-weight:700;
 }
 
-
 /* =====================================================
    JUMLAH BATANG
 ===================================================== */
 
 .main-number{
     background:#eff6ff;
+
     border:2px solid #bfdbfe;
+
     border-radius:18px;
+
     padding:20px;
+
     text-align:center;
+
     margin-bottom:12px;
 }
 
 .main-number .label{
     font-size:13px;
+
     font-weight:800;
+
     color:#2563eb;
+
     letter-spacing:.5px;
 }
 
 .main-number .value{
     margin-top:6px;
+
     font-size:42px;
+
     line-height:1;
+
     font-weight:900;
+
     color:#0f172a;
 }
 
 .main-number .unit{
     margin-top:6px;
+
     font-size:14px;
+
     color:#64748b;
+
     font-weight:700;
 }
-
 
 /* =====================================================
    INFO
@@ -460,42 +476,58 @@ button{
 
 .info-grid{
     display:grid;
+
     grid-template-columns:1fr 1fr;
+
     gap:10px;
+
     margin-bottom:15px;
 }
 
 .info-box{
     background:#f8fafc;
+
     border:1px solid #e2e8f0;
+
     border-radius:13px;
+
     padding:13px;
 }
 
 .info-box .label{
     font-size:11px;
+
     color:#64748b;
+
     font-weight:700;
+
     text-transform:uppercase;
 }
 
 .info-box .value{
     margin-top:4px;
+
     font-size:20px;
+
     font-weight:900;
 }
 
-
 /* =====================================================
    RINCIAN TPK
+   KHUSUS TUMPUK 29
 ===================================================== */
 
 .tpk-detail-box{
     display:none;
+
     background:#f8fafc;
+
     border:1px solid #e2e8f0;
+
     border-radius:15px;
+
     padding:14px;
+
     margin-bottom:15px;
 }
 
@@ -505,42 +537,55 @@ button{
 
 .tpk-detail-title{
     font-size:16px;
+
     font-weight:900;
+
     margin-bottom:10px;
 }
 
 .tpk-detail-list{
     display:flex;
+
     flex-direction:column;
+
     gap:8px;
 }
 
 .tpk-detail-item{
     background:white;
+
     border:1px solid #e2e8f0;
+
     border-radius:11px;
+
     padding:11px 12px;
 }
 
 .tpk-detail-name{
     font-size:14px;
+
     font-weight:900;
 }
 
 .tpk-detail-info{
     display:flex;
+
     justify-content:space-between;
+
     gap:10px;
+
     margin-top:5px;
+
     font-size:13px;
+
     color:#475569;
+
     font-weight:700;
 }
 
 .tpk-detail-volume{
     text-align:right;
 }
-
 
 /* =====================================================
    SECTION
@@ -552,21 +597,29 @@ button{
 
 .section-title{
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     font-size:18px;
+
     font-weight:900;
+
     margin-bottom:10px;
 }
 
 .section-count{
     font-size:12px;
+
     background:#e2e8f0;
+
     padding:5px 9px;
+
     border-radius:20px;
+
     color:#475569;
 }
-
 
 /* =====================================================
    REGISTER
@@ -574,38 +627,54 @@ button{
 
 .register-list{
     display:flex;
+
     flex-direction:column;
+
     gap:7px;
 }
 
 .register-item{
     display:flex;
+
     align-items:center;
+
     gap:10px;
+
     background:#f8fafc;
+
     border:1px solid #e2e8f0;
+
     border-radius:11px;
+
     padding:11px 12px;
+
     transition:.15s;
 }
 
 .register-item input{
     width:20px;
     height:20px;
+
     accent-color:#2563eb;
+
     cursor:pointer;
+
     flex-shrink:0;
 }
 
 .register-number{
     font-family:monospace;
+
     font-size:16px;
+
     font-weight:800;
+
     flex:1;
 }
 
 .register-item.checked{
     background:#f0fdf4;
+
     border-color:#bbf7d0;
 }
 
@@ -615,11 +684,13 @@ button{
 
 .check-status{
     font-size:11px;
+
     font-weight:800;
+
     color:#16a34a;
+
     white-space:nowrap;
 }
-
 
 /* =====================================================
    EMPTY
@@ -627,13 +698,17 @@ button{
 
 .empty{
     text-align:center;
+
     padding:20px;
+
     color:#64748b;
+
     background:#f8fafc;
+
     border-radius:12px;
+
     font-size:14px;
 }
-
 
 /* =====================================================
    HISTORY
@@ -641,41 +716,57 @@ button{
 
 .history-list{
     display:flex;
+
     flex-direction:column;
+
     gap:9px;
 }
 
 .history-item{
     background:#f8fafc;
+
     border:1px solid #e2e8f0;
+
     border-radius:13px;
+
     overflow:hidden;
 }
 
 .history-head{
     padding:14px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:10px;
+
     cursor:pointer;
 }
 
 .history-date{
     font-size:15px;
+
     font-weight:900;
 }
 
 .history-taken{
     font-size:13px;
+
     color:#dc2626;
+
     font-weight:800;
+
     margin-top:3px;
 }
 
 .history-arrow{
     font-size:18px;
+
     color:#64748b;
+
     transition:.2s;
 }
 
@@ -685,7 +776,9 @@ button{
 
 .history-detail{
     display:none;
+
     padding:0 14px 14px;
+
     border-top:1px solid #e2e8f0;
 }
 
@@ -695,17 +788,25 @@ button{
 
 .detail-title{
     font-size:12px;
+
     color:#64748b;
+
     font-weight:700;
+
     margin:12px 0 8px;
 }
 
 .detail-register{
     display:block;
+
     font-family:monospace;
+
     font-size:15px;
+
     font-weight:800;
+
     padding:7px 0;
+
     border-bottom:1px dashed #cbd5e1;
 }
 
@@ -713,14 +814,15 @@ button{
     border-bottom:0;
 }
 
-
 /* =====================================================
    BOTTOM BUTTON
 ===================================================== */
 
 .bottom-buttons{
     display:flex;
+
     gap:8px;
+
     margin-bottom:20px;
 }
 
@@ -728,18 +830,19 @@ button{
     flex:1;
 }
 
-
 /* =====================================================
    FOOTER
 ===================================================== */
 
 .footer{
     text-align:center;
+
     font-size:11px;
+
     color:#94a3b8;
+
     padding:5px 0 20px;
 }
-
 
 /* =====================================================
    RESPONSIVE
@@ -785,17 +888,19 @@ button{
         text-align:left;
     }
 
+    #video{
+        min-height:280px;
+    }
+
 }
 
 </style>
 
 </head>
 
-
 <body>
 
 <div class="container">
-
 
     <!-- =================================================
          HEADER
@@ -803,20 +908,23 @@ button{
 
     <div class="header">
 
-        <img
-            class="header-logo"
-            src="https://www.perhutani.co.id/wp-content/uploads/2022/09/logo-perhutani.png"
-            alt="Logo Perhutani"
-            onerror="this.style.display='none';">
+        <div class="header-logo">
 
-        <div class="header-content">
+            <img
+                src="https://www.perhutani.co.id/wp-content/uploads/2022/10/logo-perhutani.png"
+                alt="Perhutani"
+                onerror="this.style.display='none';">
+
+        </div>
+
+        <div class="header-text">
 
             <div class="header-title">
                 CEK TUMPUK
             </div>
 
             <div class="header-sub">
-                Scan barcode tumpuk untuk melihat data terbaru
+                IK SARADAN
             </div>
 
         </div>
@@ -830,48 +938,37 @@ button{
 
     <div class="scanner-box">
 
+        <div class="camera-card">
 
-        <!-- =================================================
-             CAMERA ZXING
-        ================================================= -->
+            <div class="camera-wrapper">
 
-        <div class="camera-wrapper">
+                <video
+                    id="video"
+                    autoplay
+                    muted
+                    playsinline>
+                </video>
 
-            <video
-                id="video"
-                autoplay
-                muted
-                playsinline>
-            </video>
+                <div class="qr-frame">
 
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
 
-            <div class="scan-frame">
+                </div>
 
-                <div class="corner tl"></div>
+                <div id="scanBerhasil"></div>
 
-                <div class="corner tr"></div>
-
-                <div class="corner bl"></div>
-
-                <div class="corner br"></div>
-
-                <div class="scan-line"></div>
-
-            </div>
-
-
-            <div id="scanBerhasil">
-                ✓ BARCODE TERBACA
             </div>
 
         </div>
 
 
-        <div
-            class="scan-status"
-            id="scanStatus">
+        <div class="scan-status"
+             id="scanStatus">
 
-            Arahkan barcode CODE 128 ke area scan
+            ⏳ Membuka kamera...
 
         </div>
 
@@ -957,7 +1054,6 @@ button{
         id="result">
 
         <div class="stack-card">
-
 
             <!-- =========================================
                  JUDUL
@@ -1170,7 +1266,6 @@ button{
 
 <script>
 
-
 /* =====================================================
    KONFIGURASI BACKEND
 ===================================================== */
@@ -1180,7 +1275,8 @@ const API_URL =
 
 
 /* =====================================================
-   VARIABEL
+   VARIABEL SCANNER
+   SAMA DENGAN SCAN REGISTER
 ===================================================== */
 
 let scannerControls = null;
@@ -1190,6 +1286,11 @@ let scannerReader = null;
 let kameraAktif = false;
 
 let sedangProses = false;
+
+
+/* =====================================================
+   VARIABEL DATA
+===================================================== */
 
 let currentTPK = "";
 
@@ -1210,6 +1311,7 @@ document.addEventListener(
 
         mulaiScanner();
 
+
         document
             .getElementById("manualInput")
             .addEventListener(
@@ -1217,7 +1319,9 @@ document.addEventListener(
                 function(e){
 
                     if(e.key === "Enter"){
+
                         prosesManual();
+
                     }
 
                 }
@@ -1238,8 +1342,20 @@ async function mulaiScanner(){
 
 
     if(kameraAktif){
+
         return;
+
     }
+
+
+    const status =
+        document.getElementById(
+            "scanStatus"
+        );
+
+
+    status.innerHTML =
+        "⏳ Membuka kamera...";
 
 
     try{
@@ -1259,6 +1375,10 @@ async function mulaiScanner(){
             );
 
 
+        /*
+           SAMA SEPERTI SCAN REGISTER
+        */
+
         scannerReader =
             new ZXingBrowser
                 .BrowserMultiFormatReader(
@@ -1266,6 +1386,10 @@ async function mulaiScanner(){
                     80
                 );
 
+
+        /*
+           SAMA SEPERTI SCAN REGISTER
+        */
 
         const constraints = {
 
@@ -1304,9 +1428,7 @@ async function mulaiScanner(){
         };
 
 
-        document
-            .getElementById("scanStatus")
-            .innerHTML =
+        status.innerHTML =
             "⏳ Meminta akses kamera...";
 
 
@@ -1323,13 +1445,26 @@ async function mulaiScanner(){
                         error
                     ){
 
+                        /*
+                           Tidak ada hasil =
+                           abaikan frame
+                        */
+
                         if(!result){
+
                             return;
+
                         }
 
 
+                        /*
+                           Jangan baca berkali-kali
+                        */
+
                         if(sedangProses){
+
                             return;
+
                         }
 
 
@@ -1340,24 +1475,6 @@ async function mulaiScanner(){
 
 
                         if(!kode){
-                            return;
-                        }
-
-
-                        const format =
-                            result.getBarcodeFormat();
-
-
-                        /*
-                           HANYA CODE 128
-                        */
-
-                        if(
-                            format !==
-                            ZXingBrowser
-                                .BarcodeFormat
-                                .CODE_128
-                        ){
 
                             return;
 
@@ -1370,26 +1487,44 @@ async function mulaiScanner(){
                         tampilkanIndikatorHijau();
 
 
-                        document
-                            .getElementById(
-                                "scanStatus"
-                            )
-                            .innerHTML =
+                        status.innerHTML =
                             "⏳ BARCODE TERBACA<br>" +
                             "Mengecek " +
                             escapeHtml(kode) +
                             "...";
 
 
+                        console.log(
+                            "BARCODE TUMPUK TERBACA:",
+                            kode
+                        );
+
+
                         /*
-                           STOP DULU
+                           LANGSUNG STOP
+                           SETELAH BARCODE TERBACA
                         */
 
                         stopScanner();
 
 
                         /*
-                           LALU PROSES
+                           LANGSUNG PROSES KODE
+
+                           Tidak dibatasi format
+                           di sini.
+
+                           Contoh:
+
+                           SARADAN|29
+
+                           atau
+
+                           SARADAN-T29
+
+                           atau
+
+                           29
                         */
 
                         prosesKodeTumpuk(
@@ -1404,11 +1539,7 @@ async function mulaiScanner(){
         kameraAktif = true;
 
 
-        document
-            .getElementById(
-                "scanStatus"
-            )
-            .innerHTML =
+        status.innerHTML =
             "📷 KAMERA AKTIF<br>" +
             "Arahkan CODE 128 ke kotak hijau";
 
@@ -1427,24 +1558,22 @@ async function mulaiScanner(){
     }
     catch(error){
 
-        kameraAktif = false;
-
-        scannerControls = null;
-
-
         console.error(
             "ZXing error:",
             error
         );
 
 
-        document
-            .getElementById(
-                "scanStatus"
-            )
-            .innerHTML =
-            "❌ Kamera gagal dibuka.<br>" +
-            "Gunakan pencarian TUMPUK.";
+        kameraAktif = false;
+
+        scannerControls = null;
+
+        scannerReader = null;
+
+
+        status.innerHTML =
+            "❌ Kamera gagal dibuka<br>" +
+            error.message;
 
     }
 
@@ -1452,7 +1581,39 @@ async function mulaiScanner(){
 
 
 /* =====================================================
-   INDIKATOR HIJAU
+   STOP SCANNER
+===================================================== */
+
+function stopScanner(){
+
+    try{
+
+        if(scannerControls){
+
+            scannerControls.stop();
+
+            scannerControls = null;
+
+        }
+
+    }
+    catch(error){
+
+        console.log(
+            "Stop scanner:",
+            error
+        );
+
+    }
+
+
+    kameraAktif = false;
+
+}
+
+
+/* =====================================================
+   INDIKATOR BARCODE TERBACA
 ===================================================== */
 
 function tampilkanIndikatorHijau(){
@@ -1463,8 +1624,15 @@ function tampilkanIndikatorHijau(){
         );
 
 
+    if(!indikator){
+
+        return;
+
+    }
+
+
     indikator.classList.add(
-        "show"
+        "scan-success"
     );
 
 
@@ -1472,7 +1640,7 @@ function tampilkanIndikatorHijau(){
         function(){
 
             indikator.classList.remove(
-                "show"
+                "scan-success"
             );
 
         },
@@ -1483,7 +1651,7 @@ function tampilkanIndikatorHijau(){
 
 
 /* =====================================================
-   OPTIMALKAN KAMERA
+   OPTIMASI KAMERA
    SAMA DENGAN SCAN REGISTER
 ===================================================== */
 
@@ -1494,17 +1662,21 @@ async function optimalkanKamera(
     try{
 
         if(!video.srcObject){
+
             return;
+
         }
 
 
         const tracks =
             video.srcObject
-            .getVideoTracks();
+                .getVideoTracks();
 
 
         if(!tracks.length){
+
             return;
+
         }
 
 
@@ -1567,83 +1739,12 @@ async function optimalkanKamera(
         ){
 
             await track.applyConstraints({
+
                 advanced:[
                     advanced
                 ]
+
             });
-
-        }
-
-    }
-    catch(e){
-
-        console.log(
-            "Optimasi kamera tidak tersedia:",
-            e
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   STOP SCANNER
-===================================================== */
-
-function stopScanner(){
-
-    try{
-
-        if(scannerControls){
-
-            scannerControls.stop();
-
-            scannerControls = null;
-
-        }
-
-
-        if(scannerReader){
-
-            if(
-                scannerReader.stopContinuousDecode
-            ){
-
-                scannerReader
-                    .stopContinuousDecode();
-
-            }
-
-        }
-
-
-        const video =
-            document.getElementById(
-                "video"
-            );
-
-
-        if(
-            video &&
-            video.srcObject
-        ){
-
-            const tracks =
-                video.srcObject
-                .getTracks();
-
-
-            tracks.forEach(
-                function(track){
-
-                    track.stop();
-
-                }
-            );
-
-
-            video.srcObject = null;
 
         }
 
@@ -1651,49 +1752,11 @@ function stopScanner(){
     catch(error){
 
         console.log(
-            "Stop scanner:",
+            "Optimasi kamera tidak tersedia:",
             error
         );
 
     }
-
-
-    kameraAktif = false;
-
-    sedangProses = false;
-
-}
-
-
-/* =====================================================
-   HASIL SCAN
-===================================================== */
-
-function hasilScan(
-    decodedText
-){
-
-    if(!decodedText){
-        return;
-    }
-
-
-    decodedText =
-        decodedText.trim();
-
-
-    console.log(
-        "BARCODE TUMPUK:",
-        decodedText
-    );
-
-
-    stopScanner();
-
-
-    prosesKodeTumpuk(
-        decodedText
-    );
 
 }
 
@@ -1726,6 +1789,10 @@ function prosesManual(){
     }
 
 
+    /*
+       Barcode lengkap tetap didukung
+    */
+
     if(
         nomor.indexOf("|") !== -1
     ){
@@ -1738,6 +1805,14 @@ function prosesManual(){
 
     }
 
+
+    /*
+       Bersihkan:
+
+       TUMPUK 29
+       TUMPUK29
+       T29
+    */
 
     nomor =
         nomor
@@ -1891,7 +1966,6 @@ function cariTumpukDenganNomor(
 
                 ambilDataTumpuk();
 
-
             }
             catch(error){
 
@@ -1907,7 +1981,11 @@ function cariTumpukDenganNomor(
 
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -1929,7 +2007,9 @@ function cariTumpukDenganNomor(
 
 
     script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
 
 
     script.src =
@@ -1940,7 +2020,11 @@ function cariTumpukDenganNomor(
         function(){
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -2012,9 +2096,21 @@ function prosesKodeTumpuk(
         kode.trim();
 
 
+    console.log(
+        "KODE TUMPUK:",
+        kode
+    );
+
+
     let parts =
         kode.split("|");
 
+
+    /*
+       FORMAT:
+
+       SARADAN|10
+    */
 
     if(parts.length >= 2){
 
@@ -2031,8 +2127,13 @@ function prosesKodeTumpuk(
 
     }
 
-
     else{
+
+        /*
+           FORMAT:
+
+           SARADAN-T10
+        */
 
         const match =
             kode.match(
@@ -2053,16 +2154,23 @@ function prosesKodeTumpuk(
 
         }
 
-
         else{
+
+            /*
+               Barcode hanya nomor TUMPUK
+            */
 
             if(
                 /^\d+$/.test(kode)
             ){
 
+                sedangProses = false;
+
+
                 cariTumpukDenganNomor(
                     kode
                 );
+
 
                 return;
 
@@ -2072,6 +2180,10 @@ function prosesKodeTumpuk(
             showError(
                 "Format barcode TUMPUK tidak dikenali."
             );
+
+
+            sedangProses = false;
+
 
             return;
 
@@ -2088,10 +2200,18 @@ function prosesKodeTumpuk(
             "Nomor TUMPUK tidak terbaca."
         );
 
+
+        sedangProses = false;
+
+
         return;
 
     }
 
+
+    /*
+       TUMPUK 29 = SATU TUMPUK
+    */
 
     if(
         String(currentTumpuk) === "29"
@@ -2157,6 +2277,10 @@ function ambilDataTumpuk(){
                         "Data TUMPUK tidak ditemukan."
                     );
 
+
+                    sedangProses = false;
+
+
                     return;
 
                 }
@@ -2171,6 +2295,10 @@ function ambilDataTumpuk(){
                         "Format data TUMPUK tidak sesuai."
                     );
 
+
+                    sedangProses = false;
+
+
                     return;
 
                 }
@@ -2179,6 +2307,9 @@ function ambilDataTumpuk(){
                 tampilkanData(
                     response.data
                 );
+
+
+                sedangProses = false;
 
             }
             catch(error){
@@ -2189,11 +2320,18 @@ function ambilDataTumpuk(){
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
+
+                sedangProses = false;
+
             }
 
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -2223,7 +2361,9 @@ function ambilDataTumpuk(){
 
 
     script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
 
 
     script.src =
@@ -2234,7 +2374,11 @@ function ambilDataTumpuk(){
         function(){
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -2244,6 +2388,9 @@ function ambilDataTumpuk(){
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
+
+
+            sedangProses = false;
 
 
             cleanupJSONP(
@@ -2264,7 +2411,9 @@ function ambilDataTumpuk(){
             function(){
 
                 if(
-                    document.body.contains(script)
+                    document.body.contains(
+                        script
+                    )
                 ){
 
                     cleanupJSONP(
@@ -2280,6 +2429,9 @@ function ambilDataTumpuk(){
                         "Waktu koneksi habis. Coba lagi."
                     );
 
+
+                    sedangProses = false;
+
                 }
 
             },
@@ -2293,7 +2445,9 @@ function ambilDataTumpuk(){
    TAMPILKAN DATA
 ===================================================== */
 
-function tampilkanData(data){
+function tampilkanData(
+    data
+){
 
     currentStackId =
         data.stackId ||
@@ -2340,6 +2494,10 @@ function tampilkanData(data){
         .add("show");
 
 
+    /*
+       TUMPUK
+    */
+
     document
         .getElementById("tumpukTitle")
         .textContent =
@@ -2352,6 +2510,10 @@ function tampilkanData(data){
             "-"
         );
 
+
+    /*
+       TPK
+    */
 
     document
         .getElementById("tpkTitle")
@@ -2366,6 +2528,10 @@ function tampilkanData(data){
         );
 
 
+    /*
+       JUMLAH BATANG
+    */
+
     document
         .getElementById("jumlahAwal")
         .textContent =
@@ -2377,6 +2543,10 @@ function tampilkanData(data){
             data.jumlahAwal
         );
 
+
+    /*
+       VOLUME
+    */
 
     document
         .getElementById("volumeAwal")
@@ -2390,10 +2560,19 @@ function tampilkanData(data){
         );
 
 
+    /*
+       RINCIAN TPK
+       HANYA 29
+    */
+
     tampilkanRincianTPK(
         data
     );
 
+
+    /*
+       REGISTER
+    */
 
     const registers =
         Array.isArray(data.registers)
@@ -2415,6 +2594,10 @@ function tampilkanData(data){
         data
     );
 
+
+    /*
+       HISTORY
+    */
 
     const history =
         Array.isArray(data.history)
@@ -2439,8 +2622,11 @@ function tampilkanData(data){
 
 
     window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
     });
 
 }
@@ -2485,18 +2671,25 @@ function updateJumlahCek(){
 
 /* =====================================================
    RINCIAN TPK
+   KHUSUS 29
 ===================================================== */
 
-function tampilkanRincianTPK(data){
+function tampilkanRincianTPK(
+    data
+){
 
     const box =
         document
-        .getElementById("tpkDetailBox");
+        .getElementById(
+            "tpkDetailBox"
+        );
 
 
     const container =
         document
-        .getElementById("tpkDetailList");
+        .getElementById(
+            "tpkDetailList"
+        );
 
 
     container.innerHTML = "";
@@ -2538,7 +2731,9 @@ function tampilkanRincianTPK(data){
 
             const wrapper =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             wrapper.className =
@@ -2547,7 +2742,9 @@ function tampilkanRincianTPK(data){
 
             const name =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             name.className =
@@ -2567,7 +2764,9 @@ function tampilkanRincianTPK(data){
 
             const info =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             info.className =
@@ -2576,7 +2775,9 @@ function tampilkanRincianTPK(data){
 
             const jumlah =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             jumlah.textContent =
@@ -2588,7 +2789,9 @@ function tampilkanRincianTPK(data){
 
             const volume =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             volume.className =
@@ -2647,7 +2850,9 @@ function tampilkanRegister(
 
     const container =
         document
-        .getElementById("registerList");
+        .getElementById(
+            "registerList"
+        );
 
 
     container.innerHTML = "";
@@ -2662,6 +2867,7 @@ function tampilkanRegister(
 
 
         updateJumlahCek();
+
 
         return;
 
@@ -2686,7 +2892,9 @@ function tampilkanRegister(
 
 
             if(!register){
+
                 return;
+
             }
 
 
@@ -2699,7 +2907,9 @@ function tampilkanRegister(
 
             const wrapper =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             wrapper.className =
@@ -2715,7 +2925,9 @@ function tampilkanRegister(
 
             const checkbox =
                 document
-                .createElement("input");
+                .createElement(
+                    "input"
+                );
 
 
             checkbox.type =
@@ -2728,7 +2940,9 @@ function tampilkanRegister(
 
             const status =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             status.className =
@@ -2763,7 +2977,9 @@ function tampilkanRegister(
 
             const number =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             number.className =
@@ -2879,7 +3095,11 @@ function setCheckbox(
         function(data){
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -2973,7 +3193,9 @@ function setCheckbox(
 
 
     script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
 
 
     script.src =
@@ -2984,7 +3206,11 @@ function setCheckbox(
         function(){
 
             if(timeoutId){
-                clearTimeout(timeoutId);
+
+                clearTimeout(
+                    timeoutId
+                );
+
             }
 
 
@@ -3025,7 +3251,9 @@ function setCheckbox(
 
     document
         .body
-        .appendChild(script);
+        .appendChild(
+            script
+        );
 
 
     timeoutId =
@@ -3033,7 +3261,9 @@ function setCheckbox(
             function(){
 
                 if(
-                    document.body.contains(script)
+                    document.body.contains(
+                        script
+                    )
                 ){
 
                     status.textContent =
@@ -3087,7 +3317,9 @@ function tampilkanHistory(
 
     const container =
         document
-        .getElementById("historyList");
+        .getElementById(
+            "historyList"
+        );
 
 
     container.innerHTML = "";
@@ -3099,6 +3331,7 @@ function tampilkanHistory(
             '<div class="empty">' +
             'Belum ada history pengambilan.' +
             '</div>';
+
 
         return;
 
@@ -3142,7 +3375,9 @@ function tampilkanHistory(
 
             const box =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             box.className =
@@ -3151,7 +3386,9 @@ function tampilkanHistory(
 
             const head =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             head.className =
@@ -3160,12 +3397,16 @@ function tampilkanHistory(
 
             const left =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             const dateEl =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             dateEl.className =
@@ -3180,7 +3421,9 @@ function tampilkanHistory(
 
             const takenEl =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             takenEl.className =
@@ -3205,7 +3448,9 @@ function tampilkanHistory(
 
             const arrow =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             arrow.className =
@@ -3228,7 +3473,9 @@ function tampilkanHistory(
 
             const detail =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             detail.className =
@@ -3237,7 +3484,9 @@ function tampilkanHistory(
 
             const detailTitle =
                 document
-                .createElement("div");
+                .createElement(
+                    "div"
+                );
 
 
             detailTitle.className =
@@ -3257,7 +3506,9 @@ function tampilkanHistory(
 
                 const empty =
                     document
-                    .createElement("div");
+                    .createElement(
+                        "div"
+                    );
 
 
                 empty.className =
@@ -3280,7 +3531,9 @@ function tampilkanHistory(
 
                         const el =
                             document
-                            .createElement("span");
+                            .createElement(
+                                "span"
+                            );
 
 
                         el.className =
@@ -3346,6 +3599,7 @@ function refreshData(){
         showError(
             "Belum ada TUMPUK yang dipilih."
         );
+
 
         return;
 
@@ -3423,8 +3677,11 @@ function kembaliScan(){
 
 
     window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
     });
 
 }
@@ -3434,7 +3691,9 @@ function kembaliScan(){
    FORMAT ANGKA
 ===================================================== */
 
-function formatAngka(value){
+function formatAngka(
+    value
+){
 
     if(
         value === undefined ||
@@ -3471,7 +3730,9 @@ function formatAngka(value){
    FORMAT VOLUME
 ===================================================== */
 
-function formatVolume(value){
+function formatVolume(
+    value
+){
 
     if(
         value === undefined ||
@@ -3512,10 +3773,14 @@ function formatVolume(value){
    FORMAT TANGGAL
 ===================================================== */
 
-function formatTanggal(value){
+function formatTanggal(
+    value
+){
 
     if(!value){
+
         return "-";
+
     }
 
 
@@ -3587,25 +3852,32 @@ function formatTanggal(value){
    ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(value){
+function escapeHtml(
+    value
+){
 
     return String(value)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
@@ -3642,7 +3914,9 @@ function hideLoading(){
    ERROR
 ===================================================== */
 
-function showError(message){
+function showError(
+    message
+){
 
     const box =
         document
@@ -3688,7 +3962,9 @@ function cleanupJSONP(
     }
     catch(error){
 
-        console.log(error);
+        console.log(
+            error
+        );
 
     }
 
