@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -15,9 +15,7 @@ content="width=device-width, initial-scale=1.0">
 
 <style>
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
     margin:0;
@@ -65,9 +63,7 @@ body{
     object-fit:contain;
 }
 
-.header-text{
-    min-width:0;
-}
+.header-text{min-width:0;}
 
 .header-title{
     font-size:25px;
@@ -91,89 +87,131 @@ body{
     box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
+
+/* =====================================================
+   CAMERA
+   SAMA SEPERTI SCAN REGISTER
+===================================================== */
+
 .camera-card{
     width:100%;
-    background:#000;
+    max-width:500px;
+    margin:auto;
+    background:white;
     border-radius:14px;
-    overflow:hidden;
+    padding:8px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
 .camera-wrapper{
     position:relative;
     width:100%;
-    background:#000;
+    height:300px;
+    border-radius:10px;
     overflow:hidden;
+    background:black;
 }
 
 #video{
     width:100%;
-    height:auto;
-    min-height:320px;
-    display:block;
+    height:300px;
     object-fit:cover;
-    background:#000;
+    display:block;
 }
+
+
+/* =====================================================
+   GARIS POJOK
+   SAMA SEPERTI SCAN REGISTER
+===================================================== */
 
 .qr-frame{
     position:absolute;
-    left:5%;
-    right:5%;
-    top:31%;
-    height:38%;
-    border:2px solid rgba(255,255,255,.9);
-    border-radius:10px;
+    left:50%;
+    top:50%;
+    width:250px;
+    height:250px;
+    transform:translate(-50%,-50%);
     pointer-events:none;
+    z-index:10;
 }
 
 .corner{
     position:absolute;
-    width:32px;
-    height:32px;
-    border-color:#22c55e;
+    width:55px;
+    height:55px;
+    border-color:#00e676;
     border-style:solid;
 }
 
 .corner.tl{
-    top:-2px;
-    left:-2px;
-    border-width:4px 0 0 4px;
-    border-radius:8px 0 0 0;
+    left:0;
+    top:0;
+    border-width:5px 0 0 5px;
+    border-radius:6px 0 0 0;
 }
 
 .corner.tr{
-    top:-2px;
-    right:-2px;
-    border-width:4px 4px 0 0;
-    border-radius:0 8px 0 0;
+    right:0;
+    top:0;
+    border-width:5px 5px 0 0;
+    border-radius:0 6px 0 0;
 }
 
 .corner.bl{
-    bottom:-2px;
-    left:-2px;
-    border-width:0 0 4px 4px;
-    border-radius:0 0 0 8px;
+    left:0;
+    bottom:0;
+    border-width:0 0 5px 5px;
+    border-radius:0 0 0 6px;
 }
 
 .corner.br{
-    bottom:-2px;
-    right:-2px;
-    border-width:0 4px 4px 0;
-    border-radius:0 0 8px 0;
+    right:0;
+    bottom:0;
+    border-width:0 5px 5px 0;
+    border-radius:0 0 6px 0;
 }
+
+
+/* =====================================================
+   INDIKATOR BERHASIL
+   SAMA SEPERTI SCAN REGISTER
+===================================================== */
 
 #scanBerhasil{
     position:absolute;
-    inset:0;
+    left:50%;
+    top:50%;
+    width:250px;
+    height:250px;
+    transform:translate(-50%,-50%);
+    border:6px solid #00e676;
+    border-radius:12px;
+    display:none;
+    z-index:20;
     pointer-events:none;
-    border-radius:14px;
-    transition:.15s;
+    box-shadow:
+        0 0 10px rgba(0,230,118,0.9),
+        0 0 25px rgba(0,230,118,0.8);
 }
 
-.scan-success{
-    box-shadow:
-        inset 0 0 0 5px #22c55e,
-        inset 0 0 35px rgba(34,197,94,.5);
+#scanBerhasil::after{
+    content:"✓";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#00c853;
+    color:white;
+    font-size:40px;
+    font-weight:bold;
+    line-height:60px;
+    text-align:center;
 }
+
 
 .scan-status{
     text-align:center;
@@ -601,48 +639,30 @@ button{
     padding:5px 0 20px;
 }
 
-@media(max-width:420px){
+@media(max-width:500px){
 
     .container{
         padding:10px;
     }
 
-    .header{
-        padding:14px;
-    }
-
-    .header-logo{
-        width:52px;
-        height:52px;
-    }
-
-    .header-title{
-        font-size:22px;
-    }
-
-    .stack-title .tumpuk{
-        font-size:27px;
-    }
-
-    .main-number .value{
-        font-size:38px;
-    }
-
-    .info-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .tpk-detail-info{
-        flex-direction:column;
-        gap:3px;
-    }
-
-    .tpk-detail-volume{
-        text-align:left;
-    }
-
+    .camera-wrapper,
     #video{
-        min-height:280px;
+        height:300px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .camera-wrapper,
+    #video{
+        height:280px;
+    }
+
+    .qr-frame,
+    #scanBerhasil{
+        width:220px;
+        height:220px;
     }
 
 }
@@ -655,316 +675,321 @@ button{
 
 <div class="container">
 
-    <div class="header">
+```
+<div class="header">
 
-        <div class="header-logo">
+    <div class="header-logo">
 
-            <img
-                src="https://www.perhutani.co.id/wp-content/uploads/2022/10/logo-perhutani.png"
-                alt="Perhutani"
-                onerror="this.style.display='none';">
-
-        </div>
-
-        <div class="header-text">
-
-            <div class="header-title">
-                CEK TUMPUK
-            </div>
-
-            <div class="header-sub">
-                IK SARADAN
-            </div>
-
-        </div>
+        <img
+            src="https://www.perhutani.co.id/wp-content/uploads/2022/10/logo-perhutani.png"
+            alt="Perhutani"
+            onerror="this.style.display='none';">
 
     </div>
 
+    <div class="header-text">
 
-    <div class="scanner-box">
-
-        <div class="camera-card">
-
-            <div class="camera-wrapper">
-
-                <video
-                    id="video"
-                    autoplay
-                    muted
-                    playsinline>
-                </video>
-
-                <div class="qr-frame">
-
-                    <div class="corner tl"></div>
-                    <div class="corner tr"></div>
-                    <div class="corner bl"></div>
-                    <div class="corner br"></div>
-
-                </div>
-
-                <div id="scanBerhasil"></div>
-
-            </div>
-
+        <div class="header-title">
+            CEK TUMPUK
         </div>
 
-
-        <div class="scan-status"
-             id="scanStatus">
-
-            ⏳ Membuka kamera...
-
+        <div class="header-sub">
+            IK SARADAN
         </div>
 
-
-        <div class="manual-box">
-
-            <input
-                type="search"
-                id="manualInput"
-                placeholder="Ketik nomor TUMPUK..."
-                autocomplete="off"
-                inputmode="numeric">
-
-            <button
-                class="btn btn-primary"
-                onclick="prosesManual()">
-
-                CARI
-
-            </button>
-
-        </div>
-
-
-        <div class="scan-buttons">
-
-            <button
-                class="btn btn-secondary"
-                onclick="mulaiScanner()">
-
-                SCAN LAGI
-
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="stopScanner()">
-
-                STOP
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div
-        class="loading"
-        id="loading">
-
-        <div class="spinner"></div>
-
-        <b>Mengambil data terbaru...</b>
-
-    </div>
-
-
-    <div
-        class="error-box"
-        id="errorBox">
-    </div>
-
-
-    <div
-        class="result"
-        id="result">
-
-        <div class="stack-card">
-
-            <div class="stack-title">
-
-                <div
-                    class="tumpuk"
-                    id="tumpukTitle">
-
-                    TUMPUK
-
-                </div>
-
-                <div
-                    class="tpk"
-                    id="tpkTitle">
-
-                    TPK ASAL :
-
-                </div>
-
-            </div>
-
-
-            <div class="main-number">
-
-                <div class="label">
-                    JUMLAH BATANG
-                </div>
-
-                <div
-                    class="value"
-                    id="jumlahAwal">
-
-                    0
-
-                </div>
-
-                <div class="unit">
-                    BATANG
-                </div>
-
-            </div>
-
-
-            <div class="info-grid">
-
-                <div class="info-box">
-
-                    <div class="label">
-                        Volume
-                    </div>
-
-                    <div
-                        class="value"
-                        id="volumeAwal">
-
-                        0 m³
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="label">
-                        Jumlah Cek
-                    </div>
-
-                    <div
-                        class="value"
-                        id="jumlahCek">
-
-                        0
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="tpk-detail-box"
-                id="tpkDetailBox">
-
-                <div class="tpk-detail-title">
-                    RINCIAN TPK
-                </div>
-
-                <div
-                    class="tpk-detail-list"
-                    id="tpkDetailList">
-                </div>
-
-            </div>
-
-
-            <div class="section">
-
-                <div class="section-title">
-
-                    <span>
-                        DAFTAR REGISTER
-                    </span>
-
-                    <span
-                        class="section-count"
-                        id="registerBadge">
-
-                        0 REGISTER
-
-                    </span>
-
-                </div>
-
-                <div
-                    class="register-list"
-                    id="registerList">
-                </div>
-
-            </div>
-
-
-            <div class="section">
-
-                <div class="section-title">
-
-                    <span>
-                        HISTORY PENGAMBILAN
-                    </span>
-
-                    <span
-                        class="section-count"
-                        id="historyBadge">
-
-                        0
-
-                    </span>
-
-                </div>
-
-                <div
-                    class="history-list"
-                    id="historyList">
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="bottom-buttons">
-
-            <button
-                class="btn btn-primary"
-                onclick="refreshData()">
-
-                REFRESH DATA
-
-            </button>
-
-            <button
-                class="btn btn-secondary"
-                onclick="kembaliScan()">
-
-                KEMBALI SCAN
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="footer">
-        Sistem CEK TUMPUK
     </div>
 
 </div>
 
 
+<div class="scanner-box">
+
+    <div class="camera-card">
+
+        <div class="camera-wrapper">
+
+            <video
+                id="video"
+                autoplay
+                muted
+                playsinline>
+            </video>
+
+            <div class="qr-frame">
+
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+                <div class="corner bl"></div>
+                <div class="corner br"></div>
+
+            </div>
+
+            <div id="scanBerhasil"></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="scan-status"
+         id="scanStatus">
+
+        ⏳ Membuka kamera...
+
+    </div>
+
+
+    <div class="manual-box">
+
+        <input
+            type="search"
+            id="manualInput"
+            placeholder="Ketik nomor TUMPUK..."
+            autocomplete="off"
+            inputmode="numeric">
+
+        <button
+            class="btn btn-primary"
+            onclick="prosesManual()">
+
+            CARI
+
+        </button>
+
+    </div>
+
+
+    <div class="scan-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="mulaiScanner()">
+
+            SCAN LAGI
+
+        </button>
+
+        <button
+            class="btn btn-danger"
+            onclick="stopScanner()">
+
+            STOP
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="loading"
+    id="loading">
+
+    <div class="spinner"></div>
+
+    <b>Mengambil data terbaru...</b>
+
+</div>
+
+
+<div
+    class="error-box"
+    id="errorBox">
+</div>
+
+
+<div
+    class="result"
+    id="result">
+
+    <div class="stack-card">
+
+        <div class="stack-title">
+
+            <div
+                class="tumpuk"
+                id="tumpukTitle">
+
+                TUMPUK
+
+            </div>
+
+            <div
+                class="tpk"
+                id="tpkTitle">
+
+                TPK ASAL :
+
+            </div>
+
+        </div>
+
+
+        <div class="main-number">
+
+            <div class="label">
+                JUMLAH BATANG
+            </div>
+
+            <div
+                class="value"
+                id="jumlahAwal">
+
+                0
+
+            </div>
+
+            <div class="unit">
+                BATANG
+            </div>
+
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <div class="label">
+                    Volume
+                </div>
+
+                <div
+                    class="value"
+                    id="volumeAwal">
+
+                    0 m³
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="label">
+                    Jumlah Cek
+                </div>
+
+                <div
+                    class="value"
+                    id="jumlahCek">
+
+                    0
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="tpk-detail-box"
+            id="tpkDetailBox">
+
+            <div class="tpk-detail-title">
+                RINCIAN TPK
+            </div>
+
+            <div
+                class="tpk-detail-list"
+                id="tpkDetailList">
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <div class="section-title">
+
+                <span>
+                    DAFTAR REGISTER
+                </span>
+
+                <span
+                    class="section-count"
+                    id="registerBadge">
+
+                    0 REGISTER
+
+                </span>
+
+            </div>
+
+            <div
+                class="register-list"
+                id="registerList">
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <div class="section-title">
+
+                <span>
+                    HISTORY PENGAMBILAN
+                </span>
+
+                <span
+                    class="section-count"
+                    id="historyBadge">
+
+                    0
+
+                </span>
+
+            </div>
+
+            <div
+                class="history-list"
+                id="historyList">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="bottom-buttons">
+
+        <button
+            class="btn btn-primary"
+            onclick="refreshData()">
+
+            REFRESH DATA
+
+        </button>
+
+        <button
+            class="btn btn-secondary"
+            onclick="kembaliScan()">
+
+            KEMBALI SCAN
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+    Sistem CEK TUMPUK
+</div>
+```
+
+</div>
+
 <script>
+
+/* =====================================================
+   KONFIGURASI BACKEND
+===================================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
@@ -975,11 +1000,8 @@ const API_URL =
 ===================================================== */
 
 let scannerControls = null;
-
 let scannerReader = null;
-
 let kameraAktif = false;
-
 let sedangProses = false;
 
 
@@ -988,11 +1010,8 @@ let sedangProses = false;
 ===================================================== */
 
 let currentTPK = "";
-
 let currentTumpuk = "";
-
 let currentStackId = "";
-
 let currentRegisters = [];
 
 
@@ -1005,7 +1024,6 @@ document.addEventListener(
     function(){
 
         mulaiScanner();
-
 
         document
             .getElementById("manualInput")
@@ -1028,13 +1046,12 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
-   MESIN SAMA DENGAN SCAN REGISTER
+   ENGINE MENGIKUTI SCAN REGISTER
 ===================================================== */
 
 async function mulaiScanner(){
 
     hideError();
-
 
     if(kameraAktif){
 
@@ -1042,22 +1059,18 @@ async function mulaiScanner(){
 
     }
 
+    const status =
+        document.getElementById(
+            "scanStatus"
+        );
 
     const video =
         document.getElementById(
             "video"
         );
 
-
-    const status =
-        document.getElementById(
-            "scanStatus"
-        );
-
-
     status.innerHTML =
         "⏳ Membuka kamera...";
-
 
     try{
 
@@ -1070,10 +1083,6 @@ async function mulaiScanner(){
         }
 
 
-        /*
-           ENGINE SCAN REGISTER
-        */
-
         scannerReader =
             new ZXingBrowser
                 .BrowserMultiFormatReader(
@@ -1082,12 +1091,9 @@ async function mulaiScanner(){
                 );
 
 
-        /*
-           CONSTRAINTS SAMA DENGAN
-           SCAN REGISTER
-        */
-
         const constraints = {
+
+            audio:false,
 
             video:{
 
@@ -1117,9 +1123,7 @@ async function mulaiScanner(){
                     ideal:"continuous"
                 }
 
-            },
-
-            audio:false
+            }
 
         };
 
@@ -1138,8 +1142,7 @@ async function mulaiScanner(){
 
                     function(
                         result,
-                        error,
-                        controls
+                        error
                     ){
 
                         if(!result){
@@ -1158,7 +1161,8 @@ async function mulaiScanner(){
 
                         const kode =
                             String(
-                                result.getText() || ""
+                                result.getText() ||
+                                ""
                             ).trim();
 
 
@@ -1169,61 +1173,42 @@ async function mulaiScanner(){
                         }
 
 
-                        sedangProses = true;
+                        sedangProses =
+                            true;
 
-
-                        /*
-                           INDIKATOR HIJAU
-                        */
 
                         tampilkanIndikatorHijau();
 
 
                         /*
-                           BEEP
-                        */
+                         * BEEP
+                         * SAMA SEPERTI
+                         * SCAN REGISTER
+                         */
 
                         bunyiBerhasil();
 
 
                         /*
-                           GETAR
-                        */
+                         * GETAR
+                         * SAMA SEPERTI
+                         * SCAN REGISTER
+                         */
 
-                        if(
-                            navigator.vibrate
-                        ){
+                        getarBerhasil();
 
-                            navigator.vibrate(
-                                80
-                            );
-
-                        }
-
-
-                        /*
-                           STATUS
-                        */
 
                         status.innerHTML =
-                            "BARCODE TERBACA<br>" +
+                            "⏳ BARCODE TERBACA<br>" +
                             "Mengecek " +
-                            escapeHtml(kode);
-
-
-                        console.log(
-                            "BARCODE TUMPUK TERBACA:",
-                            kode
-                        );
+                            escapeHtml(kode) +
+                            "...";
 
 
                         /*
-                           TIDAK MENGUBAH
-                           LOGIKA TUMPUK
-
-                           Tetap menggunakan
-                           fungsi lama.
-                        */
+                         * TETAP PAKAI LOGIKA
+                         * TUMPUK YANG SUDAH ADA
+                         */
 
                         prosesKodeTumpuk(
                             kode
@@ -1234,17 +1219,14 @@ async function mulaiScanner(){
                 );
 
 
-        kameraAktif = true;
+        kameraAktif =
+            true;
 
 
         status.innerHTML =
             "📷 KAMERA AKTIF<br>" +
             "Arahkan CODE 128 ke kotak hijau";
 
-
-        /*
-           OPTIMASI KAMERA
-        */
 
         setTimeout(
             function(){
@@ -1265,13 +1247,14 @@ async function mulaiScanner(){
             error
         );
 
+        kameraAktif =
+            false;
 
-        kameraAktif = false;
+        scannerControls =
+            null;
 
-        scannerControls = null;
-
-        scannerReader = null;
-
+        scannerReader =
+            null;
 
         status.innerHTML =
             "❌ Kamera gagal dibuka<br>" +
@@ -1286,8 +1269,44 @@ async function mulaiScanner(){
 
 
 /* =====================================================
-   BEEP BERHASIL
-   SAMA DENGAN SCAN REGISTER
+   INDIKATOR BERHASIL
+   SAMA SEPERTI SCAN REGISTER
+===================================================== */
+
+function tampilkanIndikatorHijau(){
+
+    const indikator =
+        document.getElementById(
+            "scanBerhasil"
+        );
+
+    if(!indikator){
+
+        return;
+
+    }
+
+
+    indikator.style.display =
+        "block";
+
+
+    setTimeout(
+        function(){
+
+            indikator.style.display =
+                "none";
+
+        },
+        400
+    );
+
+}
+
+
+/* =====================================================
+   SUARA
+   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 function bunyiBerhasil(){
@@ -1306,28 +1325,44 @@ function bunyiBerhasil(){
         }
 
 
-        const audioCtx =
+        const audio =
             new AudioContext();
 
 
         const oscillator =
-            audioCtx.createOscillator();
+            audio.createOscillator();
 
 
         const gain =
-            audioCtx.createGain();
-
-
-        oscillator.frequency.value =
-            1400;
+            audio.createGain();
 
 
         oscillator.type =
             "sine";
 
 
-        gain.gain.value =
-            0.15;
+        oscillator.frequency.setValueAtTime(
+            1400,
+            audio.currentTime
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.001,
+            audio.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.35,
+            audio.currentTime + 0.01
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.10
+        );
 
 
         oscillator.connect(
@@ -1336,11 +1371,16 @@ function bunyiBerhasil(){
 
 
         gain.connect(
-            audioCtx.destination
+            audio.destination
         );
 
 
         oscillator.start();
+
+
+        oscillator.stop(
+            audio.currentTime + 0.11
+        );
 
 
         setTimeout(
@@ -1348,23 +1388,38 @@ function bunyiBerhasil(){
 
                 try{
 
-                    oscillator.stop();
-
-                    audioCtx.close();
+                    audio.close();
 
                 }
                 catch(e){}
 
             },
-            110
+            200
         );
 
     }
-    catch(error){
+    catch(e){
 
-        console.log(
-            "Beep tidak tersedia:",
-            error
+        console.log(e);
+
+    }
+
+}
+
+
+/* =====================================================
+   GETAR
+   SAMA SEPERTI SCAN REGISTER
+===================================================== */
+
+function getarBerhasil(){
+
+    if(
+        navigator.vibrate
+    ){
+
+        navigator.vibrate(
+            80
         );
 
     }
@@ -1398,53 +1453,15 @@ function stopScanner(){
 
     }
 
-
-    kameraAktif = false;
-
-}
-
-
-/* =====================================================
-   INDIKATOR BARCODE TERBACA
-===================================================== */
-
-function tampilkanIndikatorHijau(){
-
-    const indikator =
-        document.getElementById(
-            "scanBerhasil"
-        );
-
-
-    if(!indikator){
-
-        return;
-
-    }
-
-
-    indikator.classList.add(
-        "scan-success"
-    );
-
-
-    setTimeout(
-        function(){
-
-            indikator.classList.remove(
-                "scan-success"
-            );
-
-        },
-        700
-    );
+    kameraAktif =
+        false;
 
 }
 
 
 /* =====================================================
    OPTIMASI KAMERA
-   SAMA DENGAN SCAN REGISTER
+   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 async function optimalkanKamera(
@@ -1555,19 +1572,18 @@ async function optimalkanKamera(
 
 /* =====================================================
    SEARCH MANUAL
+   ASLI
 ===================================================== */
 
 function prosesManual(){
 
     hideError();
 
-
     let nomor =
         document
         .getElementById("manualInput")
         .value
         .trim();
-
 
     if(!nomor){
 
@@ -1578,7 +1594,6 @@ function prosesManual(){
         return;
 
     }
-
 
     if(
         nomor.indexOf("|") !== -1
@@ -1592,7 +1607,6 @@ function prosesManual(){
 
     }
 
-
     nomor =
         nomor
         .replace(
@@ -1605,7 +1619,6 @@ function prosesManual(){
         )
         .trim();
 
-
     if(!nomor){
 
         showError(
@@ -1616,7 +1629,6 @@ function prosesManual(){
 
     }
 
-
     cariTumpukDenganNomor(
         nomor
     );
@@ -1626,6 +1638,7 @@ function prosesManual(){
 
 /* =====================================================
    CARI NOMOR TUMPUK DARI DATABASE
+   ASLI
 ===================================================== */
 
 function cariTumpukDenganNomor(
@@ -1634,16 +1647,12 @@ function cariTumpukDenganNomor(
 
     showLoading();
 
-
     const callbackName =
         "callbackList_" +
         Date.now();
 
-
     let script = null;
-
     let timeoutId = null;
-
 
     window[callbackName] =
         function(response){
@@ -1651,7 +1660,6 @@ function cariTumpukDenganNomor(
             try{
 
                 hideLoading();
-
 
                 if(
                     !response ||
@@ -1671,7 +1679,6 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 const list =
                     Array.isArray(
                         response.data
@@ -1681,11 +1688,9 @@ function cariTumpukDenganNomor(
                     :
                     [];
 
-
                 const target =
                     String(nomor)
                     .trim();
-
 
                 const ditemukan =
                     list.find(
@@ -1702,7 +1707,6 @@ function cariTumpukDenganNomor(
                         }
                     );
 
-
                 if(!ditemukan){
 
                     showError(
@@ -1715,10 +1719,8 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 currentTumpuk =
                     target;
-
 
                 if(
                     target === "29"
@@ -1738,10 +1740,8 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 currentStackId =
                     ditemukan.stackId || "";
-
 
                 ambilDataTumpuk();
 
@@ -1758,7 +1758,6 @@ function cariTumpukDenganNomor(
 
             }
 
-
             if(timeoutId){
 
                 clearTimeout(
@@ -1766,7 +1765,6 @@ function cariTumpukDenganNomor(
                 );
 
             }
-
 
             cleanupJSONP(
                 callbackName,
@@ -1806,14 +1804,11 @@ function cariTumpukDenganNomor(
 
             }
 
-
             hideLoading();
-
 
             showError(
                 "Gagal mengambil daftar TUMPUK."
             );
-
 
             cleanupJSONP(
                 callbackName,
@@ -1843,9 +1838,7 @@ function cariTumpukDenganNomor(
                         script
                     );
 
-
                     hideLoading();
-
 
                     showError(
                         "Waktu pencarian habis. Coba lagi."
@@ -1862,6 +1855,7 @@ function cariTumpukDenganNomor(
 
 /* =====================================================
    PARSE BARCODE
+   ASLI
 ===================================================== */
 
 function prosesKodeTumpuk(
@@ -1870,27 +1864,22 @@ function prosesKodeTumpuk(
 
     hideError();
 
-
     kode =
         kode.trim();
-
 
     console.log(
         "KODE TUMPUK:",
         kode
     );
 
-
     let parts =
         kode.split("|");
-
 
     if(parts.length >= 2){
 
         currentTPK =
             parts[0]
             .trim();
-
 
         currentTumpuk =
             parts
@@ -1907,13 +1896,11 @@ function prosesKodeTumpuk(
                 /^(.+)-T(\d+)$/i
             );
 
-
         if(match){
 
             currentTPK =
                 match[1]
                 .trim();
-
 
             currentTumpuk =
                 match[2]
@@ -1927,33 +1914,29 @@ function prosesKodeTumpuk(
                 /^\d+$/.test(kode)
             ){
 
-                sedangProses = false;
-
+                sedangProses =
+                    false;
 
                 cariTumpukDenganNomor(
                     kode
                 );
 
-
                 return;
 
             }
-
 
             showError(
                 "Format barcode TUMPUK tidak dikenali."
             );
 
-
-            sedangProses = false;
-
+            sedangProses =
+                false;
 
             return;
 
         }
 
     }
-
 
     if(
         !currentTumpuk
@@ -1963,14 +1946,12 @@ function prosesKodeTumpuk(
             "Nomor TUMPUK tidak terbaca."
         );
 
-
-        sedangProses = false;
-
+        sedangProses =
+            false;
 
         return;
 
     }
-
 
     if(
         String(currentTumpuk) === "29"
@@ -1989,7 +1970,6 @@ function prosesKodeTumpuk(
 
     }
 
-
     ambilDataTumpuk();
 
 }
@@ -1997,22 +1977,19 @@ function prosesKodeTumpuk(
 
 /* =====================================================
    AMBIL DATA TUMPUK
+   ASLI
 ===================================================== */
 
 function ambilDataTumpuk(){
 
     showLoading();
 
-
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
 
-
     let timeoutId = null;
-
     let script = null;
-
 
     window[callbackName] =
         function(response){
@@ -2020,7 +1997,6 @@ function ambilDataTumpuk(){
             try{
 
                 hideLoading();
-
 
                 if(
                     !response ||
@@ -2036,14 +2012,12 @@ function ambilDataTumpuk(){
                         "Data TUMPUK tidak ditemukan."
                     );
 
-
-                    sedangProses = false;
-
+                    sedangProses =
+                        false;
 
                     return;
 
                 }
-
 
                 if(
                     !response.data ||
@@ -2054,21 +2028,19 @@ function ambilDataTumpuk(){
                         "Format data TUMPUK tidak sesuai."
                     );
 
-
-                    sedangProses = false;
-
+                    sedangProses =
+                        false;
 
                     return;
 
                 }
 
-
                 tampilkanData(
                     response.data
                 );
 
-
-                sedangProses = false;
+                sedangProses =
+                    false;
 
             }
             catch(error){
@@ -2079,11 +2051,10 @@ function ambilDataTumpuk(){
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
-
-                sedangProses = false;
+                sedangProses =
+                    false;
 
             }
-
 
             if(timeoutId){
 
@@ -2092,7 +2063,6 @@ function ambilDataTumpuk(){
                 );
 
             }
-
 
             cleanupJSONP(
                 callbackName,
@@ -2140,17 +2110,14 @@ function ambilDataTumpuk(){
 
             }
 
-
             hideLoading();
-
 
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
 
-
-            sedangProses = false;
-
+            sedangProses =
+                false;
 
             cleanupJSONP(
                 callbackName,
@@ -2162,9 +2129,7 @@ function ambilDataTumpuk(){
 
     document
         .body
-        .appendChild(
-            script
-        );
+        .appendChild(script);
 
 
     timeoutId =
@@ -2182,16 +2147,14 @@ function ambilDataTumpuk(){
                         script
                     );
 
-
                     hideLoading();
-
 
                     showError(
                         "Waktu koneksi habis. Coba lagi."
                     );
 
-
-                    sedangProses = false;
+                    sedangProses =
+                        false;
 
                 }
 
@@ -2204,6 +2167,7 @@ function ambilDataTumpuk(){
 
 /* =====================================================
    TAMPILKAN DATA
+   ASLI
 ===================================================== */
 
 function tampilkanData(
@@ -2222,7 +2186,6 @@ function tampilkanData(
             currentTumpuk
         );
 
-
     if(data.tpk !== undefined){
 
         currentTPK =
@@ -2230,14 +2193,12 @@ function tampilkanData(
 
     }
 
-
     if(data.tumpuk !== undefined){
 
         currentTumpuk =
             String(data.tumpuk);
 
     }
-
 
     currentRegisters =
         Array.isArray(
@@ -2248,12 +2209,10 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("result")
         .classList
         .add("show");
-
 
     document
         .getElementById("tumpukTitle")
@@ -2267,7 +2226,6 @@ function tampilkanData(
             "-"
         );
 
-
     document
         .getElementById("tpkTitle")
         .textContent =
@@ -2280,7 +2238,6 @@ function tampilkanData(
             "-"
         );
 
-
     document
         .getElementById("jumlahAwal")
         .textContent =
@@ -2291,7 +2248,6 @@ function tampilkanData(
             :
             data.jumlahAwal
         );
-
 
     document
         .getElementById("volumeAwal")
@@ -2304,11 +2260,9 @@ function tampilkanData(
             data.volumeAwal
         );
 
-
     tampilkanRincianTPK(
         data
     );
-
 
     const registers =
         Array.isArray(data.registers)
@@ -2317,19 +2271,16 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("registerBadge")
         .textContent =
         registers.length +
         " REGISTER";
 
-
     tampilkanRegister(
         registers,
         data
     );
-
 
     const history =
         Array.isArray(data.history)
@@ -2338,27 +2289,20 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("historyBadge")
         .textContent =
         history.length;
 
-
     tampilkanHistory(
         history
     );
 
-
     updateJumlahCek();
 
-
     window.scrollTo({
-
         top:0,
-
         behavior:"smooth"
-
     });
 
 }
@@ -2366,6 +2310,7 @@ function tampilkanData(
 
 /* =====================================================
    HITUNG JUMLAH CEK
+   ASLI
 ===================================================== */
 
 function updateJumlahCek(){
@@ -2375,10 +2320,8 @@ function updateJumlahCek(){
             '#registerList input[type="checkbox"]'
         );
 
-
     let jumlah =
         0;
-
 
     checkboxes.forEach(
         function(checkbox){
@@ -2392,7 +2335,6 @@ function updateJumlahCek(){
         }
     );
 
-
     document
         .getElementById("jumlahCek")
         .textContent =
@@ -2403,6 +2345,7 @@ function updateJumlahCek(){
 
 /* =====================================================
    RINCIAN TPK
+   ASLI
 ===================================================== */
 
 function tampilkanRincianTPK(
@@ -2415,21 +2358,17 @@ function tampilkanRincianTPK(
             "tpkDetailBox"
         );
 
-
     const container =
         document
         .getElementById(
             "tpkDetailList"
         );
 
-
     container.innerHTML = "";
-
 
     box.classList.remove(
         "show"
     );
-
 
     if(
         String(data.tumpuk) !== "29"
@@ -2438,7 +2377,6 @@ function tampilkanRincianTPK(
         return;
 
     }
-
 
     const rincian =
         Array.isArray(
@@ -2449,13 +2387,11 @@ function tampilkanRincianTPK(
         :
         [];
 
-
     if(!rincian.length){
 
         return;
 
     }
-
 
     rincian.forEach(
         function(item){
@@ -2466,10 +2402,8 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             wrapper.className =
                 "tpk-detail-item";
-
 
             const name =
                 document
@@ -2477,10 +2411,8 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             name.className =
                 "tpk-detail-name";
-
 
             name.textContent =
                 "TPK " +
@@ -2492,17 +2424,14 @@ function tampilkanRincianTPK(
                     "-"
                 );
 
-
             const info =
                 document
                 .createElement(
                     "div"
                 );
 
-
             info.className =
                 "tpk-detail-info";
-
 
             const jumlah =
                 document
@@ -2510,13 +2439,11 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             jumlah.textContent =
                 formatAngka(
                     item.jumlahBatang
                 ) +
                 " BATANG";
-
 
             const volume =
                 document
@@ -2524,36 +2451,29 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             volume.className =
                 "tpk-detail-volume";
-
 
             volume.textContent =
                 formatVolume(
                     item.volume
                 );
 
-
             info.appendChild(
                 jumlah
             );
-
 
             info.appendChild(
                 volume
             );
 
-
             wrapper.appendChild(
                 name
             );
 
-
             wrapper.appendChild(
                 info
             );
-
 
             container.appendChild(
                 wrapper
@@ -2561,7 +2481,6 @@ function tampilkanRincianTPK(
 
         }
     );
-
 
     box.classList.add(
         "show"
@@ -2572,6 +2491,7 @@ function tampilkanRincianTPK(
 
 /* =====================================================
    TAMPILKAN REGISTER
+   ASLI
 ===================================================== */
 
 function tampilkanRegister(
@@ -2585,9 +2505,7 @@ function tampilkanRegister(
             "registerList"
         );
 
-
     container.innerHTML = "";
-
 
     if(!registers.length){
 
@@ -2596,14 +2514,11 @@ function tampilkanRegister(
             'Tidak ada register dalam tumpukan.' +
             '</div>';
 
-
         updateJumlahCek();
-
 
         return;
 
     }
-
 
     registers.forEach(
         function(item){
@@ -2621,13 +2536,11 @@ function tampilkanRegister(
                     ""
                 );
 
-
             if(!register){
 
                 return;
 
             }
-
 
             const checked =
                 item.checked === true ||
@@ -2635,13 +2548,11 @@ function tampilkanRegister(
                     item.checked
                 ).toLowerCase() === "true";
 
-
             const wrapper =
                 document
                 .createElement(
                     "div"
                 );
-
 
             wrapper.className =
                 "register-item" +
@@ -2653,21 +2564,17 @@ function tampilkanRegister(
                     ""
                 );
 
-
             const checkbox =
                 document
                 .createElement(
                     "input"
                 );
 
-
             checkbox.type =
                 "checkbox";
 
-
             checkbox.checked =
                 checked;
-
 
             const status =
                 document
@@ -2675,10 +2582,8 @@ function tampilkanRegister(
                     "div"
                 );
 
-
             status.className =
                 "check-status";
-
 
             status.textContent =
                 checked
@@ -2687,13 +2592,11 @@ function tampilkanRegister(
                 :
                 "";
 
-
             checkbox.addEventListener(
                 "change",
                 function(){
 
                     updateJumlahCek();
-
 
                     setCheckbox(
                         register,
@@ -2705,36 +2608,29 @@ function tampilkanRegister(
                 }
             );
 
-
             const number =
                 document
                 .createElement(
                     "div"
                 );
 
-
             number.className =
                 "register-number";
 
-
             number.textContent =
                 register;
-
 
             wrapper.appendChild(
                 checkbox
             );
 
-
             wrapper.appendChild(
                 number
             );
 
-
             wrapper.appendChild(
                 status
             );
-
 
             container.appendChild(
                 wrapper
@@ -2743,7 +2639,6 @@ function tampilkanRegister(
         }
     );
 
-
     updateJumlahCek();
 
 }
@@ -2751,6 +2646,7 @@ function tampilkanRegister(
 
 /* =====================================================
    CHECKBOX PER REGISTER
+   ASLI
 ===================================================== */
 
 function setCheckbox(
@@ -2765,10 +2661,8 @@ function setCheckbox(
             'input[type="checkbox"]'
         );
 
-
     const previousChecked =
         !checked;
-
 
     if(checked){
 
@@ -2785,14 +2679,11 @@ function setCheckbox(
 
     }
 
-
     status.textContent =
         "MENYIMPAN...";
 
-
     let stackId =
         currentStackId;
-
 
     if(!stackId){
 
@@ -2807,7 +2698,6 @@ function setCheckbox(
 
     }
 
-
     const callbackName =
         "callbackCek_" +
         Date.now() +
@@ -2816,11 +2706,8 @@ function setCheckbox(
             Math.random()*1000
         );
 
-
     let script = null;
-
     let timeoutId = null;
-
 
     window[callbackName] =
         function(data){
@@ -2833,7 +2720,6 @@ function setCheckbox(
 
             }
 
-
             if(
                 data &&
                 data.success === true
@@ -2845,7 +2731,6 @@ function setCheckbox(
                     "SUDAH DICEK"
                     :
                     "";
-
 
                 if(checked){
 
@@ -2868,10 +2753,8 @@ function setCheckbox(
                 status.textContent =
                     "GAGAL";
 
-
                 checkbox.checked =
                     previousChecked;
-
 
                 if(previousChecked){
 
@@ -2890,9 +2773,7 @@ function setCheckbox(
 
             }
 
-
             updateJumlahCek();
-
 
             cleanupJSONP(
                 callbackName,
@@ -2944,14 +2825,11 @@ function setCheckbox(
 
             }
 
-
             status.textContent =
                 "GAGAL";
 
-
             checkbox.checked =
                 previousChecked;
-
 
             if(previousChecked){
 
@@ -2968,9 +2846,7 @@ function setCheckbox(
 
             }
 
-
             updateJumlahCek();
-
 
             cleanupJSONP(
                 callbackName,
@@ -3000,10 +2876,8 @@ function setCheckbox(
                     status.textContent =
                         "GAGAL";
 
-
                     checkbox.checked =
                         previousChecked;
-
 
                     if(previousChecked){
 
@@ -3020,9 +2894,7 @@ function setCheckbox(
 
                     }
 
-
                     updateJumlahCek();
-
 
                     cleanupJSONP(
                         callbackName,
@@ -3040,6 +2912,7 @@ function setCheckbox(
 
 /* =====================================================
    HISTORY
+   ASLI
 ===================================================== */
 
 function tampilkanHistory(
@@ -3052,9 +2925,7 @@ function tampilkanHistory(
             "historyList"
         );
 
-
     container.innerHTML = "";
-
 
     if(!history.length){
 
@@ -3063,11 +2934,9 @@ function tampilkanHistory(
             'Belum ada history pengambilan.' +
             '</div>';
 
-
         return;
 
     }
-
 
     history.forEach(
         function(item){
@@ -3078,7 +2947,6 @@ function tampilkanHistory(
                 item.tanggal
                 :
                 item.TANGGAL;
-
 
             const jumlah =
                 item.jumlah !== undefined
@@ -3093,7 +2961,6 @@ function tampilkanHistory(
                     item.JUMLAH
                 );
 
-
             const registers =
                 Array.isArray(
                     item.registers
@@ -3103,17 +2970,14 @@ function tampilkanHistory(
                 :
                 [];
 
-
             const box =
                 document
                 .createElement(
                     "div"
                 );
 
-
             box.className =
                 "history-item";
-
 
             const head =
                 document
@@ -3121,10 +2985,8 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             head.className =
                 "history-head";
-
 
             const left =
                 document
@@ -3132,23 +2994,19 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             const dateEl =
                 document
                 .createElement(
                     "div"
                 );
 
-
             dateEl.className =
                 "history-date";
-
 
             dateEl.textContent =
                 formatTanggal(
                     date
                 );
-
 
             const takenEl =
                 document
@@ -3156,26 +3014,21 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             takenEl.className =
                 "history-taken";
-
 
             takenEl.textContent =
                 "DIAMBIL " +
                 formatAngka(jumlah) +
                 " BATANG";
 
-
             left.appendChild(
                 dateEl
             );
 
-
             left.appendChild(
                 takenEl
             );
-
 
             const arrow =
                 document
@@ -3183,24 +3036,19 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             arrow.className =
                 "history-arrow";
 
-
             arrow.textContent =
                 "▼";
-
 
             head.appendChild(
                 left
             );
 
-
             head.appendChild(
                 arrow
             );
-
 
             const detail =
                 document
@@ -3208,10 +3056,8 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             detail.className =
                 "history-detail";
-
 
             const detailTitle =
                 document
@@ -3219,19 +3065,15 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             detailTitle.className =
                 "detail-title";
-
 
             detailTitle.textContent =
                 "REGISTER YANG DIAMBIL";
 
-
             detail.appendChild(
                 detailTitle
             );
-
 
             if(!registers.length){
 
@@ -3241,14 +3083,11 @@ function tampilkanHistory(
                         "div"
                     );
 
-
                 empty.className =
                     "empty";
 
-
                 empty.textContent =
                     "Detail register tidak tersedia.";
-
 
                 detail.appendChild(
                     empty
@@ -3266,14 +3105,11 @@ function tampilkanHistory(
                                 "span"
                             );
 
-
                         el.className =
                             "detail-register";
 
-
                         el.textContent =
                             register;
-
 
                         detail.appendChild(
                             el
@@ -3283,7 +3119,6 @@ function tampilkanHistory(
                 );
 
             }
-
 
             head.addEventListener(
                 "click",
@@ -3296,16 +3131,13 @@ function tampilkanHistory(
                 }
             );
 
-
             box.appendChild(
                 head
             );
 
-
             box.appendChild(
                 detail
             );
-
 
             container.appendChild(
                 box
@@ -3319,6 +3151,7 @@ function tampilkanHistory(
 
 /* =====================================================
    REFRESH
+   ASLI
 ===================================================== */
 
 function refreshData(){
@@ -3331,11 +3164,9 @@ function refreshData(){
             "Belum ada TUMPUK yang dipilih."
         );
 
-
         return;
 
     }
-
 
     ambilDataTumpuk();
 
@@ -3344,6 +3175,7 @@ function refreshData(){
 
 /* =====================================================
    KEMBALI SCAN
+   ASLI
 ===================================================== */
 
 function kembaliScan(){
@@ -3353,66 +3185,50 @@ function kembaliScan(){
         .classList
         .remove("show");
 
-
     document
         .getElementById("errorBox")
         .classList
         .remove("show");
 
-
     document
         .getElementById("manualInput")
         .value = "";
-
 
     document
         .getElementById("tpkDetailBox")
         .classList
         .remove("show");
 
-
     document
         .getElementById("tpkDetailList")
         .innerHTML = "";
-
 
     document
         .getElementById("registerList")
         .innerHTML = "";
 
-
     document
         .getElementById("historyList")
         .innerHTML = "";
-
 
     document
         .getElementById("jumlahCek")
         .textContent =
         "0";
 
-
     currentTPK = "";
-
     currentTumpuk = "";
-
     currentStackId = "";
-
     currentRegisters = [];
 
-
-    sedangProses = false;
-
+    sedangProses =
+        false;
 
     mulaiScanner();
 
-
     window.scrollTo({
-
         top:0,
-
         behavior:"smooth"
-
     });
 
 }
@@ -3420,6 +3236,7 @@ function kembaliScan(){
 
 /* =====================================================
    FORMAT ANGKA
+   ASLI
 ===================================================== */
 
 function formatAngka(
@@ -3436,10 +3253,8 @@ function formatAngka(
 
     }
 
-
     const number =
         Number(value);
-
 
     if(
         Number.isNaN(number)
@@ -3448,7 +3263,6 @@ function formatAngka(
         return value;
 
     }
-
 
     return number.toLocaleString(
         "id-ID"
@@ -3459,6 +3273,7 @@ function formatAngka(
 
 /* =====================================================
    FORMAT VOLUME
+   ASLI
 ===================================================== */
 
 function formatVolume(
@@ -3475,10 +3290,8 @@ function formatVolume(
 
     }
 
-
     const number =
         Number(value);
-
 
     if(
         Number.isNaN(number)
@@ -3487,7 +3300,6 @@ function formatVolume(
         return value + " m³";
 
     }
-
 
     return number.toLocaleString(
         "id-ID",
@@ -3502,6 +3314,7 @@ function formatVolume(
 
 /* =====================================================
    FORMAT TANGGAL
+   ASLI
 ===================================================== */
 
 function formatTanggal(
@@ -3514,7 +3327,6 @@ function formatTanggal(
 
     }
 
-
     if(
         typeof value === "string" &&
         /^\d{1,2}-\d{1,2}-\d{4}$/.test(
@@ -3526,7 +3338,6 @@ function formatTanggal(
 
     }
 
-
     if(
         typeof value === "string" &&
         /^\d{4}-\d{1,2}-\d{1,2}$/.test(
@@ -3536,7 +3347,6 @@ function formatTanggal(
 
         const p =
             value.split("-");
-
 
         return (
             String(p[2]).padStart(2,"0") +
@@ -3548,10 +3358,8 @@ function formatTanggal(
 
     }
 
-
     const d =
         new Date(value);
-
 
     if(
         !Number.isNaN(
@@ -3573,7 +3381,6 @@ function formatTanggal(
 
     }
 
-
     return value;
 
 }
@@ -3581,6 +3388,7 @@ function formatTanggal(
 
 /* =====================================================
    ESCAPE HTML
+   ASLI
 ===================================================== */
 
 function escapeHtml(
@@ -3619,6 +3427,7 @@ function escapeHtml(
 
 /* =====================================================
    LOADING
+   ASLI
 ===================================================== */
 
 function showLoading(){
@@ -3643,6 +3452,7 @@ function hideLoading(){
 
 /* =====================================================
    ERROR
+   ASLI
 ===================================================== */
 
 function showError(
@@ -3653,10 +3463,8 @@ function showError(
         document
         .getElementById("errorBox");
 
-
     box.innerHTML =
         message;
-
 
     box.classList.add(
         "show"
@@ -3677,6 +3485,7 @@ function hideError(){
 
 /* =====================================================
    CLEANUP JSONP
+   ASLI
 ===================================================== */
 
 function cleanupJSONP(
@@ -3699,7 +3508,6 @@ function cleanupJSONP(
 
     }
 
-
     if(
         script &&
         script.parentNode
@@ -3718,4 +3526,3 @@ function cleanupJSONP(
 </body>
 
 </html>
-
