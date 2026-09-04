@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -8,9 +9,11 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>CETAK BARCODE TUMPUK</title>
+<title>CETAK QR TUMPUK</title>
 
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<!-- QR CODE -->
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <style>
 
@@ -133,8 +136,9 @@ button{
 }
 
 .preview-tpk{
-    font-size:18px;
+    font-size:32px;
     font-weight:900;
+    line-height:1;
     margin-bottom:12px;
 }
 
@@ -144,15 +148,35 @@ button{
     margin-bottom:10px;
 }
 
-.preview-barcode{
+.preview-qr-area{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
     background:white;
     border:2px solid #111;
-    padding:8px;
+    padding:10px;
 }
 
-.preview-barcode svg{
-    width:100%;
-    height:auto;
+.preview-qr{
+    width:100px;
+    height:100px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.preview-akhir{
+    width:120px;
+    height:100px;
+    border:3px solid #111;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:bold;
+    text-align:center;
 }
 
 .empty{
@@ -216,15 +240,20 @@ button{
     flex-direction:column;
 
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
 
-    padding:4mm;
+    padding:5mm;
 
     overflow:hidden;
 }
 
+
+/* =====================================================
+   TUMPUK
+===================================================== */
+
 .label-tumpuk{
-    font-size:14mm;
+    font-size:12mm;
     font-weight:900;
     line-height:1;
 
@@ -233,40 +262,129 @@ button{
     white-space:nowrap;
 }
 
+
+/* =====================================================
+   TPK ASAL
+===================================================== */
+
 .label-tpk{
-    font-size:6mm;
+    font-size:12mm;
     font-weight:900;
     line-height:1;
 
-    margin-bottom:3mm;
+    margin-bottom:4mm;
 
     white-space:nowrap;
 }
 
-.label-barcode{
-    width:89.95mm;
-    height:43mm;
 
-    background:white;
+/* =====================================================
+   BAGIAN BAWAH
+   QR + KOTAK JUMLAH AKHIR TAHUN
+===================================================== */
 
-    border:0.5mm solid #111;
+.label-bottom{
+    width:100%;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    padding:2mm;
+    gap:7mm;
+
+    margin-top:1mm;
 }
 
-.label-barcode svg{
-    width:100%;
-    height:100%;
+
+/* =====================================================
+   QR CODE
+===================================================== */
+
+.label-qr-box{
+    width:36mm;
+    height:36mm;
+
+    background:white;
+
+    border:0.4mm solid #111;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:1mm;
+
+    flex-shrink:0;
+}
+
+.label-qr{
+    width:32mm;
+    height:32mm;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.label-qr img{
+    width:32mm !important;
+    height:32mm !important;
+}
+
+.label-qr canvas{
+    width:32mm !important;
+    height:32mm !important;
+}
+
+
+/* =====================================================
+   KOTAK JUMLAH BATANG AKHIR TAHUN
+===================================================== */
+
+.label-akhir-area{
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:2mm;
+}
+
+.label-akhir-title{
+    font-size:3.5mm;
+    font-weight:900;
+
+    text-align:center;
+
+    line-height:1.1;
+
+    width:42mm;
+}
+
+.label-akhir-box{
+    width:42mm;
+    height:27mm;
+
+    background:white;
+
+    border:0.7mm solid #111;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
 }
 
 @page{
     size:F4 portrait;
     margin:0;
 }
+
 
 @media print{
 
@@ -328,94 +446,90 @@ button{
 
 </head>
 
-
 <body>
-
 
 <div class="panel">
 
-    <h1>
-        CETAK BARCODE TUMPUK
-    </h1>
+```
+<h1>
+    CETAK QR TUMPUK
+</h1>
 
 
-    <div class="filter-area">
+<div class="filter-area">
 
-        <div class="filter-box">
+    <div class="filter-box">
 
-            <label>
-                CARI TUMPUK
-            </label>
+        <label>
+            CARI TUMPUK
+        </label>
 
-            <input
-                type="text"
-                id="filterTumpuk"
-                placeholder="Contoh: 29"
-                oninput="tampilkanData()"
-            >
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>
-                CARI TPK
-            </label>
-
-            <input
-                type="text"
-                id="filterTpk"
-                placeholder="Contoh: SARADAN"
-                oninput="tampilkanData()"
-            >
-
-        </div>
+        <input
+            type="text"
+            id="filterTumpuk"
+            placeholder="Contoh: 29"
+            oninput="tampilkanData()"
+        >
 
     </div>
 
 
-    <div class="button-area">
+    <div class="filter-box">
 
-        <button
-            class="btn-load"
-            onclick="ambilDatabase()">
-            🔄 AMBIL DATA
-        </button>
+        <label>
+            CARI TPK
+        </label>
 
-
-        <button
-            class="btn-all"
-            onclick="tampilkanSemua()">
-            📋 TAMPILKAN SEMUA
-        </button>
-
-
-        <button
-            class="btn-print"
-            onclick="cetakBarcode()">
-            🖨️ CETAK 8 / LEMBAR F4
-        </button>
+        <input
+            type="text"
+            id="filterTpk"
+            placeholder="Contoh: SARADAN"
+            oninput="tampilkanData()"
+        >
 
     </div>
-
-
-    <div
-        id="status"
-        class="status">
-        Silakan ambil data tumpuk.
-    </div>
-
-
-    <div id="hasil"></div>
 
 </div>
 
 
+<div class="button-area">
+
+    <button
+        class="btn-load"
+        onclick="ambilDatabase()">
+        🔄 AMBIL DATA
+    </button>
+
+
+    <button
+        class="btn-all"
+        onclick="tampilkanSemua()">
+        📋 TAMPILKAN SEMUA
+    </button>
+
+
+    <button
+        class="btn-print"
+        onclick="cetakBarcode()">
+        🖨️ CETAK 8 / LEMBAR F4
+    </button>
+
+</div>
+
+
+<div
+    id="status"
+    class="status">
+    Silakan ambil data tumpuk.
+</div>
+
+
+<div id="hasil"></div>
+```
+
+</div>
 
 <div id="printArea"></div>
-
-
 
 <script>
 
@@ -459,6 +573,15 @@ function ambilDatabase(){
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
+
+
+    /*
+       SCRIPT DIBUAT DI SINI
+       SUPAYA BISA DIPAKAI CALLBACK
+    */
+
+    const script =
+        document.createElement("script");
 
 
     window[callbackName] =
@@ -592,10 +715,6 @@ function ambilDatabase(){
             );
 
         };
-
-
-    const script =
-        document.createElement("script");
 
 
     script.src =
@@ -733,10 +852,6 @@ function tampilkanData(){
 
                 /*
                    TUMPUK HARUS EXACT
-
-                   1  -> hanya 1
-                   29 -> semua TUMPUK 29
-                   1 TIDAK BOLEH MASUK 11,12,13
                 */
 
                 if(
@@ -859,24 +974,42 @@ function tampilkanData(){
                 );
 
 
-            const barcodeBox =
+            const qrArea =
                 document.createElement(
                     "div"
                 );
 
-            barcodeBox.className =
-                "preview-barcode";
+            qrArea.className =
+                "preview-qr-area";
 
 
-            const svg =
-                document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "svg"
+            const qr =
+                document.createElement(
+                    "div"
                 );
 
+            qr.className =
+                "preview-qr";
 
-            barcodeBox.appendChild(
-                svg
+
+            const akhir =
+                document.createElement(
+                    "div"
+                );
+
+            akhir.className =
+                "preview-akhir";
+
+            akhir.innerText =
+                "JUMLAH BATANG\nAKHIR TAHUN";
+
+
+            qrArea.appendChild(
+                qr
+            );
+
+            qrArea.appendChild(
+                akhir
             );
 
 
@@ -893,7 +1026,7 @@ function tampilkanData(){
             );
 
             card.appendChild(
-                barcodeBox
+                qrArea
             );
 
 
@@ -903,7 +1036,7 @@ function tampilkanData(){
 
 
             /*
-               IDENTITAS BARCODE
+               IDENTITAS QR
 
                TPK|TUMPUK
 
@@ -912,12 +1045,9 @@ function tampilkanData(){
                SARADAN|29
                TPK B|29
                TPK C|29
-
-               Jadi TUMPUK 29 tetap
-               terpisah.
             */
 
-            const barcodeValue =
+            const qrValue =
                 String(
                     item.stackId ||
                     (
@@ -934,15 +1064,14 @@ function tampilkanData(){
 
             try{
 
-                JsBarcode(
-                    svg,
-                    barcodeValue,
+                new QRCode(
+                    qr,
                     {
-                        format:"CODE128",
-                        displayValue:false,
-                        margin:0,
-                        width:2,
-                        height:80
+                        text:qrValue,
+                        width:100,
+                        height:100,
+                        correctLevel:
+                            QRCode.CorrectLevel.M
                     }
                 );
 
@@ -951,7 +1080,7 @@ function tampilkanData(){
             catch(error){
 
                 console.error(
-                    "Barcode error:",
+                    "QR error:",
                     error
                 );
 
@@ -985,7 +1114,7 @@ function tampilkanSemua(){
 
 
 /* =====================================================
-   CETAK BARCODE
+   CETAK QR
 ===================================================== */
 
 function cetakBarcode(){
@@ -1205,6 +1334,10 @@ function cetakBarcode(){
                     "label";
 
 
+                /* =========================
+                   TUMPUK
+                ========================= */
+
                 const tumpuk =
                     document.createElement(
                         "div"
@@ -1219,6 +1352,10 @@ function cetakBarcode(){
                         item.tumpuk || ""
                     );
 
+
+                /* =========================
+                   TPK ASAL
+                ========================= */
 
                 const tpk =
                     document.createElement(
@@ -1235,26 +1372,101 @@ function cetakBarcode(){
                     );
 
 
-                const barcodeBox =
+                /* =========================
+                   BAGIAN BAWAH
+                ========================= */
+
+                const bottom =
                     document.createElement(
                         "div"
                     );
 
-                barcodeBox.className =
-                    "label-barcode";
+                bottom.className =
+                    "label-bottom";
 
 
-                const svg =
-                    document.createElementNS(
-                        "http://www.w3.org/2000/svg",
-                        "svg"
+                /* =========================
+                   QR
+                ========================= */
+
+                const qrBox =
+                    document.createElement(
+                        "div"
                     );
 
+                qrBox.className =
+                    "label-qr-box";
 
-                barcodeBox.appendChild(
-                    svg
+
+                const qr =
+                    document.createElement(
+                        "div"
+                    );
+
+                qr.className =
+                    "label-qr";
+
+
+                qrBox.appendChild(
+                    qr
                 );
 
+
+                /* =========================
+                   KOTAK AKHIR TAHUN
+                ========================= */
+
+                const akhirArea =
+                    document.createElement(
+                        "div"
+                    );
+
+                akhirArea.className =
+                    "label-akhir-area";
+
+
+                const akhirTitle =
+                    document.createElement(
+                        "div"
+                    );
+
+                akhirTitle.className =
+                    "label-akhir-title";
+
+                akhirTitle.innerText =
+                    "JUMLAH BATANG AKHIR TAHUN";
+
+
+                const akhirBox =
+                    document.createElement(
+                        "div"
+                    );
+
+                akhirBox.className =
+                    "label-akhir-box";
+
+
+                akhirArea.appendChild(
+                    akhirTitle
+                );
+
+                akhirArea.appendChild(
+                    akhirBox
+                );
+
+
+                bottom.appendChild(
+                    qrBox
+                );
+
+                bottom.appendChild(
+                    akhirArea
+                );
+
+
+                /* =========================
+                   MASUKKAN KE LABEL
+                ========================= */
 
                 label.appendChild(
                     tumpuk
@@ -1265,7 +1477,7 @@ function cetakBarcode(){
                 );
 
                 label.appendChild(
-                    barcodeBox
+                    bottom
                 );
 
 
@@ -1274,7 +1486,13 @@ function cetakBarcode(){
                 );
 
 
-                const barcodeValue =
+                /*
+                   IDENTITAS QR
+
+                   TPK|TUMPUK
+                */
+
+                const qrValue =
                     String(
                         item.stackId ||
                         (
@@ -1291,15 +1509,14 @@ function cetakBarcode(){
 
                 try{
 
-                    JsBarcode(
-                        svg,
-                        barcodeValue,
+                    new QRCode(
+                        qr,
                         {
-                            format:"CODE128",
-                            displayValue:false,
-                            margin:0,
-                            width:2,
-                            height:120
+                            text:qrValue,
+                            width:120,
+                            height:120,
+                            correctLevel:
+                                QRCode.CorrectLevel.M
                         }
                     );
 
@@ -1308,7 +1525,7 @@ function cetakBarcode(){
                 catch(error){
 
                     console.error(
-                        "Barcode cetak error:",
+                        "QR cetak error:",
                         error
                     );
 
@@ -1353,7 +1570,7 @@ function cetakBarcode(){
 
 
     /*
-       Tunggu barcode selesai dirender
+       Tunggu QR selesai dirender
        baru print.
     */
 
@@ -1363,7 +1580,7 @@ function cetakBarcode(){
             window.print();
 
         },
-        500
+        700
     );
 
 }
@@ -1383,7 +1600,6 @@ window.addEventListener(
 );
 
 </script>
-
 
 </body>
 
