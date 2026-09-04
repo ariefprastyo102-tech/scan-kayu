@@ -6,12 +6,11 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>CEK TUMPUK</title>
 
-<script src="https://unpkg.com/html5-qrcode"
-crossorigin="anonymous"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
@@ -21,510 +20,244 @@ crossorigin="anonymous"></script>
 
 body{
     margin:0;
-    padding:0;
-    background:#f1f5f9;
+    padding:15px;
     font-family:Arial,Helvetica,sans-serif;
-    color:#0f172a;
+    background:#f2f4f7;
+    color:#222;
 }
 
 .container{
-    width:100%;
     max-width:600px;
     margin:auto;
+}
+
+h1{
+    text-align:center;
+    margin:5px 0 18px;
+    font-size:26px;
+}
+
+.card{
+    background:#fff;
+    border-radius:14px;
     padding:16px;
-}
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header{
-    background:#0f172a;
-    color:white;
-    border-radius:18px;
-    padding:20px;
     margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.header-title{
-    font-size:25px;
-    font-weight:800;
-    margin:0;
-}
-
-.header-sub{
-    font-size:13px;
-    opacity:.75;
-    margin-top:5px;
-}
-
-/* =====================================================
-   SCANNER
-===================================================== */
-
-.scanner-box{
-    background:white;
-    border-radius:18px;
-    padding:15px;
-    margin-bottom:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+.section-title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:12px;
 }
 
 #reader{
     width:100%;
-    overflow:hidden;
-    border-radius:14px;
-}
-
-.scan-status{
-    text-align:center;
-    font-size:13px;
-    margin-top:10px;
-    color:#64748b;
+    max-width:420px;
+    margin:auto;
 }
 
 .manual-box{
     display:flex;
     gap:8px;
-    margin-top:12px;
+    margin-top:15px;
 }
 
 .manual-box input{
     flex:1;
     min-width:0;
-    height:46px;
-    border:1px solid #cbd5e1;
-    border-radius:10px;
-    padding:0 12px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
     font-size:16px;
-    outline:none;
-}
-
-.manual-box input:focus{
-    border-color:#2563eb;
 }
 
 button{
     border:0;
+    border-radius:8px;
+    padding:11px 15px;
+    font-weight:bold;
     cursor:pointer;
-    font-family:inherit;
 }
 
-.btn{
-    min-height:44px;
-    border-radius:10px;
-    padding:0 16px;
-    font-size:14px;
-    font-weight:700;
+.btn-cari{
+    background:#1976d2;
+    color:#fff;
 }
 
-.btn-primary{
-    background:#2563eb;
-    color:white;
+.btn-refresh{
+    background:#2e7d32;
+    color:#fff;
 }
 
-.btn-secondary{
-    background:#e2e8f0;
-    color:#0f172a;
+.btn-kembali{
+    background:#555;
+    color:#fff;
+    width:100%;
+    margin-top:12px;
 }
 
-.btn-danger{
-    background:#dc2626;
-    color:white;
+.hidden{
+    display:none !important;
 }
-
-.scan-buttons{
-    display:flex;
-    gap:8px;
-    margin-top:10px;
-}
-
-.scan-buttons .btn{
-    flex:1;
-}
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.loading{
-    display:none;
-    background:white;
-    border-radius:15px;
-    padding:18px;
-    text-align:center;
-    margin-bottom:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,.07);
-}
-
-.loading.show{
-    display:block;
-}
-
-.spinner{
-    width:28px;
-    height:28px;
-    border:3px solid #cbd5e1;
-    border-top-color:#2563eb;
-    border-radius:50%;
-    margin:0 auto 10px;
-    animation:spin .8s linear infinite;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-.error-box{
-    display:none;
-    background:#fee2e2;
-    color:#991b1b;
-    border:1px solid #fecaca;
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:15px;
-    font-size:14px;
-    line-height:1.5;
-}
-
-.error-box.show{
-    display:block;
-}
-
-/* =====================================================
-   HASIL TUMPUK
-===================================================== */
-
-.result{
-    display:none;
-}
-
-.result.show{
-    display:block;
-}
-
-.stack-card{
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.09);
-}
-
-/* =====================================================
-   JUDUL TUMPUK
-===================================================== */
-
-.stack-title{
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.stack-title .tumpuk{
-    font-size:30px;
-    font-weight:900;
-    text-transform:uppercase;
-}
-
-.stack-title .tpk{
-    margin-top:5px;
-    font-size:14px;
-    color:#64748b;
-    font-weight:700;
-}
-
-/* =====================================================
-   JUMLAH BATANG
-===================================================== */
-
-.main-number{
-    background:#eff6ff;
-    border:2px solid #bfdbfe;
-    border-radius:18px;
-    padding:20px;
-    text-align:center;
-    margin-bottom:12px;
-}
-
-.main-number .label{
-    font-size:13px;
-    font-weight:800;
-    color:#2563eb;
-    letter-spacing:.5px;
-}
-
-.main-number .value{
-    margin-top:6px;
-    font-size:42px;
-    line-height:1;
-    font-weight:900;
-    color:#0f172a;
-}
-
-.main-number .unit{
-    margin-top:6px;
-    font-size:14px;
-    color:#64748b;
-    font-weight:700;
-}
-
-/* =====================================================
-   INFO
-===================================================== */
 
 .info-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
-    margin-bottom:15px;
 }
 
 .info-box{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:13px;
-    padding:13px;
+    background:#f5f7fa;
+    border-radius:10px;
+    padding:12px;
 }
 
-.info-box .label{
-    font-size:11px;
-    color:#64748b;
-    font-weight:700;
-    text-transform:uppercase;
-}
-
-.info-box .value{
-    margin-top:4px;
-    font-size:20px;
-    font-weight:900;
-}
-
-/* =====================================================
-   SECTION
-===================================================== */
-
-.section{
-    margin-top:18px;
-}
-
-.section-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:18px;
-    font-weight:900;
-    margin-bottom:10px;
-}
-
-.section-count{
+.info-label{
     font-size:12px;
-    background:#e2e8f0;
-    padding:5px 9px;
-    border-radius:20px;
-    color:#475569;
+    color:#777;
+    margin-bottom:4px;
 }
 
-/* =====================================================
-   REGISTER
-===================================================== */
+.info-value{
+    font-size:19px;
+    font-weight:bold;
+}
+
+.tumpuk-title{
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.tpk-title{
+    text-align:center;
+    font-size:17px;
+    color:#555;
+    margin-bottom:15px;
+}
 
 .register-list{
-    display:flex;
-    flex-direction:column;
-    gap:7px;
+    margin-top:10px;
 }
 
 .register-item{
     display:flex;
     align-items:center;
     gap:10px;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:11px;
-    padding:11px 12px;
+    padding:11px;
+    border-bottom:1px solid #eee;
+}
+
+.register-item:last-child{
+    border-bottom:0;
 }
 
 .register-item input{
-    width:20px;
-    height:20px;
-    accent-color:#2563eb;
-    cursor:pointer;
-    flex-shrink:0;
+    width:21px;
+    height:21px;
 }
 
-.register-number{
-    font-family:monospace;
-    font-size:16px;
-    font-weight:800;
+.register-code{
+    font-weight:bold;
     flex:1;
 }
 
-.register-item.checked{
-    background:#f0fdf4;
-    border-color:#bbf7d0;
+.status{
+    font-size:12px;
+    font-weight:bold;
+    padding:5px 8px;
+    border-radius:6px;
 }
 
-.register-item.checked .register-number{
-    color:#15803d;
+.status-sudah{
+    background:#d7f5dc;
+    color:#1b6e2b;
 }
 
-.check-status{
-    font-size:11px;
-    font-weight:800;
-    color:#16a34a;
-}
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty{
-    text-align:center;
-    padding:20px;
-    color:#64748b;
-    background:#f8fafc;
-    border-radius:12px;
-    font-size:14px;
-}
-
-/* =====================================================
-   HISTORY
-===================================================== */
-
-.history-list{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
+.status-belum{
+    background:#eee;
+    color:#666;
 }
 
 .history-item{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:13px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    margin-bottom:8px;
     overflow:hidden;
 }
 
-.history-head{
-    padding:14px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+.history-header{
+    padding:12px;
+    background:#f5f5f5;
     cursor:pointer;
-}
-
-.history-date{
-    font-size:15px;
-    font-weight:900;
-}
-
-.history-taken{
-    font-size:13px;
-    color:#dc2626;
-    font-weight:800;
-    margin-top:3px;
-}
-
-.history-arrow{
-    font-size:18px;
-    color:#64748b;
-    transition:.2s;
-}
-
-.history-item.open .history-arrow{
-    transform:rotate(180deg);
+    font-weight:bold;
 }
 
 .history-detail{
     display:none;
-    padding:0 14px 14px;
-    border-top:1px solid #e2e8f0;
+    padding:12px;
+    background:#fff;
 }
 
-.history-item.open .history-detail{
+.history-detail.show{
     display:block;
 }
 
-.detail-title{
-    font-size:12px;
-    color:#64748b;
-    font-weight:700;
-    margin:12px 0 8px;
+.history-register{
+    padding:5px 0;
+    font-size:14px;
 }
 
-.detail-register{
-    display:block;
-    font-family:monospace;
-    font-size:15px;
-    font-weight:800;
-    padding:7px 0;
-    border-bottom:1px dashed #cbd5e1;
-}
-
-.detail-register:last-child{
-    border-bottom:0;
-}
-
-/* =====================================================
-   BOTTOM BUTTON
-===================================================== */
-
-.bottom-buttons{
-    display:flex;
-    gap:8px;
-    margin-bottom:20px;
-}
-
-.bottom-buttons .btn{
-    flex:1;
-}
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-.footer{
+.empty{
     text-align:center;
-    font-size:11px;
-    color:#94a3b8;
-    padding:5px 0 20px;
+    color:#777;
+    padding:15px;
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+.loading{
+    text-align:center;
+    padding:15px;
+    color:#777;
+}
 
-@media(max-width:420px){
+.error{
+    background:#ffebee;
+    color:#c62828;
+    padding:12px;
+    border-radius:8px;
+    margin-top:10px;
+}
 
-    .container{
+.success{
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:12px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+@media(max-width:480px){
+
+    body{
         padding:10px;
     }
 
-    .header{
-        padding:16px;
-    }
-
-    .header-title{
-        font-size:22px;
-    }
-
-    .stack-title .tumpuk{
-        font-size:27px;
-    }
-
-    .main-number .value{
-        font-size:38px;
+    h1{
+        font-size:23px;
     }
 
     .info-grid{
         grid-template-columns:1fr 1fr;
+    }
+
+    .manual-box{
+        flex-direction:column;
+    }
+
+    .btn-cari{
+        width:100%;
     }
 
 }
@@ -533,189 +266,131 @@ button{
 
 </head>
 
+
 <body>
 
 <div class="container">
 
-    <!-- =================================================
-         HEADER
-    ================================================= -->
-
-    <div class="header">
-
-        <div class="header-title">
-            CEK TUMPUK
-        </div>
-
-        <div class="header-sub">
-            Scan barcode tumpuk untuk melihat data terbaru
-        </div>
-
-    </div>
+    <h1>CEK TUMPUK</h1>
 
 
     <!-- =================================================
-         SCANNER
-    ================================================= -->
+         BAGIAN SCAN
+    ================================================== -->
 
-    <div class="scanner-box">
+    <div id="scanSection">
 
-        <div id="reader"></div>
+        <div class="card">
 
-        <div class="scan-status"
-             id="scanStatus">
-            Arahkan kamera ke barcode TUMPUK
-        </div>
+            <div class="section-title">
+                SCAN BARCODE TUMPUK
+            </div>
 
-        <div class="manual-box">
+            <div id="reader"></div>
 
-            <input
-                type="text"
-                id="manualInput"
-                placeholder="Contoh: SARADAN|1"
-                autocomplete="off">
+            <div class="manual-box">
 
-            <button
-                class="btn btn-primary"
-                onclick="prosesManual()">
+                <input
+                    type="text"
+                    id="manualInput"
+                    placeholder="Contoh: SARADAN|29"
+                    autocomplete="off">
 
-                CARI
-
-            </button>
-
-        </div>
-
-        <div class="scan-buttons">
-
-            <button
-                class="btn btn-secondary"
-                onclick="mulaiScanner()">
-
-                SCAN LAGI
-
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="stopScanner()">
-
-                STOP
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- =================================================
-         LOADING
-    ================================================= -->
-
-    <div
-        class="loading"
-        id="loading">
-
-        <div class="spinner"></div>
-
-        <b>Mengambil data terbaru...</b>
-
-    </div>
-
-
-    <!-- =================================================
-         ERROR
-    ================================================= -->
-
-    <div
-        class="error-box"
-        id="errorBox">
-    </div>
-
-
-    <!-- =================================================
-         HASIL
-    ================================================= -->
-
-    <div
-        class="result"
-        id="result">
-
-        <div class="stack-card">
-
-            <!-- =========================================
-                 JUDUL
-            ========================================= -->
-
-            <div class="stack-title">
-
-                <div
-                    class="tumpuk"
-                    id="tumpukTitle">
-                    TUMPUK
-                </div>
-
-                <div
-                    class="tpk"
-                    id="tpkTitle">
-                    TPK ASAL :
-                </div>
+                <button
+                    class="btn-cari"
+                    onclick="prosesManual()">
+                    CARI
+                </button>
 
             </div>
 
-
-            <!-- =========================================
-                 JUMLAH AWAL
-            ========================================= -->
-
-            <div class="main-number">
-
-                <div class="label">
-                    JUMLAH BATANG AWAL
-                </div>
-
-                <div
-                    class="value"
-                    id="jumlahAwal">
-                    0
-                </div>
-
-                <div class="unit">
-                    BATANG
-                </div>
-
+            <div
+                id="scanMessage"
+                class="loading">
             </div>
 
+        </div>
 
-            <!-- =========================================
-                 INFO
-            ========================================= -->
+    </div>
+
+
+    <!-- =================================================
+         HASIL TUMPUK
+    ================================================== -->
+
+    <div id="hasilSection"
+         class="hidden">
+
+
+        <div class="card">
+
+            <div
+                id="tumpukTitle"
+                class="tumpuk-title">
+            </div>
+
+            <div
+                id="tpkTitle"
+                class="tpk-title">
+            </div>
+
 
             <div class="info-grid">
 
                 <div class="info-box">
 
-                    <div class="label">
-                        Volume Awal
+                    <div class="info-label">
+                        JUMLAH BATANG AWAL
                     </div>
 
                     <div
-                        class="value"
-                        id="volumeAwal">
-                        0 m³
+                        id="jumlahAwal"
+                        class="info-value">
+                        0
                     </div>
 
                 </div>
+
 
                 <div class="info-box">
 
-                    <div class="label">
-                        Register
+                    <div class="info-label">
+                        VOLUME AWAL
                     </div>
 
                     <div
-                        class="value"
-                        id="registerCount">
+                        id="volumeAwal"
+                        class="info-value">
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        JUMLAH REGISTER
+                    </div>
+
+                    <div
+                        id="jumlahRegister"
+                        class="info-value">
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        SUDAH DICEK
+                    </div>
+
+                    <div
+                        id="jumlahCek"
+                        class="info-value">
                         0
                     </div>
 
@@ -723,94 +398,61 @@ button{
 
             </div>
 
+        </div>
 
-            <!-- =========================================
-                 REGISTER
-            ========================================= -->
 
-            <div class="section">
+        <!-- =================================================
+             DAFTAR REGISTER
+        ================================================== -->
 
-                <div class="section-title">
+        <div class="card">
 
-                    <span>
-                        DAFTAR REGISTER
-                    </span>
-
-                    <span
-                        class="section-count"
-                        id="registerBadge">
-                        0 REGISTER
-                    </span>
-
-                </div>
-
-                <div
-                    class="register-list"
-                    id="registerList">
-                </div>
-
+            <div class="section-title">
+                DAFTAR REGISTER
             </div>
 
-
-            <!-- =========================================
-                 HISTORY
-            ========================================= -->
-
-            <div class="section">
-
-                <div class="section-title">
-
-                    <span>
-                        HISTORY PENGAMBILAN
-                    </span>
-
-                    <span
-                        class="section-count"
-                        id="historyBadge">
-                        0
-                    </span>
-
-                </div>
-
-                <div
-                    class="history-list"
-                    id="historyList">
-                </div>
-
+            <div
+                id="registerList"
+                class="register-list">
             </div>
 
         </div>
 
 
-        <!-- =============================================
-             BUTTON
-        ============================================= -->
+        <!-- =================================================
+             HISTORY
+        ================================================== -->
 
-        <div class="bottom-buttons">
+        <div class="card">
+
+            <div class="section-title">
+                HISTORY PENGAMBILAN
+            </div>
+
+            <div
+                id="historyList">
+            </div>
+
+        </div>
+
+
+        <div class="card">
 
             <button
-                class="btn btn-primary"
-                onclick="refreshData()">
-
+                class="btn-refresh"
+                onclick="refreshData()"
+                style="width:100%;">
                 REFRESH DATA
-
             </button>
 
             <button
-                class="btn btn-secondary"
+                class="btn-kembali"
                 onclick="kembaliScan()">
-
-                KEMBALI SCAN
-
+                KEMBALI KE SCAN
             </button>
 
         </div>
 
-    </div>
-
-
-    <div class="footer">
-        Sistem CEK TUMPUK
     </div>
 
 </div>
@@ -819,7 +461,7 @@ button{
 <script>
 
 /* =====================================================
-   KONFIGURASI BACKEND
+   KONFIGURASI
 ===================================================== */
 
 const API_URL =
@@ -842,7 +484,7 @@ let currentStackId = "";
 
 
 /* =====================================================
-   INIT
+   START
 ===================================================== */
 
 document.addEventListener(
@@ -851,6 +493,7 @@ document.addEventListener(
 
         mulaiScanner();
 
+
         document
             .getElementById("manualInput")
             .addEventListener(
@@ -858,7 +501,9 @@ document.addEventListener(
                 function(e){
 
                     if(e.key === "Enter"){
+
                         prosesManual();
+
                     }
 
                 }
@@ -869,24 +514,14 @@ document.addEventListener(
 
 
 /* =====================================================
-   START SCANNER
+   MULAI SCANNER
 ===================================================== */
 
-async function mulaiScanner(){
-
-    hideError();
-
-    if(scannerRunning){
-        return;
-    }
-
-    const reader =
-        document.getElementById("reader");
-
-    reader.innerHTML = "";
+function mulaiScanner(){
 
     html5QrCode =
         new Html5Qrcode("reader");
+
 
     const config = {
 
@@ -898,7 +533,10 @@ async function mulaiScanner(){
         ){
 
             const size =
-                Math.min(width,height) * 0.72;
+                Math.min(
+                    width,
+                    height
+                ) * 0.70;
 
             return {
                 width:size,
@@ -911,9 +549,9 @@ async function mulaiScanner(){
 
     };
 
-    try{
 
-        await html5QrCode.start(
+    html5QrCode
+        .start(
 
             {
                 facingMode:"environment"
@@ -923,92 +561,72 @@ async function mulaiScanner(){
 
             function(decodedText){
 
-                hasilScan(decodedText);
+                if(scannerRunning){
+
+                    scannerRunning = false;
+
+                    hentikanScanner();
+
+                    prosesKodeTumpuk(
+                        decodedText
+                    );
+
+                }
 
             },
 
             function(errorMessage){
 
-                // Abaikan error scan frame
-                // agar tampilan tidak penuh pesan
+                // error scan biasa
+                // tidak perlu ditampilkan
 
             }
 
-        );
+        )
+        .then(function(){
 
-        scannerRunning = true;
+            scannerRunning = true;
 
-        document
-            .getElementById("scanStatus")
-            .textContent =
-            "Arahkan kamera ke barcode TUMPUK";
+        })
+        .catch(function(error){
 
-    }
-    catch(error){
+            document
+                .getElementById(
+                    "scanMessage"
+                )
+                .innerHTML =
+                    "Kamera tidak dapat digunakan. Gunakan input manual.";
 
-        console.error(error);
-
-        document
-            .getElementById("scanStatus")
-            .textContent =
-            "Kamera tidak dapat digunakan. Gunakan input manual.";
-
-    }
+        });
 
 }
 
 
 /* =====================================================
-   STOP SCANNER
+   HENTIKAN SCANNER
 ===================================================== */
 
-async function stopScanner(){
+function hentikanScanner(){
 
     if(
         html5QrCode &&
         scannerRunning
     ){
 
-        try{
+        html5QrCode
+            .stop()
+            .then(function(){
 
-            await html5QrCode.stop();
+                scannerRunning = false;
 
-        }
-        catch(error){
+            })
+            .catch(function(){
 
-            console.log(error);
+                scannerRunning = false;
 
-        }
-
-        scannerRunning = false;
+            });
 
     }
-
-}
-
-
-/* =====================================================
-   HASIL SCAN
-===================================================== */
-
-function hasilScan(decodedText){
-
-    if(!decodedText){
-        return;
-    }
-
-    decodedText =
-        decodedText
-        .trim();
-
-    console.log(
-        "BARCODE TUMPUK:",
-        decodedText
-    );
-
-    stopScanner();
-
-    prosesKodeTumpuk(decodedText);
 
 }
 
@@ -1021,20 +639,24 @@ function prosesManual(){
 
     const input =
         document
-        .getElementById("manualInput");
+            .getElementById(
+                "manualInput"
+            );
 
-    let kode =
+    const kode =
         input.value.trim();
+
 
     if(!kode){
 
-        showError(
-            "Masukkan kode TUMPUK terlebih dahulu."
+        alert(
+            "Masukkan kode TPK|TUMPUK."
         );
 
         return;
 
     }
+
 
     prosesKodeTumpuk(kode);
 
@@ -1042,107 +664,156 @@ function prosesManual(){
 
 
 /* =====================================================
-   PARSE STACK ID
+   PROSES KODE BARCODE
+=====================================================
+
+   FORMAT UTAMA:
+
+   SARADAN|29
+
+   Artinya:
+
+   TPK     = SARADAN
+   TUMPUK  = 29
+
+   Ini penting karena TUMPUK 29
+   bisa ada di beberapa TPK.
+
 ===================================================== */
 
 function prosesKodeTumpuk(kode){
 
-    hideError();
-
     kode =
-        kode
-        .trim();
-
-    /*
-       FORMAT UTAMA:
-
-       SARADAN|1
-
-       Artinya:
-
-       TPK    = SARADAN
-       TUMPUK = 1
-    */
-
-    let parts =
-        kode.split("|");
-
-
-    /*
-       Jika scanner membaca:
-
-       SARADAN|1
-    */
-
-    if(parts.length >= 2){
-
-        currentTPK =
-            parts[0]
+        String(kode || "")
             .trim();
 
-        currentTumpuk =
-            parts
-            .slice(1)
-            .join("|")
-            .trim();
 
-    }
+    if(!kode){
 
-    /*
-       Dukungan tambahan:
-       SARADAN-T01
-
-       Tidak mengganggu format utama.
-    */
-
-    else{
-
-        const match =
-            kode.match(
-                /^(.+)-T(\d+)$/i
-            );
-
-        if(match){
-
-            currentTPK =
-                match[1]
-                .trim();
-
-            currentTumpuk =
-                match[2]
-                .trim();
-
-        }
-
-        else{
-
-            showError(
-                "Format barcode TUMPUK tidak dikenali.<br><br>" +
-                "Gunakan format:<br>" +
-                "<b>TPK|TUMPUK</b><br><br>" +
-                "Contoh:<br>" +
-                "<b>SARADAN|1</b>"
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    if(
-        !currentTPK ||
-        !currentTumpuk
-    ){
-
-        showError(
-            "TPK atau nomor TUMPUK tidak terbaca."
+        alert(
+            "Kode barcode kosong."
         );
 
         return;
 
     }
+
+
+    let tpk = "";
+
+    let tumpuk = "";
+
+
+    /* =================================================
+       FORMAT UTAMA TPK|TUMPUK
+    ================================================= */
+
+    if(kode.includes("|")){
+
+        const parts =
+            kode.split("|");
+
+
+        tpk =
+            String(
+                parts[0] || ""
+            ).trim();
+
+
+        tumpuk =
+            String(
+                parts[1] || ""
+            ).trim();
+
+    }
+
+
+    /* =================================================
+       FORMAT LAMA TPK-T01
+       Tetap dipertahankan sebagai cadangan.
+    ================================================= */
+
+    else if(
+        kode.includes("-T")
+    ){
+
+        const pos =
+            kode.lastIndexOf("-T");
+
+
+        tpk =
+            kode
+                .substring(
+                    0,
+                    pos
+                )
+                .trim();
+
+
+        tumpuk =
+            kode
+                .substring(
+                    pos + 2
+                )
+                .trim();
+
+    }
+
+
+    /* =================================================
+       FORMAT TUMPUK SAJA
+       HANYA kalau barcode lama memang
+       berupa angka tunggal.
+
+       Catatan:
+       Untuk TUMPUK 29 yang ada di 3 TPK,
+       WAJIB menggunakan TPK|29.
+    ================================================= */
+
+    else if(
+        /^\d+$/.test(kode)
+    ){
+
+        alert(
+            "Barcode TUMPUK ini hanya berisi nomor TUMPUK.\n\n" +
+            "Untuk TUMPUK yang memiliki TPK berbeda, " +
+            "barcode harus menggunakan format:\n\n" +
+            "TPK|TUMPUK\n\n" +
+            "Contoh: SARADAN|29"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !tpk ||
+        !tumpuk
+    ){
+
+        alert(
+            "Format barcode tidak dikenali.\n\n" +
+            "Format yang benar:\n" +
+            "TPK|TUMPUK\n\n" +
+            "Contoh:\n" +
+            "SARADAN|29"
+        );
+
+        return;
+
+    }
+
+
+    /* =================================================
+       IDENTITAS STACK
+    ================================================= */
+
+    currentTPK =
+        tpk;
+
+    currentTumpuk =
+        tumpuk;
 
 
     currentStackId =
@@ -1162,7 +833,8 @@ function prosesKodeTumpuk(kode){
 
 function ambilDataTumpuk(){
 
-    showLoading();
+    tampilkanLoading();
+
 
     const callbackName =
         "callbackTumpuk_" +
@@ -1174,40 +846,22 @@ function ambilDataTumpuk(){
 
             try{
 
-                hideLoading();
-
-                if(
-                    !data ||
-                    data.success !== true
-                ){
-
-                    showError(
-                        data &&
-                        data.message
-                        ?
-                        data.message
-                        :
-                        "Data TUMPUK tidak ditemukan."
-                    );
-
-                    return;
-
-                }
-
                 tampilkanData(data);
 
             }
+
             catch(error){
 
                 console.error(error);
 
-                showError(
-                    "Terjadi kesalahan saat menampilkan data."
+                tampilkanError(
+                    "Data TUMPUK gagal diproses."
                 );
 
             }
 
-            cleanupJSONP(
+
+            cleanupJsonp(
                 callbackName,
                 script
             );
@@ -1219,30 +873,35 @@ function ambilDataTumpuk(){
         API_URL +
         "?action=getTumpukData" +
         "&tpk=" +
-        encodeURIComponent(currentTPK) +
+        encodeURIComponent(
+            currentTPK
+        ) +
         "&tumpuk=" +
-        encodeURIComponent(currentTumpuk) +
+        encodeURIComponent(
+            currentTumpuk
+        ) +
         "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
+        encodeURIComponent(
+            callbackName
+        );
 
 
     const script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
+
 
     script.src = url;
 
     script.onerror =
         function(){
 
-            hideLoading();
-
-            showError(
-                "Gagal menghubungi backend CEK TUMPUK."
+            tampilkanError(
+                "Gagal menghubungi database."
             );
 
-            cleanupJSONP(
+            cleanupJsonp(
                 callbackName,
                 script
             );
@@ -1254,39 +913,44 @@ function ambilDataTumpuk(){
         .body
         .appendChild(script);
 
+}
 
-    setTimeout(
-        function(){
 
-            if(
-                document.body.contains(script)
-            ){
+/* =====================================================
+   TAMPILKAN LOADING
+===================================================== */
 
-                cleanupJSONP(
-                    callbackName,
-                    script
-                );
+function tampilkanLoading(){
 
-                if(
-                    document
-                    .getElementById("loading")
-                    .classList
-                    .contains("show")
-                ){
+    document
+        .getElementById(
+            "scanSection"
+        )
+        .classList
+        .add("hidden");
 
-                    hideLoading();
 
-                    showError(
-                        "Waktu koneksi habis. Coba lagi."
-                    );
+    document
+        .getElementById(
+            "hasilSection"
+        )
+        .classList
+        .remove("hidden");
 
-                }
 
-            }
+    document
+        .getElementById(
+            "registerList"
+        )
+        .innerHTML =
+            '<div class="loading">MEMUAT DATA...</div>';
 
-        },
-        15000
-    );
+
+    document
+        .getElementById(
+            "historyList"
+        )
+        .innerHTML = "";
 
 }
 
@@ -1297,81 +961,98 @@ function ambilDataTumpuk(){
 
 function tampilkanData(data){
 
+    if(!data){
+
+        tampilkanError(
+            "Data tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    if(data.error){
+
+        tampilkanError(
+            data.error
+        );
+
+        return;
+
+    }
+
+
+    /* =================================================
+       JUDUL
+    ================================================= */
+
     document
-        .getElementById("result")
-        .classList
-        .add("show");
-
-
-    /*
-       TUMPUK
-    */
-
-    document
-        .getElementById("tumpukTitle")
+        .getElementById(
+            "tumpukTitle"
+        )
         .textContent =
-        "TUMPUK " +
-        data.tumpuk;
+            "TUMPUK " +
+            currentTumpuk;
 
-
-    /*
-       TPK
-    */
 
     document
-        .getElementById("tpkTitle")
+        .getElementById(
+            "tpkTitle"
+        )
         .textContent =
-        "TPK ASAL : " +
-        data.tpk;
+            "TPK ASAL : " +
+            currentTPK;
 
 
-    /*
+    /* =================================================
        JUMLAH AWAL
-    */
+    ================================================= */
 
     document
-        .getElementById("jumlahAwal")
+        .getElementById(
+            "jumlahAwal"
+        )
         .textContent =
-        formatAngka(
-            data.jumlahAwal
-        );
+            formatNumber(
+                data.jumlahAwal
+            );
 
 
-    /*
-       VOLUME
-    */
+    /* =================================================
+       VOLUME AWAL
+    ================================================= */
 
     document
-        .getElementById("volumeAwal")
+        .getElementById(
+            "volumeAwal"
+        )
         .textContent =
-        formatVolume(
-            data.volumeAwal
-        );
+            formatVolume(
+                data.volumeAwal
+            );
 
 
-    /*
+    /* =================================================
        REGISTER
-    */
+    ================================================= */
 
     const registers =
-        Array.isArray(data.registers)
-        ?
-        data.registers
-        :
-        [];
+        Array.isArray(
+            data.registers
+        )
+            ? data.registers
+            : [];
 
 
     document
-        .getElementById("registerCount")
+        .getElementById(
+            "jumlahRegister"
+        )
         .textContent =
-        registers.length;
-
-
-    document
-        .getElementById("registerBadge")
-        .textContent =
-        registers.length +
-        " REGISTER";
+            formatNumber(
+                registers.length
+            );
 
 
     tampilkanRegister(
@@ -1380,33 +1061,13 @@ function tampilkanData(data){
     );
 
 
-    /*
+    /* =================================================
        HISTORY
-    */
-
-    const history =
-        Array.isArray(data.history)
-        ?
-        data.history
-        :
-        [];
-
-
-    document
-        .getElementById("historyBadge")
-        .textContent =
-        history.length;
-
+    ================================================= */
 
     tampilkanHistory(
-        history
+        data.history || []
     );
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
 
 }
 
@@ -1422,137 +1083,114 @@ function tampilkanRegister(
 
     const container =
         document
-        .getElementById("registerList");
+            .getElementById(
+                "registerList"
+            );
 
-    container.innerHTML = "";
 
-
-    if(!registers.length){
+    if(
+        !registers ||
+        registers.length === 0
+    ){
 
         container.innerHTML =
             '<div class="empty">' +
-            'Tidak ada register dalam tumpukan.' +
+            'Tidak ada register.' +
             '</div>';
+
+
+        document
+            .getElementById(
+                "jumlahCek"
+            )
+            .textContent =
+                "0";
 
         return;
 
     }
 
 
+    let jumlahCek = 0;
+
+
+    let html = "";
+
+
     registers.forEach(
-        function(item,index){
-
-            /*
-               Backend biasanya mengirim:
-
-               register
-               checked
-
-               Tetapi kita buat
-               fleksibel terhadap nama
-            */
+        function(item){
 
             const register =
-                item.register !== undefined
-                ?
-                item.register
-                :
-                item.REGISTER;
+                String(
+                    item.register || ""
+                );
 
 
             const checked =
                 item.checked === true ||
                 item.checked === "true" ||
-                item.CHECKED === true ||
-                item.CHECKED === "true";
+                item.checked === 1 ||
+                item.checked === "1";
 
 
-            const wrapper =
-                document
-                .createElement("div");
+            if(checked){
 
-            wrapper.className =
-                "register-item" +
-                (
-                    checked
-                    ?
-                    " checked"
-                    :
-                    ""
-                );
+                jumlahCek++;
+
+            }
 
 
-            const checkbox =
-                document
-                .createElement("input");
+            html +=
+                '<div class="register-item">' +
 
-            checkbox.type =
-                "checkbox";
+                    '<input ' +
+                        'type="checkbox" ' +
+                        'data-register="' +
+                        escapeHtml(register) +
+                        '" ' +
+                        (checked
+                            ? 'checked'
+                            : '') +
+                        ' ' +
+                        'onchange="setCheckbox(this)"' +
+                    '>' +
 
-            checkbox.checked =
-                checked;
+                    '<div class="register-code">' +
+                        escapeHtml(register) +
+                    '</div>' +
 
+                    '<div class="status ' +
+                    (
+                        checked
+                            ? 'status-sudah'
+                            : 'status-belum'
+                    ) +
+                    '">' +
+                    (
+                        checked
+                            ? 'SUDAH DICEK'
+                            : 'BELUM'
+                    ) +
+                    '</div>' +
 
-            checkbox.addEventListener(
-                "change",
-                function(){
-
-                    setCheckbox(
-                        register,
-                        checkbox.checked,
-                        wrapper,
-                        status
-                    );
-
-                }
-            );
-
-
-            const number =
-                document
-                .createElement("div");
-
-            number.className =
-                "register-number";
-
-            number.textContent =
-                register;
-
-
-            const status =
-                document
-                .createElement("div");
-
-            status.className =
-                "check-status";
-
-            status.textContent =
-                checked
-                ?
-                "SUDAH DICEK"
-                :
-                "";
-
-
-            wrapper.appendChild(
-                checkbox
-            );
-
-            wrapper.appendChild(
-                number
-            );
-
-            wrapper.appendChild(
-                status
-            );
-
-
-            container.appendChild(
-                wrapper
-            );
+                '</div>';
 
         }
     );
+
+
+    container.innerHTML =
+        html;
+
+
+    document
+        .getElementById(
+            "jumlahCek"
+        )
+        .textContent =
+            formatNumber(
+                jumlahCek
+            );
 
 }
 
@@ -1562,45 +1200,55 @@ function tampilkanRegister(
 ===================================================== */
 
 function setCheckbox(
-    register,
-    checked,
-    wrapper,
-    status
+    checkbox
 ){
 
-    /*
-       Update tampilan langsung
-    */
+    const register =
+        checkbox
+            .getAttribute(
+                "data-register"
+            );
 
-    if(checked){
 
-        wrapper.classList.add(
-            "checked"
+    const checked =
+        checkbox.checked;
+
+
+    const parent =
+        checkbox.parentElement;
+
+
+    const status =
+        parent.querySelector(
+            ".status"
         );
 
-        status.textContent =
-            "MENYIMPAN...";
 
-    }
-    else{
-
-        wrapper.classList.remove(
-            "checked"
-        );
+    if(status){
 
         status.textContent =
-            "MENYIMPAN...";
+            checked
+                ? "SUDAH DICEK"
+                : "BELUM";
+
+
+        status.className =
+            "status " +
+            (
+                checked
+                    ? "status-sudah"
+                    : "status-belum"
+            );
 
     }
+
+
+    updateJumlahCek();
 
 
     const callbackName =
         "callbackCek_" +
-        Date.now() +
-        "_" +
-        Math.floor(
-            Math.random()*1000
-        );
+        Date.now();
 
 
     window[callbackName] =
@@ -1608,54 +1256,21 @@ function setCheckbox(
 
             if(
                 data &&
-                data.success === true
+                data.error
             ){
 
-                status.textContent =
-                    checked
-                    ?
-                    "SUDAH DICEK"
-                    :
-                    "";
-
-                if(checked){
-
-                    wrapper.classList.add(
-                        "checked"
-                    );
-
-                }
-                else{
-
-                    wrapper.classList.remove(
-                        "checked"
-                    );
-
-                }
-
-            }
-            else{
-
-                status.textContent =
-                    "GAGAL";
-
-                /*
-                   Balikkan checkbox
-                   jika gagal
-                */
-
-                const checkbox =
-                    wrapper
-                    .querySelector(
-                        'input[type="checkbox"]'
-                    );
+                alert(
+                    data.error
+                );
 
                 checkbox.checked =
                     !checked;
 
+                updateJumlahCek();
+
             }
 
-            cleanupJSONP(
+            cleanupJsonp(
                 callbackName,
                 script
             );
@@ -1679,13 +1294,16 @@ function setCheckbox(
             checked
         ) +
         "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
+        encodeURIComponent(
+            callbackName
+        );
 
 
     const script =
-        document.createElement("script");
+        document.createElement(
+            "script"
+        );
+
 
     script.src =
         url;
@@ -1694,19 +1312,16 @@ function setCheckbox(
     script.onerror =
         function(){
 
-            status.textContent =
-                "GAGAL";
-
-            const checkbox =
-                wrapper
-                .querySelector(
-                    'input[type="checkbox"]'
-                );
-
             checkbox.checked =
                 !checked;
 
-            cleanupJSONP(
+            updateJumlahCek();
+
+            alert(
+                "Gagal menyimpan status cek."
+            );
+
+            cleanupJsonp(
                 callbackName,
                 script
             );
@@ -1716,7 +1331,49 @@ function setCheckbox(
 
     document
         .body
-        .appendChild(script);
+        .appendChild(
+            script
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE JUMLAH CEK
+===================================================== */
+
+function updateJumlahCek(){
+
+    const checkboxes =
+        document.querySelectorAll(
+            '#registerList input[type="checkbox"]'
+        );
+
+
+    let total = 0;
+
+
+    checkboxes.forEach(
+        function(cb){
+
+            if(cb.checked){
+
+                total++;
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "jumlahCek"
+        )
+        .textContent =
+            formatNumber(
+                total
+            );
 
 }
 
@@ -1731,12 +1388,15 @@ function tampilkanHistory(
 
     const container =
         document
-        .getElementById("historyList");
+            .getElementById(
+                "historyList"
+            );
 
-    container.innerHTML = "";
 
-
-    if(!history.length){
+    if(
+        !history ||
+        history.length === 0
+    ){
 
         container.innerHTML =
             '<div class="empty">' +
@@ -1748,216 +1408,136 @@ function tampilkanHistory(
     }
 
 
-    history.forEach(
-        function(item){
+    let html = "";
 
-            const date =
-                item.tanggal !== undefined
-                ?
-                item.tanggal
-                :
-                item.TANGGAL;
+
+    history.forEach(
+        function(item,index){
+
+            const tanggal =
+                item.tanggal ||
+                item.date ||
+                "-";
 
 
             const jumlah =
-                item.jumlah !== undefined
-                ?
-                item.jumlah
-                :
+                item.jumlah ||
+                item.jumlahBatang ||
                 (
-                    item.jumlahBatang !== undefined
-                    ?
-                    item.jumlahBatang
-                    :
-                    item.JUMLAH
+                    Array.isArray(
+                        item.registers
+                    )
+                        ? item.registers.length
+                        : 0
                 );
 
 
-            const registers =
+            const regs =
                 Array.isArray(
                     item.registers
                 )
-                ?
-                item.registers
-                :
-                [];
+                    ? item.registers
+                    : [];
 
 
-            const box =
-                document
-                .createElement("div");
-
-            box.className =
-                "history-item";
+            let registerHtml = "";
 
 
-            const head =
-                document
-                .createElement("div");
+            regs.forEach(
+                function(reg){
 
-            head.className =
-                "history-head";
-
-
-            const left =
-                document
-                .createElement("div");
-
-
-            const dateEl =
-                document
-                .createElement("div");
-
-            dateEl.className =
-                "history-date";
-
-            dateEl.textContent =
-                formatTanggal(
-                    date
-                );
-
-
-            const takenEl =
-                document
-                .createElement("div");
-
-            takenEl.className =
-                "history-taken";
-
-            takenEl.textContent =
-                "DIAMBIL " +
-                formatAngka(jumlah) +
-                " BATANG";
-
-
-            left.appendChild(
-                dateEl
-            );
-
-            left.appendChild(
-                takenEl
-            );
-
-
-            const arrow =
-                document
-                .createElement("div");
-
-            arrow.className =
-                "history-arrow";
-
-            arrow.textContent =
-                "▼";
-
-
-            head.appendChild(
-                left
-            );
-
-            head.appendChild(
-                arrow
-            );
-
-
-            const detail =
-                document
-                .createElement("div");
-
-            detail.className =
-                "history-detail";
-
-
-            const detailTitle =
-                document
-                .createElement("div");
-
-            detailTitle.className =
-                "detail-title";
-
-            detailTitle.textContent =
-                "REGISTER YANG DIAMBIL";
-
-
-            detail.appendChild(
-                detailTitle
-            );
-
-
-            if(!registers.length){
-
-                const empty =
-                    document
-                    .createElement("div");
-
-                empty.className =
-                    "empty";
-
-                empty.textContent =
-                    "Detail register tidak tersedia.";
-
-                detail.appendChild(
-                    empty
-                );
-
-            }
-            else{
-
-                registers.forEach(
-                    function(register){
-
-                        const el =
-                            document
-                            .createElement("span");
-
-                        el.className =
-                            "detail-register";
-
-                        el.textContent =
-                            register;
-
-                        detail.appendChild(
-                            el
-                        );
-
-                    }
-                );
-
-            }
-
-
-            head.addEventListener(
-                "click",
-                function(){
-
-                    box.classList.toggle(
-                        "open"
-                    );
+                    registerHtml +=
+                        '<div class="history-register">' +
+                        escapeHtml(
+                            String(reg)
+                        ) +
+                        '</div>';
 
                 }
             );
 
 
-            box.appendChild(
-                head
-            );
+            html +=
+                '<div class="history-item">' +
 
-            box.appendChild(
-                detail
-            );
+                    '<div ' +
+                        'class="history-header" ' +
+                        'onclick="toggleHistory(' +
+                        index +
+                        ')">' +
 
+                        escapeHtml(
+                            String(tanggal)
+                        ) +
 
-            container.appendChild(
-                box
-            );
+                        ' — ' +
+
+                        formatNumber(
+                            jumlah
+                        ) +
+
+                        ' BATANG' +
+
+                    '</div>' +
+
+                    '<div ' +
+                        'id="history-' +
+                        index +
+                        '" ' +
+                        'class="history-detail">' +
+
+                        (
+                            registerHtml ||
+                            '<div class="empty">' +
+                            'Tidak ada daftar register.' +
+                            '</div>'
+                        ) +
+
+                    '</div>' +
+
+                '</div>';
 
         }
+    );
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   TOGGLE HISTORY
+===================================================== */
+
+function toggleHistory(
+    index
+){
+
+    const el =
+        document.getElementById(
+            "history-" +
+            index
+        );
+
+
+    if(!el){
+
+        return;
+
+    }
+
+
+    el.classList.toggle(
+        "show"
     );
 
 }
 
 
 /* =====================================================
-   REFRESH DATA
+   REFRESH
 ===================================================== */
 
 function refreshData(){
@@ -1967,13 +1547,10 @@ function refreshData(){
         !currentTumpuk
     ){
 
-        showError(
-            "Belum ada TUMPUK yang dipilih."
-        );
-
         return;
 
     }
+
 
     ambilDataTumpuk();
 
@@ -1981,37 +1558,95 @@ function refreshData(){
 
 
 /* =====================================================
-   KEMBALI SCAN
+   KEMBALI KE SCAN
 ===================================================== */
 
 function kembaliScan(){
 
     document
-        .getElementById("result")
+        .getElementById(
+            "hasilSection"
+        )
         .classList
-        .remove("show");
+        .add("hidden");
+
 
     document
-        .getElementById("errorBox")
+        .getElementById(
+            "scanSection"
+        )
         .classList
-        .remove("show");
+        .remove("hidden");
+
+
+    currentTPK =
+        "";
+
+    currentTumpuk =
+        "";
+
+    currentStackId =
+        "";
+
 
     document
-        .getElementById("manualInput")
-        .value = "";
+        .getElementById(
+            "manualInput"
+        )
+        .value =
+            "";
 
-    currentTPK = "";
 
-    currentTumpuk = "";
+    if(
+        html5QrCode
+    ){
 
-    currentStackId = "";
+        html5QrCode
+            .clear()
+            .then(function(){
 
-    mulaiScanner();
+                html5QrCode =
+                    new Html5Qrcode(
+                        "reader"
+                    );
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+                mulaiScanner();
+
+            })
+            .catch(function(){
+
+                mulaiScanner();
+
+            });
+
+    }
+    else{
+
+        mulaiScanner();
+
+    }
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function tampilkanError(
+    pesan
+){
+
+    document
+        .getElementById(
+            "registerList"
+        )
+        .innerHTML =
+            '<div class="error">' +
+            escapeHtml(
+                String(pesan)
+            ) +
+            '</div>';
 
 }
 
@@ -2020,12 +1655,16 @@ function kembaliScan(){
    FORMAT ANGKA
 ===================================================== */
 
-function formatAngka(value){
+function formatNumber(
+    value
+){
+
+    const num =
+        Number(value);
+
 
     if(
-        value === undefined ||
-        value === null ||
-        value === ""
+        !Number.isFinite(num)
     ){
 
         return "0";
@@ -2033,20 +1672,7 @@ function formatAngka(value){
     }
 
 
-    const number =
-        Number(value);
-
-
-    if(
-        Number.isNaN(number)
-    ){
-
-        return value;
-
-    }
-
-
-    return number.toLocaleString(
+    return num.toLocaleString(
         "id-ID"
     );
 
@@ -2057,178 +1683,63 @@ function formatAngka(value){
    FORMAT VOLUME
 ===================================================== */
 
-function formatVolume(value){
+function formatVolume(
+    value
+){
 
-    if(
-        value === undefined ||
-        value === null ||
-        value === ""
-    ){
-
-        return "0 m³";
-
-    }
-
-
-    const number =
+    const num =
         Number(value);
 
 
     if(
-        Number.isNaN(number)
+        !Number.isFinite(num)
     ){
 
-        return value + " m³";
+        return "0";
 
     }
 
 
-    return number.toLocaleString(
+    return num.toLocaleString(
         "id-ID",
         {
-            minimumFractionDigits:0,
+            minimumFractionDigits:6,
             maximumFractionDigits:6
         }
-    ) + " m³";
-
-}
-
-
-/* =====================================================
-   FORMAT TANGGAL
-===================================================== */
-
-function formatTanggal(value){
-
-    if(!value){
-        return "-";
-    }
-
-
-    /*
-       Jika backend sudah
-       mengirim dd-mm-yyyy
-    */
-
-    if(
-        typeof value === "string" &&
-        /^\d{1,2}-\d{1,2}-\d{4}$/.test(
-            value
-        )
-    ){
-
-        return value;
-
-    }
-
-
-    /*
-       Jika yyyy-mm-dd
-    */
-
-    if(
-        typeof value === "string" &&
-        /^\d{4}-\d{1,2}-\d{1,2}$/.test(
-            value
-        )
-    ){
-
-        const p =
-            value.split("-");
-
-        return (
-            String(p[2]).padStart(2,"0") +
-            "-" +
-            String(p[1]).padStart(2,"0") +
-            "-" +
-            p[0]
-        );
-
-    }
-
-
-    /*
-       Jika format Date
-    */
-
-    const d =
-        new Date(value);
-
-
-    if(
-        !Number.isNaN(
-            d.getTime()
-        )
-    ){
-
-        return (
-            String(
-                d.getDate()
-            ).padStart(2,"0") +
-            "-" +
-            String(
-                d.getMonth()+1
-            ).padStart(2,"0") +
-            "-" +
-            d.getFullYear()
-        );
-
-    }
-
-
-    return value;
-
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-function showLoading(){
-
-    document
-        .getElementById("loading")
-        .classList
-        .add("show");
-
-}
-
-function hideLoading(){
-
-    document
-        .getElementById("loading")
-        .classList
-        .remove("show");
-
-}
-
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-function showError(message){
-
-    const box =
-        document
-        .getElementById("errorBox");
-
-    box.innerHTML =
-        message;
-
-    box.classList.add(
-        "show"
     );
 
 }
 
-function hideError(){
 
-    document
-        .getElementById("errorBox")
-        .classList
-        .remove("show");
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -2237,7 +1748,7 @@ function hideError(){
    CLEANUP JSONP
 ===================================================== */
 
-function cleanupJSONP(
+function cleanupJsonp(
     callbackName,
     script
 ){
@@ -2249,11 +1760,8 @@ function cleanupJSONP(
         ];
 
     }
-    catch(error){
 
-        console.log(error);
-
-    }
+    catch(e){}
 
 
     if(
@@ -2261,9 +1769,11 @@ function cleanupJSONP(
         script.parentNode
     ){
 
-        script.parentNode.removeChild(
-            script
-        );
+        script
+            .parentNode
+            .removeChild(
+                script
+            );
 
     }
 
