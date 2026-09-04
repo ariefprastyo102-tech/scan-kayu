@@ -307,6 +307,62 @@ button{
 }
 
 /* =====================================================
+   RINCIAN TPK
+   KHUSUS TUMPUK 29
+===================================================== */
+
+.tpk-detail-box{
+    display:none;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.tpk-detail-box.show{
+    display:block;
+}
+
+.tpk-detail-title{
+    font-size:16px;
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.tpk-detail-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.tpk-detail-item{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:11px;
+    padding:11px 12px;
+}
+
+.tpk-detail-name{
+    font-size:14px;
+    font-weight:900;
+}
+
+.tpk-detail-info{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:5px;
+    font-size:13px;
+    color:#475569;
+    font-weight:700;
+}
+
+.tpk-detail-volume{
+    text-align:right;
+}
+
+/* =====================================================
    SECTION
 ===================================================== */
 
@@ -329,37 +385,6 @@ button{
     padding:5px 9px;
     border-radius:20px;
     color:#475569;
-}
-
-/* =====================================================
-   RINCIAN TPK
-===================================================== */
-
-.rincian-tpk{
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-}
-
-.rincian-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:11px;
-    padding:12px 13px;
-}
-
-.rincian-item .nama{
-    font-size:14px;
-    font-weight:800;
-    color:#475569;
-}
-
-.rincian-item .jumlah{
-    font-size:16px;
-    font-weight:900;
 }
 
 /* =====================================================
@@ -560,8 +585,13 @@ button{
         grid-template-columns:1fr 1fr;
     }
 
-    .check-status{
-        font-size:10px;
+    .tpk-detail-info{
+        flex-direction:column;
+        gap:3px;
+    }
+
+    .tpk-detail-volume{
+        text-align:left;
     }
 
 }
@@ -767,21 +797,16 @@ button{
             ========================================= -->
 
             <div
-                class="section"
-                id="rincianSection"
-                style="display:none;">
+                class="tpk-detail-box"
+                id="tpkDetailBox">
 
-                <div class="section-title">
-
-                    <span>
-                        RINCIAN TPK
-                    </span>
-
+                <div class="tpk-detail-title">
+                    RINCIAN TPK
                 </div>
 
                 <div
-                    class="rincian-tpk"
-                    id="rincianTPK">
+                    class="tpk-detail-list"
+                    id="tpkDetailList">
                 </div>
 
             </div>
@@ -992,7 +1017,7 @@ async function mulaiScanner(){
 
             function(errorMessage){
 
-                // Abaikan error scan frame
+                // Abaikan error frame scan
 
             }
 
@@ -1113,10 +1138,18 @@ function prosesKodeTumpuk(kode){
     kode =
         kode.trim();
 
-
     let parts =
         kode.split("|");
 
+
+    /*
+       FORMAT UTAMA:
+
+       SARADAN|1
+
+       TPK    = SARADAN
+       TUMPUK = 1
+    */
 
     if(parts.length >= 2){
 
@@ -1131,6 +1164,12 @@ function prosesKodeTumpuk(kode){
             .trim();
 
     }
+
+    /*
+       FORMAT TAMBAHAN:
+
+       SARADAN-T01
+    */
 
     else{
 
@@ -1183,27 +1222,18 @@ function prosesKodeTumpuk(kode){
 
 
     /*
-     * Default stack ID.
-     *
-     * KHUSUS TUMPUK 29:
-     * nanti akan diganti lagi dengan
-     * data.stackId dari backend.
-     */
+       Jangan menentukan currentStackId
+       sendiri di sini.
 
-    if(currentTumpuk === "29"){
+       Backend yang menentukan:
+       - Tumpuk biasa = TPK|TUMPUK
+       - Tumpuk 29    = TUMPUK|29
 
-        currentStackId =
-            "TUMPUK|29";
+       Nilai final akan diambil dari
+       data.stackId di tampilkanData().
+    */
 
-    }
-    else{
-
-        currentStackId =
-            currentTPK +
-            "|" +
-            currentTumpuk;
-
-    }
+    currentStackId = "";
 
 
     ambilDataTumpuk();
@@ -1221,33 +1251,31 @@ function ambilDataTumpuk(){
 
     const callbackName =
         "callbackTumpuk_" +
-        Date.now() +
-        "_" +
-        Math.floor(
-            Math.random()*100000
-        );
+        Date.now();
 
+
+    let timeoutId = null;
 
     let script = null;
 
 
     window[callbackName] =
-        function(data){
+        function(response){
 
             try{
 
                 hideLoading();
 
                 if(
-                    !data ||
-                    data.success !== true
+                    !response ||
+                    response.success !== true
                 ){
 
                     showError(
-                        data &&
-                        data.message
+                        response &&
+                        response.message
                         ?
-                        data.message
+                        response.message
                         :
                         "Data TUMPUK tidak ditemukan."
                     );
@@ -1256,7 +1284,44 @@ function ambilDataTumpuk(){
 
                 }
 
-                tampilkanData(data);
+
+                /*
+                   PENTING:
+
+                   Backend mengirim:
+
+                   {
+                       success:true,
+                       data:{
+                           tumpuk:...,
+                           tpk:...,
+                           ...
+                       }
+                   }
+
+                   Jadi yang dikirim ke
+                   tampilkanData adalah:
+
+                   response.data
+                */
+
+                if(
+                    !response.data ||
+                    typeof response.data !== "object"
+                ){
+
+                    showError(
+                        "Data TUMPUK diterima tetapi format datanya tidak sesuai."
+                    );
+
+                    return;
+
+                }
+
+
+                tampilkanData(
+                    response.data
+                );
 
             }
             catch(error){
@@ -1267,6 +1332,11 @@ function ambilDataTumpuk(){
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
+            }
+
+
+            if(timeoutId){
+                clearTimeout(timeoutId);
             }
 
             cleanupJSONP(
@@ -1299,6 +1369,10 @@ function ambilDataTumpuk(){
     script.onerror =
         function(){
 
+            if(timeoutId){
+                clearTimeout(timeoutId);
+            }
+
             hideLoading();
 
             showError(
@@ -1318,25 +1392,18 @@ function ambilDataTumpuk(){
         .appendChild(script);
 
 
-    setTimeout(
-        function(){
-
-            if(
-                script &&
-                document.body.contains(script)
-            ){
-
-                cleanupJSONP(
-                    callbackName,
-                    script
-                );
+    timeoutId =
+        setTimeout(
+            function(){
 
                 if(
-                    document
-                    .getElementById("loading")
-                    .classList
-                    .contains("show")
+                    document.body.contains(script)
                 ){
+
+                    cleanupJSONP(
+                        callbackName,
+                        script
+                    );
 
                     hideLoading();
 
@@ -1346,11 +1413,9 @@ function ambilDataTumpuk(){
 
                 }
 
-            }
-
-        },
-        15000
-    );
+            },
+            15000
+        );
 
 }
 
@@ -1362,40 +1427,47 @@ function ambilDataTumpuk(){
 function tampilkanData(data){
 
     /*
-     * PENTING:
-     *
-     * Gunakan stackId dari backend.
-     *
-     * Untuk Tumpuk 29:
-     *
-     * TUMPUK|29
-     *
-     * bukan:
-     *
-     * TPK1|29
-     */
+       PENTING UNTUK TUMPUK 29:
 
-    if(data.stackId){
+       Backend mengirim:
 
-        currentStackId =
-            String(data.stackId)
-            .trim();
+       stackId = "TUMPUK|29"
+
+       Sedangkan Tumpuk biasa:
+
+       stackId = "SARADAN|1"
+
+       Jadi HTML harus mengikuti
+       stackId dari backend.
+    */
+
+    currentStackId =
+        data.stackId ||
+        (
+            String(data.tumpuk) === "29"
+            ?
+            "TUMPUK|29"
+            :
+            currentTPK + "|" + currentTumpuk
+        );
+
+
+    /*
+       Simpan juga nilai yang sebenarnya
+       dikirim backend.
+    */
+
+    if(data.tpk !== undefined){
+
+        currentTPK =
+            String(data.tpk);
 
     }
-    else if(
-        String(data.tumpuk) === "29"
-    ){
 
-        currentStackId =
-            "TUMPUK|29";
+    if(data.tumpuk !== undefined){
 
-    }
-    else{
-
-        currentStackId =
-            currentTPK +
-            "|" +
-            currentTumpuk;
+        currentTumpuk =
+            String(data.tumpuk);
 
     }
 
@@ -1414,28 +1486,55 @@ function tampilkanData(data){
         .getElementById("tumpukTitle")
         .textContent =
         "TUMPUK " +
-        data.tumpuk;
+        (
+            data.tumpuk !== undefined
+            ?
+            data.tumpuk
+            :
+            "-"
+        );
 
 
     /*
        TPK
+
+       Tumpuk 29:
+       backend mengirim:
+       TPK A, TPK B, TPK C
+
+       Tumpuk biasa:
+       satu TPK.
     */
 
     document
         .getElementById("tpkTitle")
         .textContent =
         "TPK ASAL : " +
-        data.tpk;
+        (
+            data.tpk !== undefined
+            ?
+            data.tpk
+            :
+            "-"
+        );
 
 
     /*
        JUMLAH BATANG
+
+       BUKAN jumlah sisa.
+
+       Ini jumlah batang dari DATABASE.
     */
 
     document
         .getElementById("jumlahAwal")
         .textContent =
         formatAngka(
+            data.jumlahBatang !== undefined
+            ?
+            data.jumlahBatang
+            :
             data.jumlahAwal
         );
 
@@ -1448,8 +1547,22 @@ function tampilkanData(data){
         .getElementById("volumeAwal")
         .textContent =
         formatVolume(
+            data.volume !== undefined
+            ?
+            data.volume
+            :
             data.volumeAwal
         );
+
+
+    /*
+       RINCIAN TPK
+       HANYA TUMPUK 29
+    */
+
+    tampilkanRincianTPK(
+        data
+    );
 
 
     /*
@@ -1467,7 +1580,9 @@ function tampilkanData(data){
     document
         .getElementById("registerCount")
         .textContent =
-        registers.length;
+        formatAngka(
+            registers.length
+        );
 
 
     document
@@ -1479,16 +1594,6 @@ function tampilkanData(data){
 
     tampilkanRegister(
         registers,
-        data
-    );
-
-
-    /*
-       RINCIAN TPK
-       KHUSUS TUMPUK 29
-    */
-
-    tampilkanRincianTPK(
         data
     );
 
@@ -1525,33 +1630,34 @@ function tampilkanData(data){
 
 
 /* =====================================================
-   TAMPILKAN RINCIAN TPK
+   RINCIAN TPK
+   KHUSUS TUMPUK 29
 ===================================================== */
 
 function tampilkanRincianTPK(data){
 
-    const section =
+    const box =
         document
-        .getElementById("rincianSection");
+        .getElementById("tpkDetailBox");
 
     const container =
         document
-        .getElementById("rincianTPK");
+        .getElementById("tpkDetailList");
 
 
     container.innerHTML = "";
 
+    box.classList.remove("show");
+
 
     /*
-     * Hanya Tumpuk 29
-     */
+       Rincian hanya boleh muncul
+       untuk Tumpuk 29.
+    */
 
     if(
         String(data.tumpuk) !== "29"
     ){
-
-        section.style.display =
-            "none";
 
         return;
 
@@ -1559,9 +1665,7 @@ function tampilkanRincianTPK(data){
 
 
     const rincian =
-        Array.isArray(
-            data.rincianTPK
-        )
+        Array.isArray(data.rincianTPK)
         ?
         data.rincianTPK
         :
@@ -1570,47 +1674,51 @@ function tampilkanRincianTPK(data){
 
     if(!rincian.length){
 
-        section.style.display =
-            "none";
-
         return;
 
     }
 
 
-    section.style.display =
-        "block";
-
-
     rincian.forEach(
         function(item){
 
-            const row =
+            const wrapper =
                 document
                 .createElement("div");
 
-            row.className =
-                "rincian-item";
+            wrapper.className =
+                "tpk-detail-item";
 
 
-            const nama =
+            const name =
                 document
                 .createElement("div");
 
-            nama.className =
-                "nama";
+            name.className =
+                "tpk-detail-name";
 
-            nama.textContent =
+            name.textContent =
                 "TPK " +
-                item.tpk;
+                (
+                    item.tpk !== undefined
+                    ?
+                    item.tpk
+                    :
+                    "-"
+                );
+
+
+            const info =
+                document
+                .createElement("div");
+
+            info.className =
+                "tpk-detail-info";
 
 
             const jumlah =
                 document
                 .createElement("div");
-
-            jumlah.className =
-                "jumlah";
 
             jumlah.textContent =
                 formatAngka(
@@ -1619,21 +1727,46 @@ function tampilkanRincianTPK(data){
                 " BATANG";
 
 
-            row.appendChild(
-                nama
+            const volume =
+                document
+                .createElement("div");
+
+            volume.className =
+                "tpk-detail-volume";
+
+            volume.textContent =
+                formatVolume(
+                    item.volume
+                );
+
+
+            info.appendChild(
+                jumlah
             );
 
-            row.appendChild(
-                jumlah
+            info.appendChild(
+                volume
+            );
+
+
+            wrapper.appendChild(
+                name
+            );
+
+            wrapper.appendChild(
+                info
             );
 
 
             container.appendChild(
-                row
+                wrapper
             );
 
         }
     );
+
+
+    box.classList.add("show");
 
 }
 
@@ -1670,32 +1803,42 @@ function tampilkanRegister(
         function(item){
 
             /*
-             * REGISTER
-             */
+               Backend mengirim:
+
+               {
+                   register:"REG001",
+                   tpk:"SARADAN",
+                   tumpuk:"1",
+                   volume:0.123,
+                   checked:true/false
+               }
+            */
+
 
             const register =
                 item.register !== undefined
                 ?
-                item.register
+                String(item.register)
                 :
-                item.REGISTER;
+                (
+                    item.REGISTER !== undefined
+                    ?
+                    String(item.REGISTER)
+                    :
+                    ""
+                );
 
 
-            /*
-             * STATUS CEK
-             *
-             * Backend mengirim:
-             *
-             * checked:true/false
-             */
+            if(!register){
+                return;
+            }
+
 
             const checked =
                 item.checked === true ||
-                item.checked === "true" ||
-                item.checked === "TRUE" ||
+                String(item.checked).toLowerCase() === "true" ||
                 item.CHECKED === true ||
-                item.CHECKED === "true" ||
-                item.CHECKED === "TRUE";
+                String(item.CHECKED).toLowerCase() === "true";
 
 
             const wrapper =
@@ -1714,13 +1857,10 @@ function tampilkanRegister(
                 );
 
 
-            /*
-             * CHECKBOX
-             */
-
             const checkbox =
                 document
                 .createElement("input");
+
 
             checkbox.type =
                 "checkbox";
@@ -1730,8 +1870,12 @@ function tampilkanRegister(
 
 
             /*
-             * STATUS
-             */
+               STATUS dibuat SEBELUM
+               event listener.
+
+               Ini memperbaiki bug
+               "Cannot access 'status' before initialization".
+            */
 
             const status =
                 document
@@ -1748,25 +1892,6 @@ function tampilkanRegister(
                 "";
 
 
-            /*
-             * NOMOR REGISTER
-             */
-
-            const number =
-                document
-                .createElement("div");
-
-            number.className =
-                "register-number";
-
-            number.textContent =
-                register;
-
-
-            /*
-             * EVENT CHECKBOX
-             */
-
             checkbox.addEventListener(
                 "change",
                 function(){
@@ -1775,12 +1900,24 @@ function tampilkanRegister(
                         register,
                         checkbox.checked,
                         wrapper,
-                        status,
-                        checkbox
+                        status
                     );
 
                 }
             );
+
+
+            const number =
+                document
+                .createElement("div");
+
+
+            number.className =
+                "register-number";
+
+
+            number.textContent =
+                register;
 
 
             wrapper.appendChild(
@@ -1814,42 +1951,29 @@ function setCheckbox(
     register,
     checked,
     wrapper,
-    status,
-    checkbox
+    status
 ){
 
     /*
-     * Pastikan stack ID
-     * selalu sesuai data aktif.
-     */
+       Simpan keadaan checkbox
+       sebelum request.
 
-    if(!currentStackId){
+       Jika gagal, akan dikembalikan.
+    */
 
-        if(currentTumpuk === "29"){
+    const checkbox =
+        wrapper.querySelector(
+            'input[type="checkbox"]'
+        );
 
-            currentStackId =
-                "TUMPUK|29";
 
-        }
-        else{
-
-            currentStackId =
-                currentTPK +
-                "|" +
-                currentTumpuk;
-
-        }
-
-    }
+    const previousChecked =
+        !checked;
 
 
     /*
-     * Update tampilan sementara
-     */
-
-    status.textContent =
-        "MENYIMPAN...";
-
+       Update tampilan langsung.
+    */
 
     if(checked){
 
@@ -1867,101 +1991,118 @@ function setCheckbox(
     }
 
 
+    status.textContent =
+        "MENYIMPAN...";
+
+
+    /*
+       Pastikan stackId sudah benar.
+
+       Tumpuk 29:
+       TUMPUK|29
+
+       Tumpuk biasa:
+       TPK|TUMPUK
+    */
+
+    let stackId =
+        currentStackId;
+
+
+    if(!stackId){
+
+        stackId =
+            String(currentTumpuk) === "29"
+            ?
+            "TUMPUK|29"
+            :
+            currentTPK +
+            "|" +
+            currentTumpuk;
+
+    }
+
+
     const callbackName =
         "callbackCek_" +
         Date.now() +
         "_" +
         Math.floor(
-            Math.random()*100000
+            Math.random()*1000
         );
 
 
     let script = null;
 
+    let timeoutId = null;
+
 
     window[callbackName] =
         function(data){
 
-            try{
-
-                if(
-                    data &&
-                    data.success === true
-                ){
-
-                    /*
-                     * Backend berhasil menyimpan
-                     */
-
-                    status.textContent =
-                        checked
-                        ?
-                        "SUDAH DICEK"
-                        :
-                        "";
+            if(timeoutId){
+                clearTimeout(timeoutId);
+            }
 
 
-                    if(checked){
+            if(
+                data &&
+                data.success === true
+            ){
 
-                        wrapper.classList.add(
-                            "checked"
-                        );
+                status.textContent =
+                    checked
+                    ?
+                    "SUDAH DICEK"
+                    :
+                    "";
 
-                    }
-                    else{
 
-                        wrapper.classList.remove(
-                            "checked"
-                        );
+                if(checked){
 
-                    }
+                    wrapper.classList.add(
+                        "checked"
+                    );
 
                 }
                 else{
 
-                    /*
-                     * Gagal simpan.
-                     *
-                     * Balikkan checkbox.
-                     */
-
-                    checkbox.checked =
-                        !checked;
-
-
-                    if(
-                        checkbox.checked
-                    ){
-
-                        wrapper.classList.add(
-                            "checked"
-                        );
-
-                    }
-                    else{
-
-                        wrapper.classList.remove(
-                            "checked"
-                        );
-
-                    }
-
-
-                    status.textContent =
-                        "GAGAL";
+                    wrapper.classList.remove(
+                        "checked"
+                    );
 
                 }
 
             }
-            catch(error){
-
-                console.error(error);
-
-                checkbox.checked =
-                    !checked;
+            else{
 
                 status.textContent =
                     "GAGAL";
+
+
+                /*
+                   Balikkan checkbox
+                   jika gagal.
+                */
+
+                checkbox.checked =
+                    previousChecked;
+
+
+                if(previousChecked){
+
+                    wrapper.classList.add(
+                        "checked"
+                    );
+
+                }
+                else{
+
+                    wrapper.classList.remove(
+                        "checked"
+                    );
+
+                }
 
             }
 
@@ -1974,20 +2115,12 @@ function setCheckbox(
         };
 
 
-    /*
-     * Kirim:
-     *
-     * stackId
-     * register
-     * checked
-     */
-
     const url =
         API_URL +
         "?action=setCek" +
         "&stackId=" +
         encodeURIComponent(
-            currentStackId
+            stackId
         ) +
         "&register=" +
         encodeURIComponent(
@@ -2006,6 +2139,7 @@ function setCheckbox(
     script =
         document.createElement("script");
 
+
     script.src =
         url;
 
@@ -2013,13 +2147,20 @@ function setCheckbox(
     script.onerror =
         function(){
 
+            if(timeoutId){
+                clearTimeout(timeoutId);
+            }
+
+
+            status.textContent =
+                "GAGAL";
+
+
             checkbox.checked =
-                !checked;
+                previousChecked;
 
 
-            if(
-                checkbox.checked
-            ){
+            if(previousChecked){
 
                 wrapper.classList.add(
                     "checked"
@@ -2035,10 +2176,6 @@ function setCheckbox(
             }
 
 
-            status.textContent =
-                "GAGAL";
-
-
             cleanupJSONP(
                 callbackName,
                 script
@@ -2052,41 +2189,28 @@ function setCheckbox(
         .appendChild(script);
 
 
-    /*
-     * Timeout
-     */
-
-    setTimeout(
-        function(){
-
-            if(
-                script &&
-                document.body.contains(script)
-            ){
-
-                cleanupJSONP(
-                    callbackName,
-                    script
-                );
-
+    timeoutId =
+        setTimeout(
+            function(){
 
                 /*
-                 * Hanya ubah kalau
-                 * callback belum berhasil.
-                 */
+                   Jika backend tidak menjawab,
+                   kembalikan checkbox.
+                */
 
                 if(
-                    status.textContent ===
-                    "MENYIMPAN..."
+                    document.body.contains(script)
                 ){
 
+                    status.textContent =
+                        "GAGAL";
+
+
                     checkbox.checked =
-                        !checked;
+                        previousChecked;
 
 
-                    if(
-                        checkbox.checked
-                    ){
+                    if(previousChecked){
 
                         wrapper.classList.add(
                             "checked"
@@ -2102,16 +2226,16 @@ function setCheckbox(
                     }
 
 
-                    status.textContent =
-                        "GAGAL";
+                    cleanupJSONP(
+                        callbackName,
+                        script
+                    );
 
                 }
 
-            }
-
-        },
-        15000
-    );
+            },
+            15000
+        );
 
 }
 
@@ -2182,6 +2306,7 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             box.className =
                 "history-item";
 
@@ -2189,6 +2314,7 @@ function tampilkanHistory(
             const head =
                 document
                 .createElement("div");
+
 
             head.className =
                 "history-head";
@@ -2203,8 +2329,10 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             dateEl.className =
                 "history-date";
+
 
             dateEl.textContent =
                 formatTanggal(
@@ -2216,8 +2344,10 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             takenEl.className =
                 "history-taken";
+
 
             takenEl.textContent =
                 "DIAMBIL " +
@@ -2238,8 +2368,10 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             arrow.className =
                 "history-arrow";
+
 
             arrow.textContent =
                 "▼";
@@ -2258,6 +2390,7 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             detail.className =
                 "history-detail";
 
@@ -2266,8 +2399,10 @@ function tampilkanHistory(
                 document
                 .createElement("div");
 
+
             detailTitle.className =
                 "detail-title";
+
 
             detailTitle.textContent =
                 "REGISTER YANG DIAMBIL";
@@ -2284,8 +2419,10 @@ function tampilkanHistory(
                     document
                     .createElement("div");
 
+
                 empty.className =
                     "empty";
+
 
                 empty.textContent =
                     "Detail register tidak tersedia.";
@@ -2305,8 +2442,10 @@ function tampilkanHistory(
                             document
                             .createElement("span");
 
+
                         el.className =
                             "detail-register";
+
 
                         el.textContent =
                             register;
@@ -2402,13 +2541,23 @@ function kembaliScan(){
 
 
     document
-        .getElementById("rincianSection")
-        .style.display =
-        "none";
+        .getElementById("tpkDetailBox")
+        .classList
+        .remove("show");
 
 
     document
-        .getElementById("rincianTPK")
+        .getElementById("tpkDetailList")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("registerList")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("historyList")
         .innerHTML = "";
 
 
@@ -2530,16 +2679,7 @@ function formatTanggal(value){
         )
     ){
 
-        const p =
-            value.split("-");
-
-        return (
-            String(p[0]).padStart(2,"0") +
-            "-" +
-            String(p[1]).padStart(2,"0") +
-            "-" +
-            p[2]
-        );
+        return value;
 
     }
 
@@ -2557,6 +2697,7 @@ function formatTanggal(value){
 
         const p =
             value.split("-");
+
 
         return (
             String(p[2]).padStart(2,"0") +
