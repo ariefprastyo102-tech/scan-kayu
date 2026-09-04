@@ -5,10 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Cetak Barcode Tumpuk</title>
 
@@ -16,370 +14,404 @@
 
 <style>
 
-/* =====================================================
-   RESET
-===================================================== */
-
 *{
     box-sizing:border-box;
 }
 
-html,
 body{
     margin:0;
-    padding:0;
-    background:#eeeeee;
-    font-family:Arial, Helvetica, sans-serif;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+}
+
+.kontrol{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+}
+
+h2{
+    text-align:center;
+    margin-top:0;
 }
 
 
 /* =====================================================
-   KONTROL
+   JUDUL
 ===================================================== */
 
-.controls{
-    width:100%;
-    max-width:1000px;
-    margin:20px auto;
-    padding:20px;
-
-    background:#ffffff;
-
-    border-radius:12px;
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.12);
-}
-
-.controls h1{
-    margin:0 0 15px 0;
-
-    text-align:center;
-
-    font-size:26px;
-    font-weight:900;
-}
-
-.search-box{
+.judulBarcode{
     display:flex;
-    gap:10px;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
     margin-bottom:15px;
 }
 
-.search-box input{
-    flex:1;
-
-    height:48px;
-
-    padding:0 15px;
-
-    border:2px solid #cccccc;
-    border-radius:8px;
-
-    font-size:18px;
+.judulBarcode img{
+    width:50px !important;
+    height:50px !important;
+    max-width:50px !important;
+    max-height:50px !important;
+    object-fit:contain;
+    display:block;
 }
 
-.search-box button{
-    min-width:110px;
+.judulBarcode h2{
+    margin:0;
+}
 
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+button{
     border:none;
-    border-radius:8px;
-
-    background:#111111;
-    color:#ffffff;
-
-    font-size:16px;
-    font-weight:800;
-
+    border-radius:7px;
+    padding:11px 15px;
+    margin:4px;
+    font-weight:bold;
     cursor:pointer;
 }
 
-.search-box button:hover{
-    opacity:.85;
+.btnAmbil{
+    width:100%;
+    background:#1976d2;
+    color:white;
+}
+
+.btnFilter{
+    background:#1976d2;
+    color:white;
+}
+
+.btnSemua{
+    background:#607d8b;
+    color:white;
+}
+
+.btnPilih{
+    background:#388e3c;
+    color:white;
+}
+
+.btnBatal{
+    background:#d32f2f;
+    color:white;
+}
+
+.btnDownload{
+    width:100%;
+    margin-top:15px;
+    background:#6a1b9a;
+    color:white;
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filter{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.filter input{
+    width:100%;
+    padding:11px;
+    border:1px solid #aaa;
+    border-radius:7px;
+    font-size:15px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+    margin-top:15px;
+    padding:12px;
+    background:#f5f5f5;
+    border-radius:7px;
+    text-align:center;
+    line-height:1.8;
+}
+
+
+/* =====================================================
+   GRID DATA
+===================================================== */
+
+#grid{
+    max-width:1100px;
+    margin:20px auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.item{
+    background:#fff700;
+    border:2px solid #111;
+    padding:10px;
+    text-align:center;
+    position:relative;
+    border-radius:5px;
+}
+
+.item.hide{
+    display:none;
+}
+
+.item input{
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:18px;
+    height:18px;
+}
+
+.item svg{
+    width:100%;
+    height:70px;
+    margin-top:15px;
 }
 
 .info{
-    text-align:center;
-
-    font-size:15px;
-
-    margin-top:8px;
-}
-
-.loading{
-    text-align:center;
-
-    padding:20px;
-
-    font-size:18px;
-    font-weight:700;
-}
-
-
-/* =====================================================
-   MASTER F4
-===================================================== */
-
-#master{
-
-    width:215mm;
-    height:330mm;
-
-    margin:20px auto;
-
-    padding:4mm;
-
-    background:#ffffff;
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    grid-template-rows:repeat(4, 1fr);
-
-    gap:3mm;
-
-    overflow:hidden;
-}
-
-
-/* =====================================================
-   LABEL
-===================================================== */
-
-.label{
-
-    width:100%;
-    height:100%;
-
-    background:#ffd900;
-
-    border:1.5mm solid #000000;
-
-    border-radius:2mm;
-
-    padding:3mm;
-
     display:flex;
-
     flex-direction:column;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    overflow:hidden;
-
-    page-break-inside:avoid;
-}
-
-
-/* =====================================================
-   TUMPUK
-===================================================== */
-
-.label .tumpuk{
-
-    width:100%;
-
-    text-align:center;
-
-    font-size:13mm;
-
-    line-height:1;
-
-    font-weight:900;
-
-    color:#000000;
-
-    margin-bottom:2mm;
-
-    letter-spacing:.5mm;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-}
-
-
-/* =====================================================
-   TPK
-===================================================== */
-
-.label .tpk{
-
-    width:100%;
-
-    text-align:center;
-
-    font-size:5mm;
-
-    line-height:1.1;
-
-    font-weight:900;
-
-    color:#000000;
-
-    margin-bottom:2mm;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-}
-
-
-/* =====================================================
-   BARCODE
-===================================================== */
-
-.barcode{
-
-    width:100%;
-
-    flex:1;
-
-    min-height:0;
-
-    display:flex;
-
     justify-content:center;
-
     align-items:center;
-
-    background:#ffffff;
-
-    padding:2mm;
-
-    border-radius:1mm;
-
-    overflow:hidden;
+    gap:3px;
+    font-weight:bold;
 }
 
-.barcode svg{
+.info .tumpuk{
+    font-size:25px;
+}
 
-    display:block;
+.info .tpk{
+    font-size:17px;
+}
 
-    width:78mm !important;
+.info .jumlah{
+    font-size:14px;
+}
 
-    height:38mm !important;
-
-    max-width:100%;
-
-    max-height:100%;
+.areaCetak{
+    display:none;
 }
 
 
 /* =====================================================
-   TIDAK ADA DATA
-===================================================== */
-
-.empty{
-
-    grid-column:1 / -1;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:24px;
-
-    font-weight:800;
-
-    color:#777777;
-}
-
-
-/* =====================================================
-   PRINT
+   CETAK F4
+   1 LEMBAR = 8 LABEL
+   2 KOLOM × 4 BARIS
 ===================================================== */
 
 @media print{
 
     @page{
-
-        size:215mm 330mm;
-
+        size:215.9mm 330.2mm;
         margin:0;
     }
-
 
     html,
     body{
-
-        width:215mm;
-
-        height:330mm;
-
+        width:215.9mm;
+        height:330.2mm;
         margin:0;
-
         padding:0;
-
-        background:#ffffff;
+        background:white;
     }
 
+    body{
+        font-family:Arial,sans-serif;
+    }
 
-    .controls{
-
+    .kontrol,
+    #grid{
         display:none !important;
     }
 
+    .areaCetak{
+        display:block;
+        width:215.9mm;
+        height:330.2mm;
+    }
 
-    #master{
 
-        width:215mm;
+    /* =================================================
+       LEMBAR F4
+    ================================================= */
 
-        height:330mm;
+    .lembar{
 
-        margin:0;
+        width:215.9mm;
+        height:330.2mm;
 
-        padding:4mm;
-
-        background:#ffffff;
+        page-break-after:always;
+        page-break-inside:avoid;
 
         display:grid;
 
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:
+            107.95mm 107.95mm;
 
-        grid-template-rows:repeat(4, 1fr);
+        grid-template-rows:
+            repeat(4,82.55mm);
 
-        gap:3mm;
+        column-gap:0;
+        row-gap:0;
+
+        padding:0;
+
+        box-sizing:border-box;
 
         overflow:hidden;
     }
 
-
-    .label{
-
-        width:100%;
-
-        height:100%;
-
-        -webkit-print-color-adjust:exact;
-
-        print-color-adjust:exact;
-
-        page-break-inside:avoid;
-
-        break-inside:avoid;
+    .lembar:last-child{
+        page-break-after:auto;
     }
 
 
-    .label .tumpuk,
-    .label .tpk{
+    /* =================================================
+       LABEL
+    ================================================= */
 
-        color:#000000;
+    .labelCetak{
+
+        width:107.95mm;
+        height:82.55mm;
+
+        border:0.3mm solid black;
+
+        background:#fff700;
+
+        position:relative;
+
+        overflow:hidden;
+
+        display:block;
     }
 
 
-    .barcode{
+    /* =================================================
+       BARCODE
+    ================================================= */
 
-        background:#ffffff;
+    .labelBarcode{
+
+        position:absolute;
+
+        left:9mm;
+
+        top:6mm;
+
+        width:89.95mm;
+
+        height:43mm;
+
+        overflow:hidden;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+    }
+
+    .labelBarcode svg{
+
+        display:block;
+
+        width:89.95mm !important;
+
+        height:43mm !important;
+
+    }
+
+
+    /* =================================================
+       TULISAN TUMPUK + TPK
+    ================================================= */
+
+    .infoCetak{
+
+        position:absolute;
+
+        left:0;
+
+        bottom:4mm;
+
+        width:107.95mm;
+
+        height:27mm;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        text-align:center;
+
+        font-family:Arial,sans-serif;
+
+        line-height:1;
+
+    }
+
+    .tumpukCetak{
+
+        font-size:14mm;
+
+        font-weight:900;
+
+        line-height:1;
+
+        white-space:nowrap;
+    }
+
+    .tpkCetak{
+
+        margin-top:2mm;
+
+        font-size:6mm;
+
+        font-weight:bold;
+
+        line-height:1;
+
+        white-space:nowrap;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .filter{
+        grid-template-columns:1fr;
+    }
+
+    #grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
 }
@@ -392,169 +424,269 @@ body{
 <body>
 
 
-<!-- =====================================================
-     KONTROL
-===================================================== -->
-
-<div class="controls">
-
-    <h1>
-        CETAK BARCODE TUMPUK
-    </h1>
+<div class="kontrol">
 
 
-    <div class="search-box">
+<div class="judulBarcode">
 
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Cari TUMPUK atau TPK..."
-            autocomplete="off"
-        >
+<img
+    src="logo-perhutani.jpg"
+    alt="Logo Perhutani"
+>
 
-        <button
-            onclick="cariTumpuk()"
-        >
-            CARI
-        </button>
-
-        <button
-            onclick="resetCari()"
-        >
-            RESET
-        </button>
-
-    </div>
-
-
-    <div
-        class="info"
-        id="info"
-    >
-        Memuat data...
-    </div>
+<h2>
+    CETAK BARCODE TUMPUK
+</h2>
 
 </div>
 
 
-<!-- =====================================================
-     MASTER CETAK
-===================================================== -->
+<button
+class="btnAmbil"
+onclick="ambilDatabase()">
 
-<div id="master">
+🔄 AMBIL DATA TUMPUK
 
-    <div class="loading">
-        Memuat data...
-    </div>
+</button>
 
+
+<div class="filter">
+
+<input
+id="filterTumpuk"
+type="text"
+placeholder="Cari nomor tumpuk">
+
+<input
+id="filterTpk"
+type="text"
+placeholder="Cari TPK">
+
+</div>
+
+
+<div>
+
+<button
+class="btnFilter"
+onclick="filterData()">
+
+🔎 FILTER
+
+</button>
+
+
+<button
+class="btnSemua"
+onclick="tampilkanSemua()">
+
+🔄 TAMPILKAN SEMUA
+
+</button>
+
+
+<button
+class="btnPilih"
+onclick="pilihHasilFilter()">
+
+☑️ PILIH HASIL FILTER
+
+</button>
+
+
+<button
+class="btnBatal"
+onclick="batalHasilFilter()">
+
+❌ BATAL HASIL FILTER
+
+</button>
+
+
+<button
+class="btnPilih"
+onclick="pilihSemua()">
+
+☑️ PILIH SEMUA
+
+</button>
+
+
+<button
+class="btnBatal"
+onclick="batalSemua()">
+
+❌ BATAL SEMUA
+
+</button>
+
+</div>
+
+
+<button
+class="btnDownload"
+onclick="cetakF4()">
+
+🖨️ CETAK F4 — 8 BARCODE / LEMBAR
+
+</button>
+
+
+<div class="status">
+
+<div id="status">
+Belum mengambil database
+</div>
+
+<div id="jumlah">
+Jumlah tumpuk: 0
+</div>
+
+<div id="dipilih">
+Dipilih: 0
+</div>
+
+</div>
+
+
+</div>
+
+
+<div id="grid"></div>
+
+
+<div
+id="areaCetak"
+class="areaCetak">
 </div>
 
 
 <script>
 
+
 /* =====================================================
-   API
+   API TUMPUK
 ===================================================== */
 
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
+"https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
+
+
+let database=[];
 
 
 /* =====================================================
-   DATA
+   AMBIL DATA TUMPUK
 ===================================================== */
 
-let semuaData = [];
+function ambilDatabase(){
 
-let dataTampil = [];
+    const status =
+        document.getElementById("status");
+
+    status.innerHTML =
+        "⏳ Mengambil DATA TUMPUK...";
 
 
-/* =====================================================
-   JSONP
-===================================================== */
+    const callback =
+        "tumpuk_"+Date.now();
 
-function ambilData(){
 
-    const callbackName =
-        "jsonpTumpuk_" +
-        Date.now();
+    let script=null;
 
-    window[callbackName] = function(response){
 
-        try{
+    window[callback] =
+        function(hasil){
 
             if(
-                !response ||
-                response.success === false
+                !hasil ||
+                hasil.status !== "success"
             ){
 
-                throw new Error(
-                    response &&
-                    response.message
-                        ? response.message
-                        : "Gagal mengambil data."
-                );
+                status.innerHTML =
+                    "❌ Gagal mengambil DATA TUMPUK";
+
+                bersihkan();
+
+                return;
 
             }
 
 
-            semuaData =
-                Array.isArray(response.data)
-                    ? response.data
-                    : [];
+            database=[];
 
 
-            dataTampil =
-                [...semuaData];
+            const data =
+                hasil.data || [];
 
 
-            tampilkanData();
+            data.forEach(function(item){
+
+                const tpk =
+                    String(
+                        item.tpk || ""
+                    ).trim();
 
 
-        }catch(error){
-
-            console.error(error);
-
-            document.getElementById(
-                "master"
-            ).innerHTML = `
-                <div class="empty">
-                    Gagal memuat data
-                </div>
-            `;
-
-            document.getElementById(
-                "info"
-            ).textContent =
-                error.message;
-
-        }
+                const tumpuk =
+                    String(
+                        item.tumpuk || ""
+                    ).trim();
 
 
-        delete window[callbackName];
-
-        const script =
-            document.getElementById(
-                callbackName
-            );
-
-        if(script){
-
-            script.remove();
-
-        }
-
-    };
+                if(!tumpuk){
+                    return;
+                }
 
 
-    const script =
-        document.createElement(
-            "script"
-        );
+                const stackId =
+                    String(
+                        item.stackId ||
+                        (
+                            tpk +
+                            "|" +
+                            tumpuk
+                        )
+                    ).trim();
 
 
-    script.id =
-        callbackName;
+                database.push({
+
+                    stackId:stackId,
+
+                    tpk:tpk,
+
+                    tumpuk:tumpuk,
+
+                    jumlahAwal:
+                        item.jumlahAwal || 0,
+
+                    volumeAwal:
+                        item.volumeAwal || 0,
+
+                    dipilih:true
+
+                });
+
+            });
+
+
+            tampilkan();
+
+            updateJumlah();
+
+
+            status.innerHTML =
+                "✅ DATA TUMPUK berhasil diambil";
+
+
+            bersihkan();
+
+        };
+
+
+    script =
+        document.createElement("script");
 
 
     script.src =
@@ -562,29 +694,17 @@ function ambilData(){
         "?action=getTumpukList" +
         "&callback=" +
         encodeURIComponent(
-            callbackName
+            callback
         );
 
 
     script.onerror =
         function(){
 
-            document.getElementById(
-                "master"
-            ).innerHTML = `
-                <div class="empty">
-                    Gagal terhubung ke server
-                </div>
-            `;
+            status.innerHTML =
+                "❌ Gagal menghubungi DATA TUMPUK";
 
-            document.getElementById(
-                "info"
-            ).textContent =
-                "Gagal mengambil data dari server.";
-
-            delete window[callbackName];
-
-            script.remove();
+            bersihkan();
 
         };
 
@@ -593,104 +713,93 @@ function ambilData(){
         script
     );
 
+
+    function bersihkan(){
+
+        delete window[
+            callback
+        ];
+
+
+        if(script){
+            script.remove();
+        }
+
+    }
+
 }
 
 
 /* =====================================================
-   TAMPILKAN DATA
+   TAMPILKAN
 ===================================================== */
 
-function tampilkanData(){
+function tampilkan(){
 
-    const master =
+    const grid =
         document.getElementById(
-            "master"
+            "grid"
         );
 
 
-    master.innerHTML = "";
+    grid.innerHTML="";
 
 
-    if(!dataTampil.length){
+    database.forEach(
+        function(data,index){
 
-        master.innerHTML = `
-            <div class="empty">
-                DATA TUMPUK TIDAK DITEMUKAN
-            </div>
-        `;
-
-        document.getElementById(
-            "info"
-        ).textContent =
-            "Tidak ada data.";
-
-        return;
-
-    }
-
-
-    dataTampil.forEach(
-        function(item){
-
-            const label =
+            const item =
                 document.createElement(
                     "div"
                 );
 
 
-            label.className =
-                "label";
+            item.className =
+                "item";
 
 
-            /* -----------------------------------------
-               TUMPUK
-            ----------------------------------------- */
+            item.dataset.index =
+                index;
 
-            const tumpuk =
+
+            item.dataset.tumpuk =
+                data.tumpuk
+                .toLowerCase();
+
+
+            item.dataset.tpk =
+                data.tpk
+                .toLowerCase();
+
+
+            const check =
                 document.createElement(
-                    "div"
-                );
-
-            tumpuk.className =
-                "tumpuk";
-
-            tumpuk.textContent =
-                "TUMPUK " +
-                String(
-                    item.tumpuk || ""
+                    "input"
                 );
 
 
-            /* -----------------------------------------
-               TPK
-            ----------------------------------------- */
-
-            const tpk =
-                document.createElement(
-                    "div"
-                );
-
-            tpk.className =
-                "tpk";
-
-            tpk.textContent =
-                "TPK ASAL : " +
-                String(
-                    item.tpk || "-"
-                );
+            check.type =
+                "checkbox";
 
 
-            /* -----------------------------------------
-               BARCODE
-            ----------------------------------------- */
+            check.checked =
+                data.dipilih;
 
-            const barcodeBox =
-                document.createElement(
-                    "div"
-                );
 
-            barcodeBox.className =
-                "barcode";
+            check.onchange =
+                function(){
+
+                    data.dipilih =
+                        this.checked;
+
+                    updateJumlah();
+
+                };
+
+
+            item.appendChild(
+                check
+            );
 
 
             const svg =
@@ -700,113 +809,511 @@ function tampilkanData(){
                 );
 
 
-            barcodeBox.appendChild(
+            item.appendChild(
                 svg
             );
 
 
-            label.appendChild(
-                tumpuk
-            );
-
-            label.appendChild(
-                tpk
-            );
-
-            label.appendChild(
-                barcodeBox
-            );
-
-
-            master.appendChild(
-                label
-            );
-
-
-            /* -----------------------------------------
-               BARCODE VALUE
-               
-               WAJIB PAKAI STACK ID
-               contoh:
-               SARADAN|29
-            ----------------------------------------- */
-
             const barcodeValue =
                 String(
-                    item.stackId ||
-                    (
-                        (item.tpk || "") +
-                        "|" +
-                        (item.tumpuk || "")
-                    )
+                    data.stackId
                 ).trim();
 
 
-            try{
+            JsBarcode(
 
-                JsBarcode(
-                    svg,
-                    barcodeValue,
-                    {
+                svg,
 
-                        format:
-                            "CODE128",
+                barcodeValue,
 
-                        lineColor:
-                            "#000000",
+                {
 
-                        background:
-                            "#ffffff",
+                    format:
+                        "CODE128",
 
-                        width:
-                            2,
+                    width:
+                        2,
 
-                        height:
-                            80,
+                    height:
+                        55,
 
-                        displayValue:
-                            false,
+                    displayValue:
+                        false,
 
-                        margin:
-                            0,
+                    margin:
+                        5
 
-                        marginTop:
-                            0,
+                }
 
-                        marginBottom:
-                            0,
+            );
 
-                        marginLeft:
-                            0,
 
-                        marginRight:
-                            0,
-
-                        valid:
-                            function(valid){
-
-                                if(!valid){
-
-                                    console.warn(
-                                        "Barcode tidak valid:",
-                                        barcodeValue
-                                    );
-
-                                }
-
-                            }
-
-                    }
+            const info =
+                document.createElement(
+                    "div"
                 );
 
 
-            }catch(error){
+            info.className =
+                "info";
 
-                console.error(
-                    "Gagal membuat barcode:",
-                    barcodeValue,
-                    error
+
+            const tumpuk =
+                document.createElement(
+                    "div"
                 );
+
+
+            tumpuk.className =
+                "tumpuk";
+
+
+            tumpuk.textContent =
+                "TUMPUK " +
+                data.tumpuk;
+
+
+            const tpk =
+                document.createElement(
+                    "div"
+                );
+
+
+            tpk.className =
+                "tpk";
+
+
+            tpk.textContent =
+                "TPK ASAL : " +
+                data.tpk;
+
+
+            const jumlah =
+                document.createElement(
+                    "div"
+                );
+
+
+            jumlah.className =
+                "jumlah";
+
+
+            jumlah.textContent =
+                "JUMLAH AWAL : " +
+                data.jumlahAwal +
+                " BATANG";
+
+
+            info.appendChild(
+                tumpuk
+            );
+
+
+            info.appendChild(
+                tpk
+            );
+
+
+            info.appendChild(
+                jumlah
+            );
+
+
+            item.appendChild(
+                info
+            );
+
+
+            grid.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function filterData(){
+
+    const tumpuk =
+        document
+        .getElementById(
+            "filterTumpuk"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const tpk =
+        document
+        .getElementById(
+            "filterTpk"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let jumlahCocok =
+        0;
+
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        const nilaiTumpuk =
+            item.dataset.tumpuk;
+
+
+        const nilaiTpk =
+            item.dataset.tpk;
+
+
+        /*
+           TUMPUK HARUS EXACT MATCH
+
+           Jadi:
+           1  ≠  11
+           1  ≠  12
+           29 = 29
+        */
+
+        const cocokTumpuk =
+            tumpuk === "" ||
+            nilaiTumpuk === tumpuk;
+
+
+        const cocokTpk =
+            tpk === "" ||
+            nilaiTpk.includes(tpk);
+
+
+        if(
+            cocokTumpuk &&
+            cocokTpk
+        ){
+
+            item.classList.remove(
+                "hide"
+            );
+
+            jumlahCocok++;
+
+        }
+
+        else{
+
+            item.classList.add(
+                "hide"
+            );
+
+        }
+
+    });
+
+
+    if(
+        tumpuk !== "" &&
+        tpk !== ""
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 Tumpuk " +
+            tumpuk +
+            " + TPK " +
+            tpk +
+            " — " +
+            jumlahCocok +
+            " ditemukan";
+
+    }
+
+    else if(
+        tumpuk !== ""
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 Tumpuk " +
+            tumpuk +
+            " — " +
+            jumlahCocok +
+            " ditemukan";
+
+    }
+
+    else if(
+        tpk !== ""
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 TPK " +
+            tpk +
+            " — " +
+            jumlahCocok +
+            " ditemukan";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🔎 Semua data ditampilkan";
+
+    }
+
+}
+
+
+/* =====================================================
+   TAMPILKAN SEMUA
+===================================================== */
+
+function tampilkanSemua(){
+
+    document.getElementById(
+        "filterTumpuk"
+    ).value="";
+
+
+    document.getElementById(
+        "filterTpk"
+    ).value="";
+
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        item.classList.remove(
+            "hide"
+        );
+
+    });
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "✅ Semua DATA TUMPUK ditampilkan";
+
+}
+
+
+/* =====================================================
+   PILIH HASIL FILTER
+===================================================== */
+
+function pilihHasilFilter(){
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        if(
+            item.classList.contains(
+                "hide"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        const index =
+            Number(
+                item.dataset.index
+            );
+
+
+        database[index].dipilih=true;
+
+
+        item.querySelector(
+            "input"
+        ).checked=true;
+
+    });
+
+
+    updateJumlah();
+
+}
+
+
+/* =====================================================
+   BATAL HASIL FILTER
+===================================================== */
+
+function batalHasilFilter(){
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        if(
+            item.classList.contains(
+                "hide"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        const index =
+            Number(
+                item.dataset.index
+            );
+
+
+        database[index].dipilih=false;
+
+
+        item.querySelector(
+            "input"
+        ).checked=false;
+
+    });
+
+
+    updateJumlah();
+
+}
+
+
+/* =====================================================
+   PILIH SEMUA
+===================================================== */
+
+function pilihSemua(){
+
+    database.forEach(
+        function(data){
+
+            data.dipilih=true;
+
+        }
+    );
+
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        item.querySelector(
+            "input"
+        ).checked=true;
+
+    });
+
+
+    updateJumlah();
+
+}
+
+
+/* =====================================================
+   BATAL SEMUA
+===================================================== */
+
+function batalSemua(){
+
+    database.forEach(
+        function(data){
+
+            data.dipilih=false;
+
+        }
+    );
+
+
+    document
+    .querySelectorAll(".item")
+    .forEach(function(item){
+
+        item.querySelector(
+            "input"
+        ).checked=false;
+
+    });
+
+
+    updateJumlah();
+
+}
+
+
+/* =====================================================
+   UPDATE JUMLAH
+===================================================== */
+
+function updateJumlah(){
+
+    const jumlah =
+        database.length;
+
+
+    const dipilih =
+        database.filter(
+            function(data){
+
+                return data.dipilih;
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "jumlah"
+    ).innerHTML =
+        "Jumlah tumpuk: " +
+        jumlah;
+
+
+    document.getElementById(
+        "dipilih"
+    ).innerHTML =
+        "Dipilih: " +
+        dipilih;
+
+}
+
+
+/* =====================================================
+   CETAK F4
+   8 LABEL / LEMBAR
+===================================================== */
+
+function cetakF4(){
+
+    const daftar=[];
+
+
+    database.forEach(
+        function(data){
+
+            if(
+                data.dipilih
+            ){
+
+                daftar.push(data);
 
             }
 
@@ -814,35 +1321,13 @@ function tampilkanData(){
     );
 
 
-    document.getElementById(
-        "info"
-    ).textContent =
-        dataTampil.length +
-        " label siap dicetak.";
+    if(
+        daftar.length === 0
+    ){
 
-
-}
-
-
-/* =====================================================
-   CARI
-===================================================== */
-
-function cariTumpuk(){
-
-    const input =
-        document.getElementById(
-            "searchInput"
-        ).value
-        .trim();
-
-
-    if(!input){
-
-        dataTampil =
-            [...semuaData];
-
-        tampilkanData();
+        alert(
+            "Belum ada tumpuk yang dipilih."
+        );
 
         return;
 
@@ -850,117 +1335,289 @@ function cariTumpuk(){
 
 
     /*
-       Kalau input angka:
-       cari TUMPUK secara EXACT.
-
-       Contoh:
-       1  -> hanya TUMPUK 1
-       29 -> semua TUMPUK 29
-       1 tidak boleh masuk 11, 12, 13
+       Urutkan berdasarkan nomor TUMPUK
     */
 
-    if(/^\d+$/.test(input)){
+    daftar.sort(
+        function(a,b){
 
-        dataTampil =
-            semuaData.filter(
-                function(item){
-
-                    return String(
-                        item.tumpuk || ""
-                    ).trim() === input;
-
-                }
-            );
-
-    }
-
-    /*
-       Kalau bukan angka:
-       cari TPK.
-    */
-
-    else{
-
-        const keyword =
-            input.toLowerCase();
-
-
-        dataTampil =
-            semuaData.filter(
-                function(item){
-
-                    return String(
-                        item.tpk || ""
+            const angkaA =
+                parseInt(
+                    String(
+                        a.tumpuk
+                    ).replace(
+                        /[^0-9-]/g,
+                        ""
                     )
-                    .toLowerCase()
-                    .includes(
-                        keyword
-                    );
-
-                }
-            );
-
-    }
+                );
 
 
-    tampilkanData();
-
-}
-
-
-/* =====================================================
-   RESET
-===================================================== */
-
-function resetCari(){
-
-    document.getElementById(
-        "searchInput"
-    ).value = "";
+            const angkaB =
+                parseInt(
+                    String(
+                        b.tumpuk
+                    ).replace(
+                        /[^0-9-]/g,
+                        ""
+                    )
+                );
 
 
-    dataTampil =
-        [...semuaData];
+            const nilaiA =
+                isNaN(
+                    angkaA
+                )
+                ? Infinity
+                : angkaA;
 
 
-    tampilkanData();
+            const nilaiB =
+                isNaN(
+                    angkaB
+                )
+                ? Infinity
+                : angkaB;
 
-}
 
-
-/* =====================================================
-   ENTER UNTUK SEARCH
-===================================================== */
-
-document
-    .getElementById(
-        "searchInput"
-    )
-    .addEventListener(
-        "keydown",
-        function(event){
-
-            if(
-                event.key ===
-                "Enter"
-            ){
-
-                cariTumpuk();
-
-            }
+            return nilaiA - nilaiB;
 
         }
     );
 
 
+    const area =
+        document.getElementById(
+            "areaCetak"
+        );
+
+
+    area.innerHTML="";
+
+
+    /*
+       8 LABEL / LEMBAR
+    */
+
+    const PER_LEMBAR =
+        8;
+
+
+    for(
+        let awal=0;
+        awal<daftar.length;
+        awal+=PER_LEMBAR
+    ){
+
+        const lembar =
+            document.createElement(
+                "div"
+            );
+
+
+        lembar.className =
+            "lembar";
+
+
+        const bagian =
+            daftar.slice(
+                awal,
+                awal+PER_LEMBAR
+            );
+
+
+        bagian.forEach(
+            function(data){
+
+                const label =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                label.className =
+                    "labelCetak";
+
+
+                /*
+                   BOX BARCODE
+                */
+
+                const barcodeBox =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                barcodeBox.className =
+                    "labelBarcode";
+
+
+                const svg =
+                    document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "svg"
+                    );
+
+
+                barcodeBox.appendChild(
+                    svg
+                );
+
+
+                JsBarcode(
+
+                    svg,
+
+                    String(
+                        data.stackId
+                    ).trim(),
+
+                    {
+
+                        format:
+                            "CODE128",
+
+                        width:
+                            2,
+
+                        height:
+                            55,
+
+                        displayValue:
+                            false,
+
+                        margin:
+                            4
+
+                    }
+
+                );
+
+
+                label.appendChild(
+                    barcodeBox
+                );
+
+
+                /*
+                   INFO TUMPUK
+                */
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                info.className =
+                    "infoCetak";
+
+
+                const tumpuk =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                tumpuk.className =
+                    "tumpukCetak";
+
+
+                tumpuk.textContent =
+                    "TUMPUK " +
+                    data.tumpuk;
+
+
+                const tpk =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                tpk.className =
+                    "tpkCetak";
+
+
+                tpk.textContent =
+                    "TPK ASAL : " +
+                    data.tpk;
+
+
+                info.appendChild(
+                    tumpuk
+                );
+
+
+                info.appendChild(
+                    tpk
+                );
+
+
+                label.appendChild(
+                    info
+                );
+
+
+                lembar.appendChild(
+                    label
+                );
+
+            }
+        );
+
+
+        area.appendChild(
+            lembar
+        );
+
+    }
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "🖨️ Siap mencetak " +
+        daftar.length +
+        " barcode — " +
+        Math.ceil(
+            daftar.length / 8
+        ) +
+        " lembar";
+
+
+    setTimeout(
+        function(){
+
+            window.print();
+
+        },
+        300
+    );
+
+}
+
+
 /* =====================================================
-   MULAI
+   SELESAI PRINT
 ===================================================== */
 
-ambilData();
+window.addEventListener(
+    "afterprint",
+    function(){
+
+        const area =
+            document.getElementById(
+                "areaCetak"
+            );
+
+
+        area.innerHTML="";
+
+    }
+);
+
 
 </script>
-
 
 </body>
 
