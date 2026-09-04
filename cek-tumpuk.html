@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CEK TUMPUK</title>
+
+<script src="https://unpkg.com/html5-qrcode"
+crossorigin="anonymous"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:0;
+    background:#f1f5f9;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#0f172a;
+}
+
+.container{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    background:#0f172a;
+    color:white;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+}
+
+.header-title{
+    font-size:25px;
+    font-weight:800;
+    margin:0;
+}
+
+.header-sub{
+    font-size:13px;
+    opacity:.75;
+    margin-top:5px;
+}
+
+/* =====================================================
+   SCANNER
+===================================================== */
+
+.scanner-box{
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+#reader{
+    width:100%;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.scan-status{
+    text-align:center;
+    font-size:13px;
+    margin-top:10px;
+    color:#64748b;
+}
+
+.manual-box{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.manual-box input{
+    flex:1;
+    min-width:0;
+    height:46px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    padding:0 12px;
+    font-size:16px;
+    outline:none;
+}
+
+.manual-box input:focus{
+    border-color:#2563eb;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
+}
+
+.btn{
+    min-height:44px;
+    border-radius:10px;
+    padding:0 16px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-secondary{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:white;
+}
+
+.scan-buttons{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.scan-buttons .btn{
+    flex:1;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading{
+    display:none;
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    text-align:center;
+    margin-bottom:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.07);
+}
+
+.loading.show{
+    display:block;
+}
+
+.spinner{
+    width:28px;
+    height:28px;
+    border:3px solid #cbd5e1;
+    border-top-color:#2563eb;
+    border-radius:50%;
+    margin:0 auto 10px;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error-box{
+    display:none;
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #fecaca;
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:15px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.error-box.show{
+    display:block;
+}
+
+/* =====================================================
+   HASIL TUMPUK
+===================================================== */
+
+.result{
+    display:none;
+}
+
+.result.show{
+    display:block;
+}
+
+.stack-card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.09);
+}
+
+/* =====================================================
+   JUDUL TUMPUK
+===================================================== */
+
+.stack-title{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.stack-title .tumpuk{
+    font-size:30px;
+    font-weight:900;
+    text-transform:uppercase;
+}
+
+.stack-title .tpk{
+    margin-top:5px;
+    font-size:14px;
+    color:#64748b;
+    font-weight:700;
+}
+
+/* =====================================================
+   JUMLAH BATANG
+===================================================== */
+
+.main-number{
+    background:#eff6ff;
+    border:2px solid #bfdbfe;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    margin-bottom:12px;
+}
+
+.main-number .label{
+    font-size:13px;
+    font-weight:800;
+    color:#2563eb;
+    letter-spacing:.5px;
+}
+
+.main-number .value{
+    margin-top:6px;
+    font-size:42px;
+    line-height:1;
+    font-weight:900;
+    color:#0f172a;
+}
+
+.main-number .unit{
+    margin-top:6px;
+    font-size:14px;
+    color:#64748b;
+    font-weight:700;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.info-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:13px;
+    padding:13px;
+}
+
+.info-box .label{
+    font-size:11px;
+    color:#64748b;
+    font-weight:700;
+    text-transform:uppercase;
+}
+
+.info-box .value{
+    margin-top:4px;
+    font-size:20px;
+    font-weight:900;
+}
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.section{
+    margin-top:18px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.section-count{
+    font-size:12px;
+    background:#e2e8f0;
+    padding:5px 9px;
+    border-radius:20px;
+    color:#475569;
+}
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+.register-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.register-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:11px;
+    padding:11px 12px;
+}
+
+.register-item input{
+    width:20px;
+    height:20px;
+    accent-color:#2563eb;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.register-number{
+    font-family:monospace;
+    font-size:16px;
+    font-weight:800;
+    flex:1;
+}
+
+.register-item.checked{
+    background:#f0fdf4;
+    border-color:#bbf7d0;
+}
+
+.register-item.checked .register-number{
+    color:#15803d;
+}
+
+.check-status{
+    font-size:11px;
+    font-weight:800;
+    color:#16a34a;
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+    text-align:center;
+    padding:20px;
+    color:#64748b;
+    background:#f8fafc;
+    border-radius:12px;
+    font-size:14px;
+}
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+.history-list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.history-item{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:13px;
+    overflow:hidden;
+}
+
+.history-head{
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    cursor:pointer;
+}
+
+.history-date{
+    font-size:15px;
+    font-weight:900;
+}
+
+.history-taken{
+    font-size:13px;
+    color:#dc2626;
+    font-weight:800;
+    margin-top:3px;
+}
+
+.history-arrow{
+    font-size:18px;
+    color:#64748b;
+    transition:.2s;
+}
+
+.history-item.open .history-arrow{
+    transform:rotate(180deg);
+}
+
+.history-detail{
+    display:none;
+    padding:0 14px 14px;
+    border-top:1px solid #e2e8f0;
+}
+
+.history-item.open .history-detail{
+    display:block;
+}
+
+.detail-title{
+    font-size:12px;
+    color:#64748b;
+    font-weight:700;
+    margin:12px 0 8px;
+}
+
+.detail-register{
+    display:block;
+    font-family:monospace;
+    font-size:15px;
+    font-weight:800;
+    padding:7px 0;
+    border-bottom:1px dashed #cbd5e1;
+}
+
+.detail-register:last-child{
+    border-bottom:0;
+}
+
+/* =====================================================
+   BOTTOM BUTTON
+===================================================== */
+
+.bottom-buttons{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.bottom-buttons .btn{
+    flex:1;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer{
+    text-align:center;
+    font-size:11px;
+    color:#94a3b8;
+    padding:5px 0 20px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:420px){
+
+    .container{
+        padding:10px;
+    }
+
+    .header{
+        padding:16px;
+    }
+
+    .header-title{
+        font-size:22px;
+    }
+
+    .stack-title .tumpuk{
+        font-size:27px;
+    }
+
+    .main-number .value{
+        font-size:38px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="header">
+
+        <div class="header-title">
+            CEK TUMPUK
+        </div>
+
+        <div class="header-sub">
+            Scan barcode tumpuk untuk melihat data terbaru
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SCANNER
+    ================================================= -->
+
+    <div class="scanner-box">
+
+        <div id="reader"></div>
+
+        <div class="scan-status"
+             id="scanStatus">
+            Arahkan kamera ke barcode TUMPUK
+        </div>
+
+        <div class="manual-box">
+
+            <input
+                type="text"
+                id="manualInput"
+                placeholder="Contoh: SARADAN|1"
+                autocomplete="off">
+
+            <button
+                class="btn btn-primary"
+                onclick="prosesManual()">
+
+                CARI
+
+            </button>
+
+        </div>
+
+        <div class="scan-buttons">
+
+            <button
+                class="btn btn-secondary"
+                onclick="mulaiScanner()">
+
+                SCAN LAGI
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="stopScanner()">
+
+                STOP
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         LOADING
+    ================================================= -->
+
+    <div
+        class="loading"
+        id="loading">
+
+        <div class="spinner"></div>
+
+        <b>Mengambil data terbaru...</b>
+
+    </div>
+
+
+    <!-- =================================================
+         ERROR
+    ================================================= -->
+
+    <div
+        class="error-box"
+        id="errorBox">
+    </div>
+
+
+    <!-- =================================================
+         HASIL
+    ================================================= -->
+
+    <div
+        class="result"
+        id="result">
+
+        <div class="stack-card">
+
+            <!-- =========================================
+                 JUDUL
+            ========================================= -->
+
+            <div class="stack-title">
+
+                <div
+                    class="tumpuk"
+                    id="tumpukTitle">
+                    TUMPUK
+                </div>
+
+                <div
+                    class="tpk"
+                    id="tpkTitle">
+                    TPK ASAL :
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 JUMLAH AWAL
+            ========================================= -->
+
+            <div class="main-number">
+
+                <div class="label">
+                    JUMLAH BATANG AWAL
+                </div>
+
+                <div
+                    class="value"
+                    id="jumlahAwal">
+                    0
+                </div>
+
+                <div class="unit">
+                    BATANG
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 INFO
+            ========================================= -->
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Volume Awal
+                    </div>
+
+                    <div
+                        class="value"
+                        id="volumeAwal">
+                        0 m³
+                    </div>
+
+                </div>
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Register
+                    </div>
+
+                    <div
+                        class="value"
+                        id="registerCount">
+                        0
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 REGISTER
+            ========================================= -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    <span>
+                        DAFTAR REGISTER
+                    </span>
+
+                    <span
+                        class="section-count"
+                        id="registerBadge">
+                        0 REGISTER
+                    </span>
+
+                </div>
+
+                <div
+                    class="register-list"
+                    id="registerList">
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 HISTORY
+            ========================================= -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    <span>
+                        HISTORY PENGAMBILAN
+                    </span>
+
+                    <span
+                        class="section-count"
+                        id="historyBadge">
+                        0
+                    </span>
+
+                </div>
+
+                <div
+                    class="history-list"
+                    id="historyList">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =============================================
+             BUTTON
+        ============================================= -->
+
+        <div class="bottom-buttons">
+
+            <button
+                class="btn btn-primary"
+                onclick="refreshData()">
+
+                REFRESH DATA
+
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                onclick="kembaliScan()">
+
+                KEMBALI SCAN
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        Sistem CEK TUMPUK
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   KONFIGURASI BACKEND
+===================================================== */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
+
+
+/* =====================================================
+   VARIABEL
+===================================================== */
+
+let html5QrCode = null;
+
+let scannerRunning = false;
+
+let currentTPK = "";
+
+let currentTumpuk = "";
+
+let currentStackId = "";
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        mulaiScanner();
+
+        document
+            .getElementById("manualInput")
+            .addEventListener(
+                "keydown",
+                function(e){
+
+                    if(e.key === "Enter"){
+                        prosesManual();
+                    }
+
+                }
+            );
+
+    }
+);
+
+
+/* =====================================================
+   START SCANNER
+===================================================== */
+
+async function mulaiScanner(){
+
+    hideError();
+
+    if(scannerRunning){
+        return;
+    }
+
+    const reader =
+        document.getElementById("reader");
+
+    reader.innerHTML = "";
+
+    html5QrCode =
+        new Html5Qrcode("reader");
+
+    const config = {
+
+        fps:10,
+
+        qrbox:function(
+            width,
+            height
+        ){
+
+            const size =
+                Math.min(width,height) * 0.72;
+
+            return {
+                width:size,
+                height:size
+            };
+
+        },
+
+        aspectRatio:1.0
+
+    };
+
+    try{
+
+        await html5QrCode.start(
+
+            {
+                facingMode:"environment"
+            },
+
+            config,
+
+            function(decodedText){
+
+                hasilScan(decodedText);
+
+            },
+
+            function(errorMessage){
+
+                // Abaikan error scan frame
+                // agar tampilan tidak penuh pesan
+
+            }
+
+        );
+
+        scannerRunning = true;
+
+        document
+            .getElementById("scanStatus")
+            .textContent =
+            "Arahkan kamera ke barcode TUMPUK";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        document
+            .getElementById("scanStatus")
+            .textContent =
+            "Kamera tidak dapat digunakan. Gunakan input manual.";
+
+    }
+
+}
+
+
+/* =====================================================
+   STOP SCANNER
+===================================================== */
+
+async function stopScanner(){
+
+    if(
+        html5QrCode &&
+        scannerRunning
+    ){
+
+        try{
+
+            await html5QrCode.stop();
+
+        }
+        catch(error){
+
+            console.log(error);
+
+        }
+
+        scannerRunning = false;
+
+    }
+
+}
+
+
+/* =====================================================
+   HASIL SCAN
+===================================================== */
+
+function hasilScan(decodedText){
+
+    if(!decodedText){
+        return;
+    }
+
+    decodedText =
+        decodedText
+        .trim();
+
+    console.log(
+        "BARCODE TUMPUK:",
+        decodedText
+    );
+
+    stopScanner();
+
+    prosesKodeTumpuk(decodedText);
+
+}
+
+
+/* =====================================================
+   INPUT MANUAL
+===================================================== */
+
+function prosesManual(){
+
+    const input =
+        document
+        .getElementById("manualInput");
+
+    let kode =
+        input.value.trim();
+
+    if(!kode){
+
+        showError(
+            "Masukkan kode TUMPUK terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+    prosesKodeTumpuk(kode);
+
+}
+
+
+/* =====================================================
+   PARSE STACK ID
+===================================================== */
+
+function prosesKodeTumpuk(kode){
+
+    hideError();
+
+    kode =
+        kode
+        .trim();
+
+    /*
+       FORMAT UTAMA:
+
+       SARADAN|1
+
+       Artinya:
+
+       TPK    = SARADAN
+       TUMPUK = 1
+    */
+
+    let parts =
+        kode.split("|");
+
+
+    /*
+       Jika scanner membaca:
+
+       SARADAN|1
+    */
+
+    if(parts.length >= 2){
+
+        currentTPK =
+            parts[0]
+            .trim();
+
+        currentTumpuk =
+            parts
+            .slice(1)
+            .join("|")
+            .trim();
+
+    }
+
+    /*
+       Dukungan tambahan:
+       SARADAN-T01
+
+       Tidak mengganggu format utama.
+    */
+
+    else{
+
+        const match =
+            kode.match(
+                /^(.+)-T(\d+)$/i
+            );
+
+        if(match){
+
+            currentTPK =
+                match[1]
+                .trim();
+
+            currentTumpuk =
+                match[2]
+                .trim();
+
+        }
+
+        else{
+
+            showError(
+                "Format barcode TUMPUK tidak dikenali.<br><br>" +
+                "Gunakan format:<br>" +
+                "<b>TPK|TUMPUK</b><br><br>" +
+                "Contoh:<br>" +
+                "<b>SARADAN|1</b>"
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    if(
+        !currentTPK ||
+        !currentTumpuk
+    ){
+
+        showError(
+            "TPK atau nomor TUMPUK tidak terbaca."
+        );
+
+        return;
+
+    }
+
+
+    currentStackId =
+        currentTPK +
+        "|" +
+        currentTumpuk;
+
+
+    ambilDataTumpuk();
+
+}
+
+
+/* =====================================================
+   AMBIL DATA TUMPUK
+===================================================== */
+
+function ambilDataTumpuk(){
+
+    showLoading();
+
+    const callbackName =
+        "callbackTumpuk_" +
+        Date.now();
+
+
+    window[callbackName] =
+        function(data){
+
+            try{
+
+                hideLoading();
+
+                if(
+                    !data ||
+                    data.success !== true
+                ){
+
+                    showError(
+                        data &&
+                        data.message
+                        ?
+                        data.message
+                        :
+                        "Data TUMPUK tidak ditemukan."
+                    );
+
+                    return;
+
+                }
+
+                tampilkanData(data);
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                showError(
+                    "Terjadi kesalahan saat menampilkan data."
+                );
+
+            }
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    const url =
+        API_URL +
+        "?action=getTumpukData" +
+        "&tpk=" +
+        encodeURIComponent(currentTPK) +
+        "&tumpuk=" +
+        encodeURIComponent(currentTumpuk) +
+        "&callback=" +
+        callbackName +
+        "&_=" +
+        Date.now();
+
+
+    const script =
+        document.createElement("script");
+
+    script.src = url;
+
+    script.onerror =
+        function(){
+
+            hideLoading();
+
+            showError(
+                "Gagal menghubungi backend CEK TUMPUK."
+            );
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    document
+        .body
+        .appendChild(script);
+
+
+    setTimeout(
+        function(){
+
+            if(
+                document.body.contains(script)
+            ){
+
+                cleanupJSONP(
+                    callbackName,
+                    script
+                );
+
+                if(
+                    document
+                    .getElementById("loading")
+                    .classList
+                    .contains("show")
+                ){
+
+                    hideLoading();
+
+                    showError(
+                        "Waktu koneksi habis. Coba lagi."
+                    );
+
+                }
+
+            }
+
+        },
+        15000
+    );
+
+}
+
+
+/* =====================================================
+   TAMPILKAN DATA
+===================================================== */
+
+function tampilkanData(data){
+
+    document
+        .getElementById("result")
+        .classList
+        .add("show");
+
+
+    /*
+       TUMPUK
+    */
+
+    document
+        .getElementById("tumpukTitle")
+        .textContent =
+        "TUMPUK " +
+        data.tumpuk;
+
+
+    /*
+       TPK
+    */
+
+    document
+        .getElementById("tpkTitle")
+        .textContent =
+        "TPK ASAL : " +
+        data.tpk;
+
+
+    /*
+       JUMLAH AWAL
+    */
+
+    document
+        .getElementById("jumlahAwal")
+        .textContent =
+        formatAngka(
+            data.jumlahAwal
+        );
+
+
+    /*
+       VOLUME
+    */
+
+    document
+        .getElementById("volumeAwal")
+        .textContent =
+        formatVolume(
+            data.volumeAwal
+        );
+
+
+    /*
+       REGISTER
+    */
+
+    const registers =
+        Array.isArray(data.registers)
+        ?
+        data.registers
+        :
+        [];
+
+
+    document
+        .getElementById("registerCount")
+        .textContent =
+        registers.length;
+
+
+    document
+        .getElementById("registerBadge")
+        .textContent =
+        registers.length +
+        " REGISTER";
+
+
+    tampilkanRegister(
+        registers,
+        data
+    );
+
+
+    /*
+       HISTORY
+    */
+
+    const history =
+        Array.isArray(data.history)
+        ?
+        data.history
+        :
+        [];
+
+
+    document
+        .getElementById("historyBadge")
+        .textContent =
+        history.length;
+
+
+    tampilkanHistory(
+        history
+    );
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   TAMPILKAN REGISTER
+===================================================== */
+
+function tampilkanRegister(
+    registers,
+    data
+){
+
+    const container =
+        document
+        .getElementById("registerList");
+
+    container.innerHTML = "";
+
+
+    if(!registers.length){
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Tidak ada register dalam tumpukan.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    registers.forEach(
+        function(item,index){
+
+            /*
+               Backend biasanya mengirim:
+
+               register
+               checked
+
+               Tetapi kita buat
+               fleksibel terhadap nama
+            */
+
+            const register =
+                item.register !== undefined
+                ?
+                item.register
+                :
+                item.REGISTER;
+
+
+            const checked =
+                item.checked === true ||
+                item.checked === "true" ||
+                item.CHECKED === true ||
+                item.CHECKED === "true";
+
+
+            const wrapper =
+                document
+                .createElement("div");
+
+            wrapper.className =
+                "register-item" +
+                (
+                    checked
+                    ?
+                    " checked"
+                    :
+                    ""
+                );
+
+
+            const checkbox =
+                document
+                .createElement("input");
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.checked =
+                checked;
+
+
+            checkbox.addEventListener(
+                "change",
+                function(){
+
+                    setCheckbox(
+                        register,
+                        checkbox.checked,
+                        wrapper,
+                        status
+                    );
+
+                }
+            );
+
+
+            const number =
+                document
+                .createElement("div");
+
+            number.className =
+                "register-number";
+
+            number.textContent =
+                register;
+
+
+            const status =
+                document
+                .createElement("div");
+
+            status.className =
+                "check-status";
+
+            status.textContent =
+                checked
+                ?
+                "SUDAH DICEK"
+                :
+                "";
+
+
+            wrapper.appendChild(
+                checkbox
+            );
+
+            wrapper.appendChild(
+                number
+            );
+
+            wrapper.appendChild(
+                status
+            );
+
+
+            container.appendChild(
+                wrapper
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+function setCheckbox(
+    register,
+    checked,
+    wrapper,
+    status
+){
+
+    /*
+       Update tampilan langsung
+    */
+
+    if(checked){
+
+        wrapper.classList.add(
+            "checked"
+        );
+
+        status.textContent =
+            "MENYIMPAN...";
+
+    }
+    else{
+
+        wrapper.classList.remove(
+            "checked"
+        );
+
+        status.textContent =
+            "MENYIMPAN...";
+
+    }
+
+
+    const callbackName =
+        "callbackCek_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+            Math.random()*1000
+        );
+
+
+    window[callbackName] =
+        function(data){
+
+            if(
+                data &&
+                data.success === true
+            ){
+
+                status.textContent =
+                    checked
+                    ?
+                    "SUDAH DICEK"
+                    :
+                    "";
+
+                if(checked){
+
+                    wrapper.classList.add(
+                        "checked"
+                    );
+
+                }
+                else{
+
+                    wrapper.classList.remove(
+                        "checked"
+                    );
+
+                }
+
+            }
+            else{
+
+                status.textContent =
+                    "GAGAL";
+
+                /*
+                   Balikkan checkbox
+                   jika gagal
+                */
+
+                const checkbox =
+                    wrapper
+                    .querySelector(
+                        'input[type="checkbox"]'
+                    );
+
+                checkbox.checked =
+                    !checked;
+
+            }
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    const url =
+        API_URL +
+        "?action=setCek" +
+        "&stackId=" +
+        encodeURIComponent(
+            currentStackId
+        ) +
+        "&register=" +
+        encodeURIComponent(
+            register
+        ) +
+        "&checked=" +
+        encodeURIComponent(
+            checked
+        ) +
+        "&callback=" +
+        callbackName +
+        "&_=" +
+        Date.now();
+
+
+    const script =
+        document.createElement("script");
+
+    script.src =
+        url;
+
+
+    script.onerror =
+        function(){
+
+            status.textContent =
+                "GAGAL";
+
+            const checkbox =
+                wrapper
+                .querySelector(
+                    'input[type="checkbox"]'
+                );
+
+            checkbox.checked =
+                !checked;
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    document
+        .body
+        .appendChild(script);
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function tampilkanHistory(
+    history
+){
+
+    const container =
+        document
+        .getElementById("historyList");
+
+    container.innerHTML = "";
+
+
+    if(!history.length){
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Belum ada history pengambilan.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    history.forEach(
+        function(item){
+
+            const date =
+                item.tanggal !== undefined
+                ?
+                item.tanggal
+                :
+                item.TANGGAL;
+
+
+            const jumlah =
+                item.jumlah !== undefined
+                ?
+                item.jumlah
+                :
+                (
+                    item.jumlahBatang !== undefined
+                    ?
+                    item.jumlahBatang
+                    :
+                    item.JUMLAH
+                );
+
+
+            const registers =
+                Array.isArray(
+                    item.registers
+                )
+                ?
+                item.registers
+                :
+                [];
+
+
+            const box =
+                document
+                .createElement("div");
+
+            box.className =
+                "history-item";
+
+
+            const head =
+                document
+                .createElement("div");
+
+            head.className =
+                "history-head";
+
+
+            const left =
+                document
+                .createElement("div");
+
+
+            const dateEl =
+                document
+                .createElement("div");
+
+            dateEl.className =
+                "history-date";
+
+            dateEl.textContent =
+                formatTanggal(
+                    date
+                );
+
+
+            const takenEl =
+                document
+                .createElement("div");
+
+            takenEl.className =
+                "history-taken";
+
+            takenEl.textContent =
+                "DIAMBIL " +
+                formatAngka(jumlah) +
+                " BATANG";
+
+
+            left.appendChild(
+                dateEl
+            );
+
+            left.appendChild(
+                takenEl
+            );
+
+
+            const arrow =
+                document
+                .createElement("div");
+
+            arrow.className =
+                "history-arrow";
+
+            arrow.textContent =
+                "▼";
+
+
+            head.appendChild(
+                left
+            );
+
+            head.appendChild(
+                arrow
+            );
+
+
+            const detail =
+                document
+                .createElement("div");
+
+            detail.className =
+                "history-detail";
+
+
+            const detailTitle =
+                document
+                .createElement("div");
+
+            detailTitle.className =
+                "detail-title";
+
+            detailTitle.textContent =
+                "REGISTER YANG DIAMBIL";
+
+
+            detail.appendChild(
+                detailTitle
+            );
+
+
+            if(!registers.length){
+
+                const empty =
+                    document
+                    .createElement("div");
+
+                empty.className =
+                    "empty";
+
+                empty.textContent =
+                    "Detail register tidak tersedia.";
+
+                detail.appendChild(
+                    empty
+                );
+
+            }
+            else{
+
+                registers.forEach(
+                    function(register){
+
+                        const el =
+                            document
+                            .createElement("span");
+
+                        el.className =
+                            "detail-register";
+
+                        el.textContent =
+                            register;
+
+                        detail.appendChild(
+                            el
+                        );
+
+                    }
+                );
+
+            }
+
+
+            head.addEventListener(
+                "click",
+                function(){
+
+                    box.classList.toggle(
+                        "open"
+                    );
+
+                }
+            );
+
+
+            box.appendChild(
+                head
+            );
+
+            box.appendChild(
+                detail
+            );
+
+
+            container.appendChild(
+                box
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   REFRESH DATA
+===================================================== */
+
+function refreshData(){
+
+    if(
+        !currentTPK ||
+        !currentTumpuk
+    ){
+
+        showError(
+            "Belum ada TUMPUK yang dipilih."
+        );
+
+        return;
+
+    }
+
+    ambilDataTumpuk();
+
+}
+
+
+/* =====================================================
+   KEMBALI SCAN
+===================================================== */
+
+function kembaliScan(){
+
+    document
+        .getElementById("result")
+        .classList
+        .remove("show");
+
+    document
+        .getElementById("errorBox")
+        .classList
+        .remove("show");
+
+    document
+        .getElementById("manualInput")
+        .value = "";
+
+    currentTPK = "";
+
+    currentTumpuk = "";
+
+    currentStackId = "";
+
+    mulaiScanner();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   FORMAT ANGKA
+===================================================== */
+
+function formatAngka(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "0";
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if(
+        Number.isNaN(number)
+    ){
+
+        return value;
+
+    }
+
+
+    return number.toLocaleString(
+        "id-ID"
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT VOLUME
+===================================================== */
+
+function formatVolume(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "0 m³";
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if(
+        Number.isNaN(number)
+    ){
+
+        return value + " m³";
+
+    }
+
+
+    return number.toLocaleString(
+        "id-ID",
+        {
+            minimumFractionDigits:0,
+            maximumFractionDigits:6
+        }
+    ) + " m³";
+
+}
+
+
+/* =====================================================
+   FORMAT TANGGAL
+===================================================== */
+
+function formatTanggal(value){
+
+    if(!value){
+        return "-";
+    }
+
+
+    /*
+       Jika backend sudah
+       mengirim dd-mm-yyyy
+    */
+
+    if(
+        typeof value === "string" &&
+        /^\d{1,2}-\d{1,2}-\d{4}$/.test(
+            value
+        )
+    ){
+
+        return value;
+
+    }
+
+
+    /*
+       Jika yyyy-mm-dd
+    */
+
+    if(
+        typeof value === "string" &&
+        /^\d{4}-\d{1,2}-\d{1,2}$/.test(
+            value
+        )
+    ){
+
+        const p =
+            value.split("-");
+
+        return (
+            String(p[2]).padStart(2,"0") +
+            "-" +
+            String(p[1]).padStart(2,"0") +
+            "-" +
+            p[0]
+        );
+
+    }
+
+
+    /*
+       Jika format Date
+    */
+
+    const d =
+        new Date(value);
+
+
+    if(
+        !Number.isNaN(
+            d.getTime()
+        )
+    ){
+
+        return (
+            String(
+                d.getDate()
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                d.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            d.getFullYear()
+        );
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+function showLoading(){
+
+    document
+        .getElementById("loading")
+        .classList
+        .add("show");
+
+}
+
+function hideLoading(){
+
+    document
+        .getElementById("loading")
+        .classList
+        .remove("show");
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(message){
+
+    const box =
+        document
+        .getElementById("errorBox");
+
+    box.innerHTML =
+        message;
+
+    box.classList.add(
+        "show"
+    );
+
+}
+
+function hideError(){
+
+    document
+        .getElementById("errorBox")
+        .classList
+        .remove("show");
+
+}
+
+
+/* =====================================================
+   CLEANUP JSONP
+===================================================== */
+
+function cleanupJSONP(
+    callbackName,
+    script
+){
+
+    try{
+
+        delete window[
+            callbackName
+        ];
+
+    }
+    catch(error){
+
+        console.log(error);
+
+    }
+
+
+    if(
+        script &&
+        script.parentNode
+    ){
+
+        script.parentNode.removeChild(
+            script
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
