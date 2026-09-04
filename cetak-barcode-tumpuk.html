@@ -885,58 +885,76 @@ function filterData(){
 
     const keyword =
         document
-            .getElementById(
-                "search"
-            )
+            .getElementById("search")
             .value
             .trim()
             .toLowerCase();
 
-
+    /* KOSONG = TAMPILKAN SEMUA */
     if(!keyword){
 
-        renderLabels(
-            allData
+        renderLabels(allData);
+
+        setStatus(
+            "Menampilkan " +
+            allData.length +
+            " tumpuk."
         );
 
         return;
-
     }
 
 
     const filtered =
-        allData.filter(
-            function(item){
+        allData.filter(function(item){
+
+            const tpk =
+                String(item.tpk || "")
+                    .trim()
+                    .toLowerCase();
+
+            const tumpuk =
+                String(item.tumpuk || "")
+                    .trim()
+                    .toLowerCase();
+
+
+            /*
+             * KALAU YANG DIKETIK ANGKA TUMPUK,
+             * HARUS COCOK PERSIS.
+             *
+             * Ketik 1
+             * → TUMPUK 1
+             *
+             * TIDAK:
+             * → TUMPUK 13
+             * → TUMPUK 100
+             * → TUMPUK 128
+             */
+            if(
+                /^\d+$/.test(keyword)
+            ){
 
                 return (
-
-                    String(
-                        item.tpk
-                    )
-                    .toLowerCase()
-                    .includes(
-                        keyword
-                    )
-
-                    ||
-
-                    String(
-                        item.tumpuk
-                    )
-                    .toLowerCase()
-                    .includes(
-                        keyword
-                    )
-
+                    tumpuk === keyword
                 );
 
             }
-        );
 
 
-    renderLabels(
-        filtered
-    );
+            /*
+             * KALAU CARI TPK,
+             * BOLEH SEBAGIAN.
+             *
+             * SAR
+             * → SARADAN
+             */
+            return tpk.includes(keyword);
+
+        });
+
+
+    renderLabels(filtered);
 
 
     setStatus(
@@ -946,7 +964,6 @@ function filterData(){
     );
 
 }
-
 
 /************************************************
  * STATUS
