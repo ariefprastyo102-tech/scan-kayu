@@ -77,6 +77,33 @@ body{
     border-radius:14px;
 }
 
+/*
+   AREA SCAN MEMANJANG
+   Cocok untuk barcode TUMPUK yang panjang
+*/
+
+#reader__scan_region{
+    min-height:150px !important;
+}
+
+#reader video{
+    width:100% !important;
+    height:auto !important;
+    object-fit:cover !important;
+}
+
+#reader__dashboard{
+    padding-top:8px;
+}
+
+#reader__dashboard_section{
+    margin-top:5px;
+}
+
+#reader__dashboard_section_csr{
+    margin-top:5px;
+}
+
 .scan-status{
     text-align:center;
     font-size:13px;
@@ -199,7 +226,7 @@ button{
 }
 
 /* =====================================================
-   HASIL TUMPUK
+   HASIL
 ===================================================== */
 
 .result{
@@ -219,7 +246,7 @@ button{
 }
 
 /* =====================================================
-   JUDUL TUMPUK
+   JUDUL
 ===================================================== */
 
 .stack-title{
@@ -631,16 +658,22 @@ button{
 
         <div class="scan-status"
              id="scanStatus">
-            Arahkan kamera ke barcode TUMPUK
+            Arahkan barcode panjang ke area scan
         </div>
+
+
+        <!-- =============================================
+             SEARCH TUMPUK
+        ============================================== -->
 
         <div class="manual-box">
 
             <input
-                type="text"
+                type="search"
                 id="manualInput"
-                placeholder="Contoh: SARADAN|1"
-                autocomplete="off">
+                placeholder="Ketik nomor TUMPUK..."
+                autocomplete="off"
+                inputmode="numeric">
 
             <button
                 class="btn btn-primary"
@@ -651,6 +684,7 @@ button{
             </button>
 
         </div>
+
 
         <div class="scan-buttons">
 
@@ -755,7 +789,7 @@ button{
 
 
             <!-- =========================================
-                 INFO
+                 VOLUME + JUMLAH CEK
             ========================================= -->
 
             <div class="info-grid">
@@ -774,15 +808,16 @@ button{
 
                 </div>
 
+
                 <div class="info-box">
 
                     <div class="label">
-                        Register
+                        Jumlah Cek
                     </div>
 
                     <div
                         class="value"
-                        id="registerCount">
+                        id="jumlahCek">
                         0
                     </div>
 
@@ -928,6 +963,8 @@ let currentTumpuk = "";
 
 let currentStackId = "";
 
+let currentRegisters = [];
+
 
 /* =====================================================
    INIT
@@ -976,6 +1013,16 @@ async function mulaiScanner(){
     html5QrCode =
         new Html5Qrcode("reader");
 
+
+    /*
+       BARCODE MEMANJANG
+
+       Lebar besar
+       Tinggi kecil
+
+       Jadi area scan tidak kotak lagi.
+    */
+
     const config = {
 
         fps:10,
@@ -985,19 +1032,30 @@ async function mulaiScanner(){
             height
         ){
 
-            const size =
-                Math.min(width,height) * 0.72;
+            const scanWidth =
+                Math.floor(
+                    width * 0.90
+                );
+
+            const scanHeight =
+                Math.floor(
+                    Math.min(
+                        130,
+                        height * 0.35
+                    )
+                );
 
             return {
-                width:size,
-                height:size
+                width:scanWidth,
+                height:scanHeight
             };
 
         },
 
-        aspectRatio:1.0
+        aspectRatio:2.5
 
     };
+
 
     try{
 
@@ -1023,22 +1081,26 @@ async function mulaiScanner(){
 
         );
 
+
         scannerRunning = true;
+
 
         document
             .getElementById("scanStatus")
             .textContent =
-            "Arahkan kamera ke barcode TUMPUK";
+            "Arahkan barcode panjang ke garis scan";
+
 
     }
     catch(error){
 
         console.error(error);
 
+
         document
             .getElementById("scanStatus")
             .textContent =
-            "Kamera tidak dapat digunakan. Gunakan input manual.";
+            "Kamera tidak dapat digunakan. Gunakan pencarian TUMPUK.";
 
     }
 
@@ -1084,71 +1146,394 @@ function hasilScan(decodedText){
         return;
     }
 
+
     decodedText =
         decodedText.trim();
+
 
     console.log(
         "BARCODE TUMPUK:",
         decodedText
     );
 
+
     stopScanner();
 
-    prosesKodeTumpuk(decodedText);
+
+    prosesKodeTumpuk(
+        decodedText
+    );
 
 }
 
 
 /* =====================================================
-   INPUT MANUAL
+   SEARCH MANUAL
+   CUKUP NOMOR TUMPUK
 ===================================================== */
 
 function prosesManual(){
 
-    const input =
+    hideError();
+
+
+    let nomor =
         document
-        .getElementById("manualInput");
+        .getElementById("manualInput")
+        .value
+        .trim();
 
-    let kode =
-        input.value.trim();
 
-    if(!kode){
+    if(!nomor){
 
         showError(
-            "Masukkan kode TUMPUK terlebih dahulu."
+            "Masukkan nomor TUMPUK."
         );
 
         return;
 
     }
 
-    prosesKodeTumpuk(kode);
+
+    /*
+       Kalau user memasukkan:
+
+       29
+
+       langsung cari TUMPUK 29.
+
+       Kalau ternyata user memasukkan
+       barcode lengkap seperti:
+
+       SARADAN|29
+
+       tetap kita dukung.
+    */
+
+    if(
+        nomor.indexOf("|") !== -1
+    ){
+
+        prosesKodeTumpuk(
+            nomor
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Bersihkan kalau user mengetik:
+
+       TUMPUK 29
+       TUMPUK29
+       T29
+    */
+
+    nomor =
+        nomor
+        .replace(
+            /TUMPUK/gi,
+            ""
+        )
+        .replace(
+            /^T/i,
+            ""
+        )
+        .trim();
+
+
+    if(!nomor){
+
+        showError(
+            "Nomor TUMPUK tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    cariTumpukDenganNomor(
+        nomor
+    );
 
 }
 
 
 /* =====================================================
-   PARSE STACK ID
+   CARI NOMOR TUMPUK DARI DATABASE
+===================================================== */
+
+function cariTumpukDenganNomor(
+    nomor
+){
+
+    showLoading();
+
+
+    const callbackName =
+        "callbackList_" +
+        Date.now();
+
+
+    let script = null;
+
+    let timeoutId = null;
+
+
+    window[callbackName] =
+        function(response){
+
+            try{
+
+                hideLoading();
+
+
+                if(
+                    !response ||
+                    response.success !== true
+                ){
+
+                    showError(
+                        response &&
+                        response.message
+                        ?
+                        response.message
+                        :
+                        "Data TUMPUK tidak ditemukan."
+                    );
+
+                    return;
+
+                }
+
+
+                const list =
+                    Array.isArray(
+                        response.data
+                    )
+                    ?
+                    response.data
+                    :
+                    [];
+
+
+                /*
+                   Cari nomor TUMPUK.
+
+                   String dipakai supaya:
+                   29
+                   "29"
+
+                   tetap sama.
+                */
+
+                const target =
+                    String(nomor)
+                    .trim();
+
+
+                const ditemukan =
+                    list.find(
+                        function(item){
+
+                            return (
+                                String(
+                                    item.tumpuk
+                                ).trim()
+                                ===
+                                target
+                            );
+
+                        }
+                    );
+
+
+                if(!ditemukan){
+
+                    showError(
+                        "TUMPUK <b>" +
+                        escapeHtml(target) +
+                        "</b> tidak ditemukan."
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                   TUMPUK 29:
+
+                   tpk yang ada di list
+                   sudah berupa:
+
+                   TPK A, TPK B, TPK C
+
+                   Tapi untuk mengambil
+                   detail, backend cukup
+                   diberi tumpuk = 29.
+
+                   TPK tidak perlu dipaksa
+                   menjadi satu TPK.
+                */
+
+                currentTumpuk =
+                    target;
+
+
+                if(
+                    target === "29"
+                ){
+
+                    currentTPK = "";
+
+                }
+                else{
+
+                    currentTPK =
+                        String(
+                            ditemukan.tpk || ""
+                        ).split(",")[0].trim();
+
+                }
+
+
+                currentStackId =
+                    ditemukan.stackId || "";
+
+
+                ambilDataTumpuk();
+
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                hideLoading();
+
+                showError(
+                    "Terjadi kesalahan saat mencari TUMPUK."
+                );
+
+            }
+
+
+            if(timeoutId){
+                clearTimeout(timeoutId);
+            }
+
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    const url =
+        API_URL +
+        "?action=getTumpukList" +
+        "&callback=" +
+        callbackName +
+        "&_=" +
+        Date.now();
+
+
+    script =
+        document.createElement("script");
+
+
+    script.src =
+        url;
+
+
+    script.onerror =
+        function(){
+
+            if(timeoutId){
+                clearTimeout(timeoutId);
+            }
+
+
+            hideLoading();
+
+
+            showError(
+                "Gagal mengambil daftar TUMPUK."
+            );
+
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    document
+        .body
+        .appendChild(script);
+
+
+    timeoutId =
+        setTimeout(
+            function(){
+
+                if(
+                    document.body.contains(
+                        script
+                    )
+                ){
+
+                    cleanupJSONP(
+                        callbackName,
+                        script
+                    );
+
+
+                    hideLoading();
+
+
+                    showError(
+                        "Waktu pencarian habis. Coba lagi."
+                    );
+
+                }
+
+            },
+            15000
+        );
+
+}
+
+
+/* =====================================================
+   PARSE BARCODE
 ===================================================== */
 
 function prosesKodeTumpuk(kode){
 
     hideError();
 
+
     kode =
         kode.trim();
+
 
     let parts =
         kode.split("|");
 
 
     /*
-       FORMAT UTAMA:
+       FORMAT:
 
-       SARADAN|1
-
-       TPK    = SARADAN
-       TUMPUK = 1
+       SARADAN|10
     */
 
     if(parts.length >= 2){
@@ -1156,6 +1541,7 @@ function prosesKodeTumpuk(kode){
         currentTPK =
             parts[0]
             .trim();
+
 
         currentTumpuk =
             parts
@@ -1165,18 +1551,20 @@ function prosesKodeTumpuk(kode){
 
     }
 
-    /*
-       FORMAT TAMBAHAN:
-
-       SARADAN-T01
-    */
 
     else{
+
+        /*
+           FORMAT:
+
+           SARADAN-T10
+        */
 
         const match =
             kode.match(
                 /^(.+)-T(\d+)$/i
             );
+
 
         if(match){
 
@@ -1184,20 +1572,40 @@ function prosesKodeTumpuk(kode){
                 match[1]
                 .trim();
 
+
             currentTumpuk =
                 match[2]
                 .trim();
 
         }
 
+
         else{
 
+            /*
+               Kalau barcode hanya berisi
+               nomor TUMPUK:
+
+               29
+
+               langsung dianggap nomor Tumpuk.
+            */
+
+            if(
+                /^\d+$/.test(kode)
+            ){
+
+                cariTumpukDenganNomor(
+                    kode
+                );
+
+                return;
+
+            }
+
+
             showError(
-                "Format barcode TUMPUK tidak dikenali.<br><br>" +
-                "Gunakan format:<br>" +
-                "<b>TPK|TUMPUK</b><br><br>" +
-                "Contoh:<br>" +
-                "<b>SARADAN|1</b>"
+                "Format barcode TUMPUK tidak dikenali."
             );
 
             return;
@@ -1208,12 +1616,11 @@ function prosesKodeTumpuk(kode){
 
 
     if(
-        !currentTPK ||
         !currentTumpuk
     ){
 
         showError(
-            "TPK atau nomor TUMPUK tidak terbaca."
+            "Nomor TUMPUK tidak terbaca."
         );
 
         return;
@@ -1222,18 +1629,25 @@ function prosesKodeTumpuk(kode){
 
 
     /*
-       Jangan menentukan currentStackId
-       sendiri di sini.
-
-       Backend yang menentukan:
-       - Tumpuk biasa = TPK|TUMPUK
-       - Tumpuk 29    = TUMPUK|29
-
-       Nilai final akan diambil dari
-       data.stackId di tampilkanData().
+       TUMPUK 29 adalah SATU TUMPUK.
     */
 
-    currentStackId = "";
+    if(
+        String(currentTumpuk) === "29"
+    ){
+
+        currentStackId =
+            "TUMPUK|29";
+
+    }
+    else{
+
+        currentStackId =
+            currentTPK +
+            "|" +
+            currentTumpuk;
+
+    }
 
 
     ambilDataTumpuk();
@@ -1248,6 +1662,7 @@ function prosesKodeTumpuk(kode){
 function ambilDataTumpuk(){
 
     showLoading();
+
 
     const callbackName =
         "callbackTumpuk_" +
@@ -1265,6 +1680,7 @@ function ambilDataTumpuk(){
             try{
 
                 hideLoading();
+
 
                 if(
                     !response ||
@@ -1286,21 +1702,16 @@ function ambilDataTumpuk(){
 
 
                 /*
-                   PENTING:
-
-                   Backend mengirim:
+                   BACKEND:
 
                    {
                        success:true,
                        data:{
-                           tumpuk:...,
-                           tpk:...,
                            ...
                        }
                    }
 
-                   Jadi yang dikirim ke
-                   tampilkanData adalah:
+                   Jadi gunakan:
 
                    response.data
                 */
@@ -1311,7 +1722,7 @@ function ambilDataTumpuk(){
                 ){
 
                     showError(
-                        "Data TUMPUK diterima tetapi format datanya tidak sesuai."
+                        "Format data TUMPUK tidak sesuai."
                     );
 
                     return;
@@ -1339,6 +1750,7 @@ function ambilDataTumpuk(){
                 clearTimeout(timeoutId);
             }
 
+
             cleanupJSONP(
                 callbackName,
                 script
@@ -1351,9 +1763,13 @@ function ambilDataTumpuk(){
         API_URL +
         "?action=getTumpukData" +
         "&tpk=" +
-        encodeURIComponent(currentTPK) +
+        encodeURIComponent(
+            currentTPK
+        ) +
         "&tumpuk=" +
-        encodeURIComponent(currentTumpuk) +
+        encodeURIComponent(
+            currentTumpuk
+        ) +
         "&callback=" +
         callbackName +
         "&_=" +
@@ -1363,7 +1779,9 @@ function ambilDataTumpuk(){
     script =
         document.createElement("script");
 
-    script.src = url;
+
+    script.src =
+        url;
 
 
     script.onerror =
@@ -1373,11 +1791,14 @@ function ambilDataTumpuk(){
                 clearTimeout(timeoutId);
             }
 
+
             hideLoading();
+
 
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
+
 
             cleanupJSONP(
                 callbackName,
@@ -1405,7 +1826,9 @@ function ambilDataTumpuk(){
                         script
                     );
 
+
                     hideLoading();
+
 
                     showError(
                         "Waktu koneksi habis. Coba lagi."
@@ -1427,18 +1850,7 @@ function ambilDataTumpuk(){
 function tampilkanData(data){
 
     /*
-       PENTING UNTUK TUMPUK 29:
-
-       Backend mengirim:
-
-       stackId = "TUMPUK|29"
-
-       Sedangkan Tumpuk biasa:
-
-       stackId = "SARADAN|1"
-
-       Jadi HTML harus mengikuti
-       stackId dari backend.
+       Ambil STACK ID dari backend.
     */
 
     currentStackId =
@@ -1448,14 +1860,11 @@ function tampilkanData(data){
             ?
             "TUMPUK|29"
             :
-            currentTPK + "|" + currentTumpuk
+            currentTPK +
+            "|" +
+            currentTumpuk
         );
 
-
-    /*
-       Simpan juga nilai yang sebenarnya
-       dikirim backend.
-    */
 
     if(data.tpk !== undefined){
 
@@ -1464,12 +1873,27 @@ function tampilkanData(data){
 
     }
 
+
     if(data.tumpuk !== undefined){
 
         currentTumpuk =
             String(data.tumpuk);
 
     }
+
+
+    /*
+       Simpan register saat ini.
+    */
+
+    currentRegisters =
+        Array.isArray(
+            data.registers
+        )
+        ?
+        data.registers
+        :
+        [];
 
 
     document
@@ -1497,13 +1921,6 @@ function tampilkanData(data){
 
     /*
        TPK
-
-       Tumpuk 29:
-       backend mengirim:
-       TPK A, TPK B, TPK C
-
-       Tumpuk biasa:
-       satu TPK.
     */
 
     document
@@ -1521,10 +1938,6 @@ function tampilkanData(data){
 
     /*
        JUMLAH BATANG
-
-       BUKAN jumlah sisa.
-
-       Ini jumlah batang dari DATABASE.
     */
 
     document
@@ -1557,7 +1970,7 @@ function tampilkanData(data){
 
     /*
        RINCIAN TPK
-       HANYA TUMPUK 29
+       HANYA 29
     */
 
     tampilkanRincianTPK(
@@ -1575,14 +1988,6 @@ function tampilkanData(data){
         data.registers
         :
         [];
-
-
-    document
-        .getElementById("registerCount")
-        .textContent =
-        formatAngka(
-            registers.length
-        );
 
 
     document
@@ -1621,6 +2026,13 @@ function tampilkanData(data){
     );
 
 
+    /*
+       Hitung jumlah CEK.
+    */
+
+    updateJumlahCek();
+
+
     window.scrollTo({
         top:0,
         behavior:"smooth"
@@ -1630,8 +2042,45 @@ function tampilkanData(data){
 
 
 /* =====================================================
+   HITUNG JUMLAH CEK
+===================================================== */
+
+function updateJumlahCek(){
+
+    const checkboxes =
+        document.querySelectorAll(
+            '#registerList input[type="checkbox"]'
+        );
+
+
+    let jumlah =
+        0;
+
+
+    checkboxes.forEach(
+        function(checkbox){
+
+            if(checkbox.checked){
+
+                jumlah++;
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById("jumlahCek")
+        .textContent =
+        formatAngka(jumlah);
+
+}
+
+
+/* =====================================================
    RINCIAN TPK
-   KHUSUS TUMPUK 29
+   KHUSUS 29
 ===================================================== */
 
 function tampilkanRincianTPK(data){
@@ -1640,6 +2089,7 @@ function tampilkanRincianTPK(data){
         document
         .getElementById("tpkDetailBox");
 
+
     const container =
         document
         .getElementById("tpkDetailList");
@@ -1647,12 +2097,15 @@ function tampilkanRincianTPK(data){
 
     container.innerHTML = "";
 
-    box.classList.remove("show");
+
+    box.classList.remove(
+        "show"
+    );
 
 
     /*
-       Rincian hanya boleh muncul
-       untuk Tumpuk 29.
+       Selain 29:
+       JANGAN TAMPILKAN RINCIAN TPK.
     */
 
     if(
@@ -1665,7 +2118,9 @@ function tampilkanRincianTPK(data){
 
 
     const rincian =
-        Array.isArray(data.rincianTPK)
+        Array.isArray(
+            data.rincianTPK
+        )
         ?
         data.rincianTPK
         :
@@ -1686,6 +2141,7 @@ function tampilkanRincianTPK(data){
                 document
                 .createElement("div");
 
+
             wrapper.className =
                 "tpk-detail-item";
 
@@ -1694,8 +2150,10 @@ function tampilkanRincianTPK(data){
                 document
                 .createElement("div");
 
+
             name.className =
                 "tpk-detail-name";
+
 
             name.textContent =
                 "TPK " +
@@ -1712,6 +2170,7 @@ function tampilkanRincianTPK(data){
                 document
                 .createElement("div");
 
+
             info.className =
                 "tpk-detail-info";
 
@@ -1719,6 +2178,7 @@ function tampilkanRincianTPK(data){
             const jumlah =
                 document
                 .createElement("div");
+
 
             jumlah.textContent =
                 formatAngka(
@@ -1731,8 +2191,10 @@ function tampilkanRincianTPK(data){
                 document
                 .createElement("div");
 
+
             volume.className =
                 "tpk-detail-volume";
+
 
             volume.textContent =
                 formatVolume(
@@ -1744,6 +2206,7 @@ function tampilkanRincianTPK(data){
                 jumlah
             );
 
+
             info.appendChild(
                 volume
             );
@@ -1752,6 +2215,7 @@ function tampilkanRincianTPK(data){
             wrapper.appendChild(
                 name
             );
+
 
             wrapper.appendChild(
                 info
@@ -1766,7 +2230,9 @@ function tampilkanRincianTPK(data){
     );
 
 
-    box.classList.add("show");
+    box.classList.add(
+        "show"
+    );
 
 }
 
@@ -1784,6 +2250,7 @@ function tampilkanRegister(
         document
         .getElementById("registerList");
 
+
     container.innerHTML = "";
 
 
@@ -1794,6 +2261,9 @@ function tampilkanRegister(
             'Tidak ada register dalam tumpukan.' +
             '</div>';
 
+
+        updateJumlahCek();
+
         return;
 
     }
@@ -1801,19 +2271,6 @@ function tampilkanRegister(
 
     registers.forEach(
         function(item){
-
-            /*
-               Backend mengirim:
-
-               {
-                   register:"REG001",
-                   tpk:"SARADAN",
-                   tumpuk:"1",
-                   volume:0.123,
-                   checked:true/false
-               }
-            */
-
 
             const register =
                 item.register !== undefined
@@ -1834,11 +2291,15 @@ function tampilkanRegister(
             }
 
 
+            /*
+               Status CEK dari backend.
+            */
+
             const checked =
                 item.checked === true ||
-                String(item.checked).toLowerCase() === "true" ||
-                item.CHECKED === true ||
-                String(item.CHECKED).toLowerCase() === "true";
+                String(
+                    item.checked
+                ).toLowerCase() === "true";
 
 
             const wrapper =
@@ -1865,24 +2326,19 @@ function tampilkanRegister(
             checkbox.type =
                 "checkbox";
 
+
             checkbox.checked =
                 checked;
 
-
-            /*
-               STATUS dibuat SEBELUM
-               event listener.
-
-               Ini memperbaiki bug
-               "Cannot access 'status' before initialization".
-            */
 
             const status =
                 document
                 .createElement("div");
 
+
             status.className =
                 "check-status";
+
 
             status.textContent =
                 checked
@@ -1895,6 +2351,13 @@ function tampilkanRegister(
             checkbox.addEventListener(
                 "change",
                 function(){
+
+                    /*
+                       JUMLAH CEK langsung berubah.
+                    */
+
+                    updateJumlahCek();
+
 
                     setCheckbox(
                         register,
@@ -1924,9 +2387,11 @@ function tampilkanRegister(
                 checkbox
             );
 
+
             wrapper.appendChild(
                 number
             );
+
 
             wrapper.appendChild(
                 status
@@ -1939,6 +2404,9 @@ function tampilkanRegister(
 
         }
     );
+
+
+    updateJumlahCek();
 
 }
 
@@ -1954,13 +2422,6 @@ function setCheckbox(
     status
 ){
 
-    /*
-       Simpan keadaan checkbox
-       sebelum request.
-
-       Jika gagal, akan dikembalikan.
-    */
-
     const checkbox =
         wrapper.querySelector(
             'input[type="checkbox"]'
@@ -1970,10 +2431,6 @@ function setCheckbox(
     const previousChecked =
         !checked;
 
-
-    /*
-       Update tampilan langsung.
-    */
 
     if(checked){
 
@@ -1994,16 +2451,6 @@ function setCheckbox(
     status.textContent =
         "MENYIMPAN...";
 
-
-    /*
-       Pastikan stackId sudah benar.
-
-       Tumpuk 29:
-       TUMPUK|29
-
-       Tumpuk biasa:
-       TPK|TUMPUK
-    */
 
     let stackId =
         currentStackId;
@@ -2080,11 +2527,6 @@ function setCheckbox(
                     "GAGAL";
 
 
-                /*
-                   Balikkan checkbox
-                   jika gagal.
-                */
-
                 checkbox.checked =
                     previousChecked;
 
@@ -2105,6 +2547,9 @@ function setCheckbox(
                 }
 
             }
+
+
+            updateJumlahCek();
 
 
             cleanupJSONP(
@@ -2176,6 +2621,9 @@ function setCheckbox(
             }
 
 
+            updateJumlahCek();
+
+
             cleanupJSONP(
                 callbackName,
                 script
@@ -2192,11 +2640,6 @@ function setCheckbox(
     timeoutId =
         setTimeout(
             function(){
-
-                /*
-                   Jika backend tidak menjawab,
-                   kembalikan checkbox.
-                */
 
                 if(
                     document.body.contains(script)
@@ -2226,6 +2669,9 @@ function setCheckbox(
                     }
 
 
+                    updateJumlahCek();
+
+
                     cleanupJSONP(
                         callbackName,
                         script
@@ -2251,6 +2697,7 @@ function tampilkanHistory(
     const container =
         document
         .getElementById("historyList");
+
 
     container.innerHTML = "";
 
@@ -2359,6 +2806,7 @@ function tampilkanHistory(
                 dateEl
             );
 
+
             left.appendChild(
                 takenEl
             );
@@ -2380,6 +2828,7 @@ function tampilkanHistory(
             head.appendChild(
                 left
             );
+
 
             head.appendChild(
                 arrow
@@ -2477,6 +2926,7 @@ function tampilkanHistory(
                 head
             );
 
+
             box.appendChild(
                 detail
             );
@@ -2493,13 +2943,12 @@ function tampilkanHistory(
 
 
 /* =====================================================
-   REFRESH DATA
+   REFRESH
 ===================================================== */
 
 function refreshData(){
 
     if(
-        !currentTPK ||
         !currentTumpuk
     ){
 
@@ -2561,11 +3010,19 @@ function kembaliScan(){
         .innerHTML = "";
 
 
+    document
+        .getElementById("jumlahCek")
+        .textContent =
+        "0";
+
+
     currentTPK = "";
 
     currentTumpuk = "";
 
     currentStackId = "";
+
+    currentRegisters = [];
 
 
     mulaiScanner();
@@ -2668,10 +3125,6 @@ function formatTanggal(value){
     }
 
 
-    /*
-       dd-mm-yyyy
-    */
-
     if(
         typeof value === "string" &&
         /^\d{1,2}-\d{1,2}-\d{4}$/.test(
@@ -2683,10 +3136,6 @@ function formatTanggal(value){
 
     }
 
-
-    /*
-       yyyy-mm-dd
-    */
 
     if(
         typeof value === "string" &&
@@ -2709,10 +3158,6 @@ function formatTanggal(value){
 
     }
 
-
-    /*
-       Format Date
-    */
 
     const d =
         new Date(value);
@@ -2740,6 +3185,37 @@ function formatTanggal(value){
 
 
     return value;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
