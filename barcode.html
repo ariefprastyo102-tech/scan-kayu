@@ -300,11 +300,11 @@ button{
 
         left:0;
 
-        top:23.2mm;
+        top:23.7mm;
 
         width:70mm;
 
-        height:6mm;
+        height:5.5mm;
 
         display:flex;
 
@@ -314,7 +314,7 @@ button{
 
         font-family:Arial,sans-serif;
 
-        font-size:5.5mm;
+        font-size:5mm;
 
         font-weight:bold;
 
@@ -518,8 +518,8 @@ function getKodeTPK(tpk){
         .toUpperCase();
 
     /*
-       Kalau dari DATABASE sudah berupa kode,
-       langsung gunakan kode tersebut.
+       Kalau dari DATABASE/API sudah berupa
+       kode singkat, langsung gunakan.
     */
 
     if(
@@ -606,14 +606,24 @@ function ambilDatabase(){
                         item.tumpuk || ""
                     ).trim();
 
+                /*
+                   Baca TPK dari API.
+                   Dibuat menerima:
+                   item.tpk
+                   atau
+                   item.TPK
+                */
+
                 const tpk =
                     String(
-                        item.tpk || ""
-                    ).trim();
+                        item.tpk ||
+                        item.TPK ||
+                        ""
+                    )
+                    .trim();
 
                 /*
-                   TPK langsung diubah menjadi
-                   kode singkat di sini.
+                   Ubah nama TPK menjadi kode singkat.
                 */
 
                 const kodeTPKItem =
@@ -1357,12 +1367,17 @@ function cetakF4(){
                     "angkaCetak";
 
                 /*
-                   TPK sudah berupa kode singkat
-                   sejak data masuk ke database JS.
+                   TPK dicetak langsung setelah
+                   nomor tumpuk.
+
+                   Contoh:
+                   12345 4000/30 1 SRD
                 */
 
                 const kode =
-                    data.tpk || "";
+                    getKodeTPK(
+                        data.tpk
+                    );
 
                 angka.textContent =
                     data.register +
