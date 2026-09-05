@@ -822,24 +822,36 @@ function tampilkan(){
                 data.diameter;
 
             const tumpuk =
-                document.createElement(
-                    "span"
-                );
+    document.createElement(
+        "span"
+    );
 
-            tumpuk.textContent =
-                data.tumpuk;
+tumpuk.textContent =
+    data.tumpuk;
 
-            info.appendChild(
-                register
-            );
+const tpk =
+    document.createElement(
+        "span"
+    );
 
-            info.appendChild(
-                ukuran
-            );
+tpk.textContent =
+    getKodeTPK(data.tpk);
 
-            info.appendChild(
-                tumpuk
-            );
+info.appendChild(
+    register
+);
+
+info.appendChild(
+    ukuran
+);
+
+info.appendChild(
+    tumpuk
+);
+
+info.appendChild(
+    tpk
+);
 
             item.appendChild(
                 info
