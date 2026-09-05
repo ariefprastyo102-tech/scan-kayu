@@ -517,6 +517,29 @@ function getKodeTPK(tpk){
         .trim()
         .toUpperCase();
 
+    /*
+       Kalau dari DATABASE sudah berupa kode,
+       langsung gunakan kode tersebut.
+    */
+
+    if(
+        nama === "SRD" ||
+        nama === "MDN" ||
+        nama === "PGT" ||
+        nama === "BJR" ||
+        nama === "KMB" ||
+        nama === "TMN"
+    ){
+
+        return nama;
+
+    }
+
+    /*
+       Kalau berupa nama TPK,
+       ubah menjadi kode.
+    */
+
     return kodeTPK[nama] || "";
 
 }
@@ -588,6 +611,14 @@ function ambilDatabase(){
                         item.tpk || ""
                     ).trim();
 
+                /*
+                   TPK langsung diubah menjadi
+                   kode singkat di sini.
+                */
+
+                const kodeTPKItem =
+                    getKodeTPK(tpk);
+
                 if(!register){
                     return;
                 }
@@ -602,7 +633,7 @@ function ambilDatabase(){
 
                     tumpuk:tumpuk,
 
-                    tpk:tpk,
+                    tpk:kodeTPKItem,
 
                     dipilih:true
 
@@ -1325,10 +1356,13 @@ function cetakF4(){
                 angka.className =
                     "angkaCetak";
 
+                /*
+                   TPK sudah berupa kode singkat
+                   sejak data masuk ke database JS.
+                */
+
                 const kode =
-                    getKodeTPK(
-                        data.tpk
-                    );
+                    data.tpk || "";
 
                 angka.textContent =
                     data.register +
@@ -1338,7 +1372,8 @@ function cetakF4(){
                     data.diameter +
                     " " +
                     data.tumpuk +
-                    (kode
+                    (
+                        kode
                         ? " " + kode
                         : ""
                     );
