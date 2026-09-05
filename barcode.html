@@ -300,11 +300,11 @@ button{
 
         left:0;
 
-        top:22.5mm;
+        top:23.2mm;
 
         width:70mm;
 
-        height:7mm;
+        height:6mm;
 
         display:flex;
 
@@ -314,7 +314,7 @@ button{
 
         font-family:Arial,sans-serif;
 
-        font-size:6.5mm;
+        font-size:5.5mm;
 
         font-weight:bold;
 
@@ -322,7 +322,7 @@ button{
 
         white-space:nowrap;
 
-        word-spacing:2mm;
+        word-spacing:1.2mm;
 
     }
 
@@ -484,6 +484,45 @@ let database=[];
 
 
 /* =====================================================
+   KODE SINGKAT TPK
+===================================================== */
+
+const kodeTPK = {
+
+    "SARADAN":"SRD",
+
+    "MADIUN":"MDN",
+
+    "PAGOTAN":"PGT",
+
+    "BANJAREJO":"BJR",
+
+    "KAMBANGAN":"KMB",
+
+    "TAMANAN":"TMN"
+
+};
+
+
+/* =====================================================
+   AMBIL KODE TPK
+===================================================== */
+
+function getKodeTPK(tpk){
+
+    const nama =
+        String(
+            tpk || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    return kodeTPK[nama] || "";
+
+}
+
+
+/* =====================================================
    AMBIL DATABASE
 ===================================================== */
 
@@ -544,6 +583,11 @@ function ambilDatabase(){
                         item.tumpuk || ""
                     ).trim();
 
+                const tpk =
+                    String(
+                        item.tpk || ""
+                    ).trim();
+
                 if(!register){
                     return;
                 }
@@ -557,6 +601,8 @@ function ambilDatabase(){
                     diameter:diameter,
 
                     tumpuk:tumpuk,
+
+                    tpk:tpk,
 
                     dipilih:true
 
@@ -1279,6 +1325,11 @@ function cetakF4(){
                 angka.className =
                     "angkaCetak";
 
+                const kode =
+                    getKodeTPK(
+                        data.tpk
+                    );
+
                 angka.textContent =
                     data.register +
                     " " +
@@ -1286,7 +1337,11 @@ function cetakF4(){
                     "/" +
                     data.diameter +
                     " " +
-                    data.tumpuk;
+                    data.tumpuk +
+                    (kode
+                        ? " " + kode
+                        : ""
+                    );
 
                 label.appendChild(
                     angka
