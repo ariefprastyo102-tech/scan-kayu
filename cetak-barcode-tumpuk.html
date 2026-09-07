@@ -160,10 +160,11 @@ button:active{
 
 
 /* =====================================================
-   TP PREVIEW
+   TUMPUK PREVIEW
+   TUMPUK KECIL + NOMOR DALAM KOTAK RAPI
 ===================================================== */
 
-.preview-tp{
+.preview-tumpuk{
 
     width:100%;
 
@@ -173,7 +174,7 @@ button:active{
 
     align-items:center;
 
-    gap:8px;
+    gap:7px;
 
     margin-bottom:8px;
 
@@ -185,25 +186,17 @@ button:active{
 }
 
 
-/* =====================================================
-   TEKS TP
-===================================================== */
+.preview-tumpuk-label{
 
-.preview-tp-label{
+    font-size:24px;
 
-    font-size:34px;
-
-    font-weight:1000;
+    font-weight:900;
 
     line-height:1;
 }
 
 
-/* =====================================================
-   ANGKA TP
-===================================================== */
-
-.preview-tp-number{
+.preview-tumpuk-number{
 
     display:inline-flex;
 
@@ -211,21 +204,17 @@ button:active{
 
     justify-content:center;
 
-    min-width:78px;
+    min-width:65px;
 
-    padding:5px 12px 7px 12px;
+    padding:3px 9px 5px 9px;
 
-    background:#000;
-
-    color:#fff;
+    border:3px solid #000;
 
     border-radius:8px;
 
-    border:3px solid #fff;
+    background:#fff;
 
-    outline:3px solid #000;
-
-    font-size:52px;
+    font-size:42px;
 
     font-weight:1000;
 
@@ -422,10 +411,11 @@ button:active{
 
 
     /* =================================================
-       TP PRINT
+       TUMPUK PRINT
+       TUMPUK KECIL + NOMOR DALAM KOTAK
     ================================================= */
 
-    .print-tp{
+    .print-tumpuk{
 
         width:100%;
 
@@ -437,37 +427,33 @@ button:active{
 
         gap:3mm;
 
+        text-align:center;
+
         margin-bottom:2mm;
 
         line-height:1;
 
         white-space:nowrap;
 
-        overflow:hidden;
+        overflow:visible;
 
         flex-shrink:0;
     }
 
 
-    /* =================================================
-       TEKS TP PRINT
-    ================================================= */
+    .print-tumpuk-label{
 
-    .print-tp-label{
+        font-size:6mm;
 
-        font-size:10mm;
+        font-weight:900;
 
-        font-weight:1000;
+        line-height:.9;
 
-        line-height:.85;
+        flex-shrink:0;
     }
 
 
-    /* =================================================
-       ANGKA TP PRINT
-    ================================================= */
-
-    .print-tp-number{
+    .print-tumpuk-number{
 
         display:inline-flex;
 
@@ -475,25 +461,21 @@ button:active{
 
         justify-content:center;
 
-        min-width:25mm;
+        min-width:24mm;
 
-        padding:1.5mm 4mm 2mm 4mm;
+        padding:1.5mm 3mm 2mm 3mm;
 
-        background:#000;
-
-        color:#fff;
+        border:.7mm solid #000;
 
         border-radius:2mm;
 
-        border:0.7mm solid #fff;
+        background:#fff;
 
-        outline:0.7mm solid #000;
-
-        font-size:17mm;
+        font-size:18mm;
 
         font-weight:1000;
 
-        line-height:.8;
+        line-height:.78;
 
         letter-spacing:-.5mm;
 
@@ -637,33 +619,36 @@ button:active{
 
 
     /* =================================================
-       TP MOBILE
+       TUMPUK MOBILE
     ================================================= */
 
-    .preview-tp{
+    .preview-tumpuk{
 
-        gap:8px;
+        gap:6px;
 
         margin-bottom:8px;
     }
 
 
-    .preview-tp-label{
+    .preview-tumpuk-label{
 
-        font-size:34px;
-
+        font-size:23px;
     }
 
 
-    .preview-tp-number{
+    .preview-tumpuk-number{
 
-        min-width:84px;
+        min-width:70px;
 
-        padding:6px 13px 8px 13px;
+        padding:4px 10px 5px 10px;
 
-        font-size:56px;
+        border:3px solid #000;
 
         border-radius:8px;
+
+        font-size:46px;
+
+        line-height:.82;
     }
 
 
@@ -710,6 +695,7 @@ button:active{
         width:66px;
 
         height:66px;
+
     }
 
 
@@ -888,10 +874,6 @@ function ambilDatabase(){
                 : [];
 
 
-            /* =========================================
-               URUT TUMPUK KECIL → BESAR
-            ========================================= */
-
             database.sort(urutTumpuk);
 
 
@@ -1024,10 +1006,6 @@ function tampilkanData(){
         });
 
 
-    /* ================================================
-       URUT TUMPUK KECIL → BESAR
-    ================================================ */
-
     data.sort(urutTumpuk);
 
 
@@ -1058,39 +1036,43 @@ function tampilkanData(){
 
 
         /* =================================================
-           TP
+           TUMPUK
         ================================================= */
 
-        const tp =
+        const tumpuk =
             document.createElement("div");
 
-        tp.className =
-            "preview-tp";
+        tumpuk.className =
+            "preview-tumpuk";
 
 
-        const tpLabel =
+        const tumpukLabel =
             document.createElement("span");
 
-        tpLabel.className =
-            "preview-tp-label";
+        tumpukLabel.className =
+            "preview-tumpuk-label";
 
-        tpLabel.textContent =
-            "TP";
+        tumpukLabel.textContent =
+            "TUMPUK";
 
 
-        const tpNumber =
+        const tumpukNumber =
             document.createElement("span");
 
-        tpNumber.className =
-            "preview-tp-number";
+        tumpukNumber.className =
+            "preview-tumpuk-number";
 
-        tpNumber.textContent =
+        tumpukNumber.textContent =
             item.tumpuk || "";
 
 
-        tp.appendChild(tpLabel);
+        tumpuk.appendChild(
+            tumpukLabel
+        );
 
-        tp.appendChild(tpNumber);
+        tumpuk.appendChild(
+            tumpukNumber
+        );
 
 
         /* =================================================
@@ -1123,7 +1105,7 @@ function tampilkanData(){
 
 
         /* =================================================
-           QR ROW
+           QR
         ================================================= */
 
         const qrRow =
@@ -1141,10 +1123,6 @@ function tampilkanData(){
                 String(item.tumpuk || "")
             );
 
-
-        /* =================================================
-           3 QR
-        ================================================= */
 
         for(let i = 0; i < 3; i++){
 
@@ -1184,7 +1162,7 @@ function tampilkanData(){
         }
 
 
-        card.appendChild(tp);
+        card.appendChild(tumpuk);
 
         card.appendChild(tpk);
 
@@ -1242,10 +1220,6 @@ function cetakBarcode(){
         });
 
 
-    /* ================================================
-       URUT TUMPUK KECIL → BESAR
-    ================================================ */
-
     data.sort(urutTumpuk);
 
 
@@ -1268,10 +1242,6 @@ function cetakBarcode(){
     printArea.innerHTML = "";
 
 
-    /* =================================================
-       BUAT LABEL
-    ================================================= */
-
     data.forEach(function(item){
 
         const label =
@@ -1282,39 +1252,43 @@ function cetakBarcode(){
 
 
         /* =================================================
-           TP
+           TUMPUK PRINT
         ================================================= */
 
-        const tp =
+        const tumpuk =
             document.createElement("div");
 
-        tp.className =
-            "print-tp";
+        tumpuk.className =
+            "print-tumpuk";
 
 
-        const tpLabel =
+        const tumpukLabel =
             document.createElement("span");
 
-        tpLabel.className =
-            "print-tp-label";
+        tumpukLabel.className =
+            "print-tumpuk-label";
 
-        tpLabel.textContent =
-            "TP";
+        tumpukLabel.textContent =
+            "TUMPUK";
 
 
-        const tpNumber =
+        const tumpukNumber =
             document.createElement("span");
 
-        tpNumber.className =
-            "print-tp-number";
+        tumpukNumber.className =
+            "print-tumpuk-number";
 
-        tpNumber.textContent =
+        tumpukNumber.textContent =
             item.tumpuk || "";
 
 
-        tp.appendChild(tpLabel);
+        tumpuk.appendChild(
+            tumpukLabel
+        );
 
-        tp.appendChild(tpNumber);
+        tumpuk.appendChild(
+            tumpukNumber
+        );
 
 
         /* =================================================
@@ -1347,7 +1321,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           QR ROW
+           QR
         ================================================= */
 
         const qrRow =
@@ -1365,10 +1339,6 @@ function cetakBarcode(){
                 String(item.tumpuk || "")
             );
 
-
-        /* =================================================
-           3 QR
-        ================================================= */
 
         for(let i = 0; i < 3; i++){
 
@@ -1404,7 +1374,7 @@ function cetakBarcode(){
         }
 
 
-        label.appendChild(tp);
+        label.appendChild(tumpuk);
 
         label.appendChild(tpk);
 
@@ -1418,7 +1388,7 @@ function cetakBarcode(){
 
 
     /* =================================================
-       PAD 8 LABEL
+       TAMBAH LABEL KOSONG
     ================================================= */
 
     const jumlahSisa =
