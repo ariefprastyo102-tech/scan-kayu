@@ -1985,7 +1985,21 @@ function cariTumpukDenganNomor(
 
 
 /* =====================================================
-   PARSE BARCODE
+   PARSE BARCODE / QR TUMPUK
+   MENDUKUNG:
+   1. QR LINK:
+      cek-tumpuk.html?tpk=TPK01&tumpuk=45
+
+   2. FORMAT LAMA:
+      TPK01|45
+
+   3. FORMAT LAMA:
+      TPK01-T45
+
+   4. NOMOR SAJA:
+      45
+
+   5. KHUSUS TUMPUK 29
 ===================================================== */
 
 function prosesKodeTumpuk(
@@ -1995,21 +2009,127 @@ function prosesKodeTumpuk(
     hideError();
 
     kode =
-        kode.trim();
+        String(kode || "")
+        .trim();
 
     console.log(
         "KODE TUMPUK:",
         kode
     );
 
+
+    /* =================================================
+       1. CEK APAKAH HASIL SCAN ADALAH URL QR
+    ================================================= */
+
+    try{
+
+        const url =
+            new URL(kode);
+
+
+        const urlTPK =
+            url.searchParams.get(
+                "tpk"
+            );
+
+
+        const urlTumpuk =
+            url.searchParams.get(
+                "tumpuk"
+            );
+
+
+        /*
+         * JIKA ADA PARAMETER TUMPUK
+         * → BERARTI INI QR LINK BARU
+         */
+
+        if(urlTumpuk){
+
+            currentTPK =
+                urlTPK
+                ?
+                String(urlTPK).trim()
+                :
+                "";
+
+
+            currentTumpuk =
+                String(urlTumpuk).trim();
+
+
+            /*
+             * KHUSUS TUMPUK 29
+             * TIDAK MEMAKAI TPK
+             */
+
+            if(
+                currentTumpuk === "29"
+            ){
+
+                currentTPK =
+                    "";
+
+                currentStackId =
+                    "TUMPUK|29";
+
+            }
+            else{
+
+                currentStackId =
+                    currentTPK +
+                    "|" +
+                    currentTumpuk;
+
+            }
+
+
+            console.log(
+                "QR LINK TERBACA:",
+                currentTPK,
+                currentTumpuk,
+                currentStackId
+            );
+
+
+            ambilDataTumpuk();
+
+            return;
+
+        }
+
+    }
+    catch(error){
+
+        /*
+         * BUKAN URL
+         *
+         * Lanjutkan ke format barcode lama.
+         */
+
+        console.log(
+            "Bukan QR URL, lanjut parser lama."
+        );
+
+    }
+
+
+    /* =================================================
+       2. FORMAT LAMA:
+          TPK01|45
+    ================================================= */
+
     let parts =
         kode.split("|");
+
 
     if(parts.length >= 2){
 
         currentTPK =
             parts[0]
             .trim();
+
 
         currentTumpuk =
             parts
@@ -2021,16 +2141,23 @@ function prosesKodeTumpuk(
 
     else{
 
+        /* =============================================
+           3. FORMAT LAMA:
+              TPK01-T45
+        ============================================= */
+
         const match =
             kode.match(
                 /^(.+)-T(\d+)$/i
             );
+
 
         if(match){
 
             currentTPK =
                 match[1]
                 .trim();
+
 
             currentTumpuk =
                 match[2]
@@ -2040,6 +2167,11 @@ function prosesKodeTumpuk(
 
         else{
 
+            /* =========================================
+               4. NOMOR SAJA:
+                  45
+            ========================================= */
+
             if(
                 /^\d+$/.test(kode)
             ){
@@ -2047,26 +2179,40 @@ function prosesKodeTumpuk(
                 sedangProses =
                     false;
 
+
                 cariTumpukDenganNomor(
                     kode
                 );
+
 
                 return;
 
             }
 
+
+            /* =========================================
+               FORMAT TIDAK DIKENALI
+            ========================================= */
+
             showError(
                 "Format barcode TUMPUK tidak dikenali."
             );
 
+
             sedangProses =
                 false;
+
 
             return;
 
         }
 
     }
+
+
+    /* =================================================
+       5. PASTIKAN NOMOR TUMPUK ADA
+    ================================================= */
 
     if(
         !currentTumpuk
@@ -2076,16 +2222,26 @@ function prosesKodeTumpuk(
             "Nomor TUMPUK tidak terbaca."
         );
 
+
         sedangProses =
             false;
+
 
         return;
 
     }
 
+
+    /* =================================================
+       6. KHUSUS TUMPUK 29
+    ================================================= */
+
     if(
         String(currentTumpuk) === "29"
     ){
+
+        currentTPK =
+            "";
 
         currentStackId =
             "TUMPUK|29";
@@ -2099,6 +2255,11 @@ function prosesKodeTumpuk(
             currentTumpuk;
 
     }
+
+
+    /* =================================================
+       7. AMBIL DATA
+    ================================================= */
 
     ambilDataTumpuk();
 
