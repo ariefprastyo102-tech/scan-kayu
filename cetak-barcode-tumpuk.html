@@ -824,6 +824,33 @@ let sedangMemuat = false;
 
 
 /* =====================================================
+   LINK TUMPUK
+===================================================== */
+
+const HALAMAN_TUMPUK_URL =
+"https://ariefprastyo102-tech.github.io/scan-kayu/cek-tumpuk.html";
+
+
+function buatLinkTumpuk(item){
+
+    const tpk =
+        String(item.tpk || "").trim();
+
+    const tumpuk =
+        String(item.tumpuk || "").trim();
+
+    return (
+        HALAMAN_TUMPUK_URL +
+        "?tpk=" +
+        encodeURIComponent(tpk) +
+        "&tumpuk=" +
+        encodeURIComponent(tumpuk)
+    );
+
+}
+
+
+/* =====================================================
    FUNGSI URUT TUMPUK
    KECIL → BESAR
 ===================================================== */
@@ -1121,13 +1148,13 @@ function tampilkanData(){
             "qr-row";
 
 
-        const stackId =
-            item.stackId ||
-            (
-                String(item.tpk || "") +
-                "|" +
-                String(item.tumpuk || "")
-            );
+        /*
+         * QR SEKARANG BERISI LINK LANGSUNG
+         * KE HALAMAN CEK TUMPUK
+         */
+
+        const qrLink =
+            buatLinkTumpuk(item);
 
 
         for(let i = 0; i < 3; i++){
@@ -1152,7 +1179,7 @@ function tampilkanData(){
 
                 new QRCode(qr,{
 
-                    text:stackId,
+                    text:qrLink,
 
                     width:62,
 
@@ -1337,13 +1364,13 @@ function cetakBarcode(){
             "print-qr-row";
 
 
-        const stackId =
-            item.stackId ||
-            (
-                String(item.tpk || "") +
-                "|" +
-                String(item.tumpuk || "")
-            );
+        /*
+         * QR SEKARANG BERISI LINK LANGSUNG
+         * KE HALAMAN CEK TUMPUK
+         */
+
+        const qrLink =
+            buatLinkTumpuk(item);
 
 
         for(let i = 0; i < 3; i++){
@@ -1366,7 +1393,7 @@ function cetakBarcode(){
 
             new QRCode(qr,{
 
-                text:stackId,
+                text:qrLink,
 
                 width:65,
 
