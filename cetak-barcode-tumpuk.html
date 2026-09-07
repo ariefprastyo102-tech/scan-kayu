@@ -45,6 +45,7 @@ h1{
     margin:0 0 25px 0;
 }
 
+
 /* =====================================================
    FILTER
 ===================================================== */
@@ -73,6 +74,7 @@ h1{
 .filter-box input:focus{
     border-color:#2196f3;
 }
+
 
 /* =====================================================
    TOMBOL
@@ -114,6 +116,7 @@ button:active{
     transform:scale(.97);
 }
 
+
 /* =====================================================
    STATUS
 ===================================================== */
@@ -127,6 +130,7 @@ button:active{
     font-size:14px;
 }
 
+
 /* =====================================================
    HASIL
 ===================================================== */
@@ -137,6 +141,7 @@ button:active{
     gap:18px;
 }
 
+
 /* =====================================================
    KARTU PREVIEW
 ===================================================== */
@@ -145,69 +150,130 @@ button:active{
     background:#ffeb00;
     border:3px solid #000;
     border-radius:10px;
-    padding:15px;
+
+    padding:12px 10px 10px 10px;
+
     text-align:center;
+
     overflow:hidden;
 }
 
-/* TUMPUK */
+
+/* =====================================================
+   TUMPUK
+   PALING NOTICE
+===================================================== */
 
 .preview-tumpuk{
-    font-size:38px;
-    font-weight:900;
-    line-height:1;
+
+    width:100%;
+
+    font-size:58px;
+
+    font-weight:1000;
+
+    line-height:.9;
+
     margin-bottom:8px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    letter-spacing:-1px;
 }
 
-/* TPK */
+
+/* =====================================================
+   TPK
+===================================================== */
 
 .preview-tpk{
-    font-size:27px;
-    font-weight:900;
-    line-height:1.05;
+
+    width:100%;
+
+    font-size:32px;
+
+    font-weight:1000;
+
+    line-height:1;
+
     white-space:nowrap;
+
     overflow:hidden;
+
     text-overflow:ellipsis;
-    margin-bottom:4px;
+
+    margin-bottom:5px;
 }
 
-/* BLOK */
+
+/* =====================================================
+   BLOK
+===================================================== */
 
 .preview-blok{
-    font-size:20px;
-    font-weight:bold;
+
+    width:100%;
+
+    font-size:25px;
+
+    font-weight:1000;
+
     line-height:1;
-    margin-bottom:12px;
+
+    margin-bottom:10px;
 }
+
 
 /* =====================================================
    QR 3 JEJER
 ===================================================== */
 
 .qr-row{
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
-    gap:10px;
+
+    gap:7px;
+
     width:100%;
 }
 
+
 .qr-box{
-    width:92px;
-    height:92px;
+
+    width:70px;
+
+    height:70px;
+
     background:#fff;
+
     border:2px solid #000;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     flex-shrink:0;
 }
 
+
 .qr-box img,
 .qr-box canvas{
-    width:82px !important;
-    height:82px !important;
+
+    width:62px !important;
+
+    height:62px !important;
 }
+
 
 /* =====================================================
    PRINT AREA
@@ -216,6 +282,7 @@ button:active{
 #printArea{
     display:none;
 }
+
 
 /* =====================================================
    CETAK F4
@@ -232,10 +299,15 @@ button:active{
 
     html,
     body{
+
         margin:0;
+
         padding:0;
+
         width:215.9mm;
+
         height:330.2mm;
+
         background:#fff;
     }
 
@@ -249,17 +321,37 @@ button:active{
     }
 
     #printArea{
+
         display:grid;
-        grid-template-columns:107.95mm 107.95mm;
-        grid-template-rows:82.55mm 82.55mm 82.55mm 82.55mm;
+
+        grid-template-columns:
+            107.95mm
+            107.95mm;
+
+        grid-template-rows:
+            82.55mm
+            82.55mm
+            82.55mm
+            82.55mm;
+
         width:215.9mm;
+
         height:330.2mm;
+
         margin:0;
+
         padding:0;
     }
 
+
+    /* =================================================
+       LABEL
+    ================================================= */
+
     .print-label{
+
         width:107.95mm;
+
         height:82.55mm;
 
         background:#ffeb00;
@@ -267,101 +359,152 @@ button:active{
         border:1mm solid #000;
 
         display:flex;
+
         flex-direction:column;
 
         align-items:center;
+
         justify-content:flex-start;
 
         overflow:hidden;
 
-        padding:4mm 3mm 3mm 3mm;
+        padding:3mm 3mm 2mm 3mm;
     }
 
-    /* TUMPUK */
+
+    /* =================================================
+       TUMPUK PRINT
+       SUPER NOTICE
+    ================================================= */
 
     .print-tumpuk{
+
         width:100%;
+
         text-align:center;
 
-        font-size:14mm;
-        line-height:1;
+        font-size:21mm;
 
-        font-weight:900;
+        line-height:.82;
 
-        margin-bottom:1.5mm;
-    }
-
-    /* TPK */
-
-    .print-tpk{
-        width:100%;
-        text-align:center;
-
-        font-size:8mm;
-        line-height:1;
-
-        font-weight:900;
+        font-weight:1000;
 
         white-space:nowrap;
+
         overflow:hidden;
+
         text-overflow:ellipsis;
 
-        margin-bottom:1mm;
-    }
-
-    /* BLOK */
-
-    .print-blok{
-        width:100%;
-        text-align:center;
-
-        font-size:5mm;
-        line-height:1;
-
-        font-weight:bold;
+        letter-spacing:-.5mm;
 
         margin-bottom:2mm;
     }
 
-    /* QR 3 JEJER */
+
+    /* =================================================
+       TPK PRINT
+    ================================================= */
+
+    .print-tpk{
+
+        width:100%;
+
+        text-align:center;
+
+        font-size:10mm;
+
+        line-height:.9;
+
+        font-weight:1000;
+
+        white-space:nowrap;
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+        margin-bottom:1.5mm;
+    }
+
+
+    /* =================================================
+       BLOK PRINT
+    ================================================= */
+
+    .print-blok{
+
+        width:100%;
+
+        text-align:center;
+
+        font-size:6mm;
+
+        line-height:.9;
+
+        font-weight:1000;
+
+        margin-bottom:2.5mm;
+    }
+
+
+    /* =================================================
+       QR 3 JEJER
+    ================================================= */
 
     .print-qr-row{
+
         width:100%;
 
         display:flex;
+
         justify-content:center;
+
         align-items:center;
 
-        gap:3mm;
+        gap:2.5mm;
     }
 
+
     .print-qr{
-        width:27mm;
-        height:27mm;
+
+        width:21mm;
+
+        height:21mm;
 
         background:#fff;
 
-        border:0.5mm solid #000;
+        border:.5mm solid #000;
 
         display:flex;
+
         justify-content:center;
+
         align-items:center;
 
         flex-shrink:0;
     }
 
+
     .print-qr img,
     .print-qr canvas{
-        width:24mm !important;
-        height:24mm !important;
+
+        width:18mm !important;
+
+        height:18mm !important;
     }
 
+
     .print-empty{
+
         visibility:hidden !important;
+
         border-color:transparent !important;
+
         background:transparent !important;
     }
+
 }
+
 
 /* =====================================================
    MOBILE
@@ -388,35 +531,73 @@ button:active{
     }
 
     .preview-card{
-        padding:14px;
+
+        padding:10px 8px 9px 8px;
     }
+
+
+    /* TUMPUK MOBILE */
 
     .preview-tumpuk{
-        font-size:42px;
+
+        font-size:62px;
+
+        line-height:.86;
+
+        letter-spacing:-1.5px;
+
+        margin-bottom:8px;
     }
+
+
+    /* TPK MOBILE */
 
     .preview-tpk{
-        font-size:29px;
+
+        font-size:34px;
+
+        line-height:.95;
+
+        margin-bottom:5px;
     }
+
+
+    /* BLOK MOBILE */
 
     .preview-blok{
-        font-size:21px;
+
+        font-size:27px;
+
+        line-height:.95;
+
+        margin-bottom:10px;
     }
+
+
+    /* QR MOBILE */
 
     .qr-row{
-        gap:7px;
+
+        gap:6px;
     }
 
+
     .qr-box{
-        width:90px;
-        height:90px;
+
+        width:66px;
+
+        height:66px;
     }
+
 
     .qr-box img,
     .qr-box canvas{
-        width:80px !important;
-        height:80px !important;
+
+        width:58px !important;
+
+        height:58px !important;
     }
+
 
     button{
         width:100%;
@@ -528,6 +709,24 @@ let sedangMemuat = false;
 
 
 /* =====================================================
+   FUNGSI URUT TUMPUK
+   KECIL → BESAR
+===================================================== */
+
+function urutTumpuk(a,b){
+
+    const numA =
+        parseInt(a.tumpuk,10) || 0;
+
+    const numB =
+        parseInt(b.tumpuk,10) || 0;
+
+    return numA - numB;
+
+}
+
+
+/* =====================================================
    AMBIL DATABASE
 ===================================================== */
 
@@ -565,26 +764,12 @@ function ambilDatabase(){
                 ? response.data
                 : [];
 
-            database.sort(function(a,b){
 
-                const tpkA =
-                    String(a.tpk || "").toUpperCase();
+            /* =========================================
+               URUT TUMPUK KECIL → BESAR
+            ========================================= */
 
-                const tpkB =
-                    String(b.tpk || "").toUpperCase();
-
-                if(tpkA < tpkB) return -1;
-                if(tpkA > tpkB) return 1;
-
-                const numA =
-                    parseInt(a.tumpuk,10) || 0;
-
-                const numB =
-                    parseInt(b.tumpuk,10) || 0;
-
-                return numA - numB;
-
-            });
+            database.sort(urutTumpuk);
 
 
             document.getElementById("status").textContent =
@@ -716,6 +901,13 @@ function tampilkanData(){
         });
 
 
+    /* ================================================
+       URUT TUMPUK KECIL → BESAR
+    ================================================ */
+
+    data.sort(urutTumpuk);
+
+
     if(data.length === 0){
 
         container.innerHTML =
@@ -733,25 +925,6 @@ function tampilkanData(){
     }
 
 
-    data.sort(function(a,b){
-
-        const tpkA =
-            String(a.tpk || "").toUpperCase();
-
-        const tpkB =
-            String(b.tpk || "").toUpperCase();
-
-        if(tpkA < tpkB) return -1;
-        if(tpkA > tpkB) return 1;
-
-        return (
-            (parseInt(a.tumpuk,10) || 0) -
-            (parseInt(b.tumpuk,10) || 0)
-        );
-
-    });
-
-
     data.forEach(function(item){
 
         const card =
@@ -761,7 +934,9 @@ function tampilkanData(){
             "preview-card";
 
 
-        /* TUMPUK */
+        /* =================================================
+           TUMPUK
+        ================================================= */
 
         const tumpuk =
             document.createElement("div");
@@ -774,7 +949,9 @@ function tampilkanData(){
             (item.tumpuk || "");
 
 
-        /* TPK */
+        /* =================================================
+           TPK
+        ================================================= */
 
         const tpk =
             document.createElement("div");
@@ -787,7 +964,9 @@ function tampilkanData(){
             (item.tpk || "");
 
 
-        /* BLOK SEMENTARA */
+        /* =================================================
+           BLOK
+        ================================================= */
 
         const blok =
             document.createElement("div");
@@ -799,7 +978,9 @@ function tampilkanData(){
             "BLOK";
 
 
-        /* QR ROW */
+        /* =================================================
+           QR ROW
+        ================================================= */
 
         const qrRow =
             document.createElement("div");
@@ -817,7 +998,9 @@ function tampilkanData(){
             );
 
 
-        /* BUAT 3 QR */
+        /* =================================================
+           3 QR
+        ================================================= */
 
         for(let i = 0; i < 3; i++){
 
@@ -840,10 +1023,16 @@ function tampilkanData(){
             setTimeout(function(){
 
                 new QRCode(qr,{
+
                     text:stackId,
-                    width:82,
-                    height:82,
-                    correctLevel:QRCode.CorrectLevel.M
+
+                    width:62,
+
+                    height:62,
+
+                    correctLevel:
+                        QRCode.CorrectLevel.M
+
                 });
 
             },0);
@@ -852,8 +1041,11 @@ function tampilkanData(){
 
 
         card.appendChild(tumpuk);
+
         card.appendChild(tpk);
+
         card.appendChild(blok);
+
         card.appendChild(qrRow);
 
         container.appendChild(card);
@@ -906,23 +1098,11 @@ function cetakBarcode(){
         });
 
 
-    data.sort(function(a,b){
+    /* ================================================
+       URUT TUMPUK KECIL → BESAR
+    ================================================ */
 
-        const tpkA =
-            String(a.tpk || "").toUpperCase();
-
-        const tpkB =
-            String(b.tpk || "").toUpperCase();
-
-        if(tpkA < tpkB) return -1;
-        if(tpkA > tpkB) return 1;
-
-        return (
-            (parseInt(a.tumpuk,10) || 0) -
-            (parseInt(b.tumpuk,10) || 0)
-        );
-
-    });
+    data.sort(urutTumpuk);
 
 
     if(data.length === 0){
@@ -957,7 +1137,9 @@ function cetakBarcode(){
             "print-label";
 
 
-        /* TUMPUK */
+        /* =================================================
+           TUMPUK
+        ================================================= */
 
         const tumpuk =
             document.createElement("div");
@@ -970,7 +1152,9 @@ function cetakBarcode(){
             (item.tumpuk || "");
 
 
-        /* TPK */
+        /* =================================================
+           TPK
+        ================================================= */
 
         const tpk =
             document.createElement("div");
@@ -983,7 +1167,9 @@ function cetakBarcode(){
             (item.tpk || "");
 
 
-        /* BLOK */
+        /* =================================================
+           BLOK
+        ================================================= */
 
         const blok =
             document.createElement("div");
@@ -995,7 +1181,9 @@ function cetakBarcode(){
             "BLOK";
 
 
-        /* QR ROW */
+        /* =================================================
+           QR ROW
+        ================================================= */
 
         const qrRow =
             document.createElement("div");
@@ -1013,7 +1201,9 @@ function cetakBarcode(){
             );
 
 
-        /* 3 QR */
+        /* =================================================
+           3 QR
+        ================================================= */
 
         for(let i = 0; i < 3; i++){
 
@@ -1034,18 +1224,27 @@ function cetakBarcode(){
 
 
             new QRCode(qr,{
+
                 text:stackId,
-                width:90,
-                height:90,
-                correctLevel:QRCode.CorrectLevel.M
+
+                width:65,
+
+                height:65,
+
+                correctLevel:
+                    QRCode.CorrectLevel.M
+
             });
 
         }
 
 
         label.appendChild(tumpuk);
+
         label.appendChild(tpk);
+
         label.appendChild(blok);
+
         label.appendChild(qrRow);
 
         printArea.appendChild(label);
