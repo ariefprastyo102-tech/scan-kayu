@@ -160,8 +160,8 @@ button:active{
 
 
 /* =====================================================
-   TUMPUK
-   PALING NOTICE
+   TUMPUK PREVIEW
+   BESAR TAPI TIDAK BOLEH KE POTONG
 ===================================================== */
 
 .preview-tumpuk{
@@ -183,6 +183,8 @@ button:active{
     text-overflow:ellipsis;
 
     letter-spacing:-1px;
+
+    transform-origin:center;
 }
 
 
@@ -374,7 +376,7 @@ button:active{
 
     /* =================================================
        TUMPUK PRINT
-       SUPER NOTICE
+       BESAR TAPI OTOMATIS MENYESUAIKAN
     ================================================= */
 
     .print-tumpuk{
@@ -391,13 +393,17 @@ button:active{
 
         white-space:nowrap;
 
-        overflow:hidden;
+        overflow:visible;
 
-        text-overflow:ellipsis;
+        text-overflow:clip;
 
         letter-spacing:-.5mm;
 
         margin-bottom:2mm;
+
+        transform-origin:center;
+
+        flex-shrink:0;
     }
 
 
@@ -1286,10 +1292,57 @@ function cetakBarcode(){
 
 
     /* =================================================
-       CETAK
+       SESUAIKAN UKURAN TUMPUK
+       AGAR TIDAK PERNAH KE POTONG
     ================================================= */
 
     setTimeout(function(){
+
+        const semuaTumpuk =
+            document.querySelectorAll(
+                ".print-tumpuk"
+            );
+
+
+        semuaTumpuk.forEach(
+            function(el){
+
+                const parent =
+                    el.parentElement;
+
+
+                const batas =
+                    parent.clientWidth -
+                    8;
+
+
+                let ukuran =
+                    21;
+
+
+                el.style.fontSize =
+                    ukuran + "mm";
+
+
+                while(
+                    el.scrollWidth > batas &&
+                    ukuran > 10
+                ){
+
+                    ukuran -= 0.5;
+
+                    el.style.fontSize =
+                        ukuran + "mm";
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           CETAK
+        ================================================= */
 
         window.print();
 
