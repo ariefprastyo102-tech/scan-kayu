@@ -160,8 +160,7 @@ button:active{
 
 
 /* =====================================================
-   TUMPUK PREVIEW
-   TUMPUK KECIL + ANGKA BESAR
+   TUMPUK
 ===================================================== */
 
 .preview-tumpuk{
@@ -271,7 +270,7 @@ button:active{
 
 
 /* =====================================================
-   QR 3 JEJER
+   QR — SATU SAJA
 ===================================================== */
 
 .qr-row{
@@ -282,17 +281,17 @@ button:active{
 
     align-items:center;
 
-    gap:7px;
-
     width:100%;
+
+    margin-top:3px;
 }
 
 
 .qr-box{
 
-    width:70px;
+    width:105px;
 
-    height:70px;
+    height:105px;
 
     background:#fff;
 
@@ -305,15 +304,19 @@ button:active{
     align-items:center;
 
     flex-shrink:0;
+
+    padding:3px;
 }
 
 
 .qr-box img,
 .qr-box canvas{
 
-    width:62px !important;
+    width:97px !important;
 
-    height:62px !important;
+    height:97px !important;
+
+    image-rendering:auto;
 }
 
 
@@ -410,13 +413,12 @@ button:active{
 
         overflow:hidden;
 
-        padding:3mm 3mm 2mm 3mm;
+        padding:2.5mm 3mm 2mm 3mm;
     }
 
 
     /* =================================================
        TUMPUK PRINT
-       ANGKA LEBIH BESAR
     ================================================= */
 
     .print-tumpuk{
@@ -433,7 +435,7 @@ button:active{
 
         text-align:center;
 
-        margin-bottom:2mm;
+        margin-bottom:1.5mm;
 
         line-height:1;
 
@@ -509,7 +511,61 @@ button:active{
 
         text-overflow:ellipsis;
 
+        margin-bottom:1mm;
+    }
+
+
+    /* =================================================
+       QR PRINT — SATU BESAR
+    ================================================= */
+
+    .print-qr-row{
+
+        width:100%;
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+        margin-top:0;
+
         margin-bottom:1.5mm;
+
+    }
+
+
+    .print-qr{
+
+        width:30mm;
+
+        height:30mm;
+
+        background:#fff;
+
+        border:.5mm solid #000;
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+        padding:1mm;
+
+        flex-shrink:0;
+    }
+
+
+    .print-qr img,
+    .print-qr canvas{
+
+        width:27.5mm !important;
+
+        height:27.5mm !important;
+
+        image-rendering:auto;
     }
 
 
@@ -529,54 +585,9 @@ button:active{
 
         font-weight:1000;
 
-        margin-bottom:2.5mm;
-    }
+        margin-top:0;
 
-
-    /* =================================================
-       QR 3 JEJER
-    ================================================= */
-
-    .print-qr-row{
-
-        width:100%;
-
-        display:flex;
-
-        justify-content:center;
-
-        align-items:center;
-
-        gap:2.5mm;
-    }
-
-
-    .print-qr{
-
-        width:21mm;
-
-        height:21mm;
-
-        background:#fff;
-
-        border:.5mm solid #000;
-
-        display:flex;
-
-        justify-content:center;
-
-        align-items:center;
-
-        flex-shrink:0;
-    }
-
-
-    .print-qr img,
-    .print-qr canvas{
-
-        width:18mm !important;
-
-        height:18mm !important;
+        margin-bottom:0;
     }
 
 
@@ -682,35 +693,36 @@ button:active{
 
         line-height:.95;
 
-        margin-bottom:10px;
+        margin-bottom:8px;
     }
 
 
     /* =================================================
-       QR MOBILE
+       QR MOBILE — SATU BESAR
     ================================================= */
 
     .qr-row{
 
-        gap:6px;
+        margin-top:3px;
     }
 
 
     .qr-box{
 
-        width:66px;
+        width:100px;
 
-        height:66px;
+        height:100px;
 
+        padding:3px;
     }
 
 
     .qr-box img,
     .qr-box canvas{
 
-        width:58px !important;
+        width:92px !important;
 
-        height:58px !important;
+        height:92px !important;
     }
 
 
@@ -781,7 +793,7 @@ button:active{
 
     <!-- =================================================
          STATUS
-    ================================================= -->
+===================================================== -->
 
     <div id="status">
         Silakan ambil data tumpuk.
@@ -790,7 +802,7 @@ button:active{
 
     <!-- =================================================
          HASIL
-    ================================================= -->
+===================================================== -->
 
     <div id="hasil"></div>
 
@@ -1138,7 +1150,7 @@ function tampilkanData(){
 
 
         /* =================================================
-           QR
+           QR — SATU SAJA
         ================================================= */
 
         const qrRow =
@@ -1148,8 +1160,24 @@ function tampilkanData(){
             "qr-row";
 
 
+        const qrBox =
+            document.createElement("div");
+
+        qrBox.className =
+            "qr-box";
+
+
+        const qr =
+            document.createElement("div");
+
+
+        qrBox.appendChild(qr);
+
+        qrRow.appendChild(qrBox);
+
+
         /*
-         * QR SEKARANG BERISI LINK LANGSUNG
+         * QR BERISI LINK LANGSUNG
          * KE HALAMAN CEK TUMPUK
          */
 
@@ -1157,42 +1185,22 @@ function tampilkanData(){
             buatLinkTumpuk(item);
 
 
-        for(let i = 0; i < 3; i++){
+        setTimeout(function(){
 
-            const qrBox =
-                document.createElement("div");
+            new QRCode(qr,{
 
-            qrBox.className =
-                "qr-box";
+                text:qrLink,
 
+                width:97,
 
-            const qr =
-                document.createElement("div");
+                height:97,
 
+                correctLevel:
+                    QRCode.CorrectLevel.M
 
-            qrBox.appendChild(qr);
+            });
 
-            qrRow.appendChild(qrBox);
-
-
-            setTimeout(function(){
-
-                new QRCode(qr,{
-
-                    text:qrLink,
-
-                    width:62,
-
-                    height:62,
-
-                    correctLevel:
-                        QRCode.CorrectLevel.M
-
-                });
-
-            },0);
-
-        }
+        },0);
 
 
         card.appendChild(tumpuk);
@@ -1325,7 +1333,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           TPK
+           TPK PRINT
         ================================================= */
 
         const tpk =
@@ -1340,7 +1348,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           BLOK
+           BLOK PRINT
         ================================================= */
 
         const blok =
@@ -1354,7 +1362,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           QR
+           QR PRINT — SATU SAJA
         ================================================= */
 
         const qrRow =
@@ -1364,8 +1372,24 @@ function cetakBarcode(){
             "print-qr-row";
 
 
+        const qrBox =
+            document.createElement("div");
+
+        qrBox.className =
+            "print-qr";
+
+
+        const qr =
+            document.createElement("div");
+
+
+        qrBox.appendChild(qr);
+
+        qrRow.appendChild(qrBox);
+
+
         /*
-         * QR SEKARANG BERISI LINK LANGSUNG
+         * QR BERISI LINK LANGSUNG
          * KE HALAMAN CEK TUMPUK
          */
 
@@ -1373,47 +1397,36 @@ function cetakBarcode(){
             buatLinkTumpuk(item);
 
 
-        for(let i = 0; i < 3; i++){
+        new QRCode(qr,{
 
-            const qrBox =
-                document.createElement("div");
+            text:qrLink,
 
-            qrBox.className =
-                "print-qr";
+            width:275,
 
+            height:275,
 
-            const qr =
-                document.createElement("div");
+            correctLevel:
+                QRCode.CorrectLevel.M
 
-
-            qrBox.appendChild(qr);
-
-            qrRow.appendChild(qrBox);
+        });
 
 
-            new QRCode(qr,{
-
-                text:qrLink,
-
-                width:65,
-
-                height:65,
-
-                correctLevel:
-                    QRCode.CorrectLevel.M
-
-            });
-
-        }
-
+        /*
+         * URUTAN:
+         *
+         * TUMPUK
+         * TPK
+         * QR
+         * BLOK
+         */
 
         label.appendChild(tumpuk);
 
         label.appendChild(tpk);
 
-        label.appendChild(blok);
-
         label.appendChild(qrRow);
+
+        label.appendChild(blok);
 
         printArea.appendChild(label);
 
