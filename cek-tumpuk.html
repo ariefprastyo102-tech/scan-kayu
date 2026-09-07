@@ -1018,7 +1018,110 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        mulaiScanner();
+        /*
+         * CEK APAKAH HALAMAN DIBUKA DARI QR URL
+         *
+         * Contoh:
+         * cek-tumpuk.html?tpk=TPK01&tumpuk=45
+         */
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const urlTPK =
+            params.get("tpk");
+
+
+        const urlTumpuk =
+            params.get("tumpuk");
+
+
+        /*
+         * JIKA ADA PARAMETER TUMPUK
+         * → JANGAN BUKA KAMERA
+         * → LANGSUNG AMBIL DATA
+         */
+
+        if(urlTumpuk){
+
+            currentTPK =
+                urlTPK
+                ?
+                String(urlTPK).trim()
+                :
+                "";
+
+
+            currentTumpuk =
+                String(urlTumpuk).trim();
+
+
+            /*
+             * KHUSUS TUMPUK 29
+             * TIDAK MEMAKAI TPK
+             */
+
+            if(
+                currentTumpuk === "29"
+            ){
+
+                currentTPK =
+                    "";
+
+                currentStackId =
+                    "TUMPUK|29";
+
+            }
+            else{
+
+                currentStackId =
+                    currentTPK +
+                    "|" +
+                    currentTumpuk;
+
+            }
+
+
+            document
+                .getElementById("scanStatus")
+                .innerHTML =
+                "🔗 MEMBUKA TUMPUK<br>" +
+                "TUMPUK " +
+                escapeHtml(
+                    currentTumpuk
+                );
+
+
+            sedangProses =
+                true;
+
+
+            /*
+             * LANGSUNG AMBIL DATA DARI BACKEND
+             */
+
+            ambilDataTumpuk();
+
+        }
+
+        else{
+
+            /*
+             * JIKA TIDAK ADA PARAMETER URL
+             * → NORMAL, BUKA KAMERA
+             */
+
+            mulaiScanner();
+
+        }
+
+
+        /*
+         * ENTER PADA INPUT MANUAL
+         */
 
         document
             .getElementById("manualInput")
