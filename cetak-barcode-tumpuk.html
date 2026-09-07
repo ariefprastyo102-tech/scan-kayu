@@ -150,11 +150,8 @@ button:active{
     background:#ffeb00;
     border:3px solid #000;
     border-radius:10px;
-
     padding:12px 10px 10px 10px;
-
     text-align:center;
-
     overflow:hidden;
 }
 
@@ -252,24 +249,6 @@ button:active{
 
 
 /* =====================================================
-   BLOK
-===================================================== */
-
-.preview-blok{
-
-    width:100%;
-
-    font-size:25px;
-
-    font-weight:1000;
-
-    line-height:1;
-
-    margin-bottom:10px;
-}
-
-
-/* =====================================================
    QR — SATU SAJA
 ===================================================== */
 
@@ -284,6 +263,8 @@ button:active{
     width:100%;
 
     margin-top:3px;
+
+    margin-bottom:8px;
 }
 
 
@@ -317,6 +298,24 @@ button:active{
     height:97px !important;
 
     image-rendering:auto;
+}
+
+
+/* =====================================================
+   BLOK
+===================================================== */
+
+.preview-blok{
+
+    width:100%;
+
+    font-size:25px;
+
+    font-weight:1000;
+
+    line-height:1;
+
+    margin-bottom:5px;
 }
 
 
@@ -684,26 +683,14 @@ button:active{
 
 
     /* =================================================
-       BLOK MOBILE
-    ================================================= */
-
-    .preview-blok{
-
-        font-size:27px;
-
-        line-height:.95;
-
-        margin-bottom:8px;
-    }
-
-
-    /* =================================================
-       QR MOBILE — SATU BESAR
+       QR MOBILE
     ================================================= */
 
     .qr-row{
 
         margin-top:3px;
+
+        margin-bottom:8px;
     }
 
 
@@ -723,6 +710,20 @@ button:active{
         width:92px !important;
 
         height:92px !important;
+    }
+
+
+    /* =================================================
+       BLOK MOBILE
+    ================================================= */
+
+    .preview-blok{
+
+        font-size:27px;
+
+        line-height:.95;
+
+        margin-bottom:5px;
     }
 
 
@@ -793,7 +794,7 @@ button:active{
 
     <!-- =================================================
          STATUS
-===================================================== -->
+    ================================================= -->
 
     <div id="status">
         Silakan ambil data tumpuk.
@@ -802,7 +803,7 @@ button:active{
 
     <!-- =================================================
          HASIL
-===================================================== -->
+    ================================================= -->
 
     <div id="hasil"></div>
 
@@ -1136,20 +1137,6 @@ function tampilkanData(){
 
 
         /* =================================================
-           BLOK
-        ================================================= */
-
-        const blok =
-            document.createElement("div");
-
-        blok.className =
-            "preview-blok";
-
-        blok.textContent =
-            "BLOK";
-
-
-        /* =================================================
            QR — SATU SAJA
         ================================================= */
 
@@ -1203,13 +1190,37 @@ function tampilkanData(){
         },0);
 
 
+        /* =================================================
+           BLOK
+           POSISI DI BAWAH QR
+        ================================================= */
+
+        const blok =
+            document.createElement("div");
+
+        blok.className =
+            "preview-blok";
+
+        blok.textContent =
+            "BLOK";
+
+
+        /* =================================================
+           URUTAN PREVIEW
+           
+           TUMPUK
+           TPK
+           QR
+           BLOK
+        ================================================= */
+
         card.appendChild(tumpuk);
 
         card.appendChild(tpk);
 
-        card.appendChild(blok);
-
         card.appendChild(qrRow);
+
+        card.appendChild(blok);
 
         container.appendChild(card);
 
@@ -1348,20 +1359,6 @@ function cetakBarcode(){
 
 
         /* =================================================
-           BLOK PRINT
-        ================================================= */
-
-        const blok =
-            document.createElement("div");
-
-        blok.className =
-            "print-blok";
-
-        blok.textContent =
-            "BLOK";
-
-
-        /* =================================================
            QR PRINT — SATU SAJA
         ================================================= */
 
@@ -1411,14 +1408,28 @@ function cetakBarcode(){
         });
 
 
-        /*
-         * URUTAN:
-         *
-         * TUMPUK
-         * TPK
-         * QR
-         * BLOK
-         */
+        /* =================================================
+           BLOK PRINT
+        ================================================= */
+
+        const blok =
+            document.createElement("div");
+
+        blok.className =
+            "print-blok";
+
+        blok.textContent =
+            "BLOK";
+
+
+        /* =================================================
+           URUTAN CETAK
+           
+           TUMPUK
+           TPK
+           QR
+           BLOK
+        ================================================= */
 
         label.appendChild(tumpuk);
 
