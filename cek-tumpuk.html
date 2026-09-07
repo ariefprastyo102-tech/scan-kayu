@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -91,7 +90,6 @@ body{
 
 /* =====================================================
    CAMERA
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 .camera-card{
@@ -123,7 +121,6 @@ body{
 
 /* =====================================================
    GARIS POJOK
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 .qr-frame{
@@ -176,7 +173,6 @@ body{
 
 /* =====================================================
    INDIKATOR BERHASIL
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 #scanBerhasil{
@@ -1045,7 +1041,6 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
-   ENGINE SAMA SEPERTI SCAN REGISTER BBI
 ===================================================== */
 
 async function mulaiScanner(){
@@ -1278,7 +1273,6 @@ async function mulaiScanner(){
 
 /* =====================================================
    INDIKATOR BERHASIL
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 function tampilkanIndikatorHijau(){
@@ -1314,7 +1308,6 @@ function tampilkanIndikatorHijau(){
 
 /* =====================================================
    SUARA
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 function bunyiBerhasil(){
@@ -1417,7 +1410,6 @@ function bunyiBerhasil(){
 
 /* =====================================================
    GETAR
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 function getarBerhasil(){
@@ -1468,7 +1460,6 @@ function stopScanner(){
 
 /* =====================================================
    OPTIMASI KAMERA
-   SAMA SEPERTI SCAN REGISTER
 ===================================================== */
 
 async function optimalkanKamera(
@@ -1579,7 +1570,6 @@ async function optimalkanKamera(
 
 /* =====================================================
    SEARCH MANUAL
-   ASLI
 ===================================================== */
 
 function prosesManual(){
@@ -1645,7 +1635,7 @@ function prosesManual(){
 
 /* =====================================================
    CARI NOMOR TUMPUK DARI DATABASE
-   ASLI
+   DIPERBAIKI
 ===================================================== */
 
 function cariTumpukDenganNomor(
@@ -1668,16 +1658,39 @@ function cariTumpukDenganNomor(
 
                 hideLoading();
 
-                if(
-                    !response ||
-                    response.success !== true
-                ){
+                /*
+                 * BACKEND SEKARANG BISA MENGIRIM:
+                 *
+                 * ok      : "success"
+                 * status  : "success"
+                 * success : true
+                 *
+                 * Jadi ketiganya diterima.
+                 */
+
+                const berhasil =
+                    response &&
+                    (
+                        response.ok === "success" ||
+                        response.ok === true ||
+                        response.status === "success" ||
+                        response.success === true
+                    );
+
+
+                if(!berhasil){
 
                     showError(
                         response &&
-                        response.message
+                        (
+                            response.message ||
+                            response.error
+                        )
                         ?
-                        response.message
+                        (
+                            response.message ||
+                            response.error
+                        )
                         :
                         "Data TUMPUK tidak ditemukan."
                     );
@@ -1685,6 +1698,7 @@ function cariTumpukDenganNomor(
                     return;
 
                 }
+
 
                 const list =
                     Array.isArray(
@@ -1695,9 +1709,11 @@ function cariTumpukDenganNomor(
                     :
                     [];
 
+
                 const target =
                     String(nomor)
                     .trim();
+
 
                 const ditemukan =
                     list.find(
@@ -1714,6 +1730,7 @@ function cariTumpukDenganNomor(
                         }
                     );
 
+
                 if(!ditemukan){
 
                     showError(
@@ -1726,8 +1743,10 @@ function cariTumpukDenganNomor(
 
                 }
 
+
                 currentTumpuk =
                     target;
+
 
                 if(
                     target === "29"
@@ -1747,8 +1766,10 @@ function cariTumpukDenganNomor(
 
                 }
 
+
                 currentStackId =
                     ditemukan.stackId || "";
+
 
                 ambilDataTumpuk();
 
@@ -1862,7 +1883,6 @@ function cariTumpukDenganNomor(
 
 /* =====================================================
    PARSE BARCODE
-   ASLI
 ===================================================== */
 
 function prosesKodeTumpuk(
@@ -1984,7 +2004,7 @@ function prosesKodeTumpuk(
 
 /* =====================================================
    AMBIL DATA TUMPUK
-   ASLI
+   DIPERBAIKI
 ===================================================== */
 
 function ambilDataTumpuk(){
@@ -2005,16 +2025,40 @@ function ambilDataTumpuk(){
 
                 hideLoading();
 
-                if(
-                    !response ||
-                    response.success !== true
-                ){
+
+                /*
+                 * BACKEND SEKARANG:
+                 *
+                 * ok      : "success"
+                 * status  : "success"
+                 * success : true
+                 *
+                 * Semua diterima.
+                 */
+
+                const berhasil =
+                    response &&
+                    (
+                        response.ok === "success" ||
+                        response.ok === true ||
+                        response.status === "success" ||
+                        response.success === true
+                    );
+
+
+                if(!berhasil){
 
                     showError(
                         response &&
-                        response.message
+                        (
+                            response.message ||
+                            response.error
+                        )
                         ?
-                        response.message
+                        (
+                            response.message ||
+                            response.error
+                        )
                         :
                         "Data TUMPUK tidak ditemukan."
                     );
@@ -2025,6 +2069,7 @@ function ambilDataTumpuk(){
                     return;
 
                 }
+
 
                 if(
                     !response.data ||
@@ -2042,9 +2087,11 @@ function ambilDataTumpuk(){
 
                 }
 
+
                 tampilkanData(
                     response.data
                 );
+
 
                 sedangProses =
                     false;
@@ -2094,6 +2141,14 @@ function ambilDataTumpuk(){
         callbackName +
         "&_=" +
         Date.now();
+
+
+    console.log(
+        "REQUEST TUMPUK:",
+        currentTPK,
+        currentTumpuk,
+        currentStackId
+    );
 
 
     script =
@@ -2174,7 +2229,6 @@ function ambilDataTumpuk(){
 
 /* =====================================================
    TAMPILKAN DATA
-   ASLI
 ===================================================== */
 
 function tampilkanData(
@@ -2193,6 +2247,7 @@ function tampilkanData(
             currentTumpuk
         );
 
+
     if(data.tpk !== undefined){
 
         currentTPK =
@@ -2200,12 +2255,14 @@ function tampilkanData(
 
     }
 
+
     if(data.tumpuk !== undefined){
 
         currentTumpuk =
             String(data.tumpuk);
 
     }
+
 
     currentRegisters =
         Array.isArray(
@@ -2216,10 +2273,12 @@ function tampilkanData(
         :
         [];
 
+
     document
         .getElementById("result")
         .classList
         .add("show");
+
 
     document
         .getElementById("tumpukTitle")
@@ -2233,6 +2292,7 @@ function tampilkanData(
             "-"
         );
 
+
     document
         .getElementById("tpkTitle")
         .textContent =
@@ -2245,6 +2305,7 @@ function tampilkanData(
             "-"
         );
 
+
     document
         .getElementById("jumlahAwal")
         .textContent =
@@ -2255,6 +2316,7 @@ function tampilkanData(
             :
             data.jumlahAwal
         );
+
 
     document
         .getElementById("volumeAwal")
@@ -2267,9 +2329,11 @@ function tampilkanData(
             data.volumeAwal
         );
 
+
     tampilkanRincianTPK(
         data
     );
+
 
     const registers =
         Array.isArray(data.registers)
@@ -2278,16 +2342,19 @@ function tampilkanData(
         :
         [];
 
+
     document
         .getElementById("registerBadge")
         .textContent =
         registers.length +
         " REGISTER";
 
+
     tampilkanRegister(
         registers,
         data
     );
+
 
     const history =
         Array.isArray(data.history)
@@ -2296,16 +2363,20 @@ function tampilkanData(
         :
         [];
 
+
     document
         .getElementById("historyBadge")
         .textContent =
         history.length;
 
+
     tampilkanHistory(
         history
     );
 
+
     updateJumlahCek();
+
 
     window.scrollTo({
         top:0,
@@ -2317,7 +2388,6 @@ function tampilkanData(
 
 /* =====================================================
    HITUNG JUMLAH CEK
-   ASLI
 ===================================================== */
 
 function updateJumlahCek(){
@@ -2329,6 +2399,7 @@ function updateJumlahCek(){
 
     let jumlah =
         0;
+
 
     checkboxes.forEach(
         function(checkbox){
@@ -2342,6 +2413,7 @@ function updateJumlahCek(){
         }
     );
 
+
     document
         .getElementById("jumlahCek")
         .textContent =
@@ -2352,7 +2424,6 @@ function updateJumlahCek(){
 
 /* =====================================================
    RINCIAN TPK
-   ASLI
 ===================================================== */
 
 function tampilkanRincianTPK(
@@ -2371,11 +2442,14 @@ function tampilkanRincianTPK(
             "tpkDetailList"
         );
 
+
     container.innerHTML = "";
+
 
     box.classList.remove(
         "show"
     );
+
 
     if(
         String(data.tumpuk) !== "29"
@@ -2384,6 +2458,7 @@ function tampilkanRincianTPK(
         return;
 
     }
+
 
     const rincian =
         Array.isArray(
@@ -2394,11 +2469,13 @@ function tampilkanRincianTPK(
         :
         [];
 
+
     if(!rincian.length){
 
         return;
 
     }
+
 
     rincian.forEach(
         function(item){
@@ -2409,8 +2486,10 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
+
             wrapper.className =
                 "tpk-detail-item";
+
 
             const name =
                 document
@@ -2418,8 +2497,10 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
+
             name.className =
                 "tpk-detail-name";
+
 
             name.textContent =
                 "TPK " +
@@ -2431,14 +2512,17 @@ function tampilkanRincianTPK(
                     "-"
                 );
 
+
             const info =
                 document
                 .createElement(
                     "div"
                 );
 
+
             info.className =
                 "tpk-detail-info";
+
 
             const jumlah =
                 document
@@ -2446,11 +2530,13 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
+
             jumlah.textContent =
                 formatAngka(
                     item.jumlahBatang
                 ) +
                 " BATANG";
+
 
             const volume =
                 document
@@ -2458,29 +2544,36 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
+
             volume.className =
                 "tpk-detail-volume";
+
 
             volume.textContent =
                 formatVolume(
                     item.volume
                 );
 
+
             info.appendChild(
                 jumlah
             );
+
 
             info.appendChild(
                 volume
             );
 
+
             wrapper.appendChild(
                 name
             );
 
+
             wrapper.appendChild(
                 info
             );
+
 
             container.appendChild(
                 wrapper
@@ -2488,6 +2581,7 @@ function tampilkanRincianTPK(
 
         }
     );
+
 
     box.classList.add(
         "show"
@@ -2498,7 +2592,6 @@ function tampilkanRincianTPK(
 
 /* =====================================================
    TAMPILKAN REGISTER
-   ASLI
 ===================================================== */
 
 function tampilkanRegister(
@@ -2512,7 +2605,9 @@ function tampilkanRegister(
             "registerList"
         );
 
+
     container.innerHTML = "";
+
 
     if(!registers.length){
 
@@ -2521,11 +2616,13 @@ function tampilkanRegister(
             'Tidak ada register dalam tumpukan.' +
             '</div>';
 
+
         updateJumlahCek();
 
         return;
 
     }
+
 
     registers.forEach(
         function(item){
@@ -2543,11 +2640,13 @@ function tampilkanRegister(
                     ""
                 );
 
+
             if(!register){
 
                 return;
 
             }
+
 
             const checked =
                 item.checked === true ||
@@ -2555,11 +2654,13 @@ function tampilkanRegister(
                     item.checked
                 ).toLowerCase() === "true";
 
+
             const wrapper =
                 document
                 .createElement(
                     "div"
                 );
+
 
             wrapper.className =
                 "register-item" +
@@ -2571,17 +2672,21 @@ function tampilkanRegister(
                     ""
                 );
 
+
             const checkbox =
                 document
                 .createElement(
                     "input"
                 );
 
+
             checkbox.type =
                 "checkbox";
 
+
             checkbox.checked =
                 checked;
+
 
             const status =
                 document
@@ -2589,8 +2694,10 @@ function tampilkanRegister(
                     "div"
                 );
 
+
             status.className =
                 "check-status";
+
 
             status.textContent =
                 checked
@@ -2599,11 +2706,13 @@ function tampilkanRegister(
                 :
                 "";
 
+
             checkbox.addEventListener(
                 "change",
                 function(){
 
                     updateJumlahCek();
+
 
                     setCheckbox(
                         register,
@@ -2615,29 +2724,36 @@ function tampilkanRegister(
                 }
             );
 
+
             const number =
                 document
                 .createElement(
                     "div"
                 );
 
+
             number.className =
                 "register-number";
 
+
             number.textContent =
                 register;
+
 
             wrapper.appendChild(
                 checkbox
             );
 
+
             wrapper.appendChild(
                 number
             );
 
+
             wrapper.appendChild(
                 status
             );
+
 
             container.appendChild(
                 wrapper
@@ -2646,6 +2762,7 @@ function tampilkanRegister(
         }
     );
 
+
     updateJumlahCek();
 
 }
@@ -2653,7 +2770,7 @@ function tampilkanRegister(
 
 /* =====================================================
    CHECKBOX PER REGISTER
-   ASLI
+   DIPERBAIKI
 ===================================================== */
 
 function setCheckbox(
@@ -2668,8 +2785,10 @@ function setCheckbox(
             'input[type="checkbox"]'
         );
 
+
     const previousChecked =
         !checked;
+
 
     if(checked){
 
@@ -2686,11 +2805,14 @@ function setCheckbox(
 
     }
 
+
     status.textContent =
         "MENYIMPAN...";
 
+
     let stackId =
         currentStackId;
+
 
     if(!stackId){
 
@@ -2705,6 +2827,7 @@ function setCheckbox(
 
     }
 
+
     const callbackName =
         "callbackCek_" +
         Date.now() +
@@ -2713,8 +2836,10 @@ function setCheckbox(
             Math.random()*1000
         );
 
+
     let script = null;
     let timeoutId = null;
+
 
     window[callbackName] =
         function(data){
@@ -2727,10 +2852,23 @@ function setCheckbox(
 
             }
 
-            if(
+
+            /*
+             * TERIMA FORMAT RESPONSE LAMA
+             * DAN FORMAT RESPONSE BARU
+             */
+
+            const berhasil =
                 data &&
-                data.success === true
-            ){
+                (
+                    data.ok === "success" ||
+                    data.ok === true ||
+                    data.status === "success" ||
+                    data.success === true
+                );
+
+
+            if(berhasil){
 
                 status.textContent =
                     checked
@@ -2738,6 +2876,7 @@ function setCheckbox(
                     "SUDAH DICEK"
                     :
                     "";
+
 
                 if(checked){
 
@@ -2760,8 +2899,10 @@ function setCheckbox(
                 status.textContent =
                     "GAGAL";
 
+
                 checkbox.checked =
                     previousChecked;
+
 
                 if(previousChecked){
 
@@ -2780,7 +2921,9 @@ function setCheckbox(
 
             }
 
+
             updateJumlahCek();
+
 
             cleanupJSONP(
                 callbackName,
@@ -2832,11 +2975,14 @@ function setCheckbox(
 
             }
 
+
             status.textContent =
                 "GAGAL";
 
+
             checkbox.checked =
                 previousChecked;
+
 
             if(previousChecked){
 
@@ -2853,7 +2999,9 @@ function setCheckbox(
 
             }
 
+
             updateJumlahCek();
+
 
             cleanupJSONP(
                 callbackName,
@@ -2883,8 +3031,10 @@ function setCheckbox(
                     status.textContent =
                         "GAGAL";
 
+
                     checkbox.checked =
                         previousChecked;
+
 
                     if(previousChecked){
 
@@ -2901,7 +3051,9 @@ function setCheckbox(
 
                     }
 
+
                     updateJumlahCek();
+
 
                     cleanupJSONP(
                         callbackName,
@@ -2919,7 +3071,6 @@ function setCheckbox(
 
 /* =====================================================
    HISTORY
-   ASLI
 ===================================================== */
 
 function tampilkanHistory(
@@ -2932,7 +3083,9 @@ function tampilkanHistory(
             "historyList"
         );
 
+
     container.innerHTML = "";
+
 
     if(!history.length){
 
@@ -2945,6 +3098,7 @@ function tampilkanHistory(
 
     }
 
+
     history.forEach(
         function(item){
 
@@ -2954,6 +3108,7 @@ function tampilkanHistory(
                 item.tanggal
                 :
                 item.TANGGAL;
+
 
             const jumlah =
                 item.jumlah !== undefined
@@ -2968,6 +3123,7 @@ function tampilkanHistory(
                     item.JUMLAH
                 );
 
+
             const registers =
                 Array.isArray(
                     item.registers
@@ -2977,14 +3133,17 @@ function tampilkanHistory(
                 :
                 [];
 
+
             const box =
                 document
                 .createElement(
                     "div"
                 );
 
+
             box.className =
                 "history-item";
+
 
             const head =
                 document
@@ -2992,8 +3151,10 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             head.className =
                 "history-head";
+
 
             const left =
                 document
@@ -3001,19 +3162,23 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             const dateEl =
                 document
                 .createElement(
                     "div"
                 );
 
+
             dateEl.className =
                 "history-date";
+
 
             dateEl.textContent =
                 formatTanggal(
                     date
                 );
+
 
             const takenEl =
                 document
@@ -3021,21 +3186,26 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             takenEl.className =
                 "history-taken";
+
 
             takenEl.textContent =
                 "DIAMBIL " +
                 formatAngka(jumlah) +
                 " BATANG";
 
+
             left.appendChild(
                 dateEl
             );
 
+
             left.appendChild(
                 takenEl
             );
+
 
             const arrow =
                 document
@@ -3043,19 +3213,24 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             arrow.className =
                 "history-arrow";
 
+
             arrow.textContent =
                 "▼";
+
 
             head.appendChild(
                 left
             );
 
+
             head.appendChild(
                 arrow
             );
+
 
             const detail =
                 document
@@ -3063,8 +3238,10 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             detail.className =
                 "history-detail";
+
 
             const detailTitle =
                 document
@@ -3072,15 +3249,19 @@ function tampilkanHistory(
                     "div"
                 );
 
+
             detailTitle.className =
                 "detail-title";
+
 
             detailTitle.textContent =
                 "REGISTER YANG DIAMBIL";
 
+
             detail.appendChild(
                 detailTitle
             );
+
 
             if(!registers.length){
 
@@ -3090,11 +3271,14 @@ function tampilkanHistory(
                         "div"
                     );
 
+
                 empty.className =
                     "empty";
 
+
                 empty.textContent =
                     "Detail register tidak tersedia.";
+
 
                 detail.appendChild(
                     empty
@@ -3112,11 +3296,14 @@ function tampilkanHistory(
                                 "span"
                             );
 
+
                         el.className =
                             "detail-register";
 
+
                         el.textContent =
                             register;
+
 
                         detail.appendChild(
                             el
@@ -3126,6 +3313,7 @@ function tampilkanHistory(
                 );
 
             }
+
 
             head.addEventListener(
                 "click",
@@ -3138,13 +3326,16 @@ function tampilkanHistory(
                 }
             );
 
+
             box.appendChild(
                 head
             );
 
+
             box.appendChild(
                 detail
             );
+
 
             container.appendChild(
                 box
@@ -3158,7 +3349,6 @@ function tampilkanHistory(
 
 /* =====================================================
    REFRESH
-   ASLI
 ===================================================== */
 
 function refreshData(){
@@ -3175,6 +3365,7 @@ function refreshData(){
 
     }
 
+
     ambilDataTumpuk();
 
 }
@@ -3182,7 +3373,6 @@ function refreshData(){
 
 /* =====================================================
    KEMBALI SCAN
-   ASLI
 ===================================================== */
 
 function kembaliScan(){
@@ -3192,46 +3382,57 @@ function kembaliScan(){
         .classList
         .remove("show");
 
+
     document
         .getElementById("errorBox")
         .classList
         .remove("show");
 
+
     document
         .getElementById("manualInput")
         .value = "";
+
 
     document
         .getElementById("tpkDetailBox")
         .classList
         .remove("show");
 
+
     document
         .getElementById("tpkDetailList")
         .innerHTML = "";
+
 
     document
         .getElementById("registerList")
         .innerHTML = "";
 
+
     document
         .getElementById("historyList")
         .innerHTML = "";
+
 
     document
         .getElementById("jumlahCek")
         .textContent =
         "0";
 
+
     currentTPK = "";
     currentTumpuk = "";
     currentStackId = "";
     currentRegisters = [];
 
+
     sedangProses =
         false;
 
+
     mulaiScanner();
+
 
     window.scrollTo({
         top:0,
@@ -3243,7 +3444,6 @@ function kembaliScan(){
 
 /* =====================================================
    FORMAT ANGKA
-   ASLI
 ===================================================== */
 
 function formatAngka(
@@ -3260,8 +3460,10 @@ function formatAngka(
 
     }
 
+
     const number =
         Number(value);
+
 
     if(
         Number.isNaN(number)
@@ -3270,6 +3472,7 @@ function formatAngka(
         return value;
 
     }
+
 
     return number.toLocaleString(
         "id-ID"
@@ -3280,7 +3483,6 @@ function formatAngka(
 
 /* =====================================================
    FORMAT VOLUME
-   ASLI
 ===================================================== */
 
 function formatVolume(
@@ -3297,8 +3499,10 @@ function formatVolume(
 
     }
 
+
     const number =
         Number(value);
+
 
     if(
         Number.isNaN(number)
@@ -3307,6 +3511,7 @@ function formatVolume(
         return value + " m³";
 
     }
+
 
     return number.toLocaleString(
         "id-ID",
@@ -3321,7 +3526,6 @@ function formatVolume(
 
 /* =====================================================
    FORMAT TANGGAL
-   ASLI
 ===================================================== */
 
 function formatTanggal(
@@ -3334,6 +3538,7 @@ function formatTanggal(
 
     }
 
+
     if(
         typeof value === "string" &&
         /^\d{1,2}-\d{1,2}-\d{4}$/.test(
@@ -3345,6 +3550,7 @@ function formatTanggal(
 
     }
 
+
     if(
         typeof value === "string" &&
         /^\d{4}-\d{1,2}-\d{1,2}$/.test(
@@ -3354,6 +3560,7 @@ function formatTanggal(
 
         const p =
             value.split("-");
+
 
         return (
             String(p[2]).padStart(2,"0") +
@@ -3365,8 +3572,10 @@ function formatTanggal(
 
     }
 
+
     const d =
         new Date(value);
+
 
     if(
         !Number.isNaN(
@@ -3388,6 +3597,7 @@ function formatTanggal(
 
     }
 
+
     return value;
 
 }
@@ -3395,7 +3605,6 @@ function formatTanggal(
 
 /* =====================================================
    ESCAPE HTML
-   ASLI
 ===================================================== */
 
 function escapeHtml(
@@ -3434,7 +3643,6 @@ function escapeHtml(
 
 /* =====================================================
    LOADING
-   ASLI
 ===================================================== */
 
 function showLoading(){
@@ -3459,7 +3667,6 @@ function hideLoading(){
 
 /* =====================================================
    ERROR
-   ASLI
 ===================================================== */
 
 function showError(
@@ -3470,8 +3677,10 @@ function showError(
         document
         .getElementById("errorBox");
 
+
     box.innerHTML =
         message;
+
 
     box.classList.add(
         "show"
@@ -3492,7 +3701,6 @@ function hideError(){
 
 /* =====================================================
    CLEANUP JSONP
-   ASLI
 ===================================================== */
 
 function cleanupJSONP(
@@ -3515,6 +3723,7 @@ function cleanupJSONP(
 
     }
 
+
     if(
         script &&
         script.parentNode
@@ -3533,4 +3742,3 @@ function cleanupJSONP(
 </body>
 
 </html>
-
