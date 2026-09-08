@@ -15,10 +15,6 @@ content="width=device-width, initial-scale=1.0">
 
 <style>
 
-/* =====================================================
-   DASAR
-===================================================== */
-
 *{
     box-sizing:border-box;
 }
@@ -145,28 +141,16 @@ button:active{
 
 #hasil{
     display:grid;
-
-    grid-template-columns:
-        repeat(auto-fill,minmax(300px,1fr));
-
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
     gap:18px;
 }
 
 .preview-card{
     background:#ffeb00;
-
     border:3px solid #000;
-
     border-radius:10px;
-
-    padding:
-        12px
-        10px
-        12px
-        10px;
-
+    padding:12px 10px;
     text-align:center;
-
     overflow:hidden;
 }
 
@@ -177,28 +161,19 @@ button:active{
 
 .pilih-cetak{
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     gap:9px;
-
     margin-bottom:12px;
-
     font-size:19px;
-
     font-weight:900;
-
     cursor:pointer;
 }
 
 .pilih-cetak input{
     width:24px;
     height:24px;
-
     cursor:pointer;
-
     accent-color:#16a34a;
 }
 
@@ -209,92 +184,56 @@ button:active{
 
 /* =====================================================
    PREVIEW TUMPUK
-   DIPERBESAR
 ===================================================== */
 
 .preview-tumpuk{
     width:100%;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     gap:10px;
-
     margin-bottom:12px;
-
     line-height:1;
-
     white-space:nowrap;
-
     overflow:hidden;
 }
 
 .preview-tumpuk-label{
     font-size:30px;
-
     font-weight:900;
-
     line-height:.9;
-
     flex-shrink:0;
 }
 
 .preview-tumpuk-number{
     display:inline-flex;
-
     align-items:center;
-
     justify-content:center;
-
     min-width:100px;
-
-    padding:
-        6px
-        15px
-        8px
-        15px;
-
+    padding:6px 15px 8px 15px;
     border:3px solid #000;
-
     border-radius:10px;
-
     background:#fff;
-
     font-size:68px;
-
     font-weight:1000;
-
     line-height:.78;
-
     letter-spacing:-2px;
-
     flex-shrink:0;
 }
 
 
 /* =====================================================
    PREVIEW TPK
-   DIPERBESAR + JARAK
 ===================================================== */
 
 .preview-tpk{
     width:100%;
-
     font-size:38px;
-
     font-weight:1000;
-
     line-height:.95;
-
     white-space:nowrap;
-
     overflow:hidden;
-
     text-overflow:ellipsis;
-
     margin-bottom:10px;
 }
 
@@ -305,62 +244,42 @@ button:active{
 
 .qr-row{
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     width:100%;
-
     margin-top:4px;
-
     margin-bottom:11px;
 }
 
 .qr-box{
     width:120px;
-
     height:120px;
-
     background:#fff;
-
     border:2px solid #000;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     flex-shrink:0;
-
     padding:3px;
 }
 
 .qr-box img,
 .qr-box canvas{
     width:112px !important;
-
     height:112px !important;
-
     image-rendering:auto;
 }
 
 
 /* =====================================================
    PREVIEW BLOK
-   DIPERBESAR
 ===================================================== */
 
 .preview-blok{
     width:100%;
-
     font-size:35px;
-
     font-weight:1000;
-
     line-height:.95;
-
     margin-bottom:5px;
 }
 
@@ -376,7 +295,7 @@ button:active{
 
 /* =====================================================
    PRINT F4 LANDSCAPE
-   FULL F4
+   2 KOLOM x 2 BARIS
 ===================================================== */
 
 @media print{
@@ -386,56 +305,45 @@ button:active{
         margin:0;
     }
 
-
     html,
     body{
         margin:0 !important;
-
         padding:0 !important;
 
         width:330.2mm !important;
-
         min-width:330.2mm !important;
 
         height:215.9mm !important;
-
         min-height:215.9mm !important;
 
         background:#fff !important;
     }
-
 
     .panel,
     #hasil{
         display:none !important;
     }
 
-
     #printArea{
         display:block !important;
 
         width:330.2mm !important;
-
         height:auto !important;
 
         margin:0 !important;
-
         padding:0 !important;
     }
 
 
     /* =================================================
-       HALAMAN F4
-       2 KOLOM x 2 BARIS
+       F4
     ================================================= */
 
     .print-page{
         width:330.2mm !important;
-
         height:215.9mm !important;
 
         min-width:330.2mm !important;
-
         min-height:215.9mm !important;
 
         display:grid !important;
@@ -447,7 +355,6 @@ button:active{
             107.95mm 107.95mm;
 
         margin:0 !important;
-
         padding:0 !important;
 
         overflow:hidden !important;
@@ -455,14 +362,11 @@ button:active{
         box-sizing:border-box !important;
 
         break-after:page;
-
         page-break-after:always;
     }
 
-
     .print-page:last-child{
         break-after:auto !important;
-
         page-break-after:auto !important;
     }
 
@@ -473,15 +377,12 @@ button:active{
 
     .print-label{
         width:165.1mm !important;
-
         height:107.95mm !important;
 
         min-width:165.1mm !important;
-
         min-height:107.95mm !important;
 
         max-width:165.1mm !important;
-
         max-height:107.95mm !important;
 
         box-sizing:border-box !important;
@@ -491,9 +392,7 @@ button:active{
         border:1mm solid #000;
 
         display:flex;
-
         flex-direction:column;
-
         align-items:center;
 
         justify-content:flex-start;
@@ -501,9 +400,9 @@ button:active{
         overflow:hidden;
 
         padding:
-            2.5mm
+            2mm
             5mm
-            3mm
+            2mm
             5mm;
 
         margin:0 !important;
@@ -512,58 +411,51 @@ button:active{
 
     /* =================================================
        TUMPUK
-       LEBIH BESAR
     ================================================= */
 
     .print-tumpuk{
         width:100%;
 
         display:flex;
-
         justify-content:center;
-
         align-items:center;
 
         gap:5mm;
 
         text-align:center;
 
-        margin-bottom:2.5mm;
+        margin-bottom:1.5mm;
 
         line-height:1;
 
         white-space:nowrap;
-
         overflow:visible;
 
         flex-shrink:0;
     }
-
 
     .print-tumpuk-label{
         font-size:13mm;
 
         font-weight:900;
 
-        line-height:.9;
+        line-height:.85;
 
         flex-shrink:0;
     }
-
 
     .print-tumpuk-number{
         display:inline-flex;
 
         align-items:center;
-
         justify-content:center;
 
         min-width:48mm;
 
         padding:
-            3mm
+            2.5mm
             6mm
-            3.5mm
+            3mm
             6mm;
 
         border:
@@ -579,7 +471,7 @@ button:active{
 
         font-weight:1000;
 
-        line-height:.78;
+        line-height:.72;
 
         letter-spacing:-1mm;
 
@@ -589,8 +481,6 @@ button:active{
 
     /* =================================================
        TPK
-       LEBIH BESAR
-       JARAK KE QR
     ================================================= */
 
     .print-tpk{
@@ -600,7 +490,7 @@ button:active{
 
         font-size:12mm;
 
-        line-height:.9;
+        line-height:.85;
 
         font-weight:1000;
 
@@ -612,7 +502,8 @@ button:active{
 
         margin-top:0;
 
-        margin-bottom:7mm;
+        /* JARAK TPK → QR */
+        margin-bottom:5mm;
 
         flex-shrink:0;
     }
@@ -620,7 +511,6 @@ button:active{
 
     /* =================================================
        QR
-       43 MM
     ================================================= */
 
     .print-qr-row{
@@ -629,24 +519,21 @@ button:active{
         display:flex;
 
         justify-content:center;
-
         align-items:center;
 
         margin-top:0;
 
-        margin-bottom:3mm;
+        /* JARAK QR → BLOK */
+        margin-bottom:1.5mm;
 
         flex-shrink:0;
     }
 
-
     .print-qr{
         width:43mm;
-
         height:43mm;
 
         min-width:43mm;
-
         min-height:43mm;
 
         background:#fff;
@@ -656,7 +543,6 @@ button:active{
         display:flex;
 
         justify-content:center;
-
         align-items:center;
 
         padding:1.5mm;
@@ -664,11 +550,9 @@ button:active{
         flex-shrink:0;
     }
 
-
     .print-qr img,
     .print-qr canvas{
         width:40mm !important;
-
         height:40mm !important;
 
         image-rendering:auto;
@@ -677,8 +561,7 @@ button:active{
 
     /* =================================================
        BLOK
-       LEBIH BESAR
-       TIDAK MEPET
+       DIJAMIN MASUK AREA LABEL
     ================================================= */
 
     .print-blok{
@@ -688,12 +571,11 @@ button:active{
 
         font-size:12mm;
 
-        line-height:.9;
+        line-height:.8;
 
         font-weight:1000;
 
-        margin-top:1mm;
-
+        margin-top:0;
         margin-bottom:0;
 
         flex-shrink:0;
@@ -727,13 +609,11 @@ button:active{
 
     .panel{
         padding:14px;
-
         border-radius:12px;
     }
 
     h1{
         font-size:23px;
-
         margin-bottom:20px;
     }
 
@@ -751,19 +631,16 @@ button:active{
 
     .pilih-cetak{
         font-size:18px;
-
         margin-bottom:10px;
     }
 
     .pilih-cetak input{
         width:24px;
-
         height:24px;
     }
 
     .preview-tumpuk{
         gap:8px;
-
         margin-bottom:10px;
     }
 
@@ -781,7 +658,6 @@ button:active{
             14px;
 
         border:3px solid #000;
-
         border-radius:10px;
 
         font-size:65px;
@@ -793,38 +669,30 @@ button:active{
 
     .preview-tpk{
         font-size:36px;
-
         line-height:.95;
-
         margin-bottom:9px;
     }
 
     .qr-row{
         margin-top:4px;
-
         margin-bottom:10px;
     }
 
     .qr-box{
         width:110px;
-
         height:110px;
-
         padding:3px;
     }
 
     .qr-box img,
     .qr-box canvas{
         width:102px !important;
-
         height:102px !important;
     }
 
     .preview-blok{
         font-size:33px;
-
         line-height:.95;
-
         margin-bottom:5px;
     }
 
@@ -942,7 +810,6 @@ function buatLinkTumpuk(item){
     const tumpuk =
         String(item.tumpuk || "").trim();
 
-
     return (
         HALAMAN_TUMPUK_URL +
         "?tpk=" +
@@ -966,7 +833,6 @@ function buatIdPilihan(item){
     const tumpuk =
         String(item.tumpuk || "").trim();
 
-
     return tpk + "|" + tumpuk;
 
 }
@@ -984,7 +850,6 @@ function urutTumpuk(a,b){
     const numB =
         parseInt(b.tumpuk,10) || 0;
 
-
     return numA - numB;
 
 }
@@ -998,20 +863,15 @@ function ambilDatabase(){
 
     if(sedangMemuat)return;
 
-
     sedangMemuat = true;
-
 
     document.getElementById("status").textContent =
         "⏳ Mengambil data...";
 
-
     const callbackName =
         "jsonpCallback_" + Date.now();
 
-
     let script = null;
-
 
     window[callbackName] =
         function(response){
@@ -1034,7 +894,6 @@ function ambilDatabase(){
 
                 }
 
-
                 database =
                     Array.isArray(response.data)
                     ?
@@ -1042,28 +901,22 @@ function ambilDatabase(){
                     :
                     [];
 
-
                 database.sort(urutTumpuk);
-
 
                 document.getElementById("status").textContent =
                     "✅ " +
                     database.length +
                     " tumpukan berhasil diambil.";
 
-
                 tampilkanData();
-
 
             }catch(error){
 
                 console.error(error);
 
-
                 document.getElementById("status").textContent =
                     "❌ " +
                     error.message;
-
 
             }finally{
 
@@ -1071,7 +924,6 @@ function ambilDatabase(){
                     callbackName,
                     script
                 );
-
 
                 sedangMemuat = false;
 
@@ -1096,12 +948,10 @@ function ambilDatabase(){
             document.getElementById("status").textContent =
                 "❌ Gagal menghubungi server.";
 
-
             selesaiCallback(
                 callbackName,
                 script
             );
-
 
             sedangMemuat = false;
 
@@ -1158,7 +1008,6 @@ function updateStatusPilihan(){
     const jumlah =
         pilihanCetak.size;
 
-
     const jumlahLembar =
         jumlah > 0
         ?
@@ -1166,17 +1015,14 @@ function updateStatusPilihan(){
         :
         0;
 
-
     document.getElementById("printInfo").textContent =
         jumlah +
         " TUMPUK DIPILIH — " +
         jumlahLembar +
         " LEMBAR F4";
 
-
     const status =
         document.getElementById("status");
-
 
     if(jumlah > 0){
 
@@ -1208,7 +1054,6 @@ function ubahPilihan(
     const id =
         buatIdPilihan(item);
 
-
     if(checked){
 
         pilihanCetak.add(id);
@@ -1222,7 +1067,6 @@ function ubahPilihan(
         card.classList.remove("dipilih");
 
     }
-
 
     updateStatusPilihan();
 
@@ -1238,9 +1082,7 @@ function tampilkanData(){
     const container =
         document.getElementById("hasil");
 
-
     container.innerHTML = "";
-
 
     const filter =
         document
@@ -1249,12 +1091,10 @@ function tampilkanData(){
         .trim()
         .toLowerCase();
 
-
     let data =
         database.filter(function(item){
 
             if(!filter)return true;
-
 
             return String(
                 item.tumpuk || ""
@@ -1265,9 +1105,7 @@ function tampilkanData(){
 
         });
 
-
     data.sort(urutTumpuk);
-
 
     if(data.length === 0){
 
@@ -1284,18 +1122,14 @@ function tampilkanData(){
         const card =
             document.createElement("div");
 
-
         card.className =
             "preview-card";
-
 
         const idPilihan =
             buatIdPilihan(item);
 
-
         const sudahDipilih =
             pilihanCetak.has(idPilihan);
-
 
         if(sudahDipilih){
 
@@ -1311,30 +1145,23 @@ function tampilkanData(){
         const pilihCetak =
             document.createElement("label");
 
-
         pilihCetak.className =
             "pilih-cetak";
-
 
         const checkbox =
             document.createElement("input");
 
-
         checkbox.type =
             "checkbox";
-
 
         checkbox.checked =
             sudahDipilih;
 
-
         const tulisan =
             document.createElement("span");
 
-
         tulisan.textContent =
             "PILIH CETAK";
-
 
         checkbox.addEventListener(
             "change",
@@ -1349,11 +1176,9 @@ function tampilkanData(){
             }
         );
 
-
         pilihCetak.appendChild(
             checkbox
         );
-
 
         pilihCetak.appendChild(
             tulisan
@@ -1367,39 +1192,30 @@ function tampilkanData(){
         const tumpuk =
             document.createElement("div");
 
-
         tumpuk.className =
             "preview-tumpuk";
-
 
         const tumpukLabel =
             document.createElement("span");
 
-
         tumpukLabel.className =
             "preview-tumpuk-label";
-
 
         tumpukLabel.textContent =
             "TUMPUK";
 
-
         const tumpukNumber =
             document.createElement("span");
-
 
         tumpukNumber.className =
             "preview-tumpuk-number";
 
-
         tumpukNumber.textContent =
             item.tumpuk || "";
-
 
         tumpuk.appendChild(
             tumpukLabel
         );
-
 
         tumpuk.appendChild(
             tumpukNumber
@@ -1413,10 +1229,8 @@ function tampilkanData(){
         const tpk =
             document.createElement("div");
 
-
         tpk.className =
             "preview-tpk";
-
 
         tpk.textContent =
             "TPK " +
@@ -1430,36 +1244,28 @@ function tampilkanData(){
         const qrRow =
             document.createElement("div");
 
-
         qrRow.className =
             "qr-row";
-
 
         const qrBox =
             document.createElement("div");
 
-
         qrBox.className =
             "qr-box";
 
-
         const qr =
             document.createElement("div");
-
 
         qrBox.appendChild(
             qr
         );
 
-
         qrRow.appendChild(
             qrBox
         );
 
-
         const qrLink =
             buatLinkTumpuk(item);
-
 
         setTimeout(function(){
 
@@ -1487,10 +1293,8 @@ function tampilkanData(){
         const blok =
             document.createElement("div");
 
-
         blok.className =
             "preview-blok";
-
 
         blok.textContent =
             "BLOK " +
@@ -1505,26 +1309,21 @@ function tampilkanData(){
             pilihCetak
         );
 
-
         card.appendChild(
             tumpuk
         );
-
 
         card.appendChild(
             tpk
         );
 
-
         card.appendChild(
             qrRow
         );
 
-
         card.appendChild(
             blok
         );
-
 
         container.appendChild(
             card
@@ -1548,7 +1347,6 @@ function tampilkanSemua(){
     .getElementById("filterTumpuk")
     .value = "";
 
-
     tampilkanData();
 
 }
@@ -1565,7 +1363,6 @@ function cetakBarcode(){
 
             const id =
                 buatIdPilihan(item);
-
 
             return pilihanCetak.has(id);
 
@@ -1607,7 +1404,6 @@ function cetakBarcode(){
         const page =
             document.createElement("div");
 
-
         page.className =
             "print-page";
 
@@ -1625,7 +1421,6 @@ function cetakBarcode(){
                 const label =
                     document.createElement("div");
 
-
                 label.className =
                     "print-label";
 
@@ -1637,39 +1432,30 @@ function cetakBarcode(){
                 const tumpuk =
                     document.createElement("div");
 
-
                 tumpuk.className =
                     "print-tumpuk";
-
 
                 const tumpukLabel =
                     document.createElement("span");
 
-
                 tumpukLabel.className =
                     "print-tumpuk-label";
-
 
                 tumpukLabel.textContent =
                     "TUMPUK";
 
-
                 const tumpukNumber =
                     document.createElement("span");
-
 
                 tumpukNumber.className =
                     "print-tumpuk-number";
 
-
                 tumpukNumber.textContent =
                     item.tumpuk || "";
-
 
                 tumpuk.appendChild(
                     tumpukLabel
                 );
-
 
                 tumpuk.appendChild(
                     tumpukNumber
@@ -1683,10 +1469,8 @@ function cetakBarcode(){
                 const tpk =
                     document.createElement("div");
 
-
                 tpk.className =
                     "print-tpk";
-
 
                 tpk.textContent =
                     "TPK " +
@@ -1700,27 +1484,21 @@ function cetakBarcode(){
                 const qrRow =
                     document.createElement("div");
 
-
                 qrRow.className =
                     "print-qr-row";
-
 
                 const qrBox =
                     document.createElement("div");
 
-
                 qrBox.className =
                     "print-qr";
-
 
                 const qr =
                     document.createElement("div");
 
-
                 qrBox.appendChild(
                     qr
                 );
-
 
                 qrRow.appendChild(
                     qrBox
@@ -1753,10 +1531,8 @@ function cetakBarcode(){
                 const blok =
                     document.createElement("div");
 
-
                 blok.className =
                     "print-blok";
-
 
                 blok.textContent =
                     "BLOK " +
@@ -1771,21 +1547,17 @@ function cetakBarcode(){
                     tumpuk
                 );
 
-
                 label.appendChild(
                     tpk
                 );
-
 
                 label.appendChild(
                     qrRow
                 );
 
-
                 label.appendChild(
                     blok
                 );
-
 
                 page.appendChild(
                     label
@@ -1803,10 +1575,8 @@ function cetakBarcode(){
             const empty =
                 document.createElement("div");
 
-
             empty.className =
                 "print-label print-empty";
-
 
             page.appendChild(
                 empty
