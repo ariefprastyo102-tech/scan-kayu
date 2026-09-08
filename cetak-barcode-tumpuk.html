@@ -295,6 +295,7 @@ button:active{
 /* =====================================================
    PRINT F4 LANDSCAPE
    2 KOLOM x 2 BARIS
+   SKALA INTERNAL 99%
 ===================================================== */
 
 @media print{
@@ -327,46 +328,66 @@ button:active{
         display:block !important;
 
         width:330.2mm !important;
-        height:auto !important;
+        height:215.9mm !important;
 
         margin:0 !important;
         padding:0 !important;
+
+        position:relative !important;
+
+        box-sizing:border-box !important;
     }
 
 
     /* =================================================
-       F4
+       F4 MASTER
+       UKURAN INTERNAL 99%
     ================================================= */
 
     .print-page{
-        width:330.2mm !important;
-        height:215.9mm !important;
 
-        min-width:330.2mm !important;
-        min-height:215.9mm !important;
+        /*
+           F4 landscape:
+           330.2 x 215.9 mm
+
+           99%:
+           326.898 x 213.741 mm
+        */
+
+        width:326.898mm !important;
+        height:213.741mm !important;
+
+        min-width:326.898mm !important;
+        min-height:213.741mm !important;
+
+        max-width:326.898mm !important;
+        max-height:213.741mm !important;
+
+        margin:0 !important;
+
+        padding:0 !important;
 
         display:grid !important;
 
         grid-template-columns:
-            165.1mm 165.1mm;
+            163.449mm 163.449mm;
 
         grid-template-rows:
-            107.95mm 107.95mm;
-
-        margin:0 !important;
-        padding:0 !important;
-
-        overflow:hidden !important;
+            106.8705mm 106.8705mm;
 
         box-sizing:border-box !important;
 
+        overflow:hidden !important;
+
+        /*
+           Tetap mulai dari kiri atas.
+           Tidak digeser ke bawah/atas.
+        */
+
+        transform:none !important;
+
         break-after:page;
         page-break-after:always;
-
-        /* KOREKSI:
-           BARIS BAWAH NAIK ±3 MM
-        */
-        transform:translateY(-3mm);
     }
 
     .print-page:last-child{
@@ -377,17 +398,19 @@ button:active{
 
     /* =================================================
        LABEL
+       MASING-MASING 99% DARI UKURAN SETENGAH F4
     ================================================= */
 
     .print-label{
-        width:165.1mm !important;
-        height:107.95mm !important;
 
-        min-width:165.1mm !important;
-        min-height:107.95mm !important;
+        width:163.449mm !important;
+        height:106.8705mm !important;
 
-        max-width:165.1mm !important;
-        max-height:107.95mm !important;
+        min-width:163.449mm !important;
+        min-height:106.8705mm !important;
+
+        max-width:163.449mm !important;
+        max-height:106.8705mm !important;
 
         box-sizing:border-box !important;
 
@@ -396,7 +419,9 @@ button:active{
         border:1mm solid #000;
 
         display:flex;
+
         flex-direction:column;
+
         align-items:center;
 
         justify-content:flex-start;
@@ -415,13 +440,16 @@ button:active{
 
     /* =================================================
        TUMPUK
-    ================================================= */
+===================================================== */
 
     .print-tumpuk{
+
         width:100%;
 
         display:flex;
+
         justify-content:center;
+
         align-items:center;
 
         gap:5mm;
@@ -433,12 +461,14 @@ button:active{
         line-height:1;
 
         white-space:nowrap;
+
         overflow:visible;
 
         flex-shrink:0;
     }
 
     .print-tumpuk-label{
+
         font-size:13mm;
 
         font-weight:900;
@@ -449,9 +479,11 @@ button:active{
     }
 
     .print-tumpuk-number{
+
         display:inline-flex;
 
         align-items:center;
+
         justify-content:center;
 
         min-width:48mm;
@@ -485,9 +517,10 @@ button:active{
 
     /* =================================================
        TPK
-    ================================================= */
+===================================================== */
 
     .print-tpk{
+
         width:100%;
 
         text-align:center;
@@ -506,11 +539,8 @@ button:active{
 
         margin-top:0;
 
-        /* JARAK TPK → QR
-           DIKECILKAN SEDIKIT
-           AGAR BAGIAN BAWAH LEBIH AMAN
-        */
-        margin-bottom:3mm;
+        /* JARAK TPK → QR */
+        margin-bottom:5mm;
 
         flex-shrink:0;
     }
@@ -518,31 +548,34 @@ button:active{
 
     /* =================================================
        QR
-    ================================================= */
+===================================================== */
 
     .print-qr-row{
+
         width:100%;
 
         display:flex;
 
         justify-content:center;
+
         align-items:center;
 
         margin-top:0;
 
-        /* JARAK QR → BLOK
-           DISEIMBANGKAN
-        */
-        margin-bottom:3mm;
+        /* JARAK QR → BLOK */
+        margin-bottom:1.5mm;
 
         flex-shrink:0;
     }
 
     .print-qr{
+
         width:43mm;
+
         height:43mm;
 
         min-width:43mm;
+
         min-height:43mm;
 
         background:#fff;
@@ -552,6 +585,7 @@ button:active{
         display:flex;
 
         justify-content:center;
+
         align-items:center;
 
         padding:1.5mm;
@@ -561,7 +595,9 @@ button:active{
 
     .print-qr img,
     .print-qr canvas{
+
         width:40mm !important;
+
         height:40mm !important;
 
         image-rendering:auto;
@@ -570,10 +606,10 @@ button:active{
 
     /* =================================================
        BLOK
-       DIJAMIN MASUK AREA LABEL
-    ================================================= */
+===================================================== */
 
     .print-blok{
+
         width:100%;
 
         text-align:center;
@@ -586,8 +622,7 @@ button:active{
 
         margin-top:0;
 
-        /* JARAK DARI GARIS BAWAH */
-        margin-bottom:1mm;
+        margin-bottom:0;
 
         flex-shrink:0;
     }
@@ -595,9 +630,10 @@ button:active{
 
     /* =================================================
        LABEL KOSONG
-    ================================================= */
+===================================================== */
 
     .print-empty{
+
         visibility:hidden !important;
 
         border-color:transparent !important;
@@ -660,6 +696,7 @@ button:active{
     }
 
     .preview-tumpuk-number{
+
         min-width:95px;
 
         padding:
@@ -669,6 +706,7 @@ button:active{
             14px;
 
         border:3px solid #000;
+
         border-radius:10px;
 
         font-size:65px;
