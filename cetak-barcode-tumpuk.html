@@ -1192,7 +1192,7 @@ function tampilkanData(){
 
         /* =================================================
            BLOK
-           POSISI DI BAWAH QR
+           DARI DATABASE KOLOM N
         ================================================= */
 
         const blok =
@@ -1202,7 +1202,7 @@ function tampilkanData(){
             "preview-blok";
 
         blok.textContent =
-            "BLOK";
+            item.blok || "";
 
 
         /* =================================================
@@ -1410,6 +1410,7 @@ function cetakBarcode(){
 
         /* =================================================
            BLOK PRINT
+           DARI DATABASE KOLOM N
         ================================================= */
 
         const blok =
@@ -1419,7 +1420,7 @@ function cetakBarcode(){
             "print-blok";
 
         blok.textContent =
-            "BLOK";
+            item.blok || "";
 
 
         /* =================================================
