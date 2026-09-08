@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -363,6 +362,11 @@ button:active{
 
         break-after:page;
         page-break-after:always;
+
+        /* KOREKSI:
+           BARIS BAWAH NAIK ±3 MM
+        */
+        transform:translateY(-3mm);
     }
 
     .print-page:last-child{
@@ -502,8 +506,11 @@ button:active{
 
         margin-top:0;
 
-        /* JARAK TPK → QR */
-        margin-bottom:5mm;
+        /* JARAK TPK → QR
+           DIKECILKAN SEDIKIT
+           AGAR BAGIAN BAWAH LEBIH AMAN
+        */
+        margin-bottom:3mm;
 
         flex-shrink:0;
     }
@@ -523,8 +530,10 @@ button:active{
 
         margin-top:0;
 
-        /* JARAK QR → BLOK */
-        margin-bottom:1.5mm;
+        /* JARAK QR → BLOK
+           DISEIMBANGKAN
+        */
+        margin-bottom:3mm;
 
         flex-shrink:0;
     }
@@ -576,7 +585,9 @@ button:active{
         font-weight:1000;
 
         margin-top:0;
-        margin-bottom:0;
+
+        /* JARAK DARI GARIS BAWAH */
+        margin-bottom:1mm;
 
         flex-shrink:0;
     }
@@ -1638,4 +1649,3 @@ window.addEventListener(
 </body>
 
 </html>
-
