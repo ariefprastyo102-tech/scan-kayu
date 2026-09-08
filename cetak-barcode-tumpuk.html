@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -13,10 +14,6 @@ content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <style>
-
-/* =====================================================
-   DASAR
-===================================================== */
 
 *{
     box-sizing:border-box;
@@ -126,8 +123,24 @@ button:active{
     background:#f1f1f1;
     border-radius:8px;
     padding:10px;
-    margin-bottom:20px;
+    margin-bottom:10px;
     font-size:14px;
+}
+
+
+/* =====================================================
+   INFO CETAK
+===================================================== */
+
+#printInfo{
+    text-align:center;
+    background:#fff3cd;
+    border:2px solid #ffc107;
+    border-radius:8px;
+    padding:11px;
+    margin:0 auto 20px auto;
+    font-size:18px;
+    font-weight:900;
 }
 
 
@@ -208,7 +221,6 @@ button:active{
     overflow:hidden;
 }
 
-
 .preview-tumpuk-label{
 
     font-size:26px;
@@ -219,7 +231,6 @@ button:active{
 
     flex-shrink:0;
 }
-
 
 .preview-tumpuk-number{
 
@@ -294,7 +305,6 @@ button:active{
     margin-bottom:8px;
 }
 
-
 .qr-box{
 
     width:105px;
@@ -315,7 +325,6 @@ button:active{
 
     padding:3px;
 }
-
 
 .qr-box img,
 .qr-box canvas{
@@ -415,10 +424,6 @@ button:active{
     }
 
 
-    /* =================================================
-       LABEL
-    ================================================= */
-
     .print-label{
 
         width:107.95mm;
@@ -442,10 +447,6 @@ button:active{
         padding:2.5mm 3mm 2mm 3mm;
     }
 
-
-    /* =================================================
-       TUMPUK PRINT
-    ================================================= */
 
     .print-tumpuk{
 
@@ -515,10 +516,6 @@ button:active{
     }
 
 
-    /* =================================================
-       TPK PRINT
-    ================================================= */
-
     .print-tpk{
 
         width:100%;
@@ -540,10 +537,6 @@ button:active{
         margin-bottom:1mm;
     }
 
-
-    /* =================================================
-       QR PRINT
-    ================================================= */
 
     .print-qr-row{
 
@@ -593,10 +586,6 @@ button:active{
         image-rendering:auto;
     }
 
-
-    /* =================================================
-       BLOK PRINT
-    ================================================= */
 
     .print-blok{
 
@@ -656,7 +645,6 @@ button:active{
         padding:10px 8px 9px 8px;
     }
 
-
     .pilih-cetak{
         font-size:17px;
         margin-bottom:8px;
@@ -666,7 +654,6 @@ button:active{
         width:23px;
         height:23px;
     }
-
 
     .preview-tumpuk{
         gap:7px;
@@ -687,13 +674,11 @@ button:active{
         letter-spacing:-2px;
     }
 
-
     .preview-tpk{
         font-size:34px;
         line-height:.95;
         margin-bottom:5px;
     }
-
 
     .qr-row{
         margin-top:3px;
@@ -712,13 +697,11 @@ button:active{
         height:92px !important;
     }
 
-
     .preview-blok{
         font-size:31px;
         line-height:.95;
         margin-bottom:5px;
     }
-
 
     button{
         width:100%;
@@ -730,81 +713,73 @@ button:active{
 
 </head>
 
-
 <body>
 
 <div class="panel">
 
-    <h1>CETAK QR TUMPUK</h1>
+```
+<h1>CETAK QR TUMPUK</h1>
 
 
-    <!-- =================================================
-         FILTER
-    ================================================== -->
+<div class="filter-box">
 
-    <div class="filter-box">
+    <label for="filterTumpuk">
+        FILTER TUMPUK
+    </label>
 
-        <label for="filterTumpuk">
-            FILTER TUMPUK
-        </label>
-
-        <input
-            type="text"
-            id="filterTumpuk"
-            placeholder="Contoh: 29"
-            oninput="tampilkanData()"
-        >
-
-    </div>
-
-
-    <!-- =================================================
-         TOMBOL
-    ================================================== -->
-
-    <div class="button-area">
-
-        <button
-            class="btn-load"
-            onclick="ambilDatabase()">
-            🔄 AMBIL DATA
-        </button>
-
-        <button
-            class="btn-all"
-            onclick="tampilkanSemua()">
-            📋 TAMPILKAN SEMUA
-        </button>
-
-        <button
-            class="btn-print"
-            onclick="cetakBarcode()">
-            🖨️ CETAK YANG DIPILIH
-        </button>
-
-    </div>
-
-
-    <!-- =================================================
-         STATUS
-    ================================================== -->
-
-    <div id="status">
-        Silakan ambil data tumpuk.
-    </div>
-
-
-    <!-- =================================================
-         HASIL
-    ================================================== -->
-
-    <div id="hasil"></div>
+    <input
+        type="text"
+        id="filterTumpuk"
+        placeholder="Contoh: 29"
+        oninput="tampilkanData()"
+    >
 
 </div>
 
 
-<div id="printArea"></div>
+<div class="button-area">
 
+    <button
+        class="btn-load"
+        onclick="ambilDatabase()">
+        🔄 AMBIL DATA
+    </button>
+
+    <button
+        class="btn-all"
+        onclick="tampilkanSemua()">
+        📋 TAMPILKAN SEMUA
+    </button>
+
+    <button
+        class="btn-print"
+        onclick="cetakBarcode()">
+        🖨️ CETAK YANG DIPILIH
+    </button>
+
+</div>
+
+
+<div id="status">
+    Silakan ambil data tumpuk.
+</div>
+
+
+<!-- =================================================
+     INFO JUMLAH CETAK
+================================================== -->
+
+<div id="printInfo">
+    0 TUMPUK DIPILIH — 0 LEMBAR F4
+</div>
+
+
+<div id="hasil"></div>
+```
+
+</div>
+
+<div id="printArea"></div>
 
 <script>
 
@@ -827,7 +802,6 @@ let sedangMemuat = false;
 
 /* =====================================================
    PILIHAN CETAK
-   DISIMPAN SAAT FILTER DIGANTI
 ===================================================== */
 
 let pilihanCetak = new Set();
@@ -866,11 +840,6 @@ function buatLinkTumpuk(item){
 
 function buatIdPilihan(item){
 
-    /*
-     * Untuk TUMPUK 29 yang digabung,
-     * TPK tetap ikut ID supaya tidak bentrok.
-     */
-
     const tpk =
         String(item.tpk || "").trim();
 
@@ -900,6 +869,53 @@ function urutTumpuk(a,b){
 
 
 /* =====================================================
+   UPDATE INFO CETAK
+===================================================== */
+
+function updateStatusPilihan(){
+
+    const jumlah =
+        pilihanCetak.size;
+
+
+    const jumlahLembar =
+        jumlah > 0
+        ? Math.ceil(jumlah / 8)
+        : 0;
+
+
+    document.getElementById(
+        "printInfo"
+    ).textContent =
+        jumlah +
+        " TUMPUK DIPILIH — " +
+        jumlahLembar +
+        " LEMBAR F4";
+
+
+    const status =
+        document.getElementById("status");
+
+
+    if(jumlah > 0){
+
+        status.textContent =
+            "✅ " +
+            jumlah +
+            " TUMPUK siap dicetak.";
+
+    }
+    else{
+
+        status.textContent =
+            "Belum ada TUMPUK yang dipilih.";
+
+    }
+
+}
+
+
+/* =====================================================
    AMBIL DATABASE
 ===================================================== */
 
@@ -911,12 +927,14 @@ function ambilDatabase(){
 
     sedangMemuat = true;
 
+
     document.getElementById("status").textContent =
         "⏳ Mengambil data...";
 
 
     const callbackName =
         "jsonpCallback_" + Date.now();
+
 
     let script = null;
 
@@ -955,6 +973,8 @@ function ambilDatabase(){
 
 
             tampilkanData();
+
+            updateStatusPilihan();
 
         }
 
@@ -1056,38 +1076,6 @@ function selesaiCallback(
 
 
 /* =====================================================
-   STATUS PILIHAN
-===================================================== */
-
-function updateStatusPilihan(){
-
-    const jumlah =
-        pilihanCetak.size;
-
-
-    const status =
-        document.getElementById("status");
-
-
-    if(jumlah > 0){
-
-        status.textContent =
-            "✅ " +
-            jumlah +
-            " TUMPUK dipilih untuk dicetak.";
-
-    }
-    else{
-
-        status.textContent =
-            "Belum ada TUMPUK yang dipilih.";
-
-    }
-
-}
-
-
-/* =====================================================
    UBAH PILIHAN
 ===================================================== */
 
@@ -1146,14 +1134,6 @@ function tampilkanData(){
             .trim()
             .toLowerCase();
 
-
-    /*
-     * EXACT MATCH
-     *
-     * 1   = hanya TUMPUK 1
-     * 10  = hanya TUMPUK 10
-     * 100 = hanya TUMPUK 100
-     */
 
     let data =
         database.filter(function(item){
@@ -1223,7 +1203,7 @@ function tampilkanData(){
 
 
         /* =================================================
-           CHECKBOX PILIH CETAK
+           CHECKBOX
         ================================================= */
 
         const pilihCetak =
@@ -1415,13 +1395,7 @@ function tampilkanData(){
 
 
         /* =================================================
-           URUTAN
-           
-           PILIH CETAK
-           TUMPUK
-           TPK
-           QR
-           BLOK
+           URUTAN PREVIEW
         ================================================= */
 
         card.appendChild(
@@ -1460,7 +1434,6 @@ function tampilkanData(){
 
 /* =====================================================
    TAMPILKAN SEMUA
-   TIDAK MENGHAPUS PILIHAN
 ===================================================== */
 
 function tampilkanSemua(){
@@ -1476,25 +1449,16 @@ function tampilkanSemua(){
 
 
 /* =====================================================
-   CETAK HANYA YANG DIPILIH
+   CETAK YANG DIPILIH
 ===================================================== */
 
 function cetakBarcode(){
 
-    /*
-     * AMBIL DATA BERDASARKAN
-     * CHECKBOX YANG DIPILIH
-     */
-
     let data =
         database.filter(function(item){
 
-            const id =
-                buatIdPilihan(item);
-
-
             return pilihanCetak.has(
-                id
+                buatIdPilihan(item)
             );
 
         });
@@ -1534,7 +1498,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           TUMPUK PRINT
+           TUMPUK
         ================================================= */
 
         const tumpuk =
@@ -1580,7 +1544,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           TPK PRINT
+           TPK
         ================================================= */
 
         const tpk =
@@ -1597,7 +1561,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           QR PRINT
+           QR
         ================================================= */
 
         const qrRow =
@@ -1649,7 +1613,7 @@ function cetakBarcode(){
 
 
         /* =================================================
-           BLOK PRINT
+           BLOK
         ================================================= */
 
         const blok =
@@ -1664,15 +1628,6 @@ function cetakBarcode(){
             "BLOK " +
             (item.blok || "");
 
-
-        /* =================================================
-           URUTAN CETAK
-
-           TUMPUK
-           TPK
-           QR
-           BLOK
-        ================================================= */
 
         label.appendChild(
             tumpuk
@@ -1702,8 +1657,7 @@ function cetakBarcode(){
 
 
     /* =================================================
-       TETAP 8 LABEL / LEMBAR
-       2 KOLOM x 4 BARIS
+       GENAP 8 LABEL / LEMBAR
     ================================================= */
 
     const jumlahSisa =
