@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -161,13 +162,18 @@ button:active{
     padding:
         12px
         10px
-        10px
+        12px
         10px;
 
     text-align:center;
 
     overflow:hidden;
 }
+
+
+/* =====================================================
+   PILIH CETAK
+===================================================== */
 
 .pilih-cetak{
     display:flex;
@@ -176,11 +182,11 @@ button:active{
 
     align-items:center;
 
-    gap:8px;
+    gap:9px;
 
-    margin-bottom:8px;
+    margin-bottom:12px;
 
-    font-size:17px;
+    font-size:19px;
 
     font-weight:900;
 
@@ -188,8 +194,8 @@ button:active{
 }
 
 .pilih-cetak input{
-    width:22px;
-    height:22px;
+    width:24px;
+    height:24px;
 
     cursor:pointer;
 
@@ -203,6 +209,7 @@ button:active{
 
 /* =====================================================
    PREVIEW TUMPUK
+   DIPERBESAR
 ===================================================== */
 
 .preview-tumpuk{
@@ -214,9 +221,9 @@ button:active{
 
     align-items:center;
 
-    gap:8px;
+    gap:10px;
 
-    margin-bottom:8px;
+    margin-bottom:12px;
 
     line-height:1;
 
@@ -226,11 +233,11 @@ button:active{
 }
 
 .preview-tumpuk-label{
-    font-size:26px;
+    font-size:30px;
 
     font-weight:900;
 
-    line-height:1;
+    line-height:.9;
 
     flex-shrink:0;
 }
@@ -242,13 +249,13 @@ button:active{
 
     justify-content:center;
 
-    min-width:85px;
+    min-width:100px;
 
     padding:
-        5px
-        13px
-        7px
-        13px;
+        6px
+        15px
+        8px
+        15px;
 
     border:3px solid #000;
 
@@ -256,11 +263,11 @@ button:active{
 
     background:#fff;
 
-    font-size:58px;
+    font-size:68px;
 
     font-weight:1000;
 
-    line-height:.82;
+    line-height:.78;
 
     letter-spacing:-2px;
 
@@ -270,16 +277,17 @@ button:active{
 
 /* =====================================================
    PREVIEW TPK
+   DIPERBESAR + JARAK
 ===================================================== */
 
 .preview-tpk{
     width:100%;
 
-    font-size:32px;
+    font-size:38px;
 
     font-weight:1000;
 
-    line-height:1;
+    line-height:.95;
 
     white-space:nowrap;
 
@@ -287,7 +295,7 @@ button:active{
 
     text-overflow:ellipsis;
 
-    margin-bottom:5px;
+    margin-bottom:10px;
 }
 
 
@@ -304,15 +312,15 @@ button:active{
 
     width:100%;
 
-    margin-top:3px;
+    margin-top:4px;
 
-    margin-bottom:8px;
+    margin-bottom:11px;
 }
 
 .qr-box{
-    width:105px;
+    width:120px;
 
-    height:105px;
+    height:120px;
 
     background:#fff;
 
@@ -331,9 +339,9 @@ button:active{
 
 .qr-box img,
 .qr-box canvas{
-    width:97px !important;
+    width:112px !important;
 
-    height:97px !important;
+    height:112px !important;
 
     image-rendering:auto;
 }
@@ -341,16 +349,17 @@ button:active{
 
 /* =====================================================
    PREVIEW BLOK
+   DIPERBESAR
 ===================================================== */
 
 .preview-blok{
     width:100%;
 
-    font-size:29px;
+    font-size:35px;
 
     font-weight:1000;
 
-    line-height:1;
+    line-height:.95;
 
     margin-bottom:5px;
 }
@@ -368,15 +377,6 @@ button:active{
 /* =====================================================
    PRINT F4 LANDSCAPE
    FULL F4
-
-   F4:
-   330.2 x 215.9 MM
-
-   4 LABEL:
-   2 KOLOM x 2 BARIS
-
-   1 LABEL:
-   165.1 x 107.95 MM
 ===================================================== */
 
 @media print{
@@ -425,7 +425,8 @@ button:active{
 
 
     /* =================================================
-       HALAMAN F4 FULL
+       HALAMAN F4
+       2 KOLOM x 2 BARIS
     ================================================= */
 
     .print-page{
@@ -468,7 +469,6 @@ button:active{
 
     /* =================================================
        LABEL
-       FULL 1/4 F4
     ================================================= */
 
     .print-label{
@@ -501,9 +501,9 @@ button:active{
         overflow:hidden;
 
         padding:
-            1.5mm
+            2.5mm
             5mm
-            1.5mm
+            3mm
             5mm;
 
         margin:0 !important;
@@ -512,7 +512,7 @@ button:active{
 
     /* =================================================
        TUMPUK
-       BESAR
+       LEBIH BESAR
     ================================================= */
 
     .print-tumpuk{
@@ -524,11 +524,11 @@ button:active{
 
         align-items:center;
 
-        gap:4mm;
+        gap:5mm;
 
         text-align:center;
 
-        margin-bottom:1mm;
+        margin-bottom:2.5mm;
 
         line-height:1;
 
@@ -541,7 +541,7 @@ button:active{
 
 
     .print-tumpuk-label{
-        font-size:10mm;
+        font-size:13mm;
 
         font-weight:900;
 
@@ -558,13 +558,13 @@ button:active{
 
         justify-content:center;
 
-        min-width:40mm;
+        min-width:48mm;
 
         padding:
-            2mm
-            4mm
-            2.5mm
-            4mm;
+            3mm
+            6mm
+            3.5mm
+            6mm;
 
         border:
             .9mm
@@ -575,7 +575,7 @@ button:active{
 
         background:#fff;
 
-        font-size:27mm;
+        font-size:34mm;
 
         font-weight:1000;
 
@@ -589,8 +589,8 @@ button:active{
 
     /* =================================================
        TPK
-       BESAR
-       JARAK KE QR DIBERI RUANG
+       LEBIH BESAR
+       JARAK KE QR
     ================================================= */
 
     .print-tpk{
@@ -598,7 +598,7 @@ button:active{
 
         text-align:center;
 
-        font-size:10mm;
+        font-size:12mm;
 
         line-height:.9;
 
@@ -612,7 +612,7 @@ button:active{
 
         margin-top:0;
 
-        margin-bottom:4mm;
+        margin-bottom:7mm;
 
         flex-shrink:0;
     }
@@ -620,7 +620,7 @@ button:active{
 
     /* =================================================
        QR
-       40 MM
+       43 MM
     ================================================= */
 
     .print-qr-row{
@@ -634,20 +634,20 @@ button:active{
 
         margin-top:0;
 
-        margin-bottom:1mm;
+        margin-bottom:3mm;
 
         flex-shrink:0;
     }
 
 
     .print-qr{
-        width:40mm;
+        width:43mm;
 
-        height:40mm;
+        height:43mm;
 
-        min-width:40mm;
+        min-width:43mm;
 
-        min-height:40mm;
+        min-height:43mm;
 
         background:#fff;
 
@@ -667,9 +667,9 @@ button:active{
 
     .print-qr img,
     .print-qr canvas{
-        width:37mm !important;
+        width:40mm !important;
 
-        height:37mm !important;
+        height:40mm !important;
 
         image-rendering:auto;
     }
@@ -677,7 +677,8 @@ button:active{
 
     /* =================================================
        BLOK
-       BESAR DAN AMAN
+       LEBIH BESAR
+       TIDAK MEPET
     ================================================= */
 
     .print-blok{
@@ -685,7 +686,7 @@ button:active{
 
         text-align:center;
 
-        font-size:10mm;
+        font-size:12mm;
 
         line-height:.9;
 
@@ -742,48 +743,48 @@ button:active{
 
     .preview-card{
         padding:
-            10px
-            8px
+            12px
             9px
-            8px;
+            12px
+            9px;
     }
 
     .pilih-cetak{
-        font-size:17px;
+        font-size:18px;
 
-        margin-bottom:8px;
+        margin-bottom:10px;
     }
 
     .pilih-cetak input{
-        width:23px;
+        width:24px;
 
-        height:23px;
+        height:24px;
     }
 
     .preview-tumpuk{
-        gap:7px;
+        gap:8px;
 
-        margin-bottom:8px;
+        margin-bottom:10px;
     }
 
     .preview-tumpuk-label{
-        font-size:25px;
+        font-size:27px;
     }
 
     .preview-tumpuk-number{
-        min-width:92px;
+        min-width:95px;
 
         padding:
-            5px
+            6px
             14px
-            7px
+            8px
             14px;
 
         border:3px solid #000;
 
         border-radius:10px;
 
-        font-size:62px;
+        font-size:65px;
 
         line-height:.80;
 
@@ -791,36 +792,36 @@ button:active{
     }
 
     .preview-tpk{
-        font-size:34px;
+        font-size:36px;
 
         line-height:.95;
 
-        margin-bottom:5px;
+        margin-bottom:9px;
     }
 
     .qr-row{
-        margin-top:3px;
+        margin-top:4px;
 
-        margin-bottom:8px;
+        margin-bottom:10px;
     }
 
     .qr-box{
-        width:100px;
+        width:110px;
 
-        height:100px;
+        height:110px;
 
         padding:3px;
     }
 
     .qr-box img,
     .qr-box canvas{
-        width:92px !important;
+        width:102px !important;
 
-        height:92px !important;
+        height:102px !important;
     }
 
     .preview-blok{
-        font-size:31px;
+        font-size:33px;
 
         line-height:.95;
 
@@ -1158,10 +1159,6 @@ function updateStatusPilihan(){
         pilihanCetak.size;
 
 
-    /*
-       4 LABEL PER LEMBAR
-    */
-
     const jumlahLembar =
         jumlah > 0
         ?
@@ -1258,13 +1255,6 @@ function tampilkanData(){
 
             if(!filter)return true;
 
-
-            /*
-               FILTER HARUS PERSIS
-
-               1 = hanya 1
-               TIDAK = 11,12,13
-            */
 
             return String(
                 item.tumpuk || ""
@@ -1478,9 +1468,9 @@ function tampilkanData(){
                 {
                     text:qrLink,
 
-                    width:97,
+                    width:112,
 
-                    height:97,
+                    height:112,
 
                     correctLevel:
                         QRCode.CorrectLevel.M
@@ -1602,11 +1592,6 @@ function cetakBarcode(){
 
     printArea.innerHTML = "";
 
-
-    /*
-       4 LABEL PER F4
-       2 KOLOM x 2 BARIS
-    */
 
     const PER_LEMBAR = 4;
 
@@ -1810,10 +1795,6 @@ function cetakBarcode(){
         );
 
 
-        /* =============================================
-           LABEL KOSONG
-        ============================================= */
-
         while(
             page.children.length <
             PER_LEMBAR
@@ -1887,3 +1868,4 @@ window.addEventListener(
 </body>
 
 </html>
+
