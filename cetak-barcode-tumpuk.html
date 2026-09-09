@@ -294,7 +294,8 @@ button:hover{
        HALAMAN PRINT
 
        TINGGI 213MM
-       ADA JARAK 2MM ANTAR BARIS
+       JARAK HORIZONTAL 2MM
+       JARAK VERTIKAL 2MM
        GESER 3MM KE KANAN
     ================================================= */
 
@@ -317,12 +318,14 @@ button:hover{
         display:grid!important;
 
         grid-template-columns:
-            163.449mm
-            163.449mm;
+            162.449mm
+            162.449mm;
 
         grid-template-rows:
             105.5mm
             105.5mm;
+
+        column-gap:2mm!important;
 
         row-gap:2mm!important;
 
@@ -348,13 +351,13 @@ button:hover{
 
     .print-label{
 
-        width:163.449mm!important;
+        width:162.449mm!important;
         height:105.5mm!important;
 
-        min-width:163.449mm!important;
+        min-width:162.449mm!important;
         min-height:105.5mm!important;
 
-        max-width:163.449mm!important;
+        max-width:162.449mm!important;
         max-height:105.5mm!important;
 
         box-sizing:border-box!important;
@@ -461,6 +464,8 @@ button:hover{
 
     /* =================================================
        TPK
+       DITURUNKAN 3MM
+       AGAR TPK + QR + BLOK TURUN BERSAMA
     ================================================= */
 
     .print-tpk{
@@ -481,7 +486,7 @@ button:hover{
 
         text-overflow:ellipsis;
 
-        margin-top:0;
+        margin-top:3mm;
 
         margin-bottom:3mm;
 
