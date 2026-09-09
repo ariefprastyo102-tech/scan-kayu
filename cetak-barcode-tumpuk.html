@@ -246,130 +246,311 @@ button:hover{
 
     html,
     body{
-        width:330.2mm;
-        height:215.9mm;
-        margin:0;
-        padding:0;
-        background:white;
+
+        margin:0!important;
+        padding:0!important;
+
+        width:330.2mm!important;
+        min-width:330.2mm!important;
+
+        height:215.9mm!important;
+        min-height:215.9mm!important;
+
+        background:#fff!important;
     }
 
-    body > *{
-        display:none !important;
+    .panel,
+    #previewGrid,
+    .hasil-box{
+        display:none!important;
     }
 
     #printArea{
-        display:block !important;
-        width:330.2mm;
-        height:215.9mm;
-        margin:0;
-        padding:0;
+
+        display:block!important;
+
+        width:330.2mm!important;
+        height:215.9mm!important;
+
+        margin:0!important;
+        padding:0!important;
+
+        position:relative!important;
+
+        box-sizing:border-box!important;
     }
+
+    /* =================================================
+       AREA PRINT 99%
+    ================================================= */
 
     .print-page{
-        width:326.898mm;
-        height:213.741mm;
-        margin:1.0795mm auto;
-        padding:0;
 
-        display:grid;
+        width:326.898mm!important;
+        height:213.741mm!important;
+
+        min-width:326.898mm!important;
+        min-height:213.741mm!important;
+
+        max-width:326.898mm!important;
+        max-height:213.741mm!important;
+
+        margin:0!important;
+        padding:0!important;
+
+        display:grid!important;
 
         grid-template-columns:
-            repeat(2,163.449mm);
+            163.449mm
+            163.449mm;
 
         grid-template-rows:
-            repeat(2,106.8705mm);
+            106.8705mm
+            106.8705mm;
 
-        page-break-after:always;
+        box-sizing:border-box!important;
+
+        overflow:hidden!important;
+
+        transform:none!important;
+
         break-after:page;
+        page-break-after:always;
     }
 
+    .print-page:last-child{
+        break-after:auto!important;
+        page-break-after:auto!important;
+    }
+
+    /* =================================================
+       LABEL
+    ================================================= */
+
     .print-label{
-        width:163.449mm;
-        height:106.8705mm;
 
-        background:#ffe900;
+        width:163.449mm!important;
+        height:106.8705mm!important;
 
-        border:1mm solid #111;
+        min-width:163.449mm!important;
+        min-height:106.8705mm!important;
 
-        padding:2mm 5mm;
+        max-width:163.449mm!important;
+        max-height:106.8705mm!important;
+
+        box-sizing:border-box!important;
+
+        background:#ffeb00!important;
+
+        border:1mm solid #000;
 
         display:flex;
+
         flex-direction:column;
+
         align-items:center;
+
         justify-content:flex-start;
 
         overflow:hidden;
+
+        padding:
+            2mm
+            5mm
+            2mm
+            5mm;
+
+        margin:0!important;
     }
 
-    /* ================================================
+    /* =================================================
        TUMPUK
-    ================================================ */
+       SAMA PERSIS ACUAN
+    ================================================= */
 
-    .print-tumpuk-label{
-        font-size:12mm;
-        font-weight:bold;
-        line-height:.9;
-        margin-top:0;
-    }
+    .print-tumpuk{
 
-    /* ================================================
-       NOMOR TUMPUK
-    ================================================ */
-
-    .print-tumpuk-number{
-        font-size:32mm;
-        font-weight:900;
-        line-height:.85;
-        margin-top:1mm;
-    }
-
-    /* ================================================
-       TPK
-    ================================================ */
-
-    .print-tpk{
-        font-size:11mm;
-        font-weight:900;
-        line-height:.9;
-        margin-top:4mm;
-        margin-bottom:4mm;
-        white-space:nowrap;
-    }
-
-    /* ================================================
-       QR
-    ================================================ */
-
-    .print-qr{
-        width:35mm;
-        height:35mm;
+        width:100%;
 
         display:flex;
+
         justify-content:center;
+
         align-items:center;
 
-        flex:none;
+        gap:5mm;
+
+        text-align:center;
+
+        margin-bottom:1.5mm;
+
+        line-height:1;
+
+        white-space:nowrap;
+
+        overflow:visible;
+
+        flex-shrink:0;
+    }
+
+    .print-tumpuk-label{
+
+        font-size:14mm;
+
+        font-weight:900;
+
+        line-height:.85;
+
+        flex-shrink:0;
+    }
+
+    /* =================================================
+       NOMOR TUMPUK
+       SAMA PERSIS ACUAN
+    ================================================= */
+
+    .print-tumpuk-number{
+
+        display:inline-flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        min-width:48mm;
+
+        padding:
+            2.5mm
+            6mm
+            3mm
+            6mm;
+
+        border:.9mm solid #000;
+
+        border-radius:3.5mm;
+
+        background:#fff;
+
+        font-size:36mm;
+
+        font-weight:1000;
+
+        line-height:.72;
+
+        letter-spacing:-1mm;
+
+        flex-shrink:0;
+    }
+
+    /* =================================================
+       TPK
+       SAMA PERSIS ACUAN
+    ================================================= */
+
+    .print-tpk{
+
+        width:100%;
+
+        text-align:center;
+
+        font-size:13mm;
+
+        line-height:.85;
+
+        font-weight:1000;
+
+        white-space:nowrap;
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+        margin-top:0;
+
+        margin-bottom:5mm;
+
+        flex-shrink:0;
+    }
+
+    /* =================================================
+       QR
+       SAMA PERSIS ACUAN
+    ================================================= */
+
+    .print-qr{
+
+        width:35mm;
+
+        height:35mm;
+
+        min-width:35mm;
+
+        min-height:35mm;
+
+        background:#fff;
+
+        border:.7mm solid #000;
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+        padding:1.5mm;
+
+        flex-shrink:0;
     }
 
     .print-qr-inner{
+
         width:32mm;
+
         height:32mm;
+
     }
 
-    /* ================================================
+    .print-qr img,
+    .print-qr canvas{
+
+        width:32mm!important;
+
+        height:32mm!important;
+
+        image-rendering:auto;
+    }
+
+    /* =================================================
        BLOK
-    ================================================ */
+       SAMA PERSIS ACUAN
+    ================================================= */
 
     .print-blok{
-        font-size:11mm;
-        font-weight:900;
-        line-height:.9;
-        margin-top:3mm;
-        white-space:nowrap;
+
+        width:100%;
+
+        text-align:center;
+
+        font-size:13mm;
+
+        line-height:.8;
+
+        font-weight:1000;
+
+        margin-top:0;
+
+        margin-bottom:0;
+
+        flex-shrink:0;
     }
 
     .print-empty{
-        visibility:hidden;
+
+        visibility:hidden!important;
+
+        border-color:transparent!important;
+
+        background:transparent!important;
     }
 
 }
@@ -1228,11 +1409,18 @@ function cetakBarcode(){
 
 
             /* =============================================
-               TUMPUK
+               TUMPUK + NOMOR
             ============================================= */
 
-            const labelTumpuk =
+            const tumpukRow =
                 document.createElement("div");
+
+            tumpukRow.className =
+                "print-tumpuk";
+
+
+            const labelTumpuk =
+                document.createElement("span");
 
             labelTumpuk.className =
                 "print-tumpuk-label";
@@ -1240,17 +1428,9 @@ function cetakBarcode(){
             labelTumpuk.textContent =
                 "TUMPUK";
 
-            label.appendChild(
-                labelTumpuk
-            );
-
-
-            /* =============================================
-               NOMOR
-            ============================================= */
 
             const nomor =
-                document.createElement("div");
+                document.createElement("span");
 
             nomor.className =
                 "print-tumpuk-number";
@@ -1258,8 +1438,17 @@ function cetakBarcode(){
             nomor.textContent =
                 tumpuk;
 
-            label.appendChild(
+
+            tumpukRow.appendChild(
+                labelTumpuk
+            );
+
+            tumpukRow.appendChild(
                 nomor
+            );
+
+            label.appendChild(
+                tumpukRow
             );
 
 
@@ -1291,11 +1480,13 @@ function cetakBarcode(){
             qr.className =
                 "print-qr";
 
+
             const qrInner =
                 document.createElement("div");
 
             qrInner.className =
                 "print-qr-inner";
+
 
             qr.appendChild(
                 qrInner
