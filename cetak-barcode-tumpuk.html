@@ -1179,8 +1179,17 @@ function tampilkanData(data){
         teksTpk.className =
             "preview-tpk";
 
-        teksTpk.textContent =
-            "TPK " + tpk;
+        if(tumpuk === "29"){
+
+            teksTpk.textContent =
+                "TPK CAMPUR";
+
+        }else{
+
+            teksTpk.textContent =
+                "TPK " + tpk;
+
+        }
 
         card.appendChild(teksTpk);
 
@@ -1488,8 +1497,17 @@ function cetakBarcode(){
             teksTpk.className =
                 "print-tpk";
 
-            teksTpk.textContent =
-                "TPK " + tpk;
+            if(tumpuk === "29"){
+
+                teksTpk.textContent =
+                    "TPK CAMPUR";
+
+            }else{
+
+                teksTpk.textContent =
+                    "TPK " + tpk;
+
+            }
 
             label.appendChild(
                 teksTpk
@@ -1627,19 +1645,19 @@ document
 document
     .getElementById("filterTumpuk")
     .addEventListener(
-        "keydown",
-        function(e){
+    "keydown",
+    function(e){
 
-            if(e.key === "Enter"){
+        if(e.key === "Enter"){
 
-                e.preventDefault();
+            e.preventDefault();
 
-                jalankanFilter();
-
-            }
+            jalankanFilter();
 
         }
-    );
+
+    }
+);
 
 
 /* =====================================================
