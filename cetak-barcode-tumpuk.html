@@ -361,11 +361,12 @@ button:hover{
             5mm;
 
         margin:0!important;
+
+        position:relative!important;
     }
 
     /* =================================================
        TUMPUK
-       SAMA PERSIS ACUAN
     ================================================= */
 
     .print-tumpuk{
@@ -406,7 +407,6 @@ button:hover{
 
     /* =================================================
        NOMOR TUMPUK
-       SAMA PERSIS ACUAN
     ================================================= */
 
     .print-tumpuk-number{
@@ -444,7 +444,7 @@ button:hover{
 
     /* =================================================
        TPK
-       SAMA PERSIS ACUAN
+       JARAK KE QR = 5 MM
     ================================================= */
 
     .print-tpk{
@@ -473,8 +473,8 @@ button:hover{
     }
 
     /* =================================================
-       QR
-       SAMA PERSIS ACUAN
+       QR / BARCODE
+       JARAK KE BLOK = 5 MM
     ================================================= */
 
     .print-qr{
@@ -499,6 +499,8 @@ button:hover{
 
         padding:1.5mm;
 
+        margin:0 0 5mm 0;
+
         flex-shrink:0;
     }
 
@@ -522,7 +524,6 @@ button:hover{
 
     /* =================================================
        BLOK
-       SAMA PERSIS ACUAN
     ================================================= */
 
     .print-blok{
@@ -542,6 +543,31 @@ button:hover{
         margin-bottom:0;
 
         flex-shrink:0;
+    }
+
+    /* =================================================
+       ANGKA 26 POJOK KANAN BAWAH
+    ================================================= */
+
+    .print-tahun{
+
+        position:absolute;
+
+        right:3mm;
+
+        bottom:2mm;
+
+        font-size:6mm;
+
+        line-height:1;
+
+        font-weight:900;
+
+        margin:0;
+
+        padding:0;
+
+        z-index:10;
     }
 
     .print-empty{
@@ -1527,6 +1553,24 @@ function cetakBarcode(){
 
             label.appendChild(
                 teksBlok
+            );
+
+
+            /* =============================================
+               ANGKA 26
+            ============================================= */
+
+            const tahun =
+                document.createElement("div");
+
+            tahun.className =
+                "print-tahun";
+
+            tahun.textContent =
+                "26";
+
+            label.appendChild(
+                tahun
             );
 
 
