@@ -270,9 +270,15 @@ button:hover{
         height:213.741mm;
         margin:1.0795mm auto;
         padding:0;
+
         display:grid;
-        grid-template-columns:repeat(2,163.449mm);
-        grid-template-rows:repeat(2,106.8705mm);
+
+        grid-template-columns:
+            repeat(2,163.449mm);
+
+        grid-template-rows:
+            repeat(2,106.8705mm);
+
         page-break-after:always;
         break-after:page;
     }
@@ -295,35 +301,53 @@ button:hover{
         overflow:hidden;
     }
 
+    /* ================================================
+       TUMPUK
+    ================================================ */
+
     .print-tumpuk-label{
-        font-size:14mm;
+        font-size:12mm;
         font-weight:bold;
         line-height:.9;
         margin-top:0;
     }
 
+    /* ================================================
+       NOMOR TUMPUK
+    ================================================ */
+
     .print-tumpuk-number{
-        font-size:36mm;
+        font-size:32mm;
         font-weight:900;
         line-height:.85;
         margin-top:1mm;
     }
 
+    /* ================================================
+       TPK
+    ================================================ */
+
     .print-tpk{
-        font-size:13mm;
+        font-size:11mm;
         font-weight:900;
         line-height:.9;
-        margin-top:5mm;
-        margin-bottom:5mm;
+        margin-top:4mm;
+        margin-bottom:4mm;
         white-space:nowrap;
     }
+
+    /* ================================================
+       QR
+    ================================================ */
 
     .print-qr{
         width:35mm;
         height:35mm;
+
         display:flex;
         justify-content:center;
         align-items:center;
+
         flex:none;
     }
 
@@ -332,11 +356,15 @@ button:hover{
         height:32mm;
     }
 
+    /* ================================================
+       BLOK
+    ================================================ */
+
     .print-blok{
-        font-size:13mm;
+        font-size:11mm;
         font-weight:900;
         line-height:.9;
-        margin-top:4mm;
+        margin-top:3mm;
         white-space:nowrap;
     }
 
@@ -745,20 +773,6 @@ function ambilFilterTumpuk(){
         return [];
     }
 
-    /*
-       Bisa:
-
-       1 11 12 13
-
-       atau:
-
-       1,11,12,13
-
-       atau:
-
-       1, 11, 12, 13
-    */
-
     return input
         .split(/[\s,;]+/)
         .map(function(x){
@@ -803,22 +817,6 @@ function jalankanFilter(){
                 )
                 .trim()
                 .toLowerCase();
-
-            /*
-               EXACT MATCH
-
-               Jadi:
-
-               filter 1
-
-               hanya 1
-
-               tidak ikut:
-               10
-               11
-               12
-               13
-            */
 
             return daftar.includes(tumpuk);
 
@@ -891,6 +889,7 @@ function tampilkanData(data){
 
         card.className =
             "preview-card";
+
 
         /* =================================================
            CHECKBOX
@@ -1379,14 +1378,6 @@ document
     .addEventListener(
         "input",
         function(){
-
-            /*
-               Kalau kosong:
-               tampilkan semua.
-
-               Kalau ada isi:
-               langsung filter.
-            */
 
             jalankanFilter();
 
