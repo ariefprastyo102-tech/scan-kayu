@@ -46,6 +46,7 @@ h1{
     font-size:28px;
 }
 
+
 /* =====================================================
    FILTER
 ===================================================== */
@@ -135,6 +136,7 @@ button:hover{
     font-weight:bold;
 }
 
+
 /* =====================================================
    HASIL
 ===================================================== */
@@ -151,6 +153,7 @@ button:hover{
     gap:15px;
     margin-top:15px;
 }
+
 
 /* =====================================================
    CARD PREVIEW
@@ -217,6 +220,7 @@ button:hover{
     line-height:1;
 }
 
+
 /* =====================================================
    PESAN
 ===================================================== */
@@ -229,6 +233,7 @@ button:hover{
     color:#555;
 }
 
+
 /* =====================================================
    PRINT
 ===================================================== */
@@ -236,6 +241,11 @@ button:hover{
 #printArea{
     display:none;
 }
+
+
+/* =====================================================
+   PRINT F4 LANDSCAPE
+===================================================== */
 
 @media print{
 
@@ -246,7 +256,6 @@ button:hover{
 
     html,
     body{
-
         margin:0!important;
         padding:0!important;
 
@@ -280,22 +289,35 @@ button:hover{
         box-sizing:border-box!important;
     }
 
+
     /* =================================================
-       AREA PRINT 99%
+       HALAMAN PRINT
+       
+       DIBUAT SEDIKIT LEBIH PENDEK AGAR
+       BAGIAN ATAS TIDAK KE POTONG
     ================================================= */
 
     .print-page{
 
         width:326.898mm!important;
-        height:213.741mm!important;
+
+        /*
+           Tinggi dikurangi dari 213.741 menjadi 211mm
+           supaya printer tidak memaksa area terlalu tinggi
+        */
+        height:211mm!important;
 
         min-width:326.898mm!important;
-        min-height:213.741mm!important;
+        min-height:211mm!important;
 
         max-width:326.898mm!important;
-        max-height:213.741mm!important;
+        max-height:211mm!important;
 
-        margin:0!important;
+        /*
+           Geser sedikit ke bawah
+        */
+        margin:2mm 0 0 0!important;
+
         padding:0!important;
 
         display:grid!important;
@@ -305,8 +327,8 @@ button:hover{
             163.449mm;
 
         grid-template-rows:
-            106.8705mm
-            106.8705mm;
+            105.5mm
+            105.5mm;
 
         box-sizing:border-box!important;
 
@@ -323,6 +345,7 @@ button:hover{
         page-break-after:auto!important;
     }
 
+
     /* =================================================
        LABEL
     ================================================= */
@@ -330,13 +353,13 @@ button:hover{
     .print-label{
 
         width:163.449mm!important;
-        height:106.8705mm!important;
+        height:105.5mm!important;
 
         min-width:163.449mm!important;
-        min-height:106.8705mm!important;
+        min-height:105.5mm!important;
 
         max-width:163.449mm!important;
-        max-height:106.8705mm!important;
+        max-height:105.5mm!important;
 
         box-sizing:border-box!important;
 
@@ -364,6 +387,7 @@ button:hover{
 
         position:relative!important;
     }
+
 
     /* =================================================
        TUMPUK
@@ -405,10 +429,6 @@ button:hover{
         flex-shrink:0;
     }
 
-    /* =================================================
-       NOMOR TUMPUK
-    ================================================= */
-
     .print-tumpuk-number{
 
         display:inline-flex;
@@ -442,9 +462,9 @@ button:hover{
         flex-shrink:0;
     }
 
+
     /* =================================================
        TPK
-       JARAK KE QR = 5 MM
     ================================================= */
 
     .print-tpk{
@@ -472,9 +492,9 @@ button:hover{
         flex-shrink:0;
     }
 
+
     /* =================================================
-       QR / BARCODE
-       JARAK KE BLOK = 5 MM
+       QR
     ================================================= */
 
     .print-qr{
@@ -499,7 +519,11 @@ button:hover{
 
         padding:1.5mm;
 
-        margin:0 0 5mm 0;
+        margin:
+            0
+            0
+            5mm
+            0;
 
         flex-shrink:0;
     }
@@ -509,7 +533,6 @@ button:hover{
         width:32mm;
 
         height:32mm;
-
     }
 
     .print-qr img,
@@ -521,6 +544,7 @@ button:hover{
 
         image-rendering:auto;
     }
+
 
     /* =================================================
        BLOK
@@ -545,8 +569,9 @@ button:hover{
         flex-shrink:0;
     }
 
+
     /* =================================================
-       ANGKA 26 POJOK KANAN BAWAH
+       TAHUN
     ================================================= */
 
     .print-tahun{
@@ -570,6 +595,11 @@ button:hover{
         z-index:10;
     }
 
+
+    /* =================================================
+       KOTAK KOSONG
+    ================================================= */
+
     .print-empty{
 
         visibility:hidden!important;
@@ -580,6 +610,7 @@ button:hover{
     }
 
 }
+
 
 /* =====================================================
    MOBILE
@@ -640,21 +671,21 @@ button:hover{
 
 </head>
 
+
 <body>
+
 
 <div class="panel">
 
     <h1>CETAK QR TUMPUK</h1>
 
-    <!-- =================================================
-         FILTER
-    ================================================== -->
 
     <div class="filter-box">
 
         <div class="filter-title">
             FILTER NOMOR TUMPUK
         </div>
+
 
         <div class="filter-input-row">
 
@@ -678,6 +709,7 @@ button:hover{
             </button>
 
         </div>
+
 
         <div class="filter-input-row">
 
@@ -706,6 +738,7 @@ button:hover{
 
         </div>
 
+
         <div class="filter-info">
 
             <span id="infoTampil">
@@ -720,13 +753,13 @@ button:hover{
 
     </div>
 
-    <!-- =================================================
-         HASIL
-    ================================================== -->
 
-    <div class="hasil-box" id="hasilBox">
+    <div
+        class="hasil-box"
+        id="hasilBox">
         DATA TUMPUK
     </div>
+
 
     <div
         id="previewGrid"
@@ -735,34 +768,34 @@ button:hover{
 
 </div>
 
-<!-- =====================================================
-     AREA PRINT
-===================================================== -->
 
 <div id="printArea"></div>
 
+
 <script>
 
+
 /* =====================================================
-   KONFIGURASI
+   API
 ===================================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
+
 
 const HALAMAN_TUMPUK_URL =
 "https://ariefprastyo102-tech.github.io/scan-kayu/cek-tumpuk.html";
 
 
 /* =====================================================
-   DATA
+   VARIABEL
 ===================================================== */
 
-let database = [];
+let database=[];
 
-let sedangMemuat = false;
+let sedangMemuat=false;
 
-let pilihanCetak = new Set();
+let pilihanCetak=new Set();
 
 
 /* =====================================================
@@ -771,19 +804,23 @@ let pilihanCetak = new Set();
 
 function buatLinkTumpuk(item){
 
-    const tpk =
+    const tpk=
         encodeURIComponent(
-            String(item.tpk || "").trim()
+            String(item.tpk||"").trim()
         );
 
-    const tumpuk =
+    const tumpuk=
         encodeURIComponent(
-            String(item.tumpuk || "").trim()
+            String(item.tumpuk||"").trim()
         );
 
-    return HALAMAN_TUMPUK_URL +
-        "?tpk=" + tpk +
-        "&tumpuk=" + tumpuk;
+    return (
+        HALAMAN_TUMPUK_URL+
+        "?tpk="+
+        tpk+
+        "&tumpuk="+
+        tumpuk
+    );
 }
 
 
@@ -794,39 +831,43 @@ function buatLinkTumpuk(item){
 function buatIdPilihan(item){
 
     return (
-        String(item.tpk || "").trim()
-        + "|"
-        + String(item.tumpuk || "").trim()
+        String(item.tpk||"").trim()+
+        "|" +
+        String(item.tumpuk||"").trim()
     );
-
 }
 
 
 /* =====================================================
-   URUTKAN TUMPUK
+   SORT TUMPUK
 ===================================================== */
 
 function urutTumpuk(a,b){
 
-    const na =
+    const na=
         Number(
-            String(a.tumpuk || "")
+            String(a.tumpuk||"")
             .replace(/[^\d.-]/g,"")
         );
 
-    const nb =
+    const nb=
         Number(
-            String(b.tumpuk || "")
+            String(b.tumpuk||"")
             .replace(/[^\d.-]/g,"")
         );
 
-    if(!isNaN(na) && !isNaN(nb)){
-        return na - nb;
+    if(
+        !isNaN(na) &&
+        !isNaN(nb)
+    ){
+
+        return na-nb;
+
     }
 
-    return String(a.tumpuk || "")
+    return String(a.tumpuk||"")
         .localeCompare(
-            String(b.tumpuk || ""),
+            String(b.tumpuk||""),
             undefined,
             {
                 numeric:true,
@@ -842,31 +883,40 @@ function urutTumpuk(a,b){
 
 function updateInfo(){
 
-    const tampil =
+    const tampil=
         document.querySelectorAll(
             ".preview-card"
         ).length;
 
-    let dipilih = 0;
+    let dipilih=0;
 
     document
         .querySelectorAll(".preview-check")
-        .forEach(cb => {
+        .forEach(cb=>{
 
             if(cb.checked){
+
                 dipilih++;
+
             }
 
         });
 
-    document.getElementById("infoTampil")
-        .textContent =
-        "Menampilkan: " + tampil + " data";
 
-    document.getElementById("infoDipilih")
-        .textContent =
-        "Dipilih: " + dipilih + " data";
+    document.getElementById(
+        "infoTampil"
+    ).textContent=
+        "Menampilkan: "+
+        tampil+
+        " data";
 
+
+    document.getElementById(
+        "infoDipilih"
+    ).textContent=
+        "Dipilih: "+
+        dipilih+
+        " data";
 }
 
 
@@ -876,125 +926,96 @@ function updateInfo(){
 
 function ambilDatabase(){
 
-    if(sedangMemuat){
-        return;
-    }
+    if(sedangMemuat)return;
 
-    sedangMemuat = true;
+    sedangMemuat=true;
 
-    document.getElementById("previewGrid")
-        .innerHTML =
+
+    document.getElementById(
+        "previewGrid"
+    ).innerHTML=
         '<div class="message">⏳ Memuat data...</div>';
 
-    const callbackName =
-        "callbackTumpuk_" +
+
+    const callbackName=
+        "callbackTumpuk_"+
         Date.now();
 
-    window[callbackName] =
-        function(data){
 
-            try{
+    window[callbackName]=function(data){
 
-                if(Array.isArray(data)){
+        try{
 
-                    database = data;
+            if(Array.isArray(data)){
 
-                }else if(
-                    data &&
-                    Array.isArray(data.data)
-                ){
+                database=data;
 
-                    database = data.data;
+            }
+            else if(
+                data &&
+                Array.isArray(data.data)
+            ){
 
-                }else{
+                database=data.data;
 
-                    database = [];
+            }
+            else{
 
-                }
-
-                database.sort(urutTumpuk);
-
-                pilihanCetak.clear();
-
-                tampilkanData(database);
-
-            }catch(err){
-
-                console.error(err);
-
-                document.getElementById(
-                    "previewGrid"
-                ).innerHTML =
-                '<div class="message">' +
-                '❌ Data gagal diproses' +
-                '</div>';
+                database=[];
 
             }
 
-            sedangMemuat = false;
 
-        };
+            database.sort(urutTumpuk);
 
-    const script =
-        document.createElement("script");
+            pilihanCetak.clear();
 
-    script.src =
-        API_URL +
-        "?action=getTumpukList" +
-        "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
+            tampilkanData(database);
 
-    script.onerror =
-        function(){
+        }
+        catch(err){
 
-            sedangMemuat = false;
+            console.error(err);
 
             document.getElementById(
                 "previewGrid"
-            ).innerHTML =
-            '<div class="message">' +
-            '❌ Gagal mengambil data dari server' +
-            '</div>';
+            ).innerHTML=
+                '<div class="message">❌ Data gagal diproses</div>';
 
-        };
+        }
+
+
+        sedangMemuat=false;
+
+    };
+
+
+    const script=
+        document.createElement("script");
+
+
+    script.src=
+        API_URL+
+        "?action=getTumpukList"+
+        "&callback="+
+        callbackName+
+        "&_="+
+        Date.now();
+
+
+    script.onerror=function(){
+
+        sedangMemuat=false;
+
+        document.getElementById(
+            "previewGrid"
+        ).innerHTML=
+            '<div class="message">❌ Gagal mengambil data dari server</div>';
+
+    };
+
 
     document.body.appendChild(script);
-
-}
-
-
-/* =====================================================
-   AMBIL DAFTAR NOMOR DARI FILTER
-===================================================== */
-
-function ambilFilterTumpuk(){
-
-    const input =
-        document.getElementById(
-            "filterTumpuk"
-        ).value.trim();
-
-    if(!input){
-        return [];
-    }
-
-    return input
-        .split(/[\s,;]+/)
-        .map(function(x){
-
-            return x
-                .trim()
-                .toLowerCase();
-
-        })
-        .filter(function(x){
-
-            return x !== "";
-
-        });
-
 }
 
 
@@ -1002,12 +1023,36 @@ function ambilFilterTumpuk(){
    FILTER
 ===================================================== */
 
+function ambilFilterTumpuk(){
+
+    const input=
+        document
+        .getElementById("filterTumpuk")
+        .value
+        .trim();
+
+
+    if(!input)return [];
+
+
+    return input
+        .split(/[\s,;]+/)
+        .map(x=>x.trim().toLowerCase())
+        .filter(x=>x!=="");
+}
+
+
+/* =====================================================
+   JALANKAN FILTER
+===================================================== */
+
 function jalankanFilter(){
 
-    const daftar =
+    const daftar=
         ambilFilterTumpuk();
 
-    if(daftar.length === 0){
+
+    if(daftar.length===0){
 
         tampilkanData(database);
 
@@ -1015,24 +1060,26 @@ function jalankanFilter(){
 
     }
 
-    const hasil =
-        database.filter(function(item){
 
-            const tumpuk =
+    const hasil=
+        database.filter(item=>{
+
+            const tumpuk=
                 String(
-                    item.tumpuk || ""
+                    item.tumpuk||""
                 )
                 .trim()
                 .toLowerCase();
+
 
             return daftar.includes(tumpuk);
 
         });
 
+
     hasil.sort(urutTumpuk);
 
     tampilkanData(hasil);
-
 }
 
 
@@ -1044,10 +1091,10 @@ function tampilkanSemua(){
 
     document.getElementById(
         "filterTumpuk"
-    ).value = "";
+    ).value="";
+
 
     tampilkanData(database);
-
 }
 
 
@@ -1057,19 +1104,22 @@ function tampilkanSemua(){
 
 function tampilkanData(data){
 
-    const grid =
+    const grid=
         document.getElementById(
             "previewGrid"
         );
 
-    grid.innerHTML = "";
 
-    if(!Array.isArray(data) || data.length === 0){
+    grid.innerHTML="";
 
-        grid.innerHTML =
-        '<div class="message">' +
-        'Tidak ada data Tumpuk yang ditemukan.' +
-        '</div>';
+
+    if(
+        !Array.isArray(data) ||
+        data.length===0
+    ){
+
+        grid.innerHTML=
+            '<div class="message">Tidak ada data Tumpuk yang ditemukan.</div>';
 
         updateInfo();
 
@@ -1077,43 +1127,56 @@ function tampilkanData(data){
 
     }
 
-    data.forEach(function(item){
 
-        const tumpuk =
-            String(item.tumpuk || "").trim();
+    data.forEach(item=>{
 
-        const tpk =
-            String(item.tpk || "").trim();
+        const tumpuk=
+            String(
+                item.tumpuk||""
+            ).trim();
 
-        const blok =
-            String(item.blok || "").trim();
 
-        const id =
+        const tpk=
+            String(
+                item.tpk||""
+            ).trim();
+
+
+        const blok=
+            String(
+                item.blok||""
+            ).trim();
+
+
+        const id=
             buatIdPilihan(item);
 
-        const card =
+
+        const card=
             document.createElement("div");
 
-        card.className =
+
+        card.className=
             "preview-card";
 
 
-        /* =================================================
-           CHECKBOX
-        ================================================= */
+        /* CHECKBOX */
 
-        const checkbox =
+        const checkbox=
             document.createElement("input");
 
-        checkbox.type = "checkbox";
 
-        checkbox.className =
+        checkbox.type="checkbox";
+
+        checkbox.className=
             "preview-check";
 
-        checkbox.dataset.id = id;
 
-        checkbox.checked =
+        checkbox.dataset.id=id;
+
+        checkbox.checked=
             pilihanCetak.has(id);
+
 
         checkbox.addEventListener(
             "change",
@@ -1123,92 +1186,101 @@ function tampilkanData(data){
 
                     pilihanCetak.add(id);
 
-                }else{
+                }
+                else{
 
                     pilihanCetak.delete(id);
 
                 }
+
 
                 updateInfo();
 
             }
         );
 
+
         card.appendChild(checkbox);
 
 
-        /* =================================================
-           LABEL TUMPUK
-        ================================================= */
+        /* TUMPUK */
 
-        const labelTumpuk =
+        const labelTumpuk=
             document.createElement("div");
 
-        labelTumpuk.className =
+
+        labelTumpuk.className=
             "preview-tumpuk-label";
 
-        labelTumpuk.textContent =
+
+        labelTumpuk.textContent=
             "TUMPUK";
+
 
         card.appendChild(labelTumpuk);
 
 
-        /* =================================================
-           NOMOR TUMPUK
-        ================================================= */
+        /* NOMOR */
 
-        const nomorTumpuk =
+        const nomorTumpuk=
             document.createElement("div");
 
-        nomorTumpuk.className =
+
+        nomorTumpuk.className=
             "preview-tumpuk-number";
 
-        nomorTumpuk.textContent =
+
+        nomorTumpuk.textContent=
             tumpuk;
+
 
         card.appendChild(nomorTumpuk);
 
 
-        /* =================================================
-           TPK
-        ================================================= */
+        /* TPK */
 
-        const teksTpk =
+        const teksTpk=
             document.createElement("div");
 
-        teksTpk.className =
+
+        teksTpk.className=
             "preview-tpk";
 
-        if(tumpuk === "29"){
 
-            teksTpk.textContent =
+        if(tumpuk==="29"){
+
+            teksTpk.textContent=
                 "TPK CAMPUR";
 
-        }else{
+        }
+        else{
 
-            teksTpk.textContent =
-                "TPK " + tpk;
+            teksTpk.textContent=
+                "TPK "+tpk;
 
         }
+
 
         card.appendChild(teksTpk);
 
 
-        /* =================================================
-           QR
-        ================================================= */
+        /* QR */
 
-        const qrBox =
+        const qrBox=
             document.createElement("div");
 
-        qrBox.className =
+
+        qrBox.className=
             "preview-qr";
 
-        const qrInner =
+
+        const qrInner=
             document.createElement("div");
 
-        qrInner.className =
+
+        qrInner.className=
             "preview-qr-inner";
+
 
         qrBox.appendChild(qrInner);
 
@@ -1218,7 +1290,7 @@ function tampilkanData(data){
         new QRCode(
             qrInner,
             {
-                text: buatLinkTumpuk(item),
+                text:buatLinkTumpuk(item),
                 width:112,
                 height:112,
                 correctLevel:
@@ -1227,18 +1299,19 @@ function tampilkanData(data){
         );
 
 
-        /* =================================================
-           BLOK
-        ================================================= */
+        /* BLOK */
 
-        const teksBlok =
+        const teksBlok=
             document.createElement("div");
 
-        teksBlok.className =
+
+        teksBlok.className=
             "preview-blok";
 
-        teksBlok.textContent =
-            "BLOK " + blok;
+
+        teksBlok.textContent=
+            "BLOK "+blok;
+
 
         card.appendChild(teksBlok);
 
@@ -1247,8 +1320,8 @@ function tampilkanData(data){
 
     });
 
-    updateInfo();
 
+    updateInfo();
 }
 
 
@@ -1258,27 +1331,27 @@ function tampilkanData(data){
 
 function pilihHasilFilter(){
 
-    const cards =
+    const cards=
         document.querySelectorAll(
             ".preview-card"
         );
 
-    if(cards.length === 0){
-        return;
-    }
 
-    cards.forEach(function(card){
+    if(cards.length===0)return;
 
-        const cb =
+
+    cards.forEach(card=>{
+
+        const cb=
             card.querySelector(
                 ".preview-check"
             );
 
-        if(!cb){
-            return;
-        }
 
-        cb.checked = true;
+        if(!cb)return;
+
+
+        cb.checked=true;
 
         pilihanCetak.add(
             cb.dataset.id
@@ -1286,8 +1359,8 @@ function pilihHasilFilter(){
 
     });
 
-    updateInfo();
 
+    updateInfo();
 }
 
 
@@ -1297,7 +1370,7 @@ function pilihHasilFilter(){
 
 function pilihSemua(){
 
-    database.forEach(function(item){
+    database.forEach(item=>{
 
         pilihanCetak.add(
             buatIdPilihan(item)
@@ -1305,18 +1378,19 @@ function pilihSemua(){
 
     });
 
+
     document
         .querySelectorAll(
             ".preview-check"
         )
-        .forEach(function(cb){
+        .forEach(cb=>{
 
-            cb.checked = true;
+            cb.checked=true;
 
         });
 
-    updateInfo();
 
+    updateInfo();
 }
 
 
@@ -1328,88 +1402,87 @@ function batalSemua(){
 
     pilihanCetak.clear();
 
+
     document
         .querySelectorAll(
             ".preview-check"
         )
-        .forEach(function(cb){
+        .forEach(cb=>{
 
-            cb.checked = false;
+            cb.checked=false;
 
         });
 
-    updateInfo();
 
+    updateInfo();
 }
 
 
 /* =====================================================
-   CETAK BARCODE
+   BUAT PRINT
 ===================================================== */
 
-function cetakBarcode(){
+function prosesCetak(dataCetak){
 
-    const dataCetak =
-        database
-        .filter(function(item){
-
-            return pilihanCetak.has(
-                buatIdPilihan(item)
-            );
-
-        })
-        .sort(urutTumpuk);
-
-    if(dataCetak.length === 0){
+    if(
+        !Array.isArray(dataCetak) ||
+        dataCetak.length===0
+    ){
 
         alert(
-            "Belum ada Tumpuk yang dipilih."
+            "Tidak ada data yang akan dicetak."
         );
 
         return;
 
     }
 
-    const printArea =
+
+    const printArea=
         document.getElementById(
             "printArea"
         );
 
-    printArea.innerHTML = "";
 
+    printArea.innerHTML="";
 
-    /* =================================================
-       4 LABEL PER F4
-    ================================================= */
 
     for(
-        let i = 0;
-        i < dataCetak.length;
-        i += 4
+        let i=0;
+        i<dataCetak.length;
+        i+=4
     ){
 
-        const page =
+        const page=
             document.createElement("div");
 
-        page.className =
+
+        page.className=
             "print-page";
 
 
         for(
-            let j = 0;
-            j < 4;
+            let j=0;
+            j<4;
             j++
         ){
 
-            const index = i + j;
+            const index=i+j;
 
-            if(index >= dataCetak.length){
 
-                const empty =
+            /* KOTAK KOSONG */
+
+            if(
+                index>=dataCetak.length
+            ){
+
+                const empty=
                     document.createElement("div");
 
-                empty.className =
+
+                empty.className=
                     "print-label print-empty";
+
 
                 page.appendChild(empty);
 
@@ -1417,60 +1490,72 @@ function cetakBarcode(){
 
             }
 
-            const item =
+
+            const item=
                 dataCetak[index];
 
-            const tumpuk =
-                String(
-                    item.tumpuk || ""
-                ).trim();
 
-            const tpk =
+            const tumpuk=
                 String(
-                    item.tpk || ""
-                ).trim();
-
-            const blok =
-                String(
-                    item.blok || ""
+                    item.tumpuk||""
                 ).trim();
 
 
-            const label =
+            const tpk=
+                String(
+                    item.tpk||""
+                ).trim();
+
+
+            const blok=
+                String(
+                    item.blok||""
+                ).trim();
+
+
+            /* LABEL */
+
+            const label=
                 document.createElement("div");
 
-            label.className =
+
+            label.className=
                 "print-label";
 
 
-            /* =============================================
-               TUMPUK + NOMOR
-            ============================================= */
+            /* =========================
+               TUMPUK ROW
+            ========================= */
 
-            const tumpukRow =
+            const tumpukRow=
                 document.createElement("div");
 
-            tumpukRow.className =
+
+            tumpukRow.className=
                 "print-tumpuk";
 
 
-            const labelTumpuk =
+            const labelTumpuk=
                 document.createElement("span");
 
-            labelTumpuk.className =
+
+            labelTumpuk.className=
                 "print-tumpuk-label";
 
-            labelTumpuk.textContent =
+
+            labelTumpuk.textContent=
                 "TUMPUK";
 
 
-            const nomor =
+            const nomor=
                 document.createElement("span");
 
-            nomor.className =
+
+            nomor.className=
                 "print-tumpuk-number";
 
-            nomor.textContent =
+
+            nomor.textContent=
                 tumpuk;
 
 
@@ -1478,137 +1563,140 @@ function cetakBarcode(){
                 labelTumpuk
             );
 
+
             tumpukRow.appendChild(
                 nomor
             );
+
 
             label.appendChild(
                 tumpukRow
             );
 
 
-            /* =============================================
+            /* =========================
                TPK
-            ============================================= */
+            ========================= */
 
-            const teksTpk =
+            const teksTpk=
                 document.createElement("div");
 
-            teksTpk.className =
+
+            teksTpk.className=
                 "print-tpk";
 
-            if(tumpuk === "29"){
 
-                teksTpk.textContent =
+            if(tumpuk==="29"){
+
+                teksTpk.textContent=
                     "TPK CAMPUR";
 
-            }else{
+            }
+            else{
 
-                teksTpk.textContent =
-                    "TPK " + tpk;
+                teksTpk.textContent=
+                    "TPK "+tpk;
 
             }
+
 
             label.appendChild(
                 teksTpk
             );
 
 
-            /* =============================================
+            /* =========================
                QR
-            ============================================= */
+            ========================= */
 
-            const qr =
+            const qr=
                 document.createElement("div");
 
-            qr.className =
+
+            qr.className=
                 "print-qr";
 
 
-            const qrInner =
+            const qrInner=
                 document.createElement("div");
 
-            qrInner.className =
+
+            qrInner.className=
                 "print-qr-inner";
 
 
-            qr.appendChild(
-                qrInner
-            );
+            qr.appendChild(qrInner);
 
-            label.appendChild(
-                qr
-            );
+            label.appendChild(qr);
 
 
             new QRCode(
                 qrInner,
                 {
-                    text:
-                        buatLinkTumpuk(item),
-
+                    text:buatLinkTumpuk(item),
                     width:275,
                     height:275,
-
                     correctLevel:
                         QRCode.CorrectLevel.H
                 }
             );
 
 
-            /* =============================================
+            /* =========================
                BLOK
-            ============================================= */
+            ========================= */
 
-            const teksBlok =
+            const teksBlok=
                 document.createElement("div");
 
-            teksBlok.className =
+
+            teksBlok.className=
                 "print-blok";
 
-            teksBlok.textContent =
-                "BLOK " + blok;
+
+            teksBlok.textContent=
+                "BLOK "+blok;
+
 
             label.appendChild(
                 teksBlok
             );
 
 
-            /* =============================================
-               ANGKA 26
-            ============================================= */
+            /* =========================
+               TAHUN
+            ========================= */
 
-            const tahun =
+            const tahun=
                 document.createElement("div");
 
-            tahun.className =
+
+            tahun.className=
                 "print-tahun";
 
-            tahun.textContent =
-                "26";
+
+            tahun.textContent="26";
+
 
             label.appendChild(
                 tahun
             );
 
 
-            page.appendChild(
-                label
-            );
+            page.appendChild(label);
 
         }
 
 
-        printArea.appendChild(
-            page
-        );
+        printArea.appendChild(page);
 
     }
 
 
-    /* =================================================
-       TUNGGU QR SELESAI
-    ================================================= */
+    /*
+       Tunggu QR selesai dirender
+       sebelum membuka dialog print
+    */
 
     setTimeout(
         function(){
@@ -1618,50 +1706,73 @@ function cetakBarcode(){
         },
         700
     );
-
 }
 
 
 /* =====================================================
-   FILTER LANGSUNG SAAT KETIK
+   CETAK YANG DIPILIH
+===================================================== */
+
+function cetakBarcode(){
+
+    const dataCetak=
+        database
+        .filter(
+            item=>
+                pilihanCetak.has(
+                    buatIdPilihan(item)
+                )
+        )
+        .sort(urutTumpuk);
+
+
+    if(dataCetak.length===0){
+
+        alert(
+            "Belum ada Tumpuk yang dipilih."
+        );
+
+        return;
+
+    }
+
+
+    prosesCetak(dataCetak);
+}
+
+
+/* =====================================================
+   FILTER ENTER
 ===================================================== */
 
 document
     .getElementById("filterTumpuk")
     .addEventListener(
         "input",
-        function(){
+        jalankanFilter
+    );
 
-            jalankanFilter();
+
+document
+    .getElementById("filterTumpuk")
+    .addEventListener(
+        "keydown",
+        function(e){
+
+            if(e.key==="Enter"){
+
+                e.preventDefault();
+
+                jalankanFilter();
+
+            }
 
         }
     );
 
 
 /* =====================================================
-   ENTER = FILTER
-===================================================== */
-
-document
-    .getElementById("filterTumpuk")
-    .addEventListener(
-    "keydown",
-    function(e){
-
-        if(e.key === "Enter"){
-
-            e.preventDefault();
-
-            jalankanFilter();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   LOAD AWAL
+   LOAD
 ===================================================== */
 
 window.addEventListener(
