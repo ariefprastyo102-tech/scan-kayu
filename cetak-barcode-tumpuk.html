@@ -292,30 +292,23 @@ button:hover{
 
     /* =================================================
        HALAMAN PRINT
-       
-       DIBUAT SEDIKIT LEBIH PENDEK AGAR
-       BAGIAN ATAS TIDAK KE POTONG
+
+       TINGGI 213MM
+       ADA JARAK 2MM ANTAR BARIS
     ================================================= */
 
     .print-page{
 
         width:326.898mm!important;
 
-        /*
-           Tinggi dikurangi dari 213.741 menjadi 211mm
-           supaya printer tidak memaksa area terlalu tinggi
-        */
-        height:211mm!important;
+        height:213mm!important;
 
         min-width:326.898mm!important;
-        min-height:211mm!important;
+        min-height:213mm!important;
 
         max-width:326.898mm!important;
-        max-height:211mm!important;
+        max-height:213mm!important;
 
-        /*
-           Geser sedikit ke bawah
-        */
         margin:2mm 0 0 0!important;
 
         padding:0!important;
@@ -330,15 +323,13 @@ button:hover{
             105.5mm
             105.5mm;
 
+        row-gap:2mm!important;
+
         box-sizing:border-box!important;
 
         overflow:hidden!important;
 
-        /*
-           GESER SEDIKIT KE KANAN
-           BAGIAN LAIN TETAP
-        */
-        transform:translateX(1.5mm)!important;
+        transform:none!important;
 
         break-after:page;
         page-break-after:always;
@@ -477,7 +468,7 @@ button:hover{
 
         text-align:center;
 
-        font-size:13mm;
+        font-size:14mm;
 
         line-height:.85;
 
@@ -491,7 +482,7 @@ button:hover{
 
         margin-top:0;
 
-        margin-bottom:5mm;
+        margin-bottom:3mm;
 
         flex-shrink:0;
     }
@@ -499,17 +490,18 @@ button:hover{
 
     /* =================================================
        QR
+       DIPERKECIL AGAR TPK + BLOK LEBIH BESAR
     ================================================= */
 
     .print-qr{
 
-        width:35mm;
+        width:30mm;
 
-        height:35mm;
+        height:30mm;
 
-        min-width:35mm;
+        min-width:30mm;
 
-        min-height:35mm;
+        min-height:30mm;
 
         background:#fff;
 
@@ -526,7 +518,7 @@ button:hover{
         margin:
             0
             0
-            5mm
+            3mm
             0;
 
         flex-shrink:0;
@@ -534,17 +526,17 @@ button:hover{
 
     .print-qr-inner{
 
-        width:32mm;
+        width:27mm;
 
-        height:32mm;
+        height:27mm;
     }
 
     .print-qr img,
     .print-qr canvas{
 
-        width:32mm!important;
+        width:27mm!important;
 
-        height:32mm!important;
+        height:27mm!important;
 
         image-rendering:auto;
     }
@@ -560,7 +552,7 @@ button:hover{
 
         text-align:center;
 
-        font-size:13mm;
+        font-size:14mm;
 
         line-height:.8;
 
@@ -1638,8 +1630,8 @@ function prosesCetak(dataCetak){
                 qrInner,
                 {
                     text:buatLinkTumpuk(item),
-                    width:275,
-                    height:275,
+                    width:225,
+                    height:225,
                     correctLevel:
                         QRCode.CorrectLevel.H
                 }
