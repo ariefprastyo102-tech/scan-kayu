@@ -229,8 +229,36 @@ body {
 }
 
 #btnScan:active,
-#btnScanBaru:active {
+#btnScanBaru:active,
+#btnLanjut:active {
   transform: scale(0.98);
+}
+
+/* ==============================
+   TOMBOL LANJUT
+============================== */
+
+#btnLanjut {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto 15px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  background: #176b38;
+  color: white;
+  cursor: pointer;
+  box-shadow:
+    0 3px 8px rgba(23,107,56,0.25);
+}
+
+#btnLanjut:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* ==============================
@@ -302,6 +330,43 @@ body {
 #jumlah .teksBatang {
   font-size: 25px;
   font-weight: 800;
+}
+
+/* ==============================
+   PENGAMBILAN SAAT INI
+============================== */
+
+.pengambilan-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #1976d2;
+  box-shadow:
+    0 3px 10px rgba(0,0,0,0.10);
+}
+
+.pengambilanJudul {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+#jumlahPengambilan {
+  font-size: 44px;
+  font-weight: 900;
+  color: #1976d2;
+  line-height: 1;
+}
+
+.teksPengambilan {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1976d2;
 }
 
 #status {
@@ -562,6 +627,10 @@ body {
     font-size: 23px;
   }
 
+  #jumlahPengambilan {
+    font-size: 42px;
+  }
+
   #btnHistory {
     right: 12px;
     bottom: 12px;
@@ -609,6 +678,10 @@ body {
 
   #jumlah .teksBatang {
     font-size: 21px;
+  }
+
+  #jumlahPengambilan {
+    font-size: 38px;
   }
 
 }
@@ -697,14 +770,6 @@ body {
   🔄 SCAN BARU
 </button>
 
-<button
-  id="btnHistory"
-  onclick="tampilkanHistory()"
-  title="History Scan"
->
-  📋 HISTORY
-</button>
-
 <!-- ==============================
      TOTAL
 ============================== -->
@@ -729,11 +794,47 @@ body {
 
 </div>
 
+<!-- ==============================
+     PENGAMBILAN SAAT INI
+============================== -->
+
+<div class="pengambilan-card">
+
+  <div class="pengambilanJudul">
+    PENGAMBILAN INI
+  </div>
+
+  <span id="jumlahPengambilan">
+    0
+  </span>
+
+  <span class="teksPengambilan">
+    BATANG
+  </span>
+
+</div>
+
+<button
+  id="btnLanjut"
+  onclick="lanjutPengambilan()"
+  disabled
+>
+  ➡️ LANJUT
+</button>
+
 <div id="daftar"></div>
 
 <!-- ==============================
      HISTORY
 ============================== -->
+
+<button
+  id="btnHistory"
+  onclick="tampilkanHistory()"
+  title="History Scan"
+>
+  📋 HISTORY
+</button>
 
 <div id="historyPanel">
 
@@ -792,6 +893,22 @@ let sesiAktif = "";
 let sedangMuatData = false;
 
 let nomorRequest = 0;
+
+
+/* =====================================================
+   PENGAMBILAN SAAT INI
+===================================================== */
+
+/*
+ * Hitungan ini HANYA untuk HP yang sedang dipakai.
+ *
+ * Tidak dikirim ke server.
+ * Tidak mengubah TOTAL SESI.
+ */
+
+let jumlahPengambilan = 0;
+
+let sesiPengambilan = "";
 
 
 /* =====================================================
@@ -958,11 +1075,6 @@ function formatTanggal(
     ).trim();
 
 
-  /*
-   * Kalau bentuk ISO:
-   * 2026-08-28T00:00:00.000Z
-   */
-
   if (
     teks.includes("T")
   ) {
@@ -991,10 +1103,6 @@ function formatTanggal(
   }
 
 
-  /*
-   * Kalau sudah dd/MM/yyyy
-   */
-
   if (
     /^\d{2}\/\d{2}\/\d{4}$/.test(
       teks
@@ -1008,10 +1116,6 @@ function formatTanggal(
 
   }
 
-
-  /*
-   * Kalau sudah dd-MM-yyyy
-   */
 
   if (
     /^\d{2}-\d{2}-\d{4}$/.test(
@@ -1047,14 +1151,6 @@ function formatJam(
     ).trim();
 
 
-  /*
-   * Buang bagian tanggal
-   * jika server mengirim ISO.
-   *
-   * Contoh:
-   * 2026-08-28T14:35:20.000Z
-   */
-
   if (
     teks.includes("T")
   ) {
@@ -1066,10 +1162,6 @@ function formatJam(
   }
 
 
-  /*
-   * Buang Z
-   */
-
   teks =
     teks.replace(
       /Z$/i,
@@ -1077,17 +1169,9 @@ function formatJam(
     );
 
 
-  /*
-   * Buang pecahan detik
-   */
-
   teks =
     teks.split(".")[0];
 
-
-  /*
-   * Ambil HH:mm:ss
-   */
 
   const cocok =
     teks.match(
@@ -1112,6 +1196,105 @@ function formatJam(
 
 
   return teks;
+
+}
+
+
+/* =====================================================
+   UPDATE TAMPILAN PENGAMBILAN
+===================================================== */
+
+function updateJumlahPengambilan() {
+
+  const angka =
+    document.getElementById(
+      "jumlahPengambilan"
+    );
+
+  const tombol =
+    document.getElementById(
+      "btnLanjut"
+    );
+
+
+  if (angka) {
+
+    angka.innerHTML =
+      jumlahPengambilan;
+
+  }
+
+
+  if (tombol) {
+
+    tombol.disabled =
+      jumlahPengambilan === 0;
+
+  }
+
+}
+
+
+/* =====================================================
+   RESET PENGAMBILAN
+===================================================== */
+
+function resetPengambilan() {
+
+  jumlahPengambilan =
+    0;
+
+  updateJumlahPengambilan();
+
+}
+
+
+/* =====================================================
+   LANJUT PENGAMBILAN
+===================================================== */
+
+function lanjutPengambilan() {
+
+  if (
+    jumlahPengambilan === 0
+  ) {
+
+    return;
+
+  }
+
+
+  const yakin =
+    confirm(
+
+      "Lanjut ke pengambilan berikutnya?\n\n" +
+
+      "Jumlah pengambilan saat ini: " +
+      jumlahPengambilan +
+      " batang\n\n" +
+
+      "Hitungan pengambilan akan kembali 0.\n" +
+
+      "TOTAL SESI tetap tidak berubah.\n\n" +
+
+      "Lanjutkan?"
+
+    );
+
+
+  if (!yakin)
+    return;
+
+
+  resetPengambilan();
+
+
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "📷 SIAP PENGAMBILAN BERIKUTNYA<br>" +
+    "Silakan scan kayu";
+
 
 }
 
@@ -1176,9 +1359,32 @@ function muatDataSesiAktif(
       }
 
 
-      sesiAktif =
+      const sesiServer =
         hasil.sesi ||
         "";
+
+
+      /*
+       * Kalau sesi server berubah,
+       * berarti ada SCAN BARU.
+       *
+       * Maka hitungan pengambilan
+       * di HP ini juga di-reset.
+       */
+
+      if (
+        sesiAktif &&
+        sesiServer &&
+        sesiServer !== sesiAktif
+      ) {
+
+        resetPengambilan();
+
+      }
+
+
+      sesiAktif =
+        sesiServer;
 
 
       const dataServer =
@@ -1212,22 +1418,11 @@ function muatDataSesiAktif(
       updateJumlah();
 
 
-      /*
-       * PENTING:
-       * Sebelum daftar dibangun ulang,
-       * simpan ID DETAIL yang sedang terbuka.
-       */
-
       simpanDetailTerbuka();
 
 
       tampilkanDataServer();
 
-
-      /*
-       * Setelah daftar dibangun ulang,
-       * buka kembali DETAIL tadi.
-       */
 
       bukaKembaliDetail();
 
@@ -1395,7 +1590,7 @@ function mulaiSinkronisasi() {
 
 
 /* =====================================================
-   UPDATE JUMLAH
+   UPDATE JUMLAH TOTAL
 ===================================================== */
 
 function updateJumlah() {
@@ -2067,6 +2262,19 @@ function prosesHasilScan(
     "success"
   ) {
 
+    /*
+     * TAMBAHAN BARU:
+     * Setiap scan sukses menambah
+     * jumlah pengambilan saat ini.
+     *
+     * TOTAL SESI tetap dihitung dari server.
+     */
+
+    jumlahPengambilan++;
+
+    updateJumlahPengambilan();
+
+
     document.getElementById(
       "status"
     ).innerHTML =
@@ -2609,6 +2817,14 @@ function scanBaru() {
 
       jumlahBerhasil =
         0;
+
+
+      /*
+       * SCAN BARU memang harus
+       * menghapus hitungan pengambilan.
+       */
+
+      resetPengambilan();
 
 
       detailTerbuka =
@@ -3157,6 +3373,8 @@ function hapusSemuaHistory() {
 document.addEventListener(
   "DOMContentLoaded",
   function() {
+
+    updateJumlahPengambilan();
 
     muatDataSesiAktif(
       true
