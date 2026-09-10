@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -1001,15 +1000,6 @@ let kameraAktif = false;
 let sedangProses = false;
 
 
-/*
- * ID sesi scanner.
- *
- * Setiap membuka scanner baru, ID berubah.
- * Callback dari scanner lama akan diabaikan.
- */
-let scannerSession = 0;
-
-
 /* =====================================================
    VARIABEL DATA
 ===================================================== */
@@ -1028,6 +1018,13 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
+        /*
+         * CEK APAKAH HALAMAN DIBUKA DARI QR URL
+         *
+         * Contoh:
+         * cek-tumpuk.html?tpk=TPK01&tumpuk=45
+         */
+
         const params =
             new URLSearchParams(
                 window.location.search
@@ -1042,6 +1039,12 @@ document.addEventListener(
             params.get("tumpuk");
 
 
+        /*
+         * JIKA ADA PARAMETER TUMPUK
+         * → JANGAN BUKA KAMERA
+         * → LANGSUNG AMBIL DATA
+         */
+
         if(urlTumpuk){
 
             currentTPK =
@@ -1055,6 +1058,11 @@ document.addEventListener(
             currentTumpuk =
                 String(urlTumpuk).trim();
 
+
+            /*
+             * KHUSUS TUMPUK 29
+             * TIDAK MEMAKAI TPK
+             */
 
             if(
                 currentTumpuk === "29"
@@ -1091,16 +1099,29 @@ document.addEventListener(
                 true;
 
 
+            /*
+             * LANGSUNG AMBIL DATA DARI BACKEND
+             */
+
             ambilDataTumpuk();
 
         }
 
         else{
 
+            /*
+             * JIKA TIDAK ADA PARAMETER URL
+             * → NORMAL, BUKA KAMERA
+             */
+
             mulaiScanner();
 
         }
 
+
+        /*
+         * ENTER PADA INPUT MANUAL
+         */
 
         document
             .getElementById("manualInput")
@@ -1123,66 +1144,30 @@ document.addEventListener(
 
 /* =====================================================
    START SCANNER
-   DIPERBAIKI
 ===================================================== */
 
 async function mulaiScanner(){
 
     hideError();
 
+    if(kameraAktif){
 
-    /*
-     * Setiap kali scanner dibuka,
-     * buat session baru.
-     *
-     * Ini mencegah callback scanner lama
-     * memproses barcode lagi.
-     */
-    const sessionIni =
-        ++scannerSession;
-
-
-    /*
-     * Kalau scanner lama masih ada,
-     * hentikan dulu secara penuh.
-     */
-    if(
-        kameraAktif ||
-        scannerControls ||
-        scannerReader
-    ){
-
-        stopScanner();
-
-        await new Promise(
-            function(resolve){
-
-                setTimeout(
-                    resolve,
-                    200
-                );
-
-            }
-        );
+        return;
 
     }
-
 
     const status =
         document.getElementById(
             "scanStatus"
         );
 
-
     const tombol =
         document.querySelector(
             '.scan-buttons .btn-secondary'
         );
 
-
     status.innerHTML =
         "⏳ Membuka kamera...";
-
 
     try{
 
@@ -1199,46 +1184,6 @@ async function mulaiScanner(){
             document.getElementById(
                 "video"
             );
-
-
-        /*
-         * Pastikan track kamera lama benar-benar mati.
-         */
-        try{
-
-            if(video.srcObject){
-
-                const oldTracks =
-                    video.srcObject
-                    .getTracks();
-
-                oldTracks.forEach(
-                    function(track){
-
-                        try{
-
-                            track.stop();
-
-                        }
-                        catch(e){}
-
-                    }
-                );
-
-                video.srcObject =
-                    null;
-
-            }
-
-        }
-        catch(e){
-
-            console.log(
-                "Bersihkan kamera lama:",
-                e
-            );
-
-        }
 
 
         scannerReader =
@@ -1289,13 +1234,8 @@ async function mulaiScanner(){
             "⏳ Meminta akses kamera...";
 
 
-        const readerUntukSesi =
-            scannerReader;
-
-
         scannerControls =
-            await readerUntukSesi
-            .decodeFromConstraints(
+            await scannerReader.decodeFromConstraints(
 
                 constraints,
 
@@ -1305,19 +1245,6 @@ async function mulaiScanner(){
                     result,
                     error
                 ){
-
-                    /*
-                     * Callback scanner lama
-                     * tidak boleh bekerja lagi.
-                     */
-                    if(
-                        sessionIni !== scannerSession
-                    ){
-
-                        return;
-
-                    }
-
 
                     if(!result){
 
@@ -1366,13 +1293,6 @@ async function mulaiScanner(){
                         "...";
 
 
-                    /*
-                     * Matikan kamera setelah berhasil
-                     * membaca satu barcode.
-                     */
-                    stopScanner();
-
-
                     prosesKodeTumpuk(
                         kode
                     );
@@ -1380,34 +1300,6 @@ async function mulaiScanner(){
                 }
 
             );
-
-
-        /*
-         * Jangan aktifkan scanner jika
-         * selama proses pembukaan sudah
-         * ada session baru.
-         */
-        if(
-            sessionIni !== scannerSession
-        ){
-
-            try{
-
-                if(scannerControls){
-
-                    scannerControls.stop();
-
-                }
-
-            }
-            catch(e){}
-
-            scannerControls =
-                null;
-
-            return;
-
-        }
 
 
         kameraAktif =
@@ -1433,15 +1325,6 @@ async function mulaiScanner(){
         setTimeout(
             function(){
 
-                if(
-                    sessionIni !== scannerSession
-                ){
-
-                    return;
-
-                }
-
-
                 optimalkanKamera(
                     video
                 );
@@ -1453,10 +1336,6 @@ async function mulaiScanner(){
     }
     catch(error){
 
-        /*
-         * Kalau pembukaan scanner gagal,
-         * jangan meninggalkan kamera hidup.
-         */
         kameraAktif =
             false;
 
@@ -1465,43 +1344,6 @@ async function mulaiScanner(){
 
         scannerReader =
             null;
-
-
-        try{
-
-            const video =
-                document.getElementById(
-                    "video"
-                );
-
-
-            if(
-                video &&
-                video.srcObject
-            ){
-
-                video.srcObject
-                    .getTracks()
-                    .forEach(
-                        function(track){
-
-                            try{
-
-                                track.stop();
-
-                            }
-                            catch(e){}
-
-                        }
-                    );
-
-                video.srcObject =
-                    null;
-
-            }
-
-        }
-        catch(e){}
 
 
         if(tombol){
@@ -1542,7 +1384,6 @@ function tampilkanIndikatorHijau(){
         document.getElementById(
             "scanBerhasil"
         );
-
 
     if(!indikator){
 
@@ -1689,26 +1530,18 @@ function getarBerhasil(){
 
 /* =====================================================
    STOP SCANNER
-   DIPERBAIKI
 ===================================================== */
 
 function stopScanner(){
 
-    /*
-     * Naikkan session agar callback scanner lama
-     * langsung dianggap tidak berlaku.
-     */
-    scannerSession++;
-
-
-    /*
-     * Hentikan ZXing.
-     */
     try{
 
         if(scannerControls){
 
             scannerControls.stop();
+
+            scannerControls =
+                null;
 
         }
 
@@ -1722,125 +1555,8 @@ function stopScanner(){
 
     }
 
-
-    scannerControls =
-        null;
-
-
-    /*
-     * Hentikan semua track kamera secara manual.
-     */
-    try{
-
-        const video =
-            document.getElementById(
-                "video"
-            );
-
-
-        if(
-            video &&
-            video.srcObject
-        ){
-
-            const tracks =
-                video.srcObject
-                .getTracks();
-
-
-            tracks.forEach(
-                function(track){
-
-                    try{
-
-                        track.stop();
-
-                    }
-                    catch(e){
-
-                        console.log(
-                            "Stop track:",
-                            e
-                        );
-
-                    }
-
-                }
-            );
-
-
-            try{
-
-                video.pause();
-
-            }
-            catch(e){}
-
-
-            video.srcObject =
-                null;
-
-        }
-
-    }
-    catch(error){
-
-        console.log(
-            "Stop video:",
-            error
-        );
-
-    }
-
-
-    scannerReader =
-        null;
-
-
     kameraAktif =
         false;
-
-
-    /*
-     * Kembalikan tombol ke kondisi SCAN LAGI.
-     */
-    const tombol =
-        document.querySelector(
-            '.scan-buttons .btn-secondary'
-        );
-
-
-    if(tombol){
-
-        tombol.innerHTML =
-            "SCAN LAGI";
-
-        tombol.style.background =
-            "";
-
-    }
-
-
-    const status =
-        document.getElementById(
-            "scanStatus"
-        );
-
-
-    /*
-     * Jangan mengubah pesan kalau data
-     * sedang diproses.
-     */
-    if(
-        status &&
-        !sedangProses
-    ){
-
-        status.innerHTML =
-            "⏹️ KAMERA BERHENTI<br>" +
-            "Tekan SCAN LAGI untuk membuka kamera";
-
-    }
 
 }
 
@@ -1963,13 +1679,11 @@ function prosesManual(){
 
     hideError();
 
-
     let nomor =
         document
         .getElementById("manualInput")
         .value
         .trim();
-
 
     if(!nomor){
 
@@ -1980,7 +1694,6 @@ function prosesManual(){
         return;
 
     }
-
 
     if(
         nomor.indexOf("|") !== -1
@@ -1994,7 +1707,6 @@ function prosesManual(){
 
     }
 
-
     nomor =
         nomor
         .replace(
@@ -2007,7 +1719,6 @@ function prosesManual(){
         )
         .trim();
 
-
     if(!nomor){
 
         showError(
@@ -2017,7 +1728,6 @@ function prosesManual(){
         return;
 
     }
-
 
     cariTumpukDenganNomor(
         nomor
@@ -2037,15 +1747,12 @@ function cariTumpukDenganNomor(
 
     showLoading();
 
-
     const callbackName =
         "callbackList_" +
         Date.now();
 
-
     let script = null;
     let timeoutId = null;
-
 
     window[callbackName] =
         function(response){
@@ -2054,6 +1761,15 @@ function cariTumpukDenganNomor(
 
                 hideLoading();
 
+                /*
+                 * BACKEND SEKARANG BISA MENGIRIM:
+                 *
+                 * ok      : "success"
+                 * status  : "success"
+                 * success : true
+                 *
+                 * Jadi ketiganya diterima.
+                 */
 
                 const berhasil =
                     response &&
@@ -2173,7 +1889,6 @@ function cariTumpukDenganNomor(
 
             }
 
-
             if(timeoutId){
 
                 clearTimeout(
@@ -2181,7 +1896,6 @@ function cariTumpukDenganNomor(
                 );
 
             }
-
 
             cleanupJSONP(
                 callbackName,
@@ -2221,14 +1935,11 @@ function cariTumpukDenganNomor(
 
             }
 
-
             hideLoading();
-
 
             showError(
                 "Gagal mengambil daftar TUMPUK."
             );
-
 
             cleanupJSONP(
                 callbackName,
@@ -2258,9 +1969,7 @@ function cariTumpukDenganNomor(
                         script
                     );
 
-
                     hideLoading();
-
 
                     showError(
                         "Waktu pencarian habis. Coba lagi."
@@ -2277,6 +1986,20 @@ function cariTumpukDenganNomor(
 
 /* =====================================================
    PARSE BARCODE / QR TUMPUK
+   MENDUKUNG:
+   1. QR LINK:
+      cek-tumpuk.html?tpk=TPK01&tumpuk=45
+
+   2. FORMAT LAMA:
+      TPK01|45
+
+   3. FORMAT LAMA:
+      TPK01-T45
+
+   4. NOMOR SAJA:
+      45
+
+   5. KHUSUS TUMPUK 29
 ===================================================== */
 
 function prosesKodeTumpuk(
@@ -2285,11 +2008,9 @@ function prosesKodeTumpuk(
 
     hideError();
 
-
     kode =
         String(kode || "")
         .trim();
-
 
     console.log(
         "KODE TUMPUK:",
@@ -2319,6 +2040,11 @@ function prosesKodeTumpuk(
             );
 
 
+        /*
+         * JIKA ADA PARAMETER TUMPUK
+         * → BERARTI INI QR LINK BARU
+         */
+
         if(urlTumpuk){
 
             currentTPK =
@@ -2332,6 +2058,11 @@ function prosesKodeTumpuk(
             currentTumpuk =
                 String(urlTumpuk).trim();
 
+
+            /*
+             * KHUSUS TUMPUK 29
+             * TIDAK MEMAKAI TPK
+             */
 
             if(
                 currentTumpuk === "29"
@@ -2370,6 +2101,12 @@ function prosesKodeTumpuk(
 
     }
     catch(error){
+
+        /*
+         * BUKAN URL
+         *
+         * Lanjutkan ke format barcode lama.
+         */
 
         console.log(
             "Bukan QR URL, lanjut parser lama."
@@ -2538,15 +2275,12 @@ function ambilDataTumpuk(){
 
     showLoading();
 
-
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
 
-
     let timeoutId = null;
     let script = null;
-
 
     window[callbackName] =
         function(response){
@@ -2555,6 +2289,16 @@ function ambilDataTumpuk(){
 
                 hideLoading();
 
+
+                /*
+                 * BACKEND SEKARANG:
+                 *
+                 * ok      : "success"
+                 * status  : "success"
+                 * success : true
+                 *
+                 * Semua diterima.
+                 */
 
                 const berhasil =
                     response &&
@@ -2583,10 +2327,8 @@ function ambilDataTumpuk(){
                         "Data TUMPUK tidak ditemukan."
                     );
 
-
                     sedangProses =
                         false;
-
 
                     return;
 
@@ -2602,10 +2344,8 @@ function ambilDataTumpuk(){
                         "Format data TUMPUK tidak sesuai."
                     );
 
-
                     sedangProses =
                         false;
-
 
                     return;
 
@@ -2625,17 +2365,14 @@ function ambilDataTumpuk(){
 
                 console.error(error);
 
-
                 showError(
                     "Terjadi kesalahan saat menampilkan data."
                 );
-
 
                 sedangProses =
                     false;
 
             }
-
 
             if(timeoutId){
 
@@ -2644,7 +2381,6 @@ function ambilDataTumpuk(){
                 );
 
             }
-
 
             cleanupJSONP(
                 callbackName,
@@ -2700,18 +2436,14 @@ function ambilDataTumpuk(){
 
             }
 
-
             hideLoading();
-
 
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
 
-
             sedangProses =
                 false;
-
 
             cleanupJSONP(
                 callbackName,
@@ -2741,14 +2473,11 @@ function ambilDataTumpuk(){
                         script
                     );
 
-
                     hideLoading();
-
 
                     showError(
                         "Waktu koneksi habis. Coba lagi."
                     );
-
 
                     sedangProses =
                         false;
@@ -2932,7 +2661,6 @@ function updateJumlahCek(){
             '#registerList input[type="checkbox"]'
         );
 
-
     let jumlah =
         0;
 
@@ -2972,7 +2700,6 @@ function tampilkanRincianTPK(
             "tpkDetailBox"
         );
 
-
     const container =
         document
         .getElementById(
@@ -2980,8 +2707,7 @@ function tampilkanRincianTPK(
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     box.classList.remove(
@@ -3144,8 +2870,7 @@ function tampilkanRegister(
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     if(!registers.length){
@@ -3157,7 +2882,6 @@ function tampilkanRegister(
 
 
         updateJumlahCek();
-
 
         return;
 
@@ -3393,6 +3117,11 @@ function setCheckbox(
             }
 
 
+            /*
+             * TERIMA FORMAT RESPONSE LAMA
+             * DAN FORMAT RESPONSE BARU
+             */
+
             const berhasil =
                 data &&
                 (
@@ -3619,8 +3348,7 @@ function tampilkanHistory(
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     if(!history.length){
@@ -3629,7 +3357,6 @@ function tampilkanHistory(
             '<div class="empty">' +
             'Belum ada history pengambilan.' +
             '</div>';
-
 
         return;
 
@@ -3910,16 +3637,9 @@ function refreshData(){
 
 /* =====================================================
    KEMBALI SCAN
-   DIPERBAIKI
 ===================================================== */
 
-async function kembaliScan(){
-
-    /*
-     * Matikan kamera lama sepenuhnya.
-     */
-    stopScanner();
-
+function kembaliScan(){
 
     document
         .getElementById("result")
@@ -3975,31 +3695,6 @@ async function kembaliScan(){
         false;
 
 
-    document
-        .getElementById("scanStatus")
-        .innerHTML =
-        "⏳ Membuka kamera...";
-
-
-    /*
-     * Tunggu sedikit agar browser benar-benar
-     * melepas kamera lama.
-     */
-    await new Promise(
-        function(resolve){
-
-            setTimeout(
-                resolve,
-                250
-            );
-
-        }
-    );
-
-
-    /*
-     * Mulai scanner baru.
-     */
     mulaiScanner();
 
 
@@ -4311,4 +4006,3 @@ function cleanupJSONP(
 </body>
 
 </html>
-
