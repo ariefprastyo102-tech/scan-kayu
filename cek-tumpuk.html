@@ -15,7 +15,9 @@ content="width=device-width, initial-scale=1.0">
 
 <style>
 
-*{box-sizing:border-box;}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -32,29 +34,99 @@ body{
     padding:16px;
 }
 
+
+/* =====================================================
+   HEADER
+===================================================== */
+
 .header{
-    background:#0f172a;
-    color:white;
+    position:relative;
+    background:#ffffff;
+    color:#0f172a;
     border-radius:18px;
     padding:16px 18px;
     margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.10);
+
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:16px;
+
+    overflow:hidden;
+
+    border:1px solid #dbe3ec;
 }
 
+
+/* LIS ATAS */
+
+.header::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:5px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #0f172a 0px,
+            #0f172a 45px,
+            #2563eb 45px,
+            #2563eb 90px
+        );
+}
+
+
+/* LIS BAWAH */
+
+.header::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0f172a 0%,
+            #2563eb 50%,
+            #0f172a 100%
+        );
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
 .header-logo{
-    width:58px;
-    height:58px;
+    width:72px;
+    height:72px;
+
     flex-shrink:0;
+
     background:white;
-    border-radius:12px;
-    padding:6px;
+
+    border-radius:14px;
+
+    padding:5px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     overflow:hidden;
+
+    border:1px solid #e2e8f0;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.08);
 }
 
 .header-logo img{
@@ -63,23 +135,37 @@ body{
     object-fit:contain;
 }
 
+
+/* =====================================================
+   JUDUL
+===================================================== */
+
 .header-text{
     min-width:0;
+    flex:1;
 }
 
 .header-title{
-    font-size:25px;
-    font-weight:800;
+    font-size:28px;
+    font-weight:900;
     margin:0;
-    line-height:1.1;
+    line-height:1.05;
+    letter-spacing:.5px;
+    color:#0f172a;
 }
 
 .header-sub{
-    font-size:13px;
-    opacity:.75;
-    margin-top:5px;
-    font-weight:600;
+    font-size:14px;
+    color:#2563eb;
+    margin-top:7px;
+    font-weight:800;
+    letter-spacing:1.5px;
 }
+
+
+/* =====================================================
+   SCANNER BOX
+===================================================== */
 
 .scanner-box{
     background:white;
@@ -212,6 +298,10 @@ body{
 }
 
 
+/* =====================================================
+   STATUS
+===================================================== */
+
 .scan-status{
     text-align:center;
     font-size:13px;
@@ -219,6 +309,11 @@ body{
     color:#64748b;
     line-height:1.5;
 }
+
+
+/* =====================================================
+   MANUAL SEARCH
+===================================================== */
 
 .manual-box{
     display:flex;
@@ -240,6 +335,11 @@ body{
 .manual-box input:focus{
     border-color:#2563eb;
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 button{
     border:0;
@@ -269,6 +369,11 @@ button{
     background:#dc2626;
     color:white;
 }
+
+
+/* =====================================================
+   LOADING
+===================================================== */
 
 .loading{
     display:none;
@@ -300,6 +405,11 @@ button{
     }
 }
 
+
+/* =====================================================
+   ERROR
+===================================================== */
+
 .error-box{
     display:none;
     background:#fee2e2;
@@ -316,6 +426,11 @@ button{
     display:block;
 }
 
+
+/* =====================================================
+   RESULT
+===================================================== */
+
 .result{
     display:none;
 }
@@ -323,6 +438,11 @@ button{
 .result.show{
     display:block;
 }
+
+
+/* =====================================================
+   STACK CARD
+===================================================== */
 
 .stack-card{
     background:white;
@@ -349,6 +469,11 @@ button{
     color:#64748b;
     font-weight:700;
 }
+
+
+/* =====================================================
+   MAIN NUMBER
+===================================================== */
 
 .main-number{
     background:#eff6ff;
@@ -381,6 +506,11 @@ button{
     font-weight:700;
 }
 
+
+/* =====================================================
+   INFO
+===================================================== */
+
 .info-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -407,6 +537,11 @@ button{
     font-size:20px;
     font-weight:900;
 }
+
+
+/* =====================================================
+   RINCIAN TPK
+===================================================== */
 
 .tpk-detail-box{
     display:none;
@@ -459,6 +594,11 @@ button{
     text-align:right;
 }
 
+
+/* =====================================================
+   SECTION
+===================================================== */
+
 .section{
     margin-top:18px;
 }
@@ -479,6 +619,11 @@ button{
     border-radius:20px;
     color:#475569;
 }
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
 
 .register-list{
     display:flex;
@@ -528,6 +673,11 @@ button{
     white-space:nowrap;
 }
 
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
 .empty{
     text-align:center;
     padding:20px;
@@ -536,6 +686,11 @@ button{
     border-radius:12px;
     font-size:14px;
 }
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
 
 .history-list{
     display:flex;
@@ -611,6 +766,11 @@ button{
     border-bottom:0;
 }
 
+
+/* =====================================================
+   BOTTOM BUTTON
+===================================================== */
+
 .bottom-buttons{
     display:flex;
     gap:8px;
@@ -621,6 +781,11 @@ button{
     flex:1;
 }
 
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
 .footer{
     text-align:center;
     font-size:11px;
@@ -628,10 +793,33 @@ button{
     padding:5px 0 20px;
 }
 
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media(max-width:500px){
 
     .container{
         padding:10px;
+    }
+
+    .header{
+        padding:15px 14px;
+        gap:13px;
+    }
+
+    .header-logo{
+        width:68px;
+        height:68px;
+    }
+
+    .header-title{
+        font-size:25px;
+    }
+
+    .header-sub{
+        font-size:13px;
     }
 
     .camera-wrapper,
@@ -641,7 +829,21 @@ button{
 
 }
 
+
 @media(max-width:380px){
+
+    .header-logo{
+        width:62px;
+        height:62px;
+    }
+
+    .header-title{
+        font-size:22px;
+    }
+
+    .header-sub{
+        font-size:12px;
+    }
 
     .camera-wrapper,
     #video{
@@ -668,9 +870,10 @@ button{
 
     <div class="header-logo">
 
-      <img
-    src="logo-perhutani.jpg"
-    alt="Perhutani">
+        <img
+            src="logo-perhutani.jpg"
+            alt="Perhutani">
+
     </div>
 
     <div class="header-text">
@@ -948,6 +1151,7 @@ button{
 </div>
 
 </div>
+
 
 <script>
 
