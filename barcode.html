@@ -1312,30 +1312,25 @@ function cetakF4(){
 barcodeBox.className =
     "labelBarcode";
 
-barcodeBox.style.position = "absolute";
-barcodeBox.style.left = "10mm";
-barcodeBox.style.top = "4mm";
-barcodeBox.style.width = "22mm";
-barcodeBox.style.height = "22mm";
-barcodeBox.style.overflow = "hidden";
+const svg =
+    document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+    );
 
-const qrBox =
-    document.createElement("div");
+barcodeBox.appendChild(svg);
 
-qrBox.style.width = "22mm";
-qrBox.style.height = "22mm";
-
-new QRCode(
-    qrBox,
+JsBarcode(
+    svg,
+    data.register,
     {
-        text: data.register,
-        width: 150,
-        height: 150,
-        correctLevel: QRCode.CorrectLevel.M
+        format:"CODE128",
+        width:1.8,
+        height:55,
+        displayValue:false,
+        margin:6
     }
 );
-
-barcodeBox.appendChild(qrBox);
 
 label.appendChild(barcodeBox);
 
