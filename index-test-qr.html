@@ -1132,35 +1132,50 @@ function formatTanggal(
 
 }
 
-
 /* =====================================================
    FORMAT JAM
 ===================================================== */
 
-function formatJam(
-  nilai
-) {
+function formatJam(nilai) {
 
-  if (!nilai)
+  if (
+    nilai === null ||
+    nilai === undefined ||
+    nilai === ""
+  ) {
     return "";
+  }
 
+  /*
+   * JAM dari Google Sheet sudah dalam bentuk
+   * tampilan lokal, contoh:
+   * 10:01:58
+   *
+   * Jangan gunakan new Date()
+   * agar tidak terjadi konversi timezone.
+   */
 
   let teks =
-    String(
-      nilai
-    ).trim();
+    String(nilai).trim();
 
+  /*
+   * Kalau backend mengirim format ISO,
+   * ambil bagian jamnya saja.
+   *
+   * Contoh:
+   * 2026-08-31T10:01:58.000Z
+   * menjadi:
+   * 10:01:58
+   */
 
   if (
     teks.includes("T")
   ) {
 
     teks =
-      teks.split("T")[1] ||
-      "";
+      teks.split("T")[1] || "";
 
   }
-
 
   teks =
     teks.replace(
@@ -1168,21 +1183,23 @@ function formatJam(
       ""
     );
 
-
   teks =
     teks.split(".")[0];
 
+  /*
+   * Kalau sudah HH:MM:SS,
+   * langsung kembalikan.
+   */
 
   const cocok =
     teks.match(
-      /(\d{2}):(\d{2})(?::(\d{2}))?/
+      /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
     );
-
 
   if (cocok) {
 
     return (
-      cocok[1] +
+      cocok[1].padStart(2, "0") +
       ":" +
       cocok[2] +
       ":" +
@@ -1194,9 +1211,7 @@ function formatJam(
 
   }
 
-
   return teks;
-
 }
 
 
