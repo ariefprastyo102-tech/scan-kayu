@@ -42,9 +42,9 @@ body{
 .header{
     position:relative;
     background:#ffffff;
-    color:#0f172a;
+    color:#14532d;
     border-radius:18px;
-    padding:16px 18px;
+    padding:18px 20px;
     margin-bottom:15px;
 
     box-shadow:
@@ -52,11 +52,11 @@ body{
 
     display:flex;
     align-items:center;
-    gap:16px;
+    gap:18px;
 
     overflow:hidden;
 
-    border:1px solid #dbe3ec;
+    border:2px solid #16a34a;
 }
 
 
@@ -68,15 +68,15 @@ body{
     top:0;
     left:0;
     right:0;
-    height:5px;
+    height:6px;
 
     background:
-        repeating-linear-gradient(
+        linear-gradient(
             90deg,
-            #0f172a 0px,
-            #0f172a 45px,
-            #2563eb 45px,
-            #2563eb 90px
+            #15803d 0%,
+            #22c55e 35%,
+            #16a34a 65%,
+            #166534 100%
         );
 }
 
@@ -89,14 +89,15 @@ body{
     bottom:0;
     left:0;
     right:0;
-    height:4px;
+    height:6px;
 
     background:
         linear-gradient(
             90deg,
-            #0f172a 0%,
-            #2563eb 50%,
-            #0f172a 100%
+            #166534 0%,
+            #16a34a 35%,
+            #22c55e 65%,
+            #15803d 100%
         );
 }
 
@@ -106,14 +107,14 @@ body{
 ===================================================== */
 
 .header-logo{
-    width:72px;
-    height:72px;
+    width:90px;
+    height:90px;
 
     flex-shrink:0;
 
     background:white;
 
-    border-radius:14px;
+    border-radius:16px;
 
     padding:5px;
 
@@ -123,10 +124,10 @@ body{
 
     overflow:hidden;
 
-    border:1px solid #e2e8f0;
+    border:2px solid #16a34a;
 
     box-shadow:
-        0 2px 6px rgba(0,0,0,.08);
+        0 2px 8px rgba(22,163,74,.20);
 }
 
 .header-logo img{
@@ -146,20 +147,37 @@ body{
 }
 
 .header-title{
-    font-size:28px;
+    font-size:32px;
     font-weight:900;
     margin:0;
     line-height:1.05;
     letter-spacing:.5px;
-    color:#0f172a;
+    color:#14532d;
 }
 
 .header-sub{
-    font-size:14px;
-    color:#2563eb;
-    margin-top:7px;
+    font-size:15px;
+    color:#15803d;
+    margin-top:8px;
     font-weight:800;
-    letter-spacing:1.5px;
+    letter-spacing:1.8px;
+}
+
+
+/* LIS KECIL DI BAWAH JUDUL */
+
+.header-text::after{
+    content:"";
+    display:block;
+
+    width:75px;
+    height:4px;
+
+    margin-top:9px;
+
+    border-radius:5px;
+
+    background:#16a34a;
 }
 
 
@@ -333,7 +351,7 @@ body{
 }
 
 .manual-box input:focus{
-    border-color:#2563eb;
+    border-color:#16a34a;
 }
 
 
@@ -356,7 +374,7 @@ button{
 }
 
 .btn-primary{
-    background:#2563eb;
+    background:#16a34a;
     color:white;
 }
 
@@ -393,7 +411,7 @@ button{
     width:28px;
     height:28px;
     border:3px solid #cbd5e1;
-    border-top-color:#2563eb;
+    border-top-color:#16a34a;
     border-radius:50%;
     margin:0 auto 10px;
     animation:spin .8s linear infinite;
@@ -476,8 +494,8 @@ button{
 ===================================================== */
 
 .main-number{
-    background:#eff6ff;
-    border:2px solid #bfdbfe;
+    background:#f0fdf4;
+    border:2px solid #bbf7d0;
     border-radius:18px;
     padding:20px;
     text-align:center;
@@ -487,7 +505,7 @@ button{
 .main-number .label{
     font-size:13px;
     font-weight:800;
-    color:#2563eb;
+    color:#15803d;
     letter-spacing:.5px;
 }
 
@@ -645,7 +663,7 @@ button{
 .register-item input{
     width:20px;
     height:20px;
-    accent-color:#2563eb;
+    accent-color:#16a34a;
     cursor:pointer;
     flex-shrink:0;
 }
@@ -805,17 +823,17 @@ button{
     }
 
     .header{
-        padding:15px 14px;
-        gap:13px;
+        padding:16px 14px;
+        gap:14px;
     }
 
     .header-logo{
-        width:68px;
-        height:68px;
+        width:82px;
+        height:82px;
     }
 
     .header-title{
-        font-size:25px;
+        font-size:28px;
     }
 
     .header-sub{
@@ -833,12 +851,12 @@ button{
 @media(max-width:380px){
 
     .header-logo{
-        width:62px;
-        height:62px;
+        width:74px;
+        height:74px;
     }
 
     .header-title{
-        font-size:22px;
+        font-size:24px;
     }
 
     .header-sub{
@@ -1155,37 +1173,19 @@ button{
 
 <script>
 
-/* =====================================================
-   KONFIGURASI BACKEND
-===================================================== */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz5Nq8bkldUGinF32eLDouyEZ6m8Gjk6rsVFK_zjv-4jdqevRGwmE6tyUCsAZIo3S7J/exec";
-
-
-/* =====================================================
-   VARIABEL SCANNER
-===================================================== */
 
 let scannerControls = null;
 let scannerReader = null;
 let kameraAktif = false;
 let sedangProses = false;
 
-
-/* =====================================================
-   VARIABEL DATA
-===================================================== */
-
 let currentTPK = "";
 let currentTumpuk = "";
 let currentStackId = "";
 let currentRegisters = [];
 
-
-/* =====================================================
-   INIT
-===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -1196,14 +1196,11 @@ document.addEventListener(
                 window.location.search
             );
 
-
         const urlTPK =
             params.get("tpk");
 
-
         const urlTumpuk =
             params.get("tumpuk");
-
 
         if(urlTumpuk){
 
@@ -1214,18 +1211,14 @@ document.addEventListener(
                 :
                 "";
 
-
             currentTumpuk =
                 String(urlTumpuk).trim();
-
 
             if(
                 currentTumpuk === "29"
             ){
 
-                currentTPK =
-                    "";
-
+                currentTPK = "";
                 currentStackId =
                     "TUMPUK|29";
 
@@ -1239,7 +1232,6 @@ document.addEventListener(
 
             }
 
-
             document
                 .getElementById("scanStatus")
                 .innerHTML =
@@ -1249,21 +1241,16 @@ document.addEventListener(
                     currentTumpuk
                 );
 
-
-            sedangProses =
-                true;
-
+            sedangProses = true;
 
             ambilDataTumpuk();
 
         }
-
         else{
 
             mulaiScanner();
 
         }
-
 
         document
             .getElementById("manualInput")
@@ -1283,10 +1270,6 @@ document.addEventListener(
     }
 );
 
-
-/* =====================================================
-   START SCANNER
-===================================================== */
 
 async function mulaiScanner(){
 
@@ -1316,19 +1299,16 @@ async function mulaiScanner(){
 
         }
 
-
         const video =
             document.getElementById(
                 "video"
             );
-
 
         scannerReader =
             new ZXingBrowser.BrowserMultiFormatReader(
                 undefined,
                 80
             );
-
 
         const constraints = {
 
@@ -1366,10 +1346,8 @@ async function mulaiScanner(){
 
         };
 
-
         status.innerHTML =
             "⏳ Meminta akses kamera...";
-
 
         scannerControls =
             await scannerReader.decodeFromConstraints(
@@ -1389,19 +1367,16 @@ async function mulaiScanner(){
 
                     }
 
-
                     if(sedangProses){
 
                         return;
 
                     }
 
-
                     const kode =
                         String(
                             result.getText() || ""
                         ).trim();
-
 
                     if(!kode){
 
@@ -1409,26 +1384,19 @@ async function mulaiScanner(){
 
                     }
 
-
-                    sedangProses =
-                        true;
-
+                    sedangProses = true;
 
                     tampilkanIndikatorHijau();
 
-
                     bunyiBerhasil();
 
-
                     getarBerhasil();
-
 
                     status.innerHTML =
                         "⏳ BARCODE TERBACA<br>" +
                         "Mengecek " +
                         escapeHtml(kode) +
                         "...";
-
 
                     prosesKodeTumpuk(
                         kode
@@ -1438,14 +1406,10 @@ async function mulaiScanner(){
 
             );
 
-
-        kameraAktif =
-            true;
-
+        kameraAktif = true;
 
         status.innerHTML =
             "📷 KAMERA AKTIF";
-
 
         setTimeout(
             function(){
@@ -1461,22 +1425,16 @@ async function mulaiScanner(){
     }
     catch(error){
 
-        kameraAktif =
-            false;
+        kameraAktif = false;
 
-        scannerControls =
-            null;
-
-        scannerReader =
-            null;
-
+        scannerControls = null;
+        scannerReader = null;
 
         status.innerHTML =
             "❌ Kamera gagal dibuka<br>" +
             escapeHtml(
                 error.message
             );
-
 
         console.log(
             "ZXing error:",
@@ -1487,10 +1445,6 @@ async function mulaiScanner(){
 
 }
 
-
-/* =====================================================
-   INDIKATOR BERHASIL
-===================================================== */
 
 function tampilkanIndikatorHijau(){
 
@@ -1505,10 +1459,8 @@ function tampilkanIndikatorHijau(){
 
     }
 
-
     indikator.style.display =
         "block";
-
 
     setTimeout(
         function(){
@@ -1523,10 +1475,6 @@ function tampilkanIndikatorHijau(){
 }
 
 
-/* =====================================================
-   SUARA
-===================================================== */
-
 function bunyiBerhasil(){
 
     try{
@@ -1535,71 +1483,57 @@ function bunyiBerhasil(){
             window.AudioContext ||
             window.webkitAudioContext;
 
-
         if(!AudioContext){
 
             return;
 
         }
 
-
         const audio =
             new AudioContext();
-
 
         const oscillator =
             audio.createOscillator();
 
-
         const gain =
             audio.createGain();
 
-
         oscillator.type =
             "sine";
-
 
         oscillator.frequency.setValueAtTime(
             1400,
             audio.currentTime
         );
 
-
         gain.gain.setValueAtTime(
             0.001,
             audio.currentTime
         );
-
 
         gain.gain.exponentialRampToValueAtTime(
             0.35,
             audio.currentTime + 0.01
         );
 
-
         gain.gain.exponentialRampToValueAtTime(
             0.001,
             audio.currentTime + 0.10
         );
 
-
         oscillator.connect(
             gain
         );
-
 
         gain.connect(
             audio.destination
         );
 
-
         oscillator.start();
-
 
         oscillator.stop(
             audio.currentTime + 0.11
         );
-
 
         setTimeout(
             function(){
@@ -1625,10 +1559,6 @@ function bunyiBerhasil(){
 }
 
 
-/* =====================================================
-   GETAR
-===================================================== */
-
 function getarBerhasil(){
 
     if(navigator.vibrate){
@@ -1642,10 +1572,6 @@ function getarBerhasil(){
 }
 
 
-/* =====================================================
-   OPTIMASI KAMERA
-===================================================== */
-
 async function optimalkanKamera(
     video
 ){
@@ -1658,11 +1584,9 @@ async function optimalkanKamera(
 
         }
 
-
         const tracks =
             video.srcObject
                 .getVideoTracks();
-
 
         if(!tracks.length){
 
@@ -1670,10 +1594,8 @@ async function optimalkanKamera(
 
         }
 
-
         const track =
             tracks[0];
-
 
         const capabilities =
             track.getCapabilities
@@ -1682,9 +1604,7 @@ async function optimalkanKamera(
             :
             {};
 
-
         const advanced = {};
-
 
         if(
             capabilities.focusMode &&
@@ -1698,7 +1618,6 @@ async function optimalkanKamera(
 
         }
 
-
         if(
             capabilities.exposureMode &&
             capabilities.exposureMode.includes(
@@ -1711,7 +1630,6 @@ async function optimalkanKamera(
 
         }
 
-
         if(
             capabilities.whiteBalanceMode &&
             capabilities.whiteBalanceMode.includes(
@@ -1723,7 +1641,6 @@ async function optimalkanKamera(
                 "continuous";
 
         }
-
 
         if(
             Object.keys(advanced).length
@@ -1751,10 +1668,6 @@ async function optimalkanKamera(
 
 }
 
-
-/* =====================================================
-   SEARCH MANUAL
-===================================================== */
 
 function prosesManual(){
 
@@ -1817,10 +1730,6 @@ function prosesManual(){
 }
 
 
-/* =====================================================
-   CARI NOMOR TUMPUK DARI DATABASE
-===================================================== */
-
 function cariTumpukDenganNomor(
     nomor
 ){
@@ -1850,7 +1759,6 @@ function cariTumpukDenganNomor(
                         response.success === true
                     );
 
-
                 if(!berhasil){
 
                     showError(
@@ -1872,7 +1780,6 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 const list =
                     Array.isArray(
                         response.data
@@ -1882,11 +1789,9 @@ function cariTumpukDenganNomor(
                     :
                     [];
 
-
                 const target =
                     String(nomor)
                     .trim();
-
 
                 const ditemukan =
                     list.find(
@@ -1903,7 +1808,6 @@ function cariTumpukDenganNomor(
                         }
                     );
 
-
                 if(!ditemukan){
 
                     showError(
@@ -1916,10 +1820,8 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 currentTumpuk =
                     target;
-
 
                 if(
                     target === "29"
@@ -1939,10 +1841,8 @@ function cariTumpukDenganNomor(
 
                 }
 
-
                 currentStackId =
                     ditemukan.stackId || "";
-
 
                 ambilDataTumpuk();
 
@@ -1974,7 +1874,6 @@ function cariTumpukDenganNomor(
 
         };
 
-
     const url =
         API_URL +
         "?action=getTumpukList" +
@@ -1983,16 +1882,13 @@ function cariTumpukDenganNomor(
         "&_=" +
         Date.now();
 
-
     script =
         document.createElement(
             "script"
         );
 
-
     script.src =
         url;
-
 
     script.onerror =
         function(){
@@ -2018,11 +1914,9 @@ function cariTumpukDenganNomor(
 
         };
 
-
     document
         .body
         .appendChild(script);
-
 
     timeoutId =
         setTimeout(
@@ -2054,10 +1948,6 @@ function cariTumpukDenganNomor(
 }
 
 
-/* =====================================================
-   PARSE BARCODE / QR TUMPUK
-===================================================== */
-
 function prosesKodeTumpuk(
     kode
 ){
@@ -2073,24 +1963,20 @@ function prosesKodeTumpuk(
         kode
     );
 
-
     try{
 
         const url =
             new URL(kode);
-
 
         const urlTPK =
             url.searchParams.get(
                 "tpk"
             );
 
-
         const urlTumpuk =
             url.searchParams.get(
                 "tumpuk"
             );
-
 
         if(urlTumpuk){
 
@@ -2101,17 +1987,14 @@ function prosesKodeTumpuk(
                 :
                 "";
 
-
             currentTumpuk =
                 String(urlTumpuk).trim();
-
 
             if(
                 currentTumpuk === "29"
             ){
 
-                currentTPK =
-                    "";
+                currentTPK = "";
 
                 currentStackId =
                     "TUMPUK|29";
@@ -2126,14 +2009,12 @@ function prosesKodeTumpuk(
 
             }
 
-
             console.log(
                 "QR LINK TERBACA:",
                 currentTPK,
                 currentTumpuk,
                 currentStackId
             );
-
 
             ambilDataTumpuk();
 
@@ -2150,17 +2031,14 @@ function prosesKodeTumpuk(
 
     }
 
-
     let parts =
         kode.split("|");
-
 
     if(parts.length >= 2){
 
         currentTPK =
             parts[0]
             .trim();
-
 
         currentTumpuk =
             parts
@@ -2169,7 +2047,6 @@ function prosesKodeTumpuk(
             .trim();
 
     }
-
     else{
 
         const match =
@@ -2177,55 +2054,44 @@ function prosesKodeTumpuk(
                 /^(.+)-T(\d+)$/i
             );
 
-
         if(match){
 
             currentTPK =
                 match[1]
                 .trim();
 
-
             currentTumpuk =
                 match[2]
                 .trim();
 
         }
-
         else{
 
             if(
                 /^\d+$/.test(kode)
             ){
 
-                sedangProses =
-                    false;
-
+                sedangProses = false;
 
                 cariTumpukDenganNomor(
                     kode
                 );
 
-
                 return;
 
             }
-
 
             showError(
                 "Format barcode TUMPUK tidak dikenali."
             );
 
-
-            sedangProses =
-                false;
-
+            sedangProses = false;
 
             return;
 
         }
 
     }
-
 
     if(
         !currentTumpuk
@@ -2235,22 +2101,17 @@ function prosesKodeTumpuk(
             "Nomor TUMPUK tidak terbaca."
         );
 
-
-        sedangProses =
-            false;
-
+        sedangProses = false;
 
         return;
 
     }
 
-
     if(
         String(currentTumpuk) === "29"
     ){
 
-        currentTPK =
-            "";
+        currentTPK = "";
 
         currentStackId =
             "TUMPUK|29";
@@ -2265,15 +2126,10 @@ function prosesKodeTumpuk(
 
     }
 
-
     ambilDataTumpuk();
 
 }
 
-
-/* =====================================================
-   AMBIL DATA TUMPUK
-===================================================== */
 
 function ambilDataTumpuk(){
 
@@ -2302,7 +2158,6 @@ function ambilDataTumpuk(){
                         response.success === true
                     );
 
-
                 if(!berhasil){
 
                     showError(
@@ -2320,13 +2175,11 @@ function ambilDataTumpuk(){
                         "Data TUMPUK tidak ditemukan."
                     );
 
-                    sedangProses =
-                        false;
+                    sedangProses = false;
 
                     return;
 
                 }
-
 
                 if(
                     !response.data ||
@@ -2337,21 +2190,17 @@ function ambilDataTumpuk(){
                         "Format data TUMPUK tidak sesuai."
                     );
 
-                    sedangProses =
-                        false;
+                    sedangProses = false;
 
                     return;
 
                 }
 
-
                 tampilkanData(
                     response.data
                 );
 
-
-                sedangProses =
-                    false;
+                sedangProses = false;
 
             }
             catch(error){
@@ -2362,8 +2211,7 @@ function ambilDataTumpuk(){
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
-                sedangProses =
-                    false;
+                sedangProses = false;
 
             }
 
@@ -2382,7 +2230,6 @@ function ambilDataTumpuk(){
 
         };
 
-
     const url =
         API_URL +
         "?action=getTumpukData" +
@@ -2399,7 +2246,6 @@ function ambilDataTumpuk(){
         "&_=" +
         Date.now();
 
-
     console.log(
         "REQUEST TUMPUK:",
         currentTPK,
@@ -2407,16 +2253,13 @@ function ambilDataTumpuk(){
         currentStackId
     );
 
-
     script =
         document.createElement(
             "script"
         );
 
-
     script.src =
         url;
-
 
     script.onerror =
         function(){
@@ -2435,8 +2278,7 @@ function ambilDataTumpuk(){
                 "Gagal menghubungi backend CEK TUMPUK."
             );
 
-            sedangProses =
-                false;
+            sedangProses = false;
 
             cleanupJSONP(
                 callbackName,
@@ -2445,11 +2287,9 @@ function ambilDataTumpuk(){
 
         };
 
-
     document
         .body
         .appendChild(script);
-
 
     timeoutId =
         setTimeout(
@@ -2472,8 +2312,7 @@ function ambilDataTumpuk(){
                         "Waktu koneksi habis. Coba lagi."
                     );
 
-                    sedangProses =
-                        false;
+                    sedangProses = false;
 
                 }
 
@@ -2483,10 +2322,6 @@ function ambilDataTumpuk(){
 
 }
 
-
-/* =====================================================
-   TAMPILKAN DATA
-===================================================== */
 
 function tampilkanData(
     data
@@ -2504,7 +2339,6 @@ function tampilkanData(
             currentTumpuk
         );
 
-
     if(data.tpk !== undefined){
 
         currentTPK =
@@ -2512,14 +2346,12 @@ function tampilkanData(
 
     }
 
-
     if(data.tumpuk !== undefined){
 
         currentTumpuk =
             String(data.tumpuk);
 
     }
-
 
     currentRegisters =
         Array.isArray(
@@ -2530,12 +2362,10 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("result")
         .classList
         .add("show");
-
 
     document
         .getElementById("tumpukTitle")
@@ -2549,7 +2379,6 @@ function tampilkanData(
             "-"
         );
 
-
     document
         .getElementById("tpkTitle")
         .textContent =
@@ -2562,7 +2391,6 @@ function tampilkanData(
             "-"
         );
 
-
     document
         .getElementById("jumlahAwal")
         .textContent =
@@ -2573,7 +2401,6 @@ function tampilkanData(
             :
             data.jumlahAwal
         );
-
 
     document
         .getElementById("volumeAwal")
@@ -2586,11 +2413,9 @@ function tampilkanData(
             data.volumeAwal
         );
 
-
     tampilkanRincianTPK(
         data
     );
-
 
     const registers =
         Array.isArray(data.registers)
@@ -2599,19 +2424,16 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("registerBadge")
         .textContent =
         registers.length +
         " REGISTER";
 
-
     tampilkanRegister(
         registers,
         data
     );
-
 
     const history =
         Array.isArray(data.history)
@@ -2620,20 +2442,16 @@ function tampilkanData(
         :
         [];
 
-
     document
         .getElementById("historyBadge")
         .textContent =
         history.length;
 
-
     tampilkanHistory(
         history
     );
 
-
     updateJumlahCek();
-
 
     window.scrollTo({
         top:0,
@@ -2643,10 +2461,6 @@ function tampilkanData(
 }
 
 
-/* =====================================================
-   HITUNG JUMLAH CEK
-===================================================== */
-
 function updateJumlahCek(){
 
     const checkboxes =
@@ -2654,9 +2468,7 @@ function updateJumlahCek(){
             '#registerList input[type="checkbox"]'
         );
 
-    let jumlah =
-        0;
-
+    let jumlah = 0;
 
     checkboxes.forEach(
         function(checkbox){
@@ -2670,7 +2482,6 @@ function updateJumlahCek(){
         }
     );
 
-
     document
         .getElementById("jumlahCek")
         .textContent =
@@ -2678,10 +2489,6 @@ function updateJumlahCek(){
 
 }
 
-
-/* =====================================================
-   RINCIAN TPK
-===================================================== */
 
 function tampilkanRincianTPK(
     data
@@ -2699,14 +2506,11 @@ function tampilkanRincianTPK(
             "tpkDetailList"
         );
 
-
     container.innerHTML = "";
-
 
     box.classList.remove(
         "show"
     );
-
 
     if(
         String(data.tumpuk) !== "29"
@@ -2715,7 +2519,6 @@ function tampilkanRincianTPK(
         return;
 
     }
-
 
     const rincian =
         Array.isArray(
@@ -2726,13 +2529,11 @@ function tampilkanRincianTPK(
         :
         [];
 
-
     if(!rincian.length){
 
         return;
 
     }
-
 
     rincian.forEach(
         function(item){
@@ -2743,10 +2544,8 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             wrapper.className =
                 "tpk-detail-item";
-
 
             const name =
                 document
@@ -2754,10 +2553,8 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             name.className =
                 "tpk-detail-name";
-
 
             name.textContent =
                 "TPK " +
@@ -2769,17 +2566,14 @@ function tampilkanRincianTPK(
                     "-"
                 );
 
-
             const info =
                 document
                 .createElement(
                     "div"
                 );
 
-
             info.className =
                 "tpk-detail-info";
-
 
             const jumlah =
                 document
@@ -2787,13 +2581,11 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             jumlah.textContent =
                 formatAngka(
                     item.jumlahBatang
                 ) +
                 " BATANG";
-
 
             const volume =
                 document
@@ -2801,36 +2593,29 @@ function tampilkanRincianTPK(
                     "div"
                 );
 
-
             volume.className =
                 "tpk-detail-volume";
-
 
             volume.textContent =
                 formatVolume(
                     item.volume
                 );
 
-
             info.appendChild(
                 jumlah
             );
-
 
             info.appendChild(
                 volume
             );
 
-
             wrapper.appendChild(
                 name
             );
 
-
             wrapper.appendChild(
                 info
             );
-
 
             container.appendChild(
                 wrapper
@@ -2839,17 +2624,12 @@ function tampilkanRincianTPK(
         }
     );
 
-
     box.classList.add(
         "show"
     );
 
 }
 
-
-/* =====================================================
-   TAMPILKAN REGISTER
-===================================================== */
 
 function tampilkanRegister(
     registers,
@@ -2862,9 +2642,7 @@ function tampilkanRegister(
             "registerList"
         );
 
-
     container.innerHTML = "";
-
 
     if(!registers.length){
 
@@ -2873,13 +2651,11 @@ function tampilkanRegister(
             'Tidak ada register dalam tumpukan.' +
             '</div>';
 
-
         updateJumlahCek();
 
         return;
 
     }
-
 
     registers.forEach(
         function(item){
@@ -2897,13 +2673,11 @@ function tampilkanRegister(
                     ""
                 );
 
-
             if(!register){
 
                 return;
 
             }
-
 
             const checked =
                 item.checked === true ||
@@ -2911,13 +2685,11 @@ function tampilkanRegister(
                     item.checked
                 ).toLowerCase() === "true";
 
-
             const wrapper =
                 document
                 .createElement(
                     "div"
                 );
-
 
             wrapper.className =
                 "register-item" +
@@ -2929,21 +2701,17 @@ function tampilkanRegister(
                     ""
                 );
 
-
             const checkbox =
                 document
                 .createElement(
                     "input"
                 );
 
-
             checkbox.type =
                 "checkbox";
 
-
             checkbox.checked =
                 checked;
-
 
             const status =
                 document
@@ -2951,10 +2719,8 @@ function tampilkanRegister(
                     "div"
                 );
 
-
             status.className =
                 "check-status";
-
 
             status.textContent =
                 checked
@@ -2963,13 +2729,11 @@ function tampilkanRegister(
                 :
                 "";
 
-
             checkbox.addEventListener(
                 "change",
                 function(){
 
                     updateJumlahCek();
-
 
                     setCheckbox(
                         register,
@@ -2981,36 +2745,29 @@ function tampilkanRegister(
                 }
             );
 
-
             const number =
                 document
                 .createElement(
                     "div"
                 );
 
-
             number.className =
                 "register-number";
 
-
             number.textContent =
                 register;
-
 
             wrapper.appendChild(
                 checkbox
             );
 
-
             wrapper.appendChild(
                 number
             );
 
-
             wrapper.appendChild(
                 status
             );
-
 
             container.appendChild(
                 wrapper
@@ -3019,15 +2776,10 @@ function tampilkanRegister(
         }
     );
 
-
     updateJumlahCek();
 
 }
 
-
-/* =====================================================
-   CHECKBOX PER REGISTER
-===================================================== */
 
 function setCheckbox(
     register,
@@ -3041,10 +2793,8 @@ function setCheckbox(
             'input[type="checkbox"]'
         );
 
-
     const previousChecked =
         !checked;
-
 
     if(checked){
 
@@ -3061,14 +2811,11 @@ function setCheckbox(
 
     }
 
-
     status.textContent =
         "MENYIMPAN...";
 
-
     let stackId =
         currentStackId;
-
 
     if(!stackId){
 
@@ -3083,7 +2830,6 @@ function setCheckbox(
 
     }
 
-
     const callbackName =
         "callbackCek_" +
         Date.now() +
@@ -3092,10 +2838,8 @@ function setCheckbox(
             Math.random()*1000
         );
 
-
     let script = null;
     let timeoutId = null;
-
 
     window[callbackName] =
         function(data){
@@ -3108,7 +2852,6 @@ function setCheckbox(
 
             }
 
-
             const berhasil =
                 data &&
                 (
@@ -3118,7 +2861,6 @@ function setCheckbox(
                     data.success === true
                 );
 
-
             if(berhasil){
 
                 status.textContent =
@@ -3127,7 +2869,6 @@ function setCheckbox(
                     "SUDAH DICEK"
                     :
                     "";
-
 
                 if(checked){
 
@@ -3150,10 +2891,8 @@ function setCheckbox(
                 status.textContent =
                     "GAGAL";
 
-
                 checkbox.checked =
                     previousChecked;
-
 
                 if(previousChecked){
 
@@ -3172,9 +2911,7 @@ function setCheckbox(
 
             }
 
-
             updateJumlahCek();
-
 
             cleanupJSONP(
                 callbackName,
@@ -3182,7 +2919,6 @@ function setCheckbox(
             );
 
         };
-
 
     const url =
         API_URL +
@@ -3204,16 +2940,13 @@ function setCheckbox(
         "&_=" +
         Date.now();
 
-
     script =
         document.createElement(
             "script"
         );
 
-
     script.src =
         url;
-
 
     script.onerror =
         function(){
@@ -3226,14 +2959,11 @@ function setCheckbox(
 
             }
 
-
             status.textContent =
                 "GAGAL";
 
-
             checkbox.checked =
                 previousChecked;
-
 
             if(previousChecked){
 
@@ -3250,9 +2980,7 @@ function setCheckbox(
 
             }
 
-
             updateJumlahCek();
-
 
             cleanupJSONP(
                 callbackName,
@@ -3261,13 +2989,11 @@ function setCheckbox(
 
         };
 
-
     document
         .body
         .appendChild(
             script
         );
-
 
     timeoutId =
         setTimeout(
@@ -3282,10 +3008,8 @@ function setCheckbox(
                     status.textContent =
                         "GAGAL";
 
-
                     checkbox.checked =
                         previousChecked;
-
 
                     if(previousChecked){
 
@@ -3302,9 +3026,7 @@ function setCheckbox(
 
                     }
 
-
                     updateJumlahCek();
-
 
                     cleanupJSONP(
                         callbackName,
@@ -3320,10 +3042,6 @@ function setCheckbox(
 }
 
 
-/* =====================================================
-   HISTORY
-===================================================== */
-
 function tampilkanHistory(
     history
 ){
@@ -3334,9 +3052,7 @@ function tampilkanHistory(
             "historyList"
         );
 
-
     container.innerHTML = "";
-
 
     if(!history.length){
 
@@ -3349,7 +3065,6 @@ function tampilkanHistory(
 
     }
 
-
     history.forEach(
         function(item){
 
@@ -3359,7 +3074,6 @@ function tampilkanHistory(
                 item.tanggal
                 :
                 item.TANGGAL;
-
 
             const jumlah =
                 item.jumlah !== undefined
@@ -3374,7 +3088,6 @@ function tampilkanHistory(
                     item.JUMLAH
                 );
 
-
             const registers =
                 Array.isArray(
                     item.registers
@@ -3384,17 +3097,14 @@ function tampilkanHistory(
                 :
                 [];
 
-
             const box =
                 document
                 .createElement(
                     "div"
                 );
 
-
             box.className =
                 "history-item";
-
 
             const head =
                 document
@@ -3402,10 +3112,8 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             head.className =
                 "history-head";
-
 
             const left =
                 document
@@ -3413,23 +3121,19 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             const dateEl =
                 document
                 .createElement(
                     "div"
                 );
 
-
             dateEl.className =
                 "history-date";
-
 
             dateEl.textContent =
                 formatTanggal(
                     date
                 );
-
 
             const takenEl =
                 document
@@ -3437,26 +3141,21 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             takenEl.className =
                 "history-taken";
-
 
             takenEl.textContent =
                 "DIAMBIL " +
                 formatAngka(jumlah) +
                 " BATANG";
 
-
             left.appendChild(
                 dateEl
             );
 
-
             left.appendChild(
                 takenEl
             );
-
 
             const arrow =
                 document
@@ -3464,24 +3163,19 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             arrow.className =
                 "history-arrow";
 
-
             arrow.textContent =
                 "▼";
-
 
             head.appendChild(
                 left
             );
 
-
             head.appendChild(
                 arrow
             );
-
 
             const detail =
                 document
@@ -3489,10 +3183,8 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             detail.className =
                 "history-detail";
-
 
             const detailTitle =
                 document
@@ -3500,19 +3192,15 @@ function tampilkanHistory(
                     "div"
                 );
 
-
             detailTitle.className =
                 "detail-title";
-
 
             detailTitle.textContent =
                 "REGISTER YANG DIAMBIL";
 
-
             detail.appendChild(
                 detailTitle
             );
-
 
             if(!registers.length){
 
@@ -3522,14 +3210,11 @@ function tampilkanHistory(
                         "div"
                     );
 
-
                 empty.className =
                     "empty";
 
-
                 empty.textContent =
                     "Detail register tidak tersedia.";
-
 
                 detail.appendChild(
                     empty
@@ -3547,14 +3232,11 @@ function tampilkanHistory(
                                 "span"
                             );
 
-
                         el.className =
                             "detail-register";
 
-
                         el.textContent =
                             register;
-
 
                         detail.appendChild(
                             el
@@ -3564,7 +3246,6 @@ function tampilkanHistory(
                 );
 
             }
-
 
             head.addEventListener(
                 "click",
@@ -3577,16 +3258,13 @@ function tampilkanHistory(
                 }
             );
 
-
             box.appendChild(
                 head
             );
 
-
             box.appendChild(
                 detail
             );
-
 
             container.appendChild(
                 box
@@ -3597,10 +3275,6 @@ function tampilkanHistory(
 
 }
 
-
-/* =====================================================
-   REFRESH
-===================================================== */
 
 function refreshData(){
 
@@ -3616,15 +3290,10 @@ function refreshData(){
 
     }
 
-
     ambilDataTumpuk();
 
 }
 
-
-/* =====================================================
-   KEMBALI SCAN
-===================================================== */
 
 function kembaliScan(){
 
@@ -3633,57 +3302,45 @@ function kembaliScan(){
         .classList
         .remove("show");
 
-
     document
         .getElementById("errorBox")
         .classList
         .remove("show");
 
-
     document
         .getElementById("manualInput")
         .value = "";
-
 
     document
         .getElementById("tpkDetailBox")
         .classList
         .remove("show");
 
-
     document
         .getElementById("tpkDetailList")
         .innerHTML = "";
-
 
     document
         .getElementById("registerList")
         .innerHTML = "";
 
-
     document
         .getElementById("historyList")
         .innerHTML = "";
-
 
     document
         .getElementById("jumlahCek")
         .textContent =
         "0";
 
-
     currentTPK = "";
     currentTumpuk = "";
     currentStackId = "";
     currentRegisters = [];
 
-
-    sedangProses =
-        false;
-
+    sedangProses = false;
 
     mulaiScanner();
-
 
     window.scrollTo({
         top:0,
@@ -3692,10 +3349,6 @@ function kembaliScan(){
 
 }
 
-
-/* =====================================================
-   FORMAT ANGKA
-===================================================== */
 
 function formatAngka(
     value
@@ -3711,10 +3364,8 @@ function formatAngka(
 
     }
 
-
     const number =
         Number(value);
-
 
     if(
         Number.isNaN(number)
@@ -3724,17 +3375,12 @@ function formatAngka(
 
     }
 
-
     return number.toLocaleString(
         "id-ID"
     );
 
 }
 
-
-/* =====================================================
-   FORMAT VOLUME
-===================================================== */
 
 function formatVolume(
     value
@@ -3750,10 +3396,8 @@ function formatVolume(
 
     }
 
-
     const number =
         Number(value);
-
 
     if(
         Number.isNaN(number)
@@ -3762,7 +3406,6 @@ function formatVolume(
         return value + " m³";
 
     }
-
 
     return number.toLocaleString(
         "id-ID",
@@ -3775,10 +3418,6 @@ function formatVolume(
 }
 
 
-/* =====================================================
-   FORMAT TANGGAL
-===================================================== */
-
 function formatTanggal(
     value
 ){
@@ -3788,7 +3427,6 @@ function formatTanggal(
         return "-";
 
     }
-
 
     if(
         typeof value === "string" &&
@@ -3801,7 +3439,6 @@ function formatTanggal(
 
     }
 
-
     if(
         typeof value === "string" &&
         /^\d{4}-\d{1,2}-\d{1,2}$/.test(
@@ -3811,7 +3448,6 @@ function formatTanggal(
 
         const p =
             value.split("-");
-
 
         return (
             String(p[2]).padStart(2,"0") +
@@ -3823,10 +3459,8 @@ function formatTanggal(
 
     }
 
-
     const d =
         new Date(value);
-
 
     if(
         !Number.isNaN(
@@ -3848,15 +3482,10 @@ function formatTanggal(
 
     }
 
-
     return value;
 
 }
 
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
 
 function escapeHtml(
     value
@@ -3892,10 +3521,6 @@ function escapeHtml(
 }
 
 
-/* =====================================================
-   LOADING
-===================================================== */
-
 function showLoading(){
 
     document
@@ -3916,10 +3541,6 @@ function hideLoading(){
 }
 
 
-/* =====================================================
-   ERROR
-===================================================== */
-
 function showError(
     message
 ){
@@ -3928,10 +3549,8 @@ function showError(
         document
         .getElementById("errorBox");
 
-
     box.innerHTML =
         message;
-
 
     box.classList.add(
         "show"
@@ -3949,10 +3568,6 @@ function hideError(){
 
 }
 
-
-/* =====================================================
-   CLEANUP JSONP
-===================================================== */
 
 function cleanupJSONP(
     callbackName,
@@ -3973,7 +3588,6 @@ function cleanupJSONP(
         );
 
     }
-
 
     if(
         script &&
