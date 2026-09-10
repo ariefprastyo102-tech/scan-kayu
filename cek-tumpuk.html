@@ -1,6 +1,4 @@
-
 <!DOCTYPE html>
-
 <html lang="id">
 
 <head>
@@ -16,7 +14,9 @@ content="width=device-width, initial-scale=1.0">
 
 <style>
 
-*{box-sizing:border-box;}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -1101,6 +1101,7 @@ button{
 
 </div>
 
+
 <script>
 
 /* =====================================================
@@ -1786,6 +1787,9 @@ function prosesManual(){
         nomor.indexOf("|") !== -1
     ){
 
+        sedangProses =
+            true;
+
         prosesKodeTumpuk(
             nomor
         );
@@ -1815,6 +1819,9 @@ function prosesManual(){
         return;
 
     }
+
+    sedangProses =
+        true;
 
     cariTumpukDenganNomor(
         nomor
@@ -1874,6 +1881,9 @@ function cariTumpukDenganNomor(
                         "Data TUMPUK tidak ditemukan."
                     );
 
+                    sedangProses =
+                        false;
+
                     return;
 
                 }
@@ -1917,6 +1927,9 @@ function cariTumpukDenganNomor(
                         escapeHtml(target) +
                         "</b> tidak ditemukan."
                     );
+
+                    sedangProses =
+                        false;
 
                     return;
 
@@ -1963,6 +1976,9 @@ function cariTumpukDenganNomor(
                 showError(
                     "Terjadi kesalahan saat mencari TUMPUK."
                 );
+
+                sedangProses =
+                    false;
 
             }
 
@@ -2018,6 +2034,9 @@ function cariTumpukDenganNomor(
                 "Gagal mengambil daftar TUMPUK."
             );
 
+            sedangProses =
+                false;
+
             cleanupJSONP(
                 callbackName,
                 script
@@ -2051,6 +2070,9 @@ function cariTumpukDenganNomor(
                     showError(
                         "Waktu pencarian habis. Coba lagi."
                     );
+
+                    sedangProses =
+                        false;
 
                 }
 
@@ -2222,7 +2244,7 @@ function prosesKodeTumpuk(
             ){
 
                 sedangProses =
-                    false;
+                    true;
 
 
                 cariTumpukDenganNomor(
@@ -2655,7 +2677,13 @@ function tampilkanData(
 
     /* =================================================
        HISTORY
-       BACKEND MENGIRIM RAW ROW DARI SHEET SCAN
+       BACKEND SEKARANG MENGIRIM OBJECT:
+       
+       {
+           tanggal:"10-09-2026",
+           jumlah:5,
+           registers:[...]
+       }
     ================================================= */
 
     const history =
@@ -2666,49 +2694,15 @@ function tampilkanData(
         [];
 
 
-    /*
-     * Badge dihitung berdasarkan JUMLAH TANGGAL
-     * unik, bukan jumlah raw row SCAN.
-     */
-
-    const historyTanggal = {};
-
-
-    history.forEach(
-        function(item){
-
-            if(!Array.isArray(item)){
-
-                return;
-
-            }
-
-
-            const tanggal =
-                normalisasiTanggalHistory(
-                    item[9]
-                );
-
-
-            if(
-                tanggal !== "-"
-            ){
-
-                historyTanggal[tanggal] =
-                    true;
-
-            }
-
-        }
-    );
-
+    /* =================================================
+       BADGE HISTORY
+       JUMLAH TANGGAL
+    ================================================= */
 
     document
         .getElementById("historyBadge")
         .textContent =
-        Object.keys(
-            historyTanggal
-        ).length;
+        history.length;
 
 
     tampilkanHistory(
@@ -2954,7 +2948,7 @@ function tampilkanRegister(
 
         container.innerHTML =
             '<div class="empty">' +
-            'Tidak ada register dalam tumpukan.' +
+            'Tidak ada register yang masih tersisa.' +
             '</div>';
 
 
@@ -3405,6 +3399,357 @@ function setCheckbox(
 
 
 /* =====================================================
+   HISTORY PENGAMBILAN
+   SESUAI FORMAT BACKEND TERBARU
+===================================================== */
+
+function tampilkanHistory(
+    history
+){
+
+    const container =
+        document.getElementById(
+            "historyList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if(
+        !Array.isArray(history) ||
+        history.length === 0
+    ){
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Belum ada history pengambilan.' +
+            '</div>';
+
+
+        return;
+
+    }
+
+
+    /* =================================================
+       BACKEND MENGIRIM:
+
+       [
+           {
+               tanggal:"10-09-2026",
+               jumlah:5,
+               registers:[
+                   "REG001",
+                   "REG002"
+               ]
+           }
+       ]
+    ================================================= */
+
+
+    history.forEach(
+        function(item){
+
+            if(
+                !item ||
+                typeof item !== "object"
+            ){
+
+                return;
+
+            }
+
+
+            const tanggal =
+                item.tanggal !== undefined
+                ?
+                item.tanggal
+                :
+                (
+                    item.TANGGAL !== undefined
+                    ?
+                    item.TANGGAL
+                    :
+                    ""
+                );
+
+
+            const registers =
+                Array.isArray(
+                    item.registers
+                )
+                ?
+                item.registers
+                :
+                [];
+
+
+            /*
+             * JUMLAH UTAMA DARI JUMLAH BACKEND.
+             * Kalau kosong, pakai jumlah registers.
+             */
+
+            let jumlah =
+                Number(
+                    item.jumlah
+                );
+
+
+            if(
+                Number.isNaN(jumlah)
+            ){
+
+                jumlah =
+                    registers.length;
+
+            }
+
+
+            /*
+             * Kalau tanggal kosong,
+             * tetap tampilkan tanda -
+             */
+
+            const tanggalTampil =
+                formatTanggalHistory(
+                    tanggal
+                );
+
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            box.className =
+                "history-item";
+
+
+            const head =
+                document.createElement(
+                    "div"
+                );
+
+
+            head.className =
+                "history-head";
+
+
+            const left =
+                document.createElement(
+                    "div"
+                );
+
+
+            const dateEl =
+                document.createElement(
+                    "div"
+                );
+
+
+            dateEl.className =
+                "history-date";
+
+
+            dateEl.textContent =
+                tanggalTampil;
+
+
+            const takenEl =
+                document.createElement(
+                    "div"
+                );
+
+
+            takenEl.className =
+                "history-taken";
+
+
+            takenEl.textContent =
+                "DIAMBIL " +
+                formatAngka(
+                    jumlah
+                ) +
+                " BATANG";
+
+
+            left.appendChild(
+                dateEl
+            );
+
+
+            left.appendChild(
+                takenEl
+            );
+
+
+            const arrow =
+                document.createElement(
+                    "div"
+                );
+
+
+            arrow.className =
+                "history-arrow";
+
+
+            arrow.textContent =
+                "▼";
+
+
+            head.appendChild(
+                left
+            );
+
+
+            head.appendChild(
+                arrow
+            );
+
+
+            /* =================================================
+               DETAIL
+            ================================================= */
+
+            const detail =
+                document.createElement(
+                    "div"
+                );
+
+
+            detail.className =
+                "history-detail";
+
+
+            const detailTitle =
+                document.createElement(
+                    "div"
+                );
+
+
+            detailTitle.className =
+                "detail-title";
+
+
+            detailTitle.textContent =
+                "REGISTER YANG DIAMBIL";
+
+
+            detail.appendChild(
+                detailTitle
+            );
+
+
+            if(
+                registers.length === 0
+            ){
+
+                const empty =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                empty.className =
+                    "empty";
+
+
+                empty.textContent =
+                    "Detail register tidak tersedia.";
+
+
+                detail.appendChild(
+                    empty
+                );
+
+            }
+
+            else{
+
+                registers.forEach(
+                    function(register){
+
+                        const el =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        el.className =
+                            "detail-register";
+
+
+                        el.textContent =
+                            String(
+                                register
+                            );
+
+
+                        detail.appendChild(
+                            el
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               KLIK BUKA / TUTUP
+            ================================================= */
+
+            head.addEventListener(
+                "click",
+                function(){
+
+                    box.classList.toggle(
+                        "open"
+                    );
+
+                }
+            );
+
+
+            box.appendChild(
+                head
+            );
+
+
+            box.appendChild(
+                detail
+            );
+
+
+            container.appendChild(
+                box
+            );
+
+        }
+    );
+
+
+    /*
+     * Jika semua item ternyata tidak valid
+     */
+
+    if(
+        !container.children.length
+    ){
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Belum ada history pengambilan.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* =====================================================
    NORMALISASI TANGGAL HISTORY
 ===================================================== */
 
@@ -3428,12 +3773,8 @@ function normalisasiTanggalHistory(
 
 
     /*
-     * Apps Script Date biasanya menjadi:
-     *
+     * FORMAT:
      * 2026-09-09T00:00:00.000Z
-     *
-     * Jangan pakai new Date() di sini karena
-     * timezone dapat membuat tanggal bergeser.
      */
 
     if(
@@ -3491,6 +3832,54 @@ function normalisasiTanggalHistory(
             String(p[1]).padStart(2,"0") +
             "-" +
             String(p[0]).padStart(2,"0")
+        );
+
+    }
+
+
+    /*
+     * FORMAT:
+     * 09/09/2026
+     */
+
+    if(
+        /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(text)
+    ){
+
+        const p =
+            text.split("/");
+
+
+        return (
+            String(p[2]) +
+            "-" +
+            String(p[1]).padStart(2,"0") +
+            "-" +
+            String(p[0]).padStart(2,"0")
+        );
+
+    }
+
+
+    /*
+     * FORMAT:
+     * 2026/09/09
+     */
+
+    if(
+        /^\d{4}\/\d{1,2}\/\d{1,2}$/.test(text)
+    ){
+
+        const p =
+            text.split("/");
+
+
+        return (
+            String(p[0]) +
+            "-" +
+            String(p[1]).padStart(2,"0") +
+            "-" +
+            String(p[2]).padStart(2,"0")
         );
 
     }
@@ -3623,478 +4012,6 @@ function tanggalHistoryToDate(
 
 
 /* =====================================================
-   HISTORY PENGAMBILAN
-   BACKEND MENGIRIM RAW ROW DARI SHEET SCAN
-===================================================== */
-
-function tampilkanHistory(
-    history
-){
-
-    const container =
-        document.getElementById(
-            "historyList"
-        );
-
-
-    container.innerHTML = "";
-
-
-    if(
-        !Array.isArray(history) ||
-        history.length === 0
-    ){
-
-        container.innerHTML =
-            '<div class="empty">' +
-            'Belum ada history pengambilan.' +
-            '</div>';
-
-
-        return;
-
-    }
-
-
-    /*
-     * GROUP HISTORY BERDASARKAN TANGGAL
-     *
-     * Struktur raw SCAN:
-     *
-     * [0]  REGISTER
-     * [1]  PANJANG
-     * [2]  DIAMETER
-     * [3]  TPK
-     * [4]  TUMPUK
-     * [5]  MUTU
-     * [6]  STATUS
-     * [7]  M3
-     * [8]  KODE QR
-     * [9]  TANGGAL SCAN
-     * [10] JAM SCAN
-     */
-
-    const groups = {};
-
-
-    history.forEach(
-        function(item){
-
-            let register = "";
-            let tanggal = "";
-
-
-            /*
-             * FORMAT RAW ARRAY
-             */
-
-            if(
-                Array.isArray(item)
-            ){
-
-                register =
-                    item[0] !== undefined
-                    ?
-                    String(item[0]).trim()
-                    :
-                    "";
-
-
-                tanggal =
-                    item[9] !== undefined
-                    ?
-                    item[9]
-                    :
-                    "";
-
-            }
-
-
-            /*
-             * FORMAT OBJECT
-             *
-             * Tetap didukung kalau suatu saat
-             * backend dikembalikan ke format object.
-             */
-
-            else if(
-                item &&
-                typeof item === "object"
-            ){
-
-                register =
-                    item.register !== undefined
-                    ?
-                    String(
-                        item.register
-                    ).trim()
-                    :
-                    (
-                        item.REGISTER !== undefined
-                        ?
-                        String(
-                            item.REGISTER
-                        ).trim()
-                        :
-                        ""
-                    );
-
-
-                tanggal =
-                    item.tanggal !== undefined
-                    ?
-                    item.tanggal
-                    :
-                    (
-                        item.TANGGAL !== undefined
-                        ?
-                        item.TANGGAL
-                        :
-                        ""
-                    );
-
-            }
-
-
-            if(!register){
-
-                return;
-
-            }
-
-
-            const keyTanggal =
-                normalisasiTanggalHistory(
-                    tanggal
-                );
-
-
-            if(
-                !groups[keyTanggal]
-            ){
-
-                groups[keyTanggal] = {
-
-                    tanggal:keyTanggal,
-
-                    registers:[]
-
-                };
-
-            }
-
-
-            /*
-             * REGISTER YANG SAMA PADA TANGGAL
-             * YANG SAMA HANYA DIHITUNG 1 KALI.
-             */
-
-            if(
-                groups[keyTanggal]
-                    .registers
-                    .indexOf(register)
-                ===
-                -1
-            ){
-
-                groups[keyTanggal]
-                    .registers
-                    .push(register);
-
-            }
-
-        }
-    );
-
-
-    const keys =
-        Object.keys(
-            groups
-        );
-
-
-    if(!keys.length){
-
-        container.innerHTML =
-            '<div class="empty">' +
-            'Belum ada history pengambilan.' +
-            '</div>';
-
-
-        return;
-
-    }
-
-
-    /*
-     * URUTKAN HISTORY:
-     * TERBARU → TERLAMA
-     */
-
-    keys.sort(
-        function(a,b){
-
-            const da =
-                tanggalHistoryToDate(
-                    a
-                );
-
-
-            const db =
-                tanggalHistoryToDate(
-                    b
-                );
-
-
-            if(
-                da &&
-                db
-            ){
-
-                return db - da;
-
-            }
-
-
-            return String(b)
-                .localeCompare(
-                    String(a)
-                );
-
-        }
-    );
-
-
-    /*
-     * BUAT KARTU HISTORY
-     */
-
-    keys.forEach(
-        function(key){
-
-            const item =
-                groups[key];
-
-
-            const jumlah =
-                item.registers.length;
-
-
-            const box =
-                document.createElement(
-                    "div"
-                );
-
-
-            box.className =
-                "history-item";
-
-
-            const head =
-                document.createElement(
-                    "div"
-                );
-
-
-            head.className =
-                "history-head";
-
-
-            const left =
-                document.createElement(
-                    "div"
-                );
-
-
-            const dateEl =
-                document.createElement(
-                    "div"
-                );
-
-
-            dateEl.className =
-                "history-date";
-
-
-            dateEl.textContent =
-                formatTanggalHistory(
-                    item.tanggal
-                );
-
-
-            const takenEl =
-                document.createElement(
-                    "div"
-                );
-
-
-            takenEl.className =
-                "history-taken";
-
-
-            takenEl.textContent =
-                "DIAMBIL " +
-                formatAngka(jumlah) +
-                " BATANG";
-
-
-            left.appendChild(
-                dateEl
-            );
-
-
-            left.appendChild(
-                takenEl
-            );
-
-
-            const arrow =
-                document.createElement(
-                    "div"
-                );
-
-
-            arrow.className =
-                "history-arrow";
-
-
-            arrow.textContent =
-                "▼";
-
-
-            head.appendChild(
-                left
-            );
-
-
-            head.appendChild(
-                arrow
-            );
-
-
-            /*
-             * DETAIL PENGAMBILAN
-             */
-
-            const detail =
-                document.createElement(
-                    "div"
-                );
-
-
-            detail.className =
-                "history-detail";
-
-
-            const detailTitle =
-                document.createElement(
-                    "div"
-                );
-
-
-            detailTitle.className =
-                "detail-title";
-
-
-            detailTitle.textContent =
-                "REGISTER YANG DIAMBIL";
-
-
-            detail.appendChild(
-                detailTitle
-            );
-
-
-            if(
-                !item.registers.length
-            ){
-
-                const empty =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                empty.className =
-                    "empty";
-
-
-                empty.textContent =
-                    "Detail register tidak tersedia.";
-
-
-                detail.appendChild(
-                    empty
-                );
-
-            }
-
-            else{
-
-                item.registers.forEach(
-                    function(register){
-
-                        const el =
-                            document.createElement(
-                                "span"
-                            );
-
-
-                        el.className =
-                            "detail-register";
-
-
-                        el.textContent =
-                            register;
-
-
-                        detail.appendChild(
-                            el
-                        );
-
-                    }
-                );
-
-            }
-
-
-            /*
-             * KLIK HEADER → BUKA/TUTUP DETAIL
-             */
-
-            head.addEventListener(
-                "click",
-                function(){
-
-                    box.classList.toggle(
-                        "open"
-                    );
-
-                }
-            );
-
-
-            box.appendChild(
-                head
-            );
-
-
-            box.appendChild(
-                detail
-            );
-
-
-            container.appendChild(
-                box
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
    REFRESH
 ===================================================== */
 
@@ -4160,6 +4077,18 @@ function kembaliScan(){
     document
         .getElementById("historyList")
         .innerHTML = "";
+
+
+    document
+        .getElementById("historyBadge")
+        .textContent =
+        "0";
+
+
+    document
+        .getElementById("registerBadge")
+        .textContent =
+        "0 REGISTER";
 
 
     document
@@ -4489,4 +4418,3 @@ function cleanupJSONP(
 </body>
 
 </html>
-
