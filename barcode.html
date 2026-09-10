@@ -758,33 +758,27 @@ function tampilkan(){
                 check
             );
 
-            item.style.display = "flex";
-item.style.alignItems = "center";
-item.style.justifyContent = "center";
-item.style.gap = "10px";
-item.style.paddingLeft = "22px";
-item.style.paddingRight = "22px";
-item.style.boxSizing = "border-box";
+            const svg =
+    document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+    );
 
-/* QR DI KIRI */
-const qrBox =
-    document.createElement("div");
-
-qrBox.style.width = "105px";
-qrBox.style.height = "105px";
-qrBox.style.flexShrink = "0";
-
-new QRCode(
-    qrBox,
-    {
-        text: data.register,
-        width: 105,
-        height: 105,
-        correctLevel: QRCode.CorrectLevel.M
-    }
+item.appendChild(
+    svg
 );
 
-item.appendChild(qrBox);
+JsBarcode(
+    svg,
+    data.register,
+    {
+        format:"CODE128",
+        width:1.8,
+        height:55,
+        displayValue:false,
+        margin:6
+    }
+);
 
             const info =
                 document.createElement(
