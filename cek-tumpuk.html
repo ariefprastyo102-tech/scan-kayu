@@ -56,10 +56,8 @@ body{
     width:90px;
     height:90px;
     object-fit:contain;
-    display:block;
-    margin:0 auto 8px;
+    flex-shrink:0;
 }
-
 .header h1{
     margin:0;
     font-size:28px;
@@ -350,7 +348,11 @@ body{
     font-weight:900;
     color:#111827;
 }
-
+.jumlah-angka{
+    font-size:42px;
+    line-height:1;
+    color:#166534;
+}
 
 /* =====================================================
    RINCIAN TPK
@@ -866,10 +868,14 @@ body{
         alt="Perhutani"
     >
 
-    <h1>CEK TUMPUK</h1>
+    <div class="header-text">
 
-    <div class="sub">
-        IK SARADAN
+        <h1>CEK TUMPUK</h1>
+
+        <div class="sub">
+            IK SARADAN
+        </div>
+
     </div>
 
 </div>
@@ -1002,7 +1008,7 @@ body{
             <div class="summary-box">
 
                 <div class="summary-label">
-                    JUMLAH AWAL
+                    JUMLAH BATANG
                 </div>
 
                 <div
@@ -2680,7 +2686,7 @@ function ambilDataTumpuk(){
 function tampilkanData(
     data
 ){
-
+hideLoading();
     currentStackId =
         data.stackId ||
         (
