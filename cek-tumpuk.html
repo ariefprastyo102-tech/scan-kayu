@@ -648,13 +648,21 @@ button{
 
 .register-item{
     display:flex;
+    flex-wrap:wrap;
     align-items:center;
-    gap:10px;
+    gap:0;
     background:#f8fafc;
     border:1px solid #e2e8f0;
     border-radius:11px;
-    padding:11px 12px;
+    padding:10px 12px;
     transition:.15s;
+}
+
+.register-main{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
 .register-item input{
@@ -681,11 +689,80 @@ button{
     color:#15803d;
 }
 
+.register-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-left:auto;
+    flex-shrink:0;
+}
+
 .check-status{
     font-size:11px;
     font-weight:800;
     color:#16a34a;
     white-space:nowrap;
+}
+
+.btn-detail{
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:7px 10px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.btn-detail:active{
+    transform:scale(.96);
+}
+
+.detail-register-box{
+    flex:0 0 100%;
+    display:none;
+    margin-top:9px;
+    padding:10px 11px;
+    background:#ffffff;
+    border:1px solid #dbeafe;
+    border-radius:9px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.detail-register-box.show{
+    display:block;
+}
+
+.detail-register-row{
+    display:flex;
+    gap:6px;
+    padding:2px 0;
+}
+
+.detail-register-label{
+    width:90px;
+    flex-shrink:0;
+    font-weight:800;
+    color:#475569;
+}
+
+.detail-register-value{
+    font-weight:700;
+    color:#111827;
+    word-break:break-word;
+}
+
+.empty{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:11px;
+    padding:13px;
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
 }
 
 
@@ -754,7 +831,7 @@ button{
     margin:12px 0 8px;
 }
 
-.detail-register{
+.history-detail .detail-register{
     display:block;
     font-family:monospace;
     font-size:15px;
@@ -763,7 +840,7 @@ button{
     border-bottom:1px dashed #cbd5e1;
 }
 
-.detail-register:last-child{
+.history-detail .detail-register:last-child{
     border-bottom:0;
 }
 
@@ -849,6 +926,23 @@ button{
     #scanBerhasil{
         width:220px;
         height:220px;
+    }
+
+    .register-main{
+        gap:7px;
+    }
+
+    .register-number{
+        font-size:14px;
+    }
+
+    .check-status{
+        font-size:10px;
+    }
+
+    .btn-detail{
+        padding:6px 8px;
+        font-size:11px;
     }
 
 }
@@ -1813,11 +1907,6 @@ function tampilkanIndikatorHijau(){
 
     }
 
-
-    /*
-     * Karena kamera ditutup setelah scan,
-     * indikator tetap dijalankan sebentar.
-     */
 
     indikator.style.display =
         "block";
@@ -3345,6 +3434,24 @@ function tampilkanRegister(
                 );
 
 
+            /* =========================================
+               BARIS UTAMA REGISTER
+            ========================================= */
+
+            const main =
+                document.createElement(
+                    "div"
+                );
+
+
+            main.className =
+                "register-main";
+
+
+            /* =========================================
+               CHECKBOX
+            ========================================= */
+
             const checkbox =
                 document.createElement(
                     "input"
@@ -3358,6 +3465,42 @@ function tampilkanRegister(
             checkbox.checked =
                 checked;
 
+
+            /* =========================================
+               NOMOR REGISTER
+            ========================================= */
+
+            const number =
+                document.createElement(
+                    "div"
+                );
+
+
+            number.className =
+                "register-number";
+
+
+            number.textContent =
+                register;
+
+
+            /* =========================================
+               ACTION
+            ========================================= */
+
+            const actions =
+                document.createElement(
+                    "div"
+                );
+
+
+            actions.className =
+                "register-actions";
+
+
+            /* =========================================
+               STATUS CHECK
+            ========================================= */
 
             const status =
                 document.createElement(
@@ -3377,6 +3520,53 @@ function tampilkanRegister(
                 "";
 
 
+            /* =========================================
+               TOMBOL DETAIL
+            ========================================= */
+
+            const detailButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            detailButton.type =
+                "button";
+
+
+            detailButton.className =
+                "btn-detail";
+
+
+            detailButton.textContent =
+                "DETAIL";
+
+
+            /* =========================================
+               BOX DETAIL
+            ========================================= */
+
+            const detailBox =
+                document.createElement(
+                    "div"
+                );
+
+
+            detailBox.className =
+                "detail-register-box";
+
+
+            detailBox.innerHTML =
+                buatDetailRegister(
+                    item,
+                    register
+                );
+
+
+            /* =========================================
+               EVENT CHECKBOX
+            ========================================= */
+
             checkbox.addEventListener(
                 "change",
                 function(){
@@ -3395,32 +3585,76 @@ function tampilkanRegister(
             );
 
 
-            const number =
-                document.createElement(
-                    "div"
-                );
+            /* =========================================
+               EVENT DETAIL
+            ========================================= */
+
+            detailButton.addEventListener(
+                "click",
+                function(){
+
+                    const terbuka =
+                        detailBox.classList.contains(
+                            "show"
+                        );
 
 
-            number.className =
-                "register-number";
+                    detailBox.classList.toggle(
+                        "show"
+                    );
 
 
-            number.textContent =
-                register;
+                    detailButton.textContent =
+                        terbuka
+                        ?
+                        "DETAIL"
+                        :
+                        "TUTUP";
+
+                }
+            );
 
 
-            wrapper.appendChild(
+            /* =========================================
+               SUSUN BARIS UTAMA
+            ========================================= */
+
+            main.appendChild(
                 checkbox
             );
 
 
-            wrapper.appendChild(
+            main.appendChild(
                 number
             );
 
 
-            wrapper.appendChild(
+            actions.appendChild(
                 status
+            );
+
+
+            actions.appendChild(
+                detailButton
+            );
+
+
+            main.appendChild(
+                actions
+            );
+
+
+            wrapper.appendChild(
+                main
+            );
+
+
+            /* =========================================
+               BOX DETAIL DI BAWAH REGISTER
+            ========================================= */
+
+            wrapper.appendChild(
+                detailBox
             );
 
 
@@ -3433,6 +3667,247 @@ function tampilkanRegister(
 
 
     updateJumlahCek();
+
+}
+
+
+/* =====================================================
+   BUAT DETAIL REGISTER
+===================================================== */
+
+function buatDetailRegister(
+    item,
+    register
+){
+
+    const panjang =
+        ambilFieldDetail(
+            item,
+            [
+                "panjang",
+                "PANJANG"
+            ]
+        );
+
+
+    const diameter =
+        ambilFieldDetail(
+            item,
+            [
+                "diameter",
+                "DIAMETER"
+            ]
+        );
+
+
+    const tpk =
+        ambilFieldDetail(
+            item,
+            [
+                "tpk",
+                "TPK"
+            ]
+        );
+
+
+    const tumpuk =
+        ambilFieldDetail(
+            item,
+            [
+                "tumpuk",
+                "TUMPUK"
+            ]
+        );
+
+
+    const mutu =
+        ambilFieldDetail(
+            item,
+            [
+                "mutu",
+                "MUTU"
+            ]
+        );
+
+
+    const status =
+        ambilFieldDetail(
+            item,
+            [
+                "status",
+                "statusOlah",
+                "STATUS",
+                "STATUS OLAH"
+            ]
+        );
+
+
+    const volume =
+        ambilFieldDetail(
+            item,
+            [
+                "volume",
+                "VOLUME"
+            ]
+        );
+
+
+    return (
+
+        buatBarisDetail(
+            "REGISTER",
+            register
+        ) +
+
+        buatBarisDetail(
+            "PANJANG",
+            panjang
+        ) +
+
+        buatBarisDetail(
+            "DIAMETER",
+            diameter
+        ) +
+
+        buatBarisDetail(
+            "TPK",
+            tpk
+        ) +
+
+        buatBarisDetail(
+            "TUMPUK",
+            tumpuk
+        ) +
+
+        buatBarisDetail(
+            "MUTU",
+            mutu
+        ) +
+
+        buatBarisDetail(
+            "STATUS",
+            status
+        ) +
+
+        buatBarisDetail(
+            "VOLUME",
+            formatVolume3(
+                volume
+            ) +
+            " m³"
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   AMBIL FIELD DETAIL
+===================================================== */
+
+function ambilFieldDetail(
+    item,
+    fields
+){
+
+    for(
+        let i = 0;
+        i < fields.length;
+        i++
+    ){
+
+        const key =
+            fields[i];
+
+
+        if(
+            item &&
+            item[key] !== undefined &&
+            item[key] !== null &&
+            item[key] !== ""
+        ){
+
+            return String(
+                item[key]
+            );
+
+        }
+
+    }
+
+
+    return "-";
+
+}
+
+
+/* =====================================================
+   BUAT BARIS DETAIL
+===================================================== */
+
+function buatBarisDetail(
+    label,
+    value
+){
+
+    return (
+
+        '<div class="detail-register-row">' +
+
+            '<div class="detail-register-label">' +
+                escapeHtml(label) +
+            '</div>' +
+
+            '<div class="detail-register-value">' +
+                escapeHtml(value) +
+            '</div>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT VOLUME 3 ANGKA
+===================================================== */
+
+function formatVolume3(
+    value
+){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "0,000";
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if(
+        Number.isNaN(number)
+    ){
+
+        return String(value);
+
+    }
+
+
+    return number
+        .toFixed(3)
+        .replace(
+            ".",
+            ","
+        );
 
 }
 
