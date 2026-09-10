@@ -337,6 +337,23 @@ body{
     text-align:center;
 }
 
+.jumlah-utama{
+    grid-column:1 / -1;
+    padding:16px 12px;
+}
+
+.jumlah-utama .summary-label{
+    font-size:14px;
+}
+
+.jumlah-angka{
+    margin-top:6px;
+    font-size:48px;
+    line-height:1;
+    font-weight:900;
+    color:#166534;
+}
+
 .summary-label{
     font-size:11px;
     color:#64748b;
@@ -1006,15 +1023,14 @@ body{
 
         <div class="summary-grid">
 
-            <div class="summary-box">
-
+            <div class="summary-box jumlah-utama">
                 <div class="summary-label">
                     JUMLAH BATANG
                 </div>
 
                 <div
                     id="jumlahAwal"
-                    class="summary-value"
+class="summary-value jumlah-angka"
                 >
                     0
                 </div>
@@ -1969,6 +1985,8 @@ function cariTumpukDenganNomor(
     nomor
 ){
 
+    showLoading();
+
     const callbackName =
         "callbackList_" +
         Date.now();
@@ -1999,7 +2017,9 @@ function cariTumpukDenganNomor(
 
                 if(!berhasil){
 
-                    showError(
+    hideLoading();
+
+    showError(
                         response &&
                         (
                             response.message ||
@@ -2051,7 +2071,9 @@ function cariTumpukDenganNomor(
 
                 if(!target){
 
-                    showError(
+    hideLoading();
+
+    showError(
                         "TUMPUK " +
                         nomor +
                         " tidak ditemukan."
@@ -4744,6 +4766,8 @@ function refreshData(){
 ===================================================== */
 
 function kembaliScan(){
+
+    hideLoading();
 
     tutupKamera();
 
