@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -1018,32 +1019,17 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        /*
-         * CEK APAKAH HALAMAN DIBUKA DARI QR URL
-         *
-         * Contoh:
-         * cek-tumpuk.html?tpk=TPK01&tumpuk=45
-         */
-
         const params =
             new URLSearchParams(
                 window.location.search
             );
 
-
         const urlTPK =
             params.get("tpk");
-
 
         const urlTumpuk =
             params.get("tumpuk");
 
-
-        /*
-         * JIKA ADA PARAMETER TUMPUK
-         * → JANGAN BUKA KAMERA
-         * → LANGSUNG AMBIL DATA
-         */
 
         if(urlTumpuk){
 
@@ -1054,15 +1040,9 @@ document.addEventListener(
                 :
                 "";
 
-
             currentTumpuk =
                 String(urlTumpuk).trim();
 
-
-            /*
-             * KHUSUS TUMPUK 29
-             * TIDAK MEMAKAI TPK
-             */
 
             if(
                 currentTumpuk === "29"
@@ -1099,29 +1079,16 @@ document.addEventListener(
                 true;
 
 
-            /*
-             * LANGSUNG AMBIL DATA DARI BACKEND
-             */
-
             ambilDataTumpuk();
 
         }
 
         else{
 
-            /*
-             * JIKA TIDAK ADA PARAMETER URL
-             * → NORMAL, BUKA KAMERA
-             */
-
             mulaiScanner();
 
         }
 
-
-        /*
-         * ENTER PADA INPUT MANUAL
-         */
 
         document
             .getElementById("manualInput")
@@ -1738,7 +1705,6 @@ function prosesManual(){
 
 /* =====================================================
    CARI NOMOR TUMPUK DARI DATABASE
-   DIPERBAIKI
 ===================================================== */
 
 function cariTumpukDenganNomor(
@@ -1760,16 +1726,6 @@ function cariTumpukDenganNomor(
             try{
 
                 hideLoading();
-
-                /*
-                 * BACKEND SEKARANG BISA MENGIRIM:
-                 *
-                 * ok      : "success"
-                 * status  : "success"
-                 * success : true
-                 *
-                 * Jadi ketiganya diterima.
-                 */
 
                 const berhasil =
                     response &&
@@ -1986,20 +1942,6 @@ function cariTumpukDenganNomor(
 
 /* =====================================================
    PARSE BARCODE / QR TUMPUK
-   MENDUKUNG:
-   1. QR LINK:
-      cek-tumpuk.html?tpk=TPK01&tumpuk=45
-
-   2. FORMAT LAMA:
-      TPK01|45
-
-   3. FORMAT LAMA:
-      TPK01-T45
-
-   4. NOMOR SAJA:
-      45
-
-   5. KHUSUS TUMPUK 29
 ===================================================== */
 
 function prosesKodeTumpuk(
@@ -2019,7 +1961,7 @@ function prosesKodeTumpuk(
 
 
     /* =================================================
-       1. CEK APAKAH HASIL SCAN ADALAH URL QR
+       1. CEK QR URL
     ================================================= */
 
     try{
@@ -2040,11 +1982,6 @@ function prosesKodeTumpuk(
             );
 
 
-        /*
-         * JIKA ADA PARAMETER TUMPUK
-         * → BERARTI INI QR LINK BARU
-         */
-
         if(urlTumpuk){
 
             currentTPK =
@@ -2058,11 +1995,6 @@ function prosesKodeTumpuk(
             currentTumpuk =
                 String(urlTumpuk).trim();
 
-
-            /*
-             * KHUSUS TUMPUK 29
-             * TIDAK MEMAKAI TPK
-             */
 
             if(
                 currentTumpuk === "29"
@@ -2102,12 +2034,6 @@ function prosesKodeTumpuk(
     }
     catch(error){
 
-        /*
-         * BUKAN URL
-         *
-         * Lanjutkan ke format barcode lama.
-         */
-
         console.log(
             "Bukan QR URL, lanjut parser lama."
         );
@@ -2116,8 +2042,7 @@ function prosesKodeTumpuk(
 
 
     /* =================================================
-       2. FORMAT LAMA:
-          TPK01|45
+       2. FORMAT LAMA TPK01|45
     ================================================= */
 
     let parts =
@@ -2142,8 +2067,7 @@ function prosesKodeTumpuk(
     else{
 
         /* =============================================
-           3. FORMAT LAMA:
-              TPK01-T45
+           3. FORMAT LAMA TPK01-T45
         ============================================= */
 
         const match =
@@ -2168,8 +2092,7 @@ function prosesKodeTumpuk(
         else{
 
             /* =========================================
-               4. NOMOR SAJA:
-                  45
+               4. NOMOR SAJA
             ========================================= */
 
             if(
@@ -2189,10 +2112,6 @@ function prosesKodeTumpuk(
 
             }
 
-
-            /* =========================================
-               FORMAT TIDAK DIKENALI
-            ========================================= */
 
             showError(
                 "Format barcode TUMPUK tidak dikenali."
@@ -2268,7 +2187,6 @@ function prosesKodeTumpuk(
 
 /* =====================================================
    AMBIL DATA TUMPUK
-   DIPERBAIKI
 ===================================================== */
 
 function ambilDataTumpuk(){
@@ -2289,16 +2207,6 @@ function ambilDataTumpuk(){
 
                 hideLoading();
 
-
-                /*
-                 * BACKEND SEKARANG:
-                 *
-                 * ok      : "success"
-                 * status  : "success"
-                 * success : true
-                 *
-                 * Semua diterima.
-                 */
 
                 const berhasil =
                     response &&
@@ -2620,6 +2528,11 @@ function tampilkanData(
     );
 
 
+    /* =================================================
+       HISTORY
+       BACKEND MENGIRIM RAW ROW DARI SHEET SCAN
+    ================================================= */
+
     const history =
         Array.isArray(data.history)
         ?
@@ -2628,10 +2541,49 @@ function tampilkanData(
         [];
 
 
+    /*
+     * Badge dihitung berdasarkan JUMLAH TANGGAL
+     * unik, bukan jumlah raw row SCAN.
+     */
+
+    const historyTanggal = {};
+
+
+    history.forEach(
+        function(item){
+
+            if(!Array.isArray(item)){
+
+                return;
+
+            }
+
+
+            const tanggal =
+                normalisasiTanggalHistory(
+                    item[9]
+                );
+
+
+            if(
+                tanggal !== "-"
+            ){
+
+                historyTanggal[tanggal] =
+                    true;
+
+            }
+
+        }
+    );
+
+
     document
         .getElementById("historyBadge")
         .textContent =
-        history.length;
+        Object.keys(
+            historyTanggal
+        ).length;
 
 
     tampilkanHistory(
@@ -3034,7 +2986,6 @@ function tampilkanRegister(
 
 /* =====================================================
    CHECKBOX PER REGISTER
-   DIPERBAIKI
 ===================================================== */
 
 function setCheckbox(
@@ -3116,11 +3067,6 @@ function setCheckbox(
 
             }
 
-
-            /*
-             * TERIMA FORMAT RESPONSE LAMA
-             * DAN FORMAT RESPONSE BARU
-             */
 
             const berhasil =
                 data &&
@@ -3334,7 +3280,226 @@ function setCheckbox(
 
 
 /* =====================================================
-   HISTORY
+   NORMALISASI TANGGAL HISTORY
+===================================================== */
+
+function normalisasiTanggalHistory(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    const text =
+        String(value).trim();
+
+
+    /*
+     * Apps Script Date biasanya menjadi:
+     *
+     * 2026-09-09T00:00:00.000Z
+     *
+     * Jangan pakai new Date() di sini karena
+     * timezone dapat membuat tanggal bergeser.
+     */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}T/.test(text)
+    ){
+
+        return text.substring(
+            0,
+            10
+        );
+
+    }
+
+
+    /*
+     * FORMAT:
+     * 2026-09-09
+     */
+
+    if(
+        /^\d{4}-\d{1,2}-\d{1,2}$/.test(text)
+    ){
+
+        const p =
+            text.split("-");
+
+
+        return (
+            String(p[0]) +
+            "-" +
+            String(p[1]).padStart(2,"0") +
+            "-" +
+            String(p[2]).padStart(2,"0")
+        );
+
+    }
+
+
+    /*
+     * FORMAT:
+     * 09-09-2026
+     */
+
+    if(
+        /^\d{1,2}-\d{1,2}-\d{4}$/.test(text)
+    ){
+
+        const p =
+            text.split("-");
+
+
+        return (
+            String(p[2]) +
+            "-" +
+            String(p[1]).padStart(2,"0") +
+            "-" +
+            String(p[0]).padStart(2,"0")
+        );
+
+    }
+
+
+    const d =
+        new Date(text);
+
+
+    if(
+        !Number.isNaN(
+            d.getTime()
+        )
+    ){
+
+        return (
+            String(
+                d.getFullYear()
+            ) +
+            "-" +
+            String(
+                d.getMonth()+1
+            ).padStart(2,"0") +
+            "-" +
+            String(
+                d.getDate()
+            ).padStart(2,"0")
+        );
+
+    }
+
+
+    return text;
+
+}
+
+
+/* =====================================================
+   FORMAT TANGGAL HISTORY
+===================================================== */
+
+function formatTanggalHistory(
+    value
+){
+
+    const key =
+        normalisasiTanggalHistory(
+            value
+        );
+
+
+    if(
+        !key ||
+        key === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    const match =
+        String(key).match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if(match){
+
+        return (
+            match[3] +
+            "-" +
+            match[2] +
+            "-" +
+            match[1]
+        );
+
+    }
+
+
+    return String(value);
+
+}
+
+
+/* =====================================================
+   TANGGAL HISTORY → DATE
+===================================================== */
+
+function tanggalHistoryToDate(
+    value
+){
+
+    const key =
+        normalisasiTanggalHistory(
+            value
+        );
+
+
+    if(
+        !key ||
+        key === "-"
+    ){
+
+        return null;
+
+    }
+
+
+    const match =
+        String(key).match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if(match){
+
+        return new Date(
+            Number(match[1]),
+            Number(match[2])-1,
+            Number(match[3])
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   HISTORY PENGAMBILAN
+   BACKEND MENGIRIM RAW ROW DARI SHEET SCAN
 ===================================================== */
 
 function tampilkanHistory(
@@ -3342,8 +3507,7 @@ function tampilkanHistory(
 ){
 
     const container =
-        document
-        .getElementById(
+        document.getElementById(
             "historyList"
         );
 
@@ -3351,56 +3515,248 @@ function tampilkanHistory(
     container.innerHTML = "";
 
 
-    if(!history.length){
+    if(
+        !Array.isArray(history) ||
+        history.length === 0
+    ){
 
         container.innerHTML =
             '<div class="empty">' +
             'Belum ada history pengambilan.' +
             '</div>';
 
+
         return;
 
     }
 
 
+    /*
+     * GROUP HISTORY BERDASARKAN TANGGAL
+     *
+     * Struktur raw SCAN:
+     *
+     * [0]  REGISTER
+     * [1]  PANJANG
+     * [2]  DIAMETER
+     * [3]  TPK
+     * [4]  TUMPUK
+     * [5]  MUTU
+     * [6]  STATUS
+     * [7]  M3
+     * [8]  KODE QR
+     * [9]  TANGGAL SCAN
+     * [10] JAM SCAN
+     */
+
+    const groups = {};
+
+
     history.forEach(
         function(item){
 
-            const date =
-                item.tanggal !== undefined
-                ?
-                item.tanggal
-                :
-                item.TANGGAL;
+            let register = "";
+            let tanggal = "";
 
 
-            const jumlah =
-                item.jumlah !== undefined
-                ?
-                item.jumlah
-                :
-                (
-                    item.jumlahBatang !== undefined
+            /*
+             * FORMAT RAW ARRAY
+             */
+
+            if(
+                Array.isArray(item)
+            ){
+
+                register =
+                    item[0] !== undefined
                     ?
-                    item.jumlahBatang
+                    String(item[0]).trim()
                     :
-                    item.JUMLAH
+                    "";
+
+
+                tanggal =
+                    item[9] !== undefined
+                    ?
+                    item[9]
+                    :
+                    "";
+
+            }
+
+
+            /*
+             * FORMAT OBJECT
+             *
+             * Tetap didukung kalau suatu saat
+             * backend dikembalikan ke format object.
+             */
+
+            else if(
+                item &&
+                typeof item === "object"
+            ){
+
+                register =
+                    item.register !== undefined
+                    ?
+                    String(
+                        item.register
+                    ).trim()
+                    :
+                    (
+                        item.REGISTER !== undefined
+                        ?
+                        String(
+                            item.REGISTER
+                        ).trim()
+                        :
+                        ""
+                    );
+
+
+                tanggal =
+                    item.tanggal !== undefined
+                    ?
+                    item.tanggal
+                    :
+                    (
+                        item.TANGGAL !== undefined
+                        ?
+                        item.TANGGAL
+                        :
+                        ""
+                    );
+
+            }
+
+
+            if(!register){
+
+                return;
+
+            }
+
+
+            const keyTanggal =
+                normalisasiTanggalHistory(
+                    tanggal
                 );
 
 
-            const registers =
-                Array.isArray(
-                    item.registers
-                )
-                ?
-                item.registers
-                :
-                [];
+            if(
+                !groups[keyTanggal]
+            ){
+
+                groups[keyTanggal] = {
+
+                    tanggal:keyTanggal,
+
+                    registers:[]
+
+                };
+
+            }
+
+
+            /*
+             * REGISTER YANG SAMA PADA TANGGAL
+             * YANG SAMA HANYA DIHITUNG 1 KALI.
+             */
+
+            if(
+                groups[keyTanggal]
+                    .registers
+                    .indexOf(register)
+                ===
+                -1
+            ){
+
+                groups[keyTanggal]
+                    .registers
+                    .push(register);
+
+            }
+
+        }
+    );
+
+
+    const keys =
+        Object.keys(
+            groups
+        );
+
+
+    if(!keys.length){
+
+        container.innerHTML =
+            '<div class="empty">' +
+            'Belum ada history pengambilan.' +
+            '</div>';
+
+
+        return;
+
+    }
+
+
+    /*
+     * URUTKAN HISTORY:
+     * TERBARU → TERLAMA
+     */
+
+    keys.sort(
+        function(a,b){
+
+            const da =
+                tanggalHistoryToDate(
+                    a
+                );
+
+
+            const db =
+                tanggalHistoryToDate(
+                    b
+                );
+
+
+            if(
+                da &&
+                db
+            ){
+
+                return db - da;
+
+            }
+
+
+            return String(b)
+                .localeCompare(
+                    String(a)
+                );
+
+        }
+    );
+
+
+    /*
+     * BUAT KARTU HISTORY
+     */
+
+    keys.forEach(
+        function(key){
+
+            const item =
+                groups[key];
+
+
+            const jumlah =
+                item.registers.length;
 
 
             const box =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3410,8 +3766,7 @@ function tampilkanHistory(
 
 
             const head =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3421,15 +3776,13 @@ function tampilkanHistory(
 
 
             const left =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
 
             const dateEl =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3439,14 +3792,13 @@ function tampilkanHistory(
 
 
             dateEl.textContent =
-                formatTanggal(
-                    date
+                formatTanggalHistory(
+                    item.tanggal
                 );
 
 
             const takenEl =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3472,8 +3824,7 @@ function tampilkanHistory(
 
 
             const arrow =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3496,9 +3847,12 @@ function tampilkanHistory(
             );
 
 
+            /*
+             * DETAIL PENGAMBILAN
+             */
+
             const detail =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3508,8 +3862,7 @@ function tampilkanHistory(
 
 
             const detailTitle =
-                document
-                .createElement(
+                document.createElement(
                     "div"
                 );
 
@@ -3527,11 +3880,12 @@ function tampilkanHistory(
             );
 
 
-            if(!registers.length){
+            if(
+                !item.registers.length
+            ){
 
                 const empty =
-                    document
-                    .createElement(
+                    document.createElement(
                         "div"
                     );
 
@@ -3551,12 +3905,11 @@ function tampilkanHistory(
             }
             else{
 
-                registers.forEach(
+                item.registers.forEach(
                     function(register){
 
                         const el =
-                            document
-                            .createElement(
+                            document.createElement(
                                 "span"
                             );
 
@@ -3578,6 +3931,10 @@ function tampilkanHistory(
 
             }
 
+
+            /*
+             * KLIK HEADER → BUKA/TUTUP DETAIL
+             */
 
             head.addEventListener(
                 "click",
@@ -3789,7 +4146,7 @@ function formatVolume(
 
 
 /* =====================================================
-   FORMAT TANGGAL
+   FORMAT TANGGAL UMUM
 ===================================================== */
 
 function formatTanggal(
@@ -4006,3 +4363,4 @@ function cleanupJSONP(
 </body>
 
 </html>
+
