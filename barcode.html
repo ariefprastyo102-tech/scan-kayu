@@ -1307,53 +1307,37 @@ function cetakF4(){
                     "labelCetak";
 
                 const barcodeBox =
-                    document.createElement(
-                        "div"
-                    );
+    document.createElement("div");
 
-                barcodeBox.className =
-                    "labelBarcode";
+barcodeBox.className =
+    "labelBarcode";
 
-                const svg =
-                    document.createElementNS(
-                        "http://www.w3.org/2000/svg",
-                        "svg"
-                    );
+barcodeBox.style.position = "absolute";
+barcodeBox.style.left = "10mm";
+barcodeBox.style.top = "4mm";
+barcodeBox.style.width = "22mm";
+barcodeBox.style.height = "22mm";
+barcodeBox.style.overflow = "hidden";
 
-                barcodeBox.appendChild(
-                    svg
-                );
+const qrBox =
+    document.createElement("div");
 
-                JsBarcode(
+qrBox.style.width = "22mm";
+qrBox.style.height = "22mm";
 
-                    svg,
+new QRCode(
+    qrBox,
+    {
+        text: data.register,
+        width: 150,
+        height: 150,
+        correctLevel: QRCode.CorrectLevel.M
+    }
+);
 
-                    data.register,
+barcodeBox.appendChild(qrBox);
 
-                    {
-
-                        format:
-                            "CODE128",
-
-                        width:
-                            1.8,
-
-                        height:
-                            55,
-
-                        displayValue:
-                            false,
-
-                        margin:
-                            6
-
-                    }
-
-                );
-
-                label.appendChild(
-                    barcodeBox
-                );
+label.appendChild(barcodeBox);
 
                 const angka =
                     document.createElement(
