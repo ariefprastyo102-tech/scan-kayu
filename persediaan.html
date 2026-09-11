@@ -9,7 +9,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>PERSEDIAAN BBI</title>
+<title>PASOKAN & PERSEDIAAN BBI IK SARADAN</title>
 
 <style>
 
@@ -163,6 +163,70 @@ tbody tr:last-child th{
     border-radius:6px;
     padding:15px;
     background:#fafafa;
+    overflow-x:auto;
+}
+
+.rincian table{
+    margin-top:0;
+}
+
+.rincian th{
+    white-space:nowrap;
+}
+
+.rincian td{
+    white-space:nowrap;
+}
+
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#666;
+}
+
+.error{
+    padding:15px;
+    background:#ffe5e5;
+    color:#a00000;
+    border:1px solid #ffb5b5;
+    border-radius:6px;
+    margin-top:15px;
+}
+
+.kosong{
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:600px){
+
+    .header h1{
+        font-size:22px;
+    }
+
+    .menu{
+        gap:6px;
+    }
+
+    .menu button{
+        padding:12px 15px;
+        font-size:14px;
+    }
+
+    .kartu{
+        padding:15px;
+    }
+
+    .filter{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
 }
 
 </style>
@@ -292,6 +356,16 @@ tbody tr:last-child th{
         </div>
 
 
+        <!-- STATUS -->
+
+        <div id="statusPasokan"
+             class="loading">
+
+            MEMUAT DATA PASOKAN...
+
+        </div>
+
+
         <!-- TOTAL PASOKAN -->
 
         <h3>
@@ -330,11 +404,11 @@ tbody tr:last-child th{
                         A I
                     </td>
 
-                    <td>
+                    <td id="batangAI">
                         0
                     </td>
 
-                    <td>
+                    <td id="volumeAI">
                         0,000
                     </td>
 
@@ -347,11 +421,11 @@ tbody tr:last-child th{
                         A II
                     </td>
 
-                    <td>
+                    <td id="batangAII">
                         0
                     </td>
 
-                    <td>
+                    <td id="volumeAII">
                         0,000
                     </td>
 
@@ -364,11 +438,11 @@ tbody tr:last-child th{
                         A III
                     </td>
 
-                    <td>
+                    <td id="batangAIII">
                         0
                     </td>
 
-                    <td>
+                    <td id="volumeAIII">
                         0,000
                     </td>
 
@@ -381,11 +455,11 @@ tbody tr:last-child th{
                         KBP
                     </td>
 
-                    <td>
+                    <td id="batangKBP">
                         0
                     </td>
 
-                    <td>
+                    <td id="volumeKBP">
                         0,000
                     </td>
 
@@ -398,11 +472,11 @@ tbody tr:last-child th{
                         TOTAL
                     </th>
 
-                    <th>
+                    <th id="totalBatang">
                         0
                     </th>
 
-                    <th>
+                    <th id="totalVolume">
                         0,000
                     </th>
 
@@ -420,11 +494,13 @@ tbody tr:last-child th{
         </h3>
 
 
-        <div class="rincian">
+        <div
+            id="rincianPasokan"
+            class="rincian">
 
-            <p>
-                Data rincian akan ditampilkan di sini.
-            </p>
+            <div class="loading">
+                MEMUAT RINCIAN...
+            </div>
 
         </div>
 
@@ -476,6 +552,33 @@ tbody tr:last-child th{
 
 <script>
 
+/* =====================================================
+   URL APPS SCRIPT BARU
+===================================================== */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbwARmnRs73166TJf_LH64jRsNAAZ9gEAZ4HmdfQ-NMJCOj9B08JfsXW2yKlYa89-Lg/exec";
+
+
+/* =====================================================
+   FORMAT ANGKA
+===================================================== */
+
+function formatVolume(angka){
+
+    return Number(angka || 0)
+        .toLocaleString("id-ID",{
+            minimumFractionDigits:3,
+            maximumFractionDigits:3
+        });
+
+}
+
+
+/* =====================================================
+   BUKA RUANG
+===================================================== */
+
 function bukaRuang(nama,tombol){
 
     document
@@ -508,6 +611,301 @@ function bukaRuang(nama,tombol){
     tombol.classList.add("active");
 
 }
+
+
+/* =====================================================
+   TAMPILKAN DATA PASOKAN
+===================================================== */
+
+function tampilkanPasokan(hasil){
+
+    if(!hasil || !hasil.sukses){
+
+        tampilkanError(
+            (hasil && hasil.pesan)
+            ? hasil.pesan
+            : "Data tidak dapat dibaca."
+        );
+
+        return;
+    }
+
+
+    const r = hasil.ringkasan || {};
+
+
+    /* -----------------------------------------------
+       A I
+    ----------------------------------------------- */
+
+    document.getElementById("batangAI").textContent =
+        (r.AI ? r.AI.batang : 0);
+
+    document.getElementById("volumeAI").textContent =
+        formatVolume(r.AI ? r.AI.volume : 0);
+
+
+    /* -----------------------------------------------
+       A II
+    ----------------------------------------------- */
+
+    document.getElementById("batangAII").textContent =
+        (r.AII ? r.AII.batang : 0);
+
+    document.getElementById("volumeAII").textContent =
+        formatVolume(r.AII ? r.AII.volume : 0);
+
+
+    /* -----------------------------------------------
+       A III
+    ----------------------------------------------- */
+
+    document.getElementById("batangAIII").textContent =
+        (r.AIII ? r.AIII.batang : 0);
+
+    document.getElementById("volumeAIII").textContent =
+        formatVolume(r.AIII ? r.AIII.volume : 0);
+
+
+    /* -----------------------------------------------
+       KBP
+    ----------------------------------------------- */
+
+    document.getElementById("batangKBP").textContent =
+        (r.KBP ? r.KBP.batang : 0);
+
+    document.getElementById("volumeKBP").textContent =
+        formatVolume(r.KBP ? r.KBP.volume : 0);
+
+
+    /* -----------------------------------------------
+       TOTAL
+    ----------------------------------------------- */
+
+    document.getElementById("totalBatang").textContent =
+        hasil.totalBatang || 0;
+
+    document.getElementById("totalVolume").textContent =
+        formatVolume(hasil.totalVolume);
+
+
+    document.getElementById("statusPasokan").style.display =
+        "none";
+
+
+    tampilkanRincian(hasil.data || []);
+
+}
+
+
+/* =====================================================
+   RINCIAN PASOKAN
+===================================================== */
+
+function tampilkanRincian(data){
+
+    const box =
+        document.getElementById("rincianPasokan");
+
+
+    if(!data.length){
+
+        box.innerHTML =
+            '<div class="kosong">Tidak ada data pasokan.</div>';
+
+        return;
+    }
+
+
+    let html = "";
+
+    html += "<table>";
+
+    html += "<thead>";
+
+    html += "<tr>";
+
+    html += "<th>NO</th>";
+    html += "<th>REGISTER</th>";
+    html += "<th>TPK</th>";
+    html += "<th>TUMPUK</th>";
+    html += "<th>SORTIMEN</th>";
+    html += "<th>VOLUME (M³)</th>";
+
+    html += "</tr>";
+
+    html += "</thead>";
+
+    html += "<tbody>";
+
+
+    data.forEach(function(item,index){
+
+        html += "<tr>";
+
+        html += "<td>" +
+            (index + 1) +
+            "</td>";
+
+        html += "<td>" +
+            escapeHtml(item.register) +
+            "</td>";
+
+        html += "<td>" +
+            escapeHtml(item.tpk) +
+            "</td>";
+
+        html += "<td>" +
+            escapeHtml(item.tumpuk) +
+            "</td>";
+
+        html += "<td>" +
+            escapeHtml(item.sortimen) +
+            "</td>";
+
+        html += "<td>" +
+            formatVolume(item.volume) +
+            "</td>";
+
+        html += "</tr>";
+
+    });
+
+
+    html += "</tbody>";
+
+    html += "</table>";
+
+
+    box.innerHTML = html;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value == null ? "" : value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function tampilkanError(pesan){
+
+    document.getElementById("statusPasokan")
+        .innerHTML =
+        '<div class="error">' +
+        escapeHtml(pesan) +
+        '</div>';
+
+
+    document.getElementById("rincianPasokan")
+        .innerHTML =
+        '<div class="error">' +
+        escapeHtml(pesan) +
+        '</div>';
+
+}
+
+
+/* =====================================================
+   AMBIL DATA DARI APPS SCRIPT
+===================================================== */
+
+function ambilPasokan(){
+
+    document.getElementById("statusPasokan")
+        .style.display = "block";
+
+
+    document.getElementById("statusPasokan")
+        .textContent =
+        "MEMUAT DATA PASOKAN...";
+
+
+    fetch(API_URL)
+
+        .then(function(response){
+
+            if(!response.ok){
+
+                throw new Error(
+                    "HTTP " + response.status
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data){
+
+            tampilkanPasokan(data);
+
+        })
+
+        .catch(function(error){
+
+            console.error(error);
+
+            tampilkanError(
+                "GAGAL MENGAMBIL DATA DARI APPS SCRIPT."
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   FILTER BULAN
+===================================================== */
+
+document
+    .getElementById("bulanPasokan")
+    .addEventListener(
+        "change",
+        function(){
+
+            /*
+             * UNTUK SEMENTARA:
+             * dropdown belum memfilter data.
+             *
+             * Kita aktifkan setelah kolom bulan
+             * pasokan ditentukan.
+             */
+
+            ambilPasokan();
+
+        }
+    );
+
+
+/* =====================================================
+   JALANKAN SAAT HALAMAN DIBUKA
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        ambilPasokan();
+
+    }
+);
 
 </script>
 
