@@ -156,7 +156,7 @@ tbody tr:last-child th{
 }
 
 /* =====================================================
-   TOTAL RINCIAN - WARNA HIJAU
+   TOTAL RINCIAN
 ===================================================== */
 
 .rincian td.total-cell{
@@ -300,15 +300,13 @@ tbody tr:last-child th{
 
 <div class="ruang">
 
-<!-- =================================================
+<!-- =====================================================
      PASOKAN
-================================================== -->
+===================================================== -->
 
 <div id="pasokan" class="kartu">
 
     <h2>PASOKAN</h2>
-
-    <!-- FILTER BULAN -->
 
     <div class="filter">
 
@@ -374,16 +372,12 @@ tbody tr:last-child th{
 
     </div>
 
-    <!-- STATUS -->
-
     <div id="statusPasokan"
          class="loading">
 
         MEMUAT DATA PASOKAN...
 
     </div>
-
-    <!-- TOTAL PASOKAN -->
 
     <h3>
         TOTAL PASOKAN
@@ -497,8 +491,6 @@ tbody tr:last-child th{
 
     </table>
 
-    <!-- RINCIAN -->
-
     <h3>
         RINCIAN PASOKAN
     </h3>
@@ -515,9 +507,10 @@ tbody tr:last-child th{
 
 </div>
 
-<!-- =================================================
+
+<!-- =====================================================
      OLAH
-================================================== -->
+===================================================== -->
 
 <div
     id="olah"
@@ -525,8 +518,6 @@ tbody tr:last-child th{
     style="display:none;">
 
     <h2>OLAH</h2>
-
-    <!-- FILTER -->
 
     <div class="filter">
 
@@ -569,8 +560,6 @@ tbody tr:last-child th{
 
     </div>
 
-    <!-- STATUS -->
-
     <div
         id="statusOlah"
         class="loading">
@@ -578,8 +567,6 @@ tbody tr:last-child th{
         MEMUAT DATA OLAH...
 
     </div>
-
-    <!-- RINCIAN -->
 
     <h3>
         RINCIAN OLAH
@@ -597,9 +584,10 @@ tbody tr:last-child th{
 
 </div>
 
-<!-- =================================================
+
+<!-- =====================================================
      SISA
-================================================== -->
+===================================================== -->
 
 <div
     id="sisa"
@@ -615,6 +603,7 @@ tbody tr:last-child th{
 </div>
 
 </div>
+
 
 <!-- =====================================================
      JAVASCRIPT
@@ -785,6 +774,26 @@ function tampilkanPasokan(hasil){
 ===================================================== */
 
 function normalisasiSortimen(nama){
+
+    /*
+     * Pastikan tidak pernah menampilkan
+     * [object Object]
+     */
+
+    if(
+        nama &&
+        typeof nama === "object"
+    ){
+
+        nama =
+            nama.sortimen ||
+            nama.nama ||
+            nama.name ||
+            nama.value ||
+            nama.text ||
+            "";
+
+    }
 
     const s =
         String(nama || "")
@@ -1228,6 +1237,24 @@ function tampilkanRincian(data){
 
 function escapeHtml(value){
 
+    /*
+     * Cegah object masuk langsung ke String()
+     */
+
+    if(
+        value &&
+        typeof value === "object"
+    ){
+
+        value =
+            value.value ||
+            value.nama ||
+            value.name ||
+            value.text ||
+            "";
+
+    }
+
     return String(value == null ? "" : value)
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
@@ -1250,7 +1277,8 @@ function ambilOlah(){
     const rincian =
         document.getElementById("rincianOlah");
 
-    status.style.display = "block";
+    status.style.display =
+        "block";
 
     status.textContent =
         "MEMUAT DATA OLAH...";
@@ -1389,20 +1417,16 @@ function isiJenisOlah(
 
 /* =====================================================
    TAMPILKAN DATA OLAH
-=====================================================
 
-   PENTING:
+   BACKEND:
 
-   BACKEND MENGIRIM:
-
-   sortimen = O
-   hara     = G / STATUS
-   batang
-   volume
-
-   K / STATUS OLAH hanya digunakan
-   sebagai filter backend.
-
+   O = SORTIMEN
+   G = STATUS
+   H = VOLUME
+   K = STATUS OLAH
+       hanya sebagai filter
+   S = JENIS OLAH
+   T = BULAN OLAH
 ===================================================== */
 
 function tampilkanOlah(data){
@@ -1435,9 +1459,6 @@ function tampilkanOlah(data){
 
     /* =================================================
        NORMALISASI BARIS
-
-       SORTIMEN = O
-       HARA     = G / STATUS
     ================================================= */
 
     const baris = [];
@@ -1450,25 +1471,75 @@ function tampilkanOlah(data){
         }
 
 
+        /* ---------------------------------------------
+           SORTIMEN = O
+        --------------------------------------------- */
+
         const sortimen =
             normalisasiSortimen(
                 item.sortimen || ""
             );
 
 
-        const hara =
+        /* ---------------------------------------------
+           STATUS = G
+        --------------------------------------------- */
+
+        let statusData =
+            item.status;
+
+
+        /*
+         * Jaga-jaga jika backend lama masih
+         * mengirim hara. Tidak digunakan sebagai
+         * nama kolom lagi.
+         */
+
+        if(
+            statusData === undefined ||
+            statusData === null
+        ){
+
+            statusData = "";
+
+        }
+
+
+        if(
+            typeof statusData === "object"
+        ){
+
+            statusData =
+                statusData.status ||
+                statusData.value ||
+                statusData.nama ||
+                statusData.name ||
+                statusData.text ||
+                "";
+
+        }
+
+
+        statusData =
             String(
-                item.hara ||
-                ""
+                statusData
             )
             .trim();
 
+
+        /* ---------------------------------------------
+           BATANG
+        --------------------------------------------- */
 
         const batang =
             Number(
                 item.batang || 0
             );
 
+
+        /* ---------------------------------------------
+           VOLUME
+        --------------------------------------------- */
 
         const volume =
             Number(
@@ -1478,7 +1549,7 @@ function tampilkanOlah(data){
 
         if(
             !sortimen &&
-            !hara &&
+            !statusData &&
             !batang &&
             !volume
         ){
@@ -1493,8 +1564,8 @@ function tampilkanOlah(data){
             sortimen:
                 sortimen,
 
-            hara:
-                hara,
+            status:
+                statusData,
 
             batang:
                 batang,
@@ -1554,18 +1625,19 @@ function tampilkanOlah(data){
             ib === -1
         ){
 
-            const sort =
+            const hasilSortimen =
                 a.sortimen.localeCompare(
-                    b.sortimen
+                    b.sortimen,
+                    "id"
                 );
 
-            if(sort !== 0){
-                return sort;
-            }
+            if(
+                hasilSortimen !== 0
+            ){
 
-            return a.hara.localeCompare(
-                b.hara
-            );
+                return hasilSortimen;
+
+            }
 
         }
 
@@ -1585,8 +1657,10 @@ function tampilkanOlah(data){
         }
 
 
-        return a.hara.localeCompare(
-            b.hara,
+        return String(
+            a.status
+        ).localeCompare(
+            String(b.status),
             "id"
         );
 
@@ -1630,7 +1704,7 @@ function tampilkanOlah(data){
 
         "<th>SORTIMEN</th>" +
 
-        "<th>HARA</th>" +
+        "<th>STATUS</th>" +
 
         "<th>BATANG</th>" +
 
@@ -1650,7 +1724,9 @@ function tampilkanOlah(data){
             "<tr>";
 
 
-        /* SORTIMEN */
+        /* ---------------------------------------------
+           SORTIMEN
+        --------------------------------------------- */
 
         html +=
             "<td>" +
@@ -1660,17 +1736,21 @@ function tampilkanOlah(data){
             "</td>";
 
 
-        /* HARA */
+        /* ---------------------------------------------
+           STATUS
+        --------------------------------------------- */
 
         html +=
             "<td>" +
             escapeHtml(
-                item.hara
+                item.status
             ) +
             "</td>";
 
 
-        /* BATANG */
+        /* ---------------------------------------------
+           BATANG
+        --------------------------------------------- */
 
         html +=
             "<td>" +
@@ -1678,7 +1758,9 @@ function tampilkanOlah(data){
             "</td>";
 
 
-        /* VOLUME */
+        /* ---------------------------------------------
+           VOLUME
+        --------------------------------------------- */
 
         html +=
             "<td>" +
