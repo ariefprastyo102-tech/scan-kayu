@@ -525,9 +525,76 @@ tbody tr:last-child th{
 
     <h2>OLAH</h2>
 
-    <p>
-        Ruang OLAH.
-    </p>
+    <!-- FILTER -->
+
+    <div class="filter">
+
+        <label for="bulanOlah">
+            FILTER BULAN
+        </label>
+
+        <select id="bulanOlah">
+
+            <option value="SEMUA">
+                SEMUA BULAN
+            </option>
+
+            <option value="JANUARI">JANUARI</option>
+            <option value="FEBRUARI">FEBRUARI</option>
+            <option value="MARET">MARET</option>
+            <option value="APRIL">APRIL</option>
+            <option value="MEI">MEI</option>
+            <option value="JUNI">JUNI</option>
+            <option value="JULI">JULI</option>
+            <option value="AGUSTUS">AGUSTUS</option>
+            <option value="SEPTEMBER">SEPTEMBER</option>
+            <option value="OKTOBER">OKTOBER</option>
+            <option value="NOVEMBER">NOVEMBER</option>
+            <option value="DESEMBER">DESEMBER</option>
+
+        </select>
+
+        <label for="jenisOlah">
+            JENIS OLAH
+        </label>
+
+        <select id="jenisOlah">
+
+            <option value="SEMUA">
+                SEMUA JENIS
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div
+        id="statusOlah"
+        class="loading">
+
+        MEMUAT DATA OLAH...
+
+    </div>
+
+
+    <!-- RINCIAN -->
+
+    <h3>
+        RINCIAN OLAH
+    </h3>
+
+    <div
+        id="rincianOlah"
+        class="rincian">
+
+        <div class="loading">
+            MEMUAT RINCIAN...
+        </div>
+
+    </div>
 
 </div>
 
@@ -662,6 +729,17 @@ function bukaRuang(nama,tombol){
         });
 
     tombol.classList.add("active");
+
+
+    /* =================================================
+       KHUSUS RUANG OLAH
+    ================================================= */
+
+    if(nama === "olah"){
+
+        ambilOlah();
+
+    }
 
 }
 
@@ -1348,7 +1426,238 @@ function escapeHtml(value){
 
 }
 
+/* =====================================================
+   AMBIL DATA OLAH
+===================================================== */
 
+function ambilOlah(){
+
+    const status = document.getElementById("statusOlah");
+    const rincian = document.getElementById("rincianOlah");
+
+    status.style.display = "block";
+    status.textContent = "MEMUAT DATA OLAH...";
+
+    const bulan =
+        document.getElementById("bulanOlah").value;
+
+    const jenis =
+        document.getElementById("jenisOlah").value;
+
+    const url =
+        API_URL +
+        "?action=olah" +
+        "&bulan=" + encodeURIComponent(bulan) +
+        "&jenis=" + encodeURIComponent(jenis);
+
+    fetch(url)
+
+        .then(function(response){
+
+            if(!response.ok){
+                throw new Error(
+                    "Gagal mengambil data OLAH."
+                );
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data){
+
+            if(!data.sukses){
+
+                throw new Error(
+                    data.pesan || "Gagal mengambil data OLAH."
+                );
+
+            }
+
+            isiJenisOlah(
+                data.jenisList || [],
+                jenis
+            );
+
+            tampilkanOlah(
+                data,
+                data.totalBatang || 0,
+                data.totalVolume || 0
+            );
+
+        })
+
+        .catch(function(error){
+
+            status.innerHTML =
+                '<div class="error">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+            rincian.innerHTML =
+                '<div class="error">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+        });
+
+}
+
+
+/* =====================================================
+   ISI JENIS OLAH
+===================================================== */
+
+function isiJenisOlah(daftar, jenisAktif){
+
+    const select =
+        document.getElementById("jenisOlah");
+
+    if(!select) return;
+
+    select.innerHTML =
+        '<option value="SEMUA">SEMUA JENIS</option>';
+
+    daftar.forEach(function(jenis){
+
+        const nilai =
+            String(jenis || "").trim();
+
+        if(!nilai) return;
+
+        const option =
+            document.createElement("option");
+
+        option.value = nilai;
+        option.textContent = nilai;
+
+        select.appendChild(option);
+
+    });
+
+    if(
+        jenisAktif &&
+        jenisAktif !== "SEMUA" &&
+        daftar.indexOf(jenisAktif) !== -1
+    ){
+
+        select.value = jenisAktif;
+
+    }else{
+
+        select.value = "SEMUA";
+
+    }
+
+}
+
+
+/* =====================================================
+   TAMPILKAN DATA OLAH
+===================================================== */
+
+function tampilkanOlah(
+    data,
+    totalBatang,
+    totalVolume
+){
+
+    const status =
+        document.getElementById("statusOlah");
+
+    const rincian =
+        document.getElementById("rincianOlah");
+
+    status.style.display = "none";
+
+
+    if(
+        !data.rincian ||
+        data.rincian.length === 0
+    ){
+
+        rincian.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA OLAH.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    let html = '';
+
+    html +=
+        '<table>';
+
+    html +=
+        '<thead>' +
+        '<tr>' +
+        '<th>SORTIMEN</th>' +
+        '<th>STATUS</th>' +
+        '<th>BATANG</th>' +
+        '<th>VOLUME (M³)</th>' +
+        '</tr>' +
+        '</thead>';
+
+    html += '<tbody>';
+
+
+    data.rincian.forEach(function(item){
+
+        html +=
+            '<tr>' +
+
+            '<td>' +
+            escapeHtml(item.sortimen || "") +
+            '</td>' +
+
+            '<td>' +
+            escapeHtml(item.status || "") +
+            '</td>' +
+
+            '<td>' +
+            Number(item.batang || 0) +
+            '</td>' +
+
+            '<td>' +
+            formatVolume(item.volume) +
+            '</td>' +
+
+            '</tr>';
+
+    });
+
+
+    html +=
+        '<tr class="baris-total">' +
+
+        '<th class="total-label">' +
+        'TOTAL' +
+        '</th>' +
+
+        '<th></th>' +
+
+        '<th>' +
+        Number(totalBatang || 0) +
+        '</th>' +
+
+        '<th class="total-cell">' +
+        formatVolume(totalVolume) +
+        '</th>' +
+
+        '</tr>';
+
+
+    html +=
+        '</tbody>' +
+        '</table>';
+
+
+    rincian.innerHTML = html;
+
+}
 /* =====================================================
    ERROR
 ===================================================== */
@@ -1445,7 +1754,6 @@ function ambilPasokan(){
 
 }
 
-
 /* =====================================================
    FILTER BULAN
 ===================================================== */
@@ -1461,7 +1769,36 @@ document
         }
     );
 
+/* =====================================================
+   FILTER BULAN OLAH
+===================================================== */
 
+document
+    .getElementById("bulanOlah")
+    .addEventListener(
+        "change",
+        function(){
+
+            ambilOlah();
+
+        }
+    );
+
+
+/* =====================================================
+   FILTER JENIS OLAH
+===================================================== */
+
+document
+    .getElementById("jenisOlah")
+    .addEventListener(
+        "change",
+        function(){
+
+            ambilOlah();
+
+        }
+    );
 /* =====================================================
    JALANKAN SAAT HALAMAN DIBUKA
 ===================================================== */
