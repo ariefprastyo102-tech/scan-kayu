@@ -749,7 +749,6 @@ function normalisasiSortimen(nama){
 
 }
 
-
 /* =====================================================
    RINCIAN PASOKAN
 ===================================================== */
@@ -772,13 +771,10 @@ function tampilkanRincian(data){
     /*
      * SATU BARIS = SATU SKSHH-KB
      *
-     * Data register dari DATABASE digabung
-     * berdasarkan:
-     *   SKSHH-KB (R)
-     *   TGL TERIMA (Q)
-     *   TPK (D)
-     *
-     * SORTIMEN dihitung terpisah.
+     * Digabung berdasarkan:
+     *   SKSHH-KB
+     *   TGL TERIMA
+     *   TPK
      */
 
     const kelompok = {};
@@ -800,6 +796,7 @@ function tampilkanRincian(data){
             String(item.tpk || "")
                 .trim();
 
+
         const key =
             skshh +
             "|" +
@@ -818,7 +815,11 @@ function tampilkanRincian(data){
 
                 tpk: tpk,
 
-                sortimen: {}
+                sortimen: {},
+
+                totalBatang: 0,
+
+                totalVolume: 0
 
             };
 
@@ -839,23 +840,41 @@ function tampilkanRincian(data){
         sortimenSet.add(sortimen);
 
 
-        if(!kelompok[key].sortimen[sortimen]){
+        if(
+            !kelompok[key]
+                .sortimen[sortimen]
+        ){
 
-            kelompok[key].sortimen[sortimen] = {
+            kelompok[key]
+                .sortimen[sortimen] = {
 
-                batang: 0,
+                    batang: 0,
 
-                volume: 0
+                    volume: 0
 
-            };
+                };
 
         }
 
 
-        kelompok[key].sortimen[sortimen].batang++;
+        kelompok[key]
+            .sortimen[sortimen]
+            .batang++;
 
-        kelompok[key].sortimen[sortimen].volume +=
-            Number(item.volume || 0);
+
+        kelompok[key]
+            .sortimen[sortimen]
+            .volume +=
+                Number(item.volume || 0);
+
+
+        kelompok[key]
+            .totalBatang++;
+
+
+        kelompok[key]
+            .totalVolume +=
+                Number(item.volume || 0);
 
     });
 
@@ -886,17 +905,26 @@ function tampilkanRincian(data){
                 const ib =
                     urutan.indexOf(b);
 
-                if(ia === -1 && ib === -1){
+
+                if(
+                    ia === -1 &&
+                    ib === -1
+                ){
+
                     return a.localeCompare(b);
+
                 }
+
 
                 if(ia === -1){
                     return 1;
                 }
 
+
                 if(ib === -1){
                     return -1;
                 }
+
 
                 return ia - ib;
 
@@ -913,13 +941,81 @@ function tampilkanRincian(data){
 
 
     /*
-     * TOTAL HANYA KALAU ADA
-     * LEBIH DARI SATU SORTIMEN.
+     * TOTAL KANAN HANYA KALAU
+     * ADA LEBIH DARI 1 SORTIMEN
      */
 
     const tampilkanTotal =
         sortimenAktif.length > 1;
 
+
+    /*
+     * TOTAL KESELURUHAN
+     */
+
+    const grandTotal = {
+
+        batang: 0,
+
+        volume: 0,
+
+        sortimen: {}
+
+    };
+
+
+    sortimenAktif.forEach(function(sortimen){
+
+        grandTotal.sortimen[sortimen] = {
+
+            batang: 0,
+
+            volume: 0
+
+        };
+
+    });
+
+
+    baris.forEach(function(item){
+
+        sortimenAktif.forEach(function(sortimen){
+
+            const nilai =
+                item.sortimen[sortimen];
+
+
+            if(nilai){
+
+                grandTotal
+                    .sortimen[sortimen]
+                    .batang +=
+                        nilai.batang;
+
+
+                grandTotal
+                    .sortimen[sortimen]
+                    .volume +=
+                        nilai.volume;
+
+            }
+
+        });
+
+
+        grandTotal.batang +=
+            item.totalBatang;
+
+
+        grandTotal.volume +=
+            item.totalVolume;
+
+    });
+
+
+    /*
+     * BIKIN TABEL
+     */
 
     let html = "";
 
@@ -929,10 +1025,18 @@ function tampilkanRincian(data){
 
     html += "<tr>";
 
-    html += "<th rowspan='2'>NO</th>";
-    html += "<th rowspan='2'>SKSHH-KB</th>";
-    html += "<th rowspan='2'>TGL TERIMA</th>";
-    html += "<th rowspan='2'>TPK</th>";
+
+    html +=
+        "<th rowspan='2'>NO</th>";
+
+    html +=
+        "<th rowspan='2'>SKSHH-KB</th>";
+
+    html +=
+        "<th rowspan='2'>TGL TERIMA</th>";
+
+    html +=
+        "<th rowspan='2'>TPK</th>";
 
 
     sortimenAktif.forEach(function(sortimen){
@@ -956,21 +1060,31 @@ function tampilkanRincian(data){
     html += "</tr>";
 
 
+    /*
+     * HEADER BARIS KEDUA
+     */
+
     html += "<tr>";
 
 
     sortimenAktif.forEach(function(){
 
-        html += "<th>BTG</th>";
-        html += "<th>M³</th>";
+        html +=
+            "<th>BTG</th>";
+
+        html +=
+            "<th>M³</th>";
 
     });
 
 
     if(tampilkanTotal){
 
-        html += "<th>BTG</th>";
-        html += "<th>M³</th>";
+        html +=
+            "<th>BTG</th>";
+
+        html +=
+            "<th>M³</th>";
 
     }
 
@@ -979,6 +1093,11 @@ function tampilkanRincian(data){
 
     html += "</thead>";
 
+
+    /*
+     * BODY
+     */
+
     html += "<tbody>";
 
 
@@ -986,30 +1105,49 @@ function tampilkanRincian(data){
 
         html += "<tr>";
 
+
         html +=
             "<td>" +
             (index + 1) +
             "</td>";
 
-        html +=
-            "<td>" +
-            escapeHtml(item.skshhkb) +
-            "</td>";
 
         html +=
             "<td>" +
-            formatTanggal(item.tglTerima) +
+            escapeHtml(
+                item.skshhkb
+            ) +
             "</td>";
+
 
         html +=
             "<td>" +
-            escapeHtml(item.tpk) +
+            formatTanggal(
+                item.tglTerima
+            ) +
             "</td>";
 
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.tpk
+            ) +
+            "</td>";
+
+
+        /*
+         * TOTAL PER BARIS
+         */
 
         let totalBatangBaris = 0;
+
         let totalVolumeBaris = 0;
 
+
+        /*
+         * SORTIMEN
+         */
 
         sortimenAktif.forEach(function(sortimen){
 
@@ -1023,19 +1161,35 @@ function tampilkanRincian(data){
                 };
 
 
-            html +=
-                "<td>" +
-                nilai.batang +
-                "</td>";
+            /*
+             * 0 = KOSONG
+             */
 
             html +=
                 "<td>" +
-                formatVolume(nilai.volume) +
+                (
+                    nilai.batang === 0
+                        ? ""
+                        : nilai.batang
+                ) +
+                "</td>";
+
+
+            html +=
+                "<td>" +
+                (
+                    nilai.volume === 0
+                        ? ""
+                        : formatVolume(
+                            nilai.volume
+                          )
+                ) +
                 "</td>";
 
 
             totalBatangBaris +=
                 nilai.batang;
+
 
             totalVolumeBaris +=
                 nilai.volume;
@@ -1043,16 +1197,31 @@ function tampilkanRincian(data){
         });
 
 
+        /*
+         * TOTAL DI KANAN
+         */
+
         if(tampilkanTotal){
 
             html +=
                 "<td>" +
-                totalBatangBaris +
+                (
+                    totalBatangBaris === 0
+                        ? ""
+                        : totalBatangBaris
+                ) +
                 "</td>";
+
 
             html +=
                 "<td>" +
-                formatVolume(totalVolumeBaris) +
+                (
+                    totalVolumeBaris === 0
+                        ? ""
+                        : formatVolume(
+                            totalVolumeBaris
+                          )
+                ) +
                 "</td>";
 
         }
@@ -1063,15 +1232,126 @@ function tampilkanRincian(data){
     });
 
 
+    /*
+     * =================================================
+     * BARIS TOTAL PALING BAWAH
+     * =================================================
+     */
+
+    html +=
+        "<tr class='baris-total'>";
+
+
+    /*
+     * NO
+     */
+
+    html +=
+        "<td></td>";
+
+
+    /*
+     * SKSHH-KB
+     */
+
+    html +=
+        "<td><strong>TOTAL</strong></td>";
+
+
+    /*
+     * TGL TERIMA
+     */
+
+    html +=
+        "<td></td>";
+
+
+    /*
+     * TPK
+     */
+
+    html +=
+        "<td></td>";
+
+
+    /*
+     * TOTAL PER SORTIMEN
+     */
+
+    sortimenAktif.forEach(function(sortimen){
+
+        const total =
+            grandTotal
+                .sortimen[sortimen];
+
+
+        html +=
+            "<td><strong>" +
+            (
+                total.batang === 0
+                    ? ""
+                    : total.batang
+            ) +
+            "</strong></td>";
+
+
+        html +=
+            "<td><strong>" +
+            (
+                total.volume === 0
+                    ? ""
+                    : formatVolume(
+                        total.volume
+                      )
+            ) +
+            "</strong></td>";
+
+    });
+
+
+    /*
+     * TOTAL KESELURUHAN
+     * HANYA KALAU ADA > 1 SORTIMEN
+     */
+
+    if(tampilkanTotal){
+
+        html +=
+            "<td><strong>" +
+            (
+                grandTotal.batang === 0
+                    ? ""
+                    : grandTotal.batang
+            ) +
+            "</strong></td>";
+
+
+        html +=
+            "<td><strong>" +
+            (
+                grandTotal.volume === 0
+                    ? ""
+                    : formatVolume(
+                        grandTotal.volume
+                      )
+            ) +
+            "</strong></td>";
+
+    }
+
+
+    html += "</tr>";
+
+
     html += "</tbody>";
 
     html += "</table>";
 
 
-    box.innerHTML = html;
+    box.innerHTML =
+        html;
 
 }
-
 
 /* =====================================================
    ESCAPE HTML
