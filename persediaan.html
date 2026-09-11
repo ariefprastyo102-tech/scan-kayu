@@ -1606,28 +1606,28 @@ function tampilkanOlah(
 
     data.rincian.forEach(function(item){
 
-        html +=
-            '<tr>' +
+    html +=
+        '<tr>' +
 
-            '<td>' +
-            escapeHtml(item.sortimen || "") +
-            '</td>' +
+        '<td>' +
+        escapeHtml(item.sortimen || "") +
+        '</td>' +
 
-            '<td>' +
-            escapeHtml(item.status || "") +
-            '</td>' +
+        '<td>' +
+        escapeHtml(item.statusOlah || "") +
+        '</td>' +
 
-            '<td>' +
-            Number(item.batang || 0) +
-            '</td>' +
+        '<td>' +
+        Number(item.batang || 0) +
+        '</td>' +
 
-            '<td>' +
-            formatVolume(item.volume) +
-            '</td>' +
+        '<td>' +
+        formatVolume(item.volume) +
+        '</td>' +
 
-            '</tr>';
+        '</tr>';
 
-    });
+});
 
 
     html +=
