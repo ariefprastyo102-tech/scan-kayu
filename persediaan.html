@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PERSEDIAAN BBI</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f2f4f7;
+    color:#222;
+}
+
+.header{
+    background:#176b3a;
+    color:white;
+    text-align:center;
+    padding:22px 15px;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+    letter-spacing:1px;
+}
+
+.header p{
+    margin:6px 0 0;
+    font-size:14px;
+}
+
+.menu{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    padding:20px 15px;
+    background:white;
+    border-bottom:1px solid #ddd;
+}
+
+.menu button{
+    border:0;
+    padding:14px 25px;
+    border-radius:8px;
+    background:#ddd;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu button.active{
+    background:#176b3a;
+    color:white;
+}
+
+.ruang{
+    max-width:1000px;
+    margin:20px auto;
+    padding:0 15px;
+}
+
+.kartu{
+    background:white;
+    border-radius:10px;
+    padding:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.kartu h2{
+    margin-top:0;
+    color:#176b3a;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>PERSEDIAAN BBI</h1>
+    <p>Sistem Monitoring Persediaan</p>
+</div>
+
+<div class="menu">
+
+    <button class="active" onclick="bukaRuang('pasokan',this)">
+        PASOKAN
+    </button>
+
+    <button onclick="bukaRuang('olah',this)">
+        OLAH
+    </button>
+
+    <button onclick="bukaRuang('sisa',this)">
+        SISA
+    </button>
+
+</div>
+
+<div class="ruang">
+
+    <div id="pasokan" class="kartu">
+        <h2>PASOKAN</h2>
+        <p>Ruang PASOKAN.</p>
+    </div>
+
+    <div id="olah" class="kartu" style="display:none;">
+        <h2>OLAH</h2>
+        <p>Ruang OLAH.</p>
+    </div>
+
+    <div id="sisa" class="kartu" style="display:none;">
+        <h2>SISA</h2>
+        <p>Ruang SISA.</p>
+    </div>
+
+</div>
+
+<script>
+
+function bukaRuang(nama,tombol){
+
+    document.getElementById("pasokan").style.display = "none";
+    document.getElementById("olah").style.display = "none";
+    document.getElementById("sisa").style.display = "none";
+
+    document.getElementById(nama).style.display = "block";
+
+    document.querySelectorAll(".menu button").forEach(function(btn){
+        btn.classList.remove("active");
+    });
+
+    tombol.classList.add("active");
+}
+
+</script>
+
+</body>
+</html>
+
