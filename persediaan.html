@@ -1572,8 +1572,9 @@ function tampilkanOlah(
 
 
     if(
+        !data ||
         !data.rincian ||
-        data.rincian.length === 0
+        !data.rincian.length
     ){
 
         rincian.innerHTML =
@@ -1586,76 +1587,445 @@ function tampilkanOlah(
     }
 
 
-    let html = '';
+    /* =================================================
+       NORMALISASI DATA OLAH
 
-    html +=
-        '<table>';
+       BACKEND BISA MENGIRIM:
+       1. sortimen = "A III"
+       2. sortimen = { "A III": {...} }
+       3. sortimen = { nama:"A III", batang:40, volume:1.234 }
+    ================================================= */
 
-    html +=
-        '<thead>' +
-        '<tr>' +
-        '<th>SORTIMEN</th>' +
-        '<th>STATUS</th>' +
-        '<th>BATANG</th>' +
-        '<th>VOLUME (M³)</th>' +
-        '</tr>' +
-        '</thead>';
-
-    html += '<tbody>';
+    const baris = [];
 
 
     data.rincian.forEach(function(item){
 
+        if(!item){
+            return;
+        }
+
+
+        /*
+         * KASUS 1
+         * sortimen berupa object
+         *
+         * contoh:
+         * sortimen: {
+         *     "A III": {
+         *         batang: 40,
+         *         volume: 1.234
+         *     }
+         * }
+         */
+
+        if(
+            item.sortimen &&
+            typeof item.sortimen === "object" &&
+            !Array.isArray(item.sortimen)
+        ){
+
+            const obj =
+                item.sortimen;
+
+
+            /*
+             * JIKA OBJECT LANGSUNG MEMILIKI
+             * BATANG / VOLUME
+             *
+             * contoh:
+             * {
+             *   nama:"A III",
+             *   batang:40,
+             *   volume:1.2
+             * }
+             */
+
+            if(
+                obj.batang !== undefined ||
+                obj.volume !== undefined ||
+                obj.nama !== undefined ||
+                obj.sortimen !== undefined
+            ){
+
+                const nama =
+                    obj.nama ||
+                    obj.sortimen ||
+                    item.nama ||
+                    "";
+
+
+                baris.push({
+
+                    sortimen:
+                        normalisasiSortimen(nama),
+
+                    status:
+                        item.statusOlah ||
+                        item.status ||
+                        "SUDAH DIOLAH",
+
+                    batang:
+                        Number(
+                            obj.batang || 0
+                        ),
+
+                    volume:
+                        Number(
+                            obj.volume || 0
+                        )
+
+                });
+
+                return;
+
+            }
+
+
+            /*
+             * JIKA OBJECT BERISI BEBERAPA SORTIMEN
+             *
+             * contoh:
+             *
+             * sortimen:{
+             *   "A I":{
+             *      batang:40,
+             *      volume:1
+             *   },
+             *   "A II":{
+             *      batang:20,
+             *      volume:2
+             *   }
+             * }
+             */
+
+            Object.keys(obj)
+                .forEach(function(namaSortimen){
+
+                    const nilai =
+                        obj[namaSortimen];
+
+
+                    if(
+                        !nilai ||
+                        typeof nilai !== "object"
+                    ){
+                        return;
+                    }
+
+
+                    baris.push({
+
+                        sortimen:
+                            normalisasiSortimen(
+                                namaSortimen
+                            ),
+
+                        status:
+                            nilai.statusOlah ||
+                            nilai.status ||
+                            item.statusOlah ||
+                            item.status ||
+                            "SUDAH DIOLAH",
+
+                        batang:
+                            Number(
+                                nilai.batang || 0
+                            ),
+
+                        volume:
+                            Number(
+                                nilai.volume || 0
+                            )
+
+                    });
+
+                });
+
+
+            return;
+
+        }
+
+
+        /*
+         * KASUS 2
+         * sortimen memang berupa teks biasa
+         */
+
+        baris.push({
+
+            sortimen:
+                normalisasiSortimen(
+                    item.sortimen || ""
+                ),
+
+            status:
+                item.statusOlah ||
+                item.status ||
+                "SUDAH DIOLAH",
+
+            batang:
+                Number(
+                    item.batang || 0
+                ),
+
+            volume:
+                Number(
+                    item.volume || 0
+                )
+
+        });
+
+    });
+
+
+    /* =================================================
+       BUANG BARIS KOSONG
+    ================================================= */
+
+    const barisValid =
+        baris.filter(function(item){
+
+            return (
+                item.sortimen ||
+                item.batang ||
+                item.volume
+            );
+
+        });
+
+
+    if(!barisValid.length){
+
+        rincian.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA OLAH.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    /* =================================================
+       HITUNG TOTAL DARI DATA YANG SUDAH DINORMALISASI
+       SUPAYA TIDAK TERGANTUNG TOTAL BACKEND
+    ================================================= */
+
+    let hitungBatang = 0;
+    let hitungVolume = 0;
+
+
+    barisValid.forEach(function(item){
+
+        hitungBatang +=
+            Number(item.batang || 0);
+
+        hitungVolume +=
+            Number(item.volume || 0);
+
+    });
+
+
+    /*
+     * JIKA BACKEND MENGIRIM TOTAL YANG VALID,
+     * PAKAI TOTAL BACKEND.
+     *
+     * JIKA 0 PADAHAL ADA DATA,
+     * PAKAI HASIL HITUNG FRONTEND.
+     */
+
+    const totalBatangFinal =
+        Number(totalBatang || 0) > 0
+            ? Number(totalBatang)
+            : hitungBatang;
+
+
+    const totalVolumeFinal =
+        Number(totalVolume || 0) > 0
+            ? Number(totalVolume)
+            : hitungVolume;
+
+
+    /* =================================================
+       URUTAN SORTIMEN
+    ================================================= */
+
+    const urutan = [
+        "A I",
+        "A II",
+        "A III",
+        "KBP"
+    ];
+
+
+    barisValid.sort(function(a,b){
+
+        const ia =
+            urutan.indexOf(a.sortimen);
+
+        const ib =
+            urutan.indexOf(b.sortimen);
+
+
+        if(
+            ia === -1 &&
+            ib === -1
+        ){
+
+            return a.sortimen.localeCompare(
+                b.sortimen
+            );
+
+        }
+
+
+        if(ia === -1){
+            return 1;
+        }
+
+
+        if(ib === -1){
+            return -1;
+        }
+
+
+        return ia - ib;
+
+    });
+
+
+    /* =================================================
+       BUAT TABEL
+    ================================================= */
+
+    let html = "";
+
+
     html +=
-        '<tr>' +
-
-        '<td>' +
-        escapeHtml(item.sortimen || "") +
-        '</td>' +
-
-        '<td>' +
-        escapeHtml(item.statusOlah || "") +
-        '</td>' +
-
-        '<td>' +
-        Number(item.batang || 0) +
-        '</td>' +
-
-        '<td>' +
-        formatVolume(item.volume) +
-        '</td>' +
-
-        '</tr>';
-
-});
+        "<table>";
 
 
     html +=
-        '<tr class="baris-total">' +
+        "<thead>" +
+        "<tr>" +
 
-        '<th class="total-label">' +
-        'TOTAL' +
-        '</th>' +
+        "<th>SORTIMEN</th>" +
 
-        '<th></th>' +
+        "<th>STATUS</th>" +
 
-        '<th>' +
-        Number(totalBatang || 0) +
-        '</th>' +
+        "<th>BATANG</th>" +
 
-        '<th class="total-cell">' +
-        formatVolume(totalVolume) +
-        '</th>' +
+        "<th>VOLUME (M³)</th>" +
 
-        '</tr>';
+        "</tr>" +
+        "</thead>";
 
 
     html +=
-        '</tbody>' +
-        '</table>';
+        "<tbody>";
 
 
-    rincian.innerHTML = html;
+    /* =================================================
+       DATA
+    ================================================= */
+
+    barisValid.forEach(function(item){
+
+        html +=
+            "<tr>";
+
+
+        /* SORTIMEN */
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.sortimen || ""
+            ) +
+            "</td>";
+
+
+        /* STATUS */
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.status || ""
+            ) +
+            "</td>";
+
+
+        /* BATANG */
+
+        html +=
+            "<td>" +
+            (
+                Number(item.batang || 0)
+            ) +
+            "</td>";
+
+
+        /* VOLUME */
+
+        html +=
+            "<td>" +
+            formatVolume(
+                Number(item.volume || 0)
+            ) +
+            "</td>";
+
+
+        html +=
+            "</tr>";
+
+    });
+
+
+    /* =================================================
+       TOTAL
+    ================================================= */
+
+    html +=
+        "<tr class='baris-total'>";
+
+
+    html +=
+        "<th class='total-label'>" +
+        "TOTAL" +
+        "</th>";
+
+
+    html +=
+        "<th></th>";
+
+
+    html +=
+        "<th>" +
+        totalBatangFinal +
+        "</th>";
+
+
+    html +=
+        "<th class='total-cell'>" +
+        formatVolume(
+            totalVolumeFinal
+        ) +
+        "</th>";
+
+
+    html +=
+        "</tr>";
+
+
+    html +=
+        "</tbody>" +
+        "</table>";
+
+
+    rincian.innerHTML =
+        html;
 
 }
 /* =====================================================
