@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -241,11 +242,9 @@ tbody tr:last-child th{
 
 <div class="header">
 
-
 <h1>PASOKAN & PERSEDIAAN BBI IK SARADAN</h1>
 
 <p>Sistem Monitoring Persediaan</p>
-
 
 </div>
 
@@ -254,7 +253,6 @@ tbody tr:last-child th{
 ===================================================== -->
 
 <div class="menu">
-
 
 <button
     class="active"
@@ -272,7 +270,6 @@ tbody tr:last-child th{
     SISA
 </button>
 
-
 </div>
 
 <!-- =====================================================
@@ -281,7 +278,6 @@ tbody tr:last-child th{
 
 <div class="ruang">
 
-
 <!-- =================================================
      PASOKAN
 ================================================== -->
@@ -289,7 +285,6 @@ tbody tr:last-child th{
 <div id="pasokan" class="kartu">
 
     <h2>PASOKAN</h2>
-
 
     <!-- FILTER BULAN -->
 
@@ -357,7 +352,6 @@ tbody tr:last-child th{
 
     </div>
 
-
     <!-- STATUS -->
 
     <div id="statusPasokan"
@@ -367,13 +361,11 @@ tbody tr:last-child th{
 
     </div>
 
-
     <!-- TOTAL PASOKAN -->
 
     <h3>
         TOTAL PASOKAN
     </h3>
-
 
     <table>
 
@@ -397,7 +389,6 @@ tbody tr:last-child th{
 
         </thead>
 
-
         <tbody>
 
             <tr>
@@ -416,7 +407,6 @@ tbody tr:last-child th{
 
             </tr>
 
-
             <tr>
 
                 <td>
@@ -432,7 +422,6 @@ tbody tr:last-child th{
                 </td>
 
             </tr>
-
 
             <tr>
 
@@ -450,7 +439,6 @@ tbody tr:last-child th{
 
             </tr>
 
-
             <tr>
 
                 <td>
@@ -466,7 +454,6 @@ tbody tr:last-child th{
                 </td>
 
             </tr>
-
 
             <tr>
 
@@ -488,13 +475,11 @@ tbody tr:last-child th{
 
     </table>
 
-
     <!-- RINCIAN -->
 
     <h3>
         RINCIAN PASOKAN
     </h3>
-
 
     <div
         id="rincianPasokan"
@@ -507,7 +492,6 @@ tbody tr:last-child th{
     </div>
 
 </div>
-
 
 <!-- =================================================
      OLAH
@@ -526,7 +510,6 @@ tbody tr:last-child th{
 
 </div>
 
-
 <!-- =================================================
      SISA
 ================================================== -->
@@ -543,7 +526,6 @@ tbody tr:last-child th{
     </p>
 
 </div>
-
 
 </div>
 
@@ -617,11 +599,9 @@ function bukaRuang(nama,tombol){
         .getElementById("sisa")
         .style.display = "none";
 
-
     document
         .getElementById(nama)
         .style.display = "block";
-
 
     document
         .querySelectorAll(".menu button")
@@ -630,7 +610,6 @@ function bukaRuang(nama,tombol){
             btn.classList.remove("active");
 
         });
-
 
     tombol.classList.add("active");
 
@@ -653,7 +632,6 @@ function tampilkanPasokan(hasil){
 
         return;
     }
-
 
     const r = hasil.ringkasan || {};
 
@@ -717,7 +695,11 @@ function tampilkanPasokan(hasil){
         "none";
 
 
-    tampilkanRincian(hasil.data || []);
+    /*
+     * BACKEND BARU SUDAH MENGIRIM
+     * RINCIAN DALAM BENTUK KELOMPOK.
+     */
+    tampilkanRincian(hasil.rincian || []);
 
 }
 
@@ -749,8 +731,10 @@ function normalisasiSortimen(nama){
 
 }
 
+
 /* =====================================================
    RINCIAN PASOKAN
+   BACKEND SUDAH MENGELOMPOKKAN DATA
 ===================================================== */
 
 function tampilkanRincian(data){
@@ -759,7 +743,7 @@ function tampilkanRincian(data){
         document.getElementById("rincianPasokan");
 
 
-    if(!data.length){
+    if(!data || !data.length){
 
         box.innerHTML =
             '<div class="kosong">Tidak ada data pasokan.</div>';
@@ -768,124 +752,38 @@ function tampilkanRincian(data){
     }
 
 
-    /*
-     * SATU BARIS = SATU SKSHH-KB
-     *
-     * Digabung berdasarkan:
-     *   SKSHH-KB
-     *   TGL TERIMA
-     *   TPK
-     */
-
-    const kelompok = {};
+    /* =================================================
+       AMBIL SEMUA SORTIMEN AKTIF
+    ================================================= */
 
     const sortimenSet = new Set();
 
 
     data.forEach(function(item){
 
-        const skshh =
-            String(item.skshhkb || "")
-                .trim();
-
-        const tgl =
-            String(item.tglTerima || "")
-                .trim();
-
-        const tpk =
-            String(item.tpk || "")
-                .trim();
+        const daftar =
+            item.sortimen || {};
 
 
-        const key =
-            skshh +
-            "|" +
-            tgl +
-            "|" +
-            tpk;
+        Object.keys(daftar)
+            .forEach(function(sortimen){
 
+                if(sortimen){
 
-        if(!kelompok[key]){
+                    sortimenSet.add(
+                        normalisasiSortimen(sortimen)
+                    );
 
-            kelompok[key] = {
+                }
 
-                skshhkb: skshh,
-
-                tglTerima: tgl,
-
-                tpk: tpk,
-
-                sortimen: {},
-
-                totalBatang: 0,
-
-                totalVolume: 0
-
-            };
-
-        }
-
-
-        const sortimen =
-            normalisasiSortimen(
-                item.sortimen
-            );
-
-
-        if(!sortimen){
-            return;
-        }
-
-
-        sortimenSet.add(sortimen);
-
-
-        if(
-            !kelompok[key]
-                .sortimen[sortimen]
-        ){
-
-            kelompok[key]
-                .sortimen[sortimen] = {
-
-                    batang: 0,
-
-                    volume: 0
-
-                };
-
-        }
-
-
-        kelompok[key]
-            .sortimen[sortimen]
-            .batang++;
-
-
-        kelompok[key]
-            .sortimen[sortimen]
-            .volume +=
-                Number(item.volume || 0);
-
-
-        kelompok[key]
-            .totalBatang++;
-
-
-        kelompok[key]
-            .totalVolume +=
-                Number(item.volume || 0);
+            });
 
     });
 
 
-    const baris =
-        Object.values(kelompok);
-
-
-    /*
-     * URUTAN SORTIMEN
-     */
+    /* =================================================
+       URUTAN SORTIMEN
+    ================================================= */
 
     const urutan = [
         "A I",
@@ -940,18 +838,18 @@ function tampilkanRincian(data){
     }
 
 
-    /*
-     * TOTAL KANAN HANYA KALAU
-     * ADA LEBIH DARI 1 SORTIMEN
-     */
+    /* =================================================
+       TOTAL KANAN HANYA JIKA
+       ADA LEBIH DARI 1 SORTIMEN
+    ================================================= */
 
     const tampilkanTotal =
         sortimenAktif.length > 1;
 
 
-    /*
-     * TOTAL KESELURUHAN
-     */
+    /* =================================================
+       TOTAL KESELURUHAN
+    ================================================= */
 
     const grandTotal = {
 
@@ -977,49 +875,72 @@ function tampilkanRincian(data){
     });
 
 
-    baris.forEach(function(item){
+    /* =================================================
+       HITUNG GRAND TOTAL
+    ================================================= */
+
+    data.forEach(function(item){
+
+        const daftar =
+            item.sortimen || {};
+
 
         sortimenAktif.forEach(function(sortimen){
 
             const nilai =
-                item.sortimen[sortimen];
+                daftar[sortimen];
 
 
-            if(nilai){
-
-                grandTotal
-                    .sortimen[sortimen]
-                    .batang +=
-                        nilai.batang;
-
-
-                grandTotal
-                    .sortimen[sortimen]
-                    .volume +=
-                        nilai.volume;
-
+            if(!nilai){
+                return;
             }
 
+
+            grandTotal
+                .sortimen[sortimen]
+                .batang +=
+                    Number(nilai.batang || 0);
+
+
+            grandTotal
+                .sortimen[sortimen]
+                .volume +=
+                    Number(nilai.volume || 0);
+
         });
-
-
-        grandTotal.batang +=
-            item.totalBatang;
-
-
-        grandTotal.volume +=
-            item.totalVolume;
 
     });
 
 
-    /*
-     * BIKIN TABEL
-     */
+    sortimenAktif.forEach(function(sortimen){
+
+        grandTotal.batang +=
+            grandTotal
+                .sortimen[sortimen]
+                .batang;
+
+
+        grandTotal.volume +=
+            grandTotal
+                .sortimen[sortimen]
+                .volume;
+
+    });
+
+
+    /* =================================================
+       BIKIN TABEL
+    ================================================= */
 
     let html = "";
 
+
     html += "<table>";
+
+
+    /* =================================================
+       HEADER BARIS 1
+    ================================================= */
 
     html += "<thead>";
 
@@ -1029,11 +950,14 @@ function tampilkanRincian(data){
     html +=
         "<th rowspan='2'>NO</th>";
 
+
     html +=
         "<th rowspan='2'>SKSHH-KB</th>";
 
+
     html +=
         "<th rowspan='2'>TGL TERIMA</th>";
+
 
     html +=
         "<th rowspan='2'>TPK</th>";
@@ -1060,9 +984,9 @@ function tampilkanRincian(data){
     html += "</tr>";
 
 
-    /*
-     * HEADER BARIS KEDUA
-     */
+    /* =================================================
+       HEADER BARIS 2
+    ================================================= */
 
     html += "<tr>";
 
@@ -1094,17 +1018,19 @@ function tampilkanRincian(data){
     html += "</thead>";
 
 
-    /*
-     * BODY
-     */
+    /* =================================================
+       BODY
+    ================================================= */
 
     html += "<tbody>";
 
 
-    baris.forEach(function(item,index){
+    data.forEach(function(item,index){
 
         html += "<tr>";
 
+
+        /* NO */
 
         html +=
             "<td>" +
@@ -1112,47 +1038,60 @@ function tampilkanRincian(data){
             "</td>";
 
 
-        html +=
-            "<td>" +
-            escapeHtml(
-                item.skshhkb
-            ) +
-            "</td>";
-
-
-        html +=
-            "<td>" +
-            formatTanggal(
-                item.tglTerima
-            ) +
-            "</td>";
-
+        /* SKSHH-KB */
 
         html +=
             "<td>" +
             escapeHtml(
-                item.tpk
+                item.skshhkb || ""
             ) +
             "</td>";
 
 
-        /*
-         * TOTAL PER BARIS
-         */
+        /* TGL TERIMA
+           Backend sudah mengirim
+           dalam format d-M-yyyy
+        */
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.tglTerima || ""
+            ) +
+            "</td>";
+
+
+        /* TPK */
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.tpk || ""
+            ) +
+            "</td>";
+
+
+        /* =================================================
+           TOTAL PER BARIS
+        ================================================= */
 
         let totalBatangBaris = 0;
 
         let totalVolumeBaris = 0;
 
 
-        /*
-         * SORTIMEN
-         */
+        const daftar =
+            item.sortimen || {};
+
+
+        /* =================================================
+           SORTIMEN
+        ================================================= */
 
         sortimenAktif.forEach(function(sortimen){
 
             const nilai =
-                item.sortimen[sortimen] || {
+                daftar[sortimen] || {
 
                     batang: 0,
 
@@ -1161,45 +1100,55 @@ function tampilkanRincian(data){
                 };
 
 
-            /*
-             * 0 = KOSONG
-             */
+            const batang =
+                Number(
+                    nilai.batang || 0
+                );
+
+
+            const volume =
+                Number(
+                    nilai.volume || 0
+                );
+
+
+            /* BTG */
 
             html +=
                 "<td>" +
                 (
-                    nilai.batang === 0
+                    batang === 0
                         ? ""
-                        : nilai.batang
+                        : batang
                 ) +
                 "</td>";
 
 
+            /* VOLUME */
+
             html +=
                 "<td>" +
                 (
-                    nilai.volume === 0
+                    volume === 0
                         ? ""
-                        : formatVolume(
-                            nilai.volume
-                          )
+                        : formatVolume(volume)
                 ) +
                 "</td>";
 
 
             totalBatangBaris +=
-                nilai.batang;
+                batang;
 
 
             totalVolumeBaris +=
-                nilai.volume;
+                volume;
 
         });
 
 
-        /*
-         * TOTAL DI KANAN
-         */
+        /* =================================================
+           TOTAL KANAN
+        ================================================= */
 
         if(tampilkanTotal){
 
@@ -1232,51 +1181,33 @@ function tampilkanRincian(data){
     });
 
 
-    /*
-     * =================================================
-     * BARIS TOTAL PALING BAWAH
-     * =================================================
-     */
+    /* =================================================
+       TOTAL PALING BAWAH
+    ================================================= */
 
     html +=
         "<tr class='baris-total'>";
 
 
-    /*
-     * NO
-     */
-
     html +=
         "<td></td>";
 
-
-    /*
-     * SKSHH-KB
-     */
 
     html +=
         "<td><strong>TOTAL</strong></td>";
 
 
-    /*
-     * TGL TERIMA
-     */
+    html +=
+        "<td></td>";
+
 
     html +=
         "<td></td>";
 
 
-    /*
-     * TPK
-     */
-
-    html +=
-        "<td></td>";
-
-
-    /*
-     * TOTAL PER SORTIMEN
-     */
+    /* =================================================
+       TOTAL PER SORTIMEN
+    ================================================= */
 
     sortimenAktif.forEach(function(sortimen){
 
@@ -1309,10 +1240,9 @@ function tampilkanRincian(data){
     });
 
 
-    /*
-     * TOTAL KESELURUHAN
-     * HANYA KALAU ADA > 1 SORTIMEN
-     */
+    /* =================================================
+       TOTAL KESELURUHAN
+    ================================================= */
 
     if(tampilkanTotal){
 
@@ -1352,6 +1282,7 @@ function tampilkanRincian(data){
         html;
 
 }
+
 
 /* =====================================================
    ESCAPE HTML
@@ -1500,3 +1431,4 @@ document.addEventListener(
 </body>
 
 </html>
+
