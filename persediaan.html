@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
@@ -241,12 +241,13 @@ tbody tr:last-child th{
 
 <div class="header">
 
-    <h1>PERSEDIAAN BBI</h1>
+```
+<h1>PERSEDIAAN BBI</h1>
 
-    <p>Sistem Monitoring Persediaan</p>
+<p>Sistem Monitoring Persediaan</p>
+```
 
 </div>
-
 
 <!-- =====================================================
      MENU
@@ -254,24 +255,25 @@ tbody tr:last-child th{
 
 <div class="menu">
 
-    <button
-        class="active"
-        onclick="bukaRuang('pasokan',this)">
-        PASOKAN
-    </button>
+```
+<button
+    class="active"
+    onclick="bukaRuang('pasokan',this)">
+    PASOKAN
+</button>
 
-    <button
-        onclick="bukaRuang('olah',this)">
-        OLAH
-    </button>
+<button
+    onclick="bukaRuang('olah',this)">
+    OLAH
+</button>
 
-    <button
-        onclick="bukaRuang('sisa',this)">
-        SISA
-    </button>
+<button
+    onclick="bukaRuang('sisa',this)">
+    SISA
+</button>
+```
 
 </div>
-
 
 <!-- =====================================================
      RUANG
@@ -279,272 +281,271 @@ tbody tr:last-child th{
 
 <div class="ruang">
 
+```
+<!-- =================================================
+     PASOKAN
+================================================== -->
 
-    <!-- =================================================
-         PASOKAN
-    ================================================== -->
+<div id="pasokan" class="kartu">
 
-    <div id="pasokan" class="kartu">
+    <h2>PASOKAN</h2>
 
-        <h2>PASOKAN</h2>
 
+    <!-- FILTER BULAN -->
 
-        <!-- FILTER BULAN -->
+    <div class="filter">
 
-        <div class="filter">
+        <label for="bulanPasokan">
+            FILTER BULAN
+        </label>
 
-            <label for="bulanPasokan">
-                FILTER BULAN
-            </label>
+        <select id="bulanPasokan">
 
-            <select id="bulanPasokan">
+            <option value="SEMUA">
+                SEMUA BULAN
+            </option>
 
-                <option value="SEMUA">
-                    SEMUA BULAN
-                </option>
+            <option value="JANUARI">
+                JANUARI
+            </option>
 
-                <option value="JANUARI">
-                    JANUARI
-                </option>
+            <option value="FEBRUARI">
+                FEBRUARI
+            </option>
 
-                <option value="FEBRUARI">
-                    FEBRUARI
-                </option>
+            <option value="MARET">
+                MARET
+            </option>
 
-                <option value="MARET">
-                    MARET
-                </option>
+            <option value="APRIL">
+                APRIL
+            </option>
 
-                <option value="APRIL">
-                    APRIL
-                </option>
+            <option value="MEI">
+                MEI
+            </option>
 
-                <option value="MEI">
-                    MEI
-                </option>
+            <option value="JUNI">
+                JUNI
+            </option>
 
-                <option value="JUNI">
-                    JUNI
-                </option>
+            <option value="JULI">
+                JULI
+            </option>
 
-                <option value="JULI">
-                    JULI
-                </option>
+            <option value="AGUSTUS">
+                AGUSTUS
+            </option>
 
-                <option value="AGUSTUS">
-                    AGUSTUS
-                </option>
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
 
-                <option value="SEPTEMBER">
-                    SEPTEMBER
-                </option>
+            <option value="OKTOBER">
+                OKTOBER
+            </option>
 
-                <option value="OKTOBER">
-                    OKTOBER
-                </option>
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
 
-                <option value="NOVEMBER">
-                    NOVEMBER
-                </option>
+            <option value="DESEMBER">
+                DESEMBER
+            </option>
 
-                <option value="DESEMBER">
-                    DESEMBER
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <!-- STATUS -->
-
-        <div id="statusPasokan"
-             class="loading">
-
-            MEMUAT DATA PASOKAN...
-
-        </div>
-
-
-        <!-- TOTAL PASOKAN -->
-
-        <h3>
-            TOTAL PASOKAN
-        </h3>
-
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        SORTIMEN
-                    </th>
-
-                    <th>
-                        BATANG
-                    </th>
-
-                    <th>
-                        VOLUME (M³)
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                <tr>
-
-                    <td>
-                        A I
-                    </td>
-
-                    <td id="batangAI">
-                        0
-                    </td>
-
-                    <td id="volumeAI">
-                        0,000
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        A II
-                    </td>
-
-                    <td id="batangAII">
-                        0
-                    </td>
-
-                    <td id="volumeAII">
-                        0,000
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        A III
-                    </td>
-
-                    <td id="batangAIII">
-                        0
-                    </td>
-
-                    <td id="volumeAIII">
-                        0,000
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        KBP
-                    </td>
-
-                    <td id="batangKBP">
-                        0
-                    </td>
-
-                    <td id="volumeKBP">
-                        0,000
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <th>
-                        TOTAL
-                    </th>
-
-                    <th id="totalBatang">
-                        0
-                    </th>
-
-                    <th id="totalVolume">
-                        0,000
-                    </th>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-
-        <!-- RINCIAN -->
-
-        <h3>
-            RINCIAN PASOKAN
-        </h3>
-
-
-        <div
-            id="rincianPasokan"
-            class="rincian">
-
-            <div class="loading">
-                MEMUAT RINCIAN...
-            </div>
-
-        </div>
+        </select>
 
     </div>
 
 
-    <!-- =================================================
-         OLAH
-    ================================================== -->
+    <!-- STATUS -->
+
+    <div id="statusPasokan"
+         class="loading">
+
+        MEMUAT DATA PASOKAN...
+
+    </div>
+
+
+    <!-- TOTAL PASOKAN -->
+
+    <h3>
+        TOTAL PASOKAN
+    </h3>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    SORTIMEN
+                </th>
+
+                <th>
+                    BATANG
+                </th>
+
+                <th>
+                    VOLUME (M³)
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            <tr>
+
+                <td>
+                    A I
+                </td>
+
+                <td id="batangAI">
+                    0
+                </td>
+
+                <td id="volumeAI">
+                    0,000
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    A II
+                </td>
+
+                <td id="batangAII">
+                    0
+                </td>
+
+                <td id="volumeAII">
+                    0,000
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    A III
+                </td>
+
+                <td id="batangAIII">
+                    0
+                </td>
+
+                <td id="volumeAIII">
+                    0,000
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    KBP
+                </td>
+
+                <td id="batangKBP">
+                    0
+                </td>
+
+                <td id="volumeKBP">
+                    0,000
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    TOTAL
+                </th>
+
+                <th id="totalBatang">
+                    0
+                </th>
+
+                <th id="totalVolume">
+                    0,000
+                </th>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <!-- RINCIAN -->
+
+    <h3>
+        RINCIAN PASOKAN
+    </h3>
+
 
     <div
-        id="olah"
-        class="kartu"
-        style="display:none;">
+        id="rincianPasokan"
+        class="rincian">
 
-        <h2>OLAH</h2>
-
-        <p>
-            Ruang OLAH.
-        </p>
+        <div class="loading">
+            MEMUAT RINCIAN...
+        </div>
 
     </div>
-
-
-    <!-- =================================================
-         SISA
-    ================================================== -->
-
-    <div
-        id="sisa"
-        class="kartu"
-        style="display:none;">
-
-        <h2>SISA</h2>
-
-        <p>
-            Ruang SISA.
-        </p>
-
-    </div>
-
 
 </div>
 
+
+<!-- =================================================
+     OLAH
+================================================== -->
+
+<div
+    id="olah"
+    class="kartu"
+    style="display:none;">
+
+    <h2>OLAH</h2>
+
+    <p>
+        Ruang OLAH.
+    </p>
+
+</div>
+
+
+<!-- =================================================
+     SISA
+================================================== -->
+
+<div
+    id="sisa"
+    class="kartu"
+    style="display:none;">
+
+    <h2>SISA</h2>
+
+    <p>
+        Ruang SISA.
+    </p>
+
+</div>
+```
+
+</div>
 
 <!-- =====================================================
      JAVASCRIPT
@@ -567,10 +568,33 @@ const API_URL =
 function formatVolume(angka){
 
     return Number(angka || 0)
-        .toLocaleString("id-ID",{
-            minimumFractionDigits:3,
-            maximumFractionDigits:3
-        });
+        .toFixed(3)
+        .replace(".", ",");
+
+}
+
+
+/* =====================================================
+   FORMAT TANGGAL
+===================================================== */
+
+function formatTanggal(tanggal){
+
+    if(!tanggal){
+        return "";
+    }
+
+    const d = new Date(tanggal);
+
+    if(isNaN(d.getTime())){
+        return String(tanggal);
+    }
+
+    return d.getDate() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getFullYear();
 
 }
 
@@ -699,6 +723,34 @@ function tampilkanPasokan(hasil){
 
 
 /* =====================================================
+   NORMALISASI SORTIMEN
+===================================================== */
+
+function normalisasiSortimen(nama){
+
+    const s =
+        String(nama || "")
+            .toUpperCase()
+            .trim();
+
+    if(s === "AI"){
+        return "A I";
+    }
+
+    if(s === "AII"){
+        return "A II";
+    }
+
+    if(s === "AIII"){
+        return "A III";
+    }
+
+    return s;
+
+}
+
+
+/* =====================================================
    RINCIAN PASOKAN
 ===================================================== */
 
@@ -717,6 +769,158 @@ function tampilkanRincian(data){
     }
 
 
+    /*
+     * SATU BARIS = SATU SKSHH-KB
+     *
+     * Data register dari DATABASE digabung
+     * berdasarkan:
+     *   SKSHH-KB (R)
+     *   TGL TERIMA (Q)
+     *   TPK (D)
+     *
+     * SORTIMEN dihitung terpisah.
+     */
+
+    const kelompok = {};
+
+    const sortimenSet = new Set();
+
+
+    data.forEach(function(item){
+
+        const skshh =
+            String(item.skshhkb || "")
+                .trim();
+
+        const tgl =
+            String(item.tglTerima || "")
+                .trim();
+
+        const tpk =
+            String(item.tpk || "")
+                .trim();
+
+        const key =
+            skshh +
+            "|" +
+            tgl +
+            "|" +
+            tpk;
+
+
+        if(!kelompok[key]){
+
+            kelompok[key] = {
+
+                skshhkb: skshh,
+
+                tglTerima: tgl,
+
+                tpk: tpk,
+
+                sortimen: {}
+
+            };
+
+        }
+
+
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen
+            );
+
+
+        if(!sortimen){
+            return;
+        }
+
+
+        sortimenSet.add(sortimen);
+
+
+        if(!kelompok[key].sortimen[sortimen]){
+
+            kelompok[key].sortimen[sortimen] = {
+
+                batang: 0,
+
+                volume: 0
+
+            };
+
+        }
+
+
+        kelompok[key].sortimen[sortimen].batang++;
+
+        kelompok[key].sortimen[sortimen].volume +=
+            Number(item.volume || 0);
+
+    });
+
+
+    const baris =
+        Object.values(kelompok);
+
+
+    /*
+     * URUTAN SORTIMEN
+     */
+
+    const urutan = [
+        "A I",
+        "A II",
+        "A III",
+        "KBP"
+    ];
+
+
+    const sortimenAktif =
+        Array.from(sortimenSet)
+            .sort(function(a,b){
+
+                const ia =
+                    urutan.indexOf(a);
+
+                const ib =
+                    urutan.indexOf(b);
+
+                if(ia === -1 && ib === -1){
+                    return a.localeCompare(b);
+                }
+
+                if(ia === -1){
+                    return 1;
+                }
+
+                if(ib === -1){
+                    return -1;
+                }
+
+                return ia - ib;
+
+            });
+
+
+    if(!sortimenAktif.length){
+
+        box.innerHTML =
+            '<div class="kosong">Tidak ada sortimen.</div>';
+
+        return;
+    }
+
+
+    /*
+     * TOTAL HANYA KALAU ADA
+     * LEBIH DARI SATU SORTIMEN.
+     */
+
+    const tampilkanTotal =
+        sortimenAktif.length > 1;
+
+
     let html = "";
 
     html += "<table>";
@@ -725,12 +929,51 @@ function tampilkanRincian(data){
 
     html += "<tr>";
 
-    html += "<th>NO</th>";
-    html += "<th>REGISTER</th>";
-    html += "<th>TPK</th>";
-    html += "<th>TUMPUK</th>";
-    html += "<th>SORTIMEN</th>";
-    html += "<th>VOLUME (M³)</th>";
+    html += "<th rowspan='2'>NO</th>";
+    html += "<th rowspan='2'>SKSHH-KB</th>";
+    html += "<th rowspan='2'>TGL TERIMA</th>";
+    html += "<th rowspan='2'>TPK</th>";
+
+
+    sortimenAktif.forEach(function(sortimen){
+
+        html +=
+            "<th colspan='2'>" +
+            escapeHtml(sortimen) +
+            "</th>";
+
+    });
+
+
+    if(tampilkanTotal){
+
+        html +=
+            "<th colspan='2'>TOTAL</th>";
+
+    }
+
+
+    html += "</tr>";
+
+
+    html += "<tr>";
+
+
+    sortimenAktif.forEach(function(){
+
+        html += "<th>BTG</th>";
+        html += "<th>M³</th>";
+
+    });
+
+
+    if(tampilkanTotal){
+
+        html += "<th>BTG</th>";
+        html += "<th>M³</th>";
+
+    }
+
 
     html += "</tr>";
 
@@ -739,33 +982,81 @@ function tampilkanRincian(data){
     html += "<tbody>";
 
 
-    data.forEach(function(item,index){
+    baris.forEach(function(item,index){
 
         html += "<tr>";
 
-        html += "<td>" +
+        html +=
+            "<td>" +
             (index + 1) +
             "</td>";
 
-        html += "<td>" +
-            escapeHtml(item.register) +
+        html +=
+            "<td>" +
+            escapeHtml(item.skshhkb) +
             "</td>";
 
-        html += "<td>" +
+        html +=
+            "<td>" +
+            formatTanggal(item.tglTerima) +
+            "</td>";
+
+        html +=
+            "<td>" +
             escapeHtml(item.tpk) +
             "</td>";
 
-        html += "<td>" +
-            escapeHtml(item.tumpuk) +
-            "</td>";
 
-        html += "<td>" +
-            escapeHtml(item.sortimen) +
-            "</td>";
+        let totalBatangBaris = 0;
+        let totalVolumeBaris = 0;
 
-        html += "<td>" +
-            formatVolume(item.volume) +
-            "</td>";
+
+        sortimenAktif.forEach(function(sortimen){
+
+            const nilai =
+                item.sortimen[sortimen] || {
+
+                    batang: 0,
+
+                    volume: 0
+
+                };
+
+
+            html +=
+                "<td>" +
+                nilai.batang +
+                "</td>";
+
+            html +=
+                "<td>" +
+                formatVolume(nilai.volume) +
+                "</td>";
+
+
+            totalBatangBaris +=
+                nilai.batang;
+
+            totalVolumeBaris +=
+                nilai.volume;
+
+        });
+
+
+        if(tampilkanTotal){
+
+            html +=
+                "<td>" +
+                totalBatangBaris +
+                "</td>";
+
+            html +=
+                "<td>" +
+                formatVolume(totalVolumeBaris) +
+                "</td>";
+
+        }
+
 
         html += "</tr>";
 
@@ -835,7 +1126,32 @@ function ambilPasokan(){
         "MEMUAT DATA PASOKAN...";
 
 
-    fetch(API_URL)
+    const select =
+        document.getElementById("bulanPasokan");
+
+
+    const bulan =
+        select
+            ? select.value
+            : "SEMUA";
+
+
+    let url = API_URL;
+
+
+    if(
+        bulan &&
+        bulan !== "SEMUA"
+    ){
+
+        url +=
+            "?bulan=" +
+            encodeURIComponent(bulan);
+
+    }
+
+
+    fetch(url)
 
         .then(function(response){
 
@@ -880,14 +1196,6 @@ document
         "change",
         function(){
 
-            /*
-             * UNTUK SEMENTARA:
-             * dropdown belum memfilter data.
-             *
-             * Kita aktifkan setelah kolom bulan
-             * pasokan ditentukan.
-             */
-
             ambilPasokan();
 
         }
@@ -912,4 +1220,3 @@ document.addEventListener(
 </body>
 
 </html>
-
