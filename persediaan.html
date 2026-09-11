@@ -3,12 +3,16 @@
 <html lang="id">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>PERSEDIAAN BBI</title>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -19,6 +23,10 @@ body{
     background:#f2f4f7;
     color:#222;
 }
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
     background:#176b3a;
@@ -37,6 +45,10 @@ body{
     margin:6px 0 0;
     font-size:14px;
 }
+
+/* =====================================================
+   MENU
+===================================================== */
 
 .menu{
     display:flex;
@@ -62,6 +74,10 @@ body{
     color:white;
 }
 
+/* =====================================================
+   RUANG
+===================================================== */
+
 .ruang{
     max-width:1000px;
     margin:20px auto;
@@ -79,71 +95,423 @@ body{
     margin-top:0;
     color:#176b3a;
 }
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:20px 0;
+}
+
+.filter label{
+    font-weight:bold;
+}
+
+.filter select{
+    padding:9px 12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:15px;
+}
+
+/* =====================================================
+   JUDUL BAGIAN
+===================================================== */
+
+.kartu h3{
+    margin-top:25px;
+    margin-bottom:12px;
+}
+
+/* =====================================================
+   TABEL
+===================================================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th,
+td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#176b3a;
+    color:white;
+}
+
+tbody tr:last-child th{
+    background:#e8f1eb;
+    color:#222;
+}
+
+/* =====================================================
+   RINCIAN
+===================================================== */
+
+.rincian{
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:15px;
+    background:#fafafa;
+}
+
 </style>
 
 </head>
 
 <body>
 
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <div class="header">
+
     <h1>PERSEDIAAN BBI</h1>
+
     <p>Sistem Monitoring Persediaan</p>
+
 </div>
+
+
+<!-- =====================================================
+     MENU
+===================================================== -->
 
 <div class="menu">
 
-    <button class="active" onclick="bukaRuang('pasokan',this)">
+    <button
+        class="active"
+        onclick="bukaRuang('pasokan',this)">
         PASOKAN
     </button>
 
-    <button onclick="bukaRuang('olah',this)">
+    <button
+        onclick="bukaRuang('olah',this)">
         OLAH
     </button>
 
-    <button onclick="bukaRuang('sisa',this)">
+    <button
+        onclick="bukaRuang('sisa',this)">
         SISA
     </button>
 
 </div>
 
+
+<!-- =====================================================
+     RUANG
+===================================================== -->
+
 <div class="ruang">
 
+
+    <!-- =================================================
+         PASOKAN
+    ================================================== -->
+
     <div id="pasokan" class="kartu">
+
         <h2>PASOKAN</h2>
-        <p>Ruang PASOKAN.</p>
+
+
+        <!-- FILTER BULAN -->
+
+        <div class="filter">
+
+            <label for="bulanPasokan">
+                FILTER BULAN
+            </label>
+
+            <select id="bulanPasokan">
+
+                <option value="SEMUA">
+                    SEMUA BULAN
+                </option>
+
+                <option value="JANUARI">
+                    JANUARI
+                </option>
+
+                <option value="FEBRUARI">
+                    FEBRUARI
+                </option>
+
+                <option value="MARET">
+                    MARET
+                </option>
+
+                <option value="APRIL">
+                    APRIL
+                </option>
+
+                <option value="MEI">
+                    MEI
+                </option>
+
+                <option value="JUNI">
+                    JUNI
+                </option>
+
+                <option value="JULI">
+                    JULI
+                </option>
+
+                <option value="AGUSTUS">
+                    AGUSTUS
+                </option>
+
+                <option value="SEPTEMBER">
+                    SEPTEMBER
+                </option>
+
+                <option value="OKTOBER">
+                    OKTOBER
+                </option>
+
+                <option value="NOVEMBER">
+                    NOVEMBER
+                </option>
+
+                <option value="DESEMBER">
+                    DESEMBER
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- TOTAL PASOKAN -->
+
+        <h3>
+            TOTAL PASOKAN
+        </h3>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        SORTIMEN
+                    </th>
+
+                    <th>
+                        BATANG
+                    </th>
+
+                    <th>
+                        VOLUME (M³)
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        A I
+                    </td>
+
+                    <td>
+                        0
+                    </td>
+
+                    <td>
+                        0,000
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        A II
+                    </td>
+
+                    <td>
+                        0
+                    </td>
+
+                    <td>
+                        0,000
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        A III
+                    </td>
+
+                    <td>
+                        0
+                    </td>
+
+                    <td>
+                        0,000
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        KBP
+                    </td>
+
+                    <td>
+                        0
+                    </td>
+
+                    <td>
+                        0,000
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>
+                        TOTAL
+                    </th>
+
+                    <th>
+                        0
+                    </th>
+
+                    <th>
+                        0,000
+                    </th>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <!-- RINCIAN -->
+
+        <h3>
+            RINCIAN PASOKAN
+        </h3>
+
+
+        <div class="rincian">
+
+            <p>
+                Data rincian akan ditampilkan di sini.
+            </p>
+
+        </div>
+
     </div>
 
-    <div id="olah" class="kartu" style="display:none;">
+
+    <!-- =================================================
+         OLAH
+    ================================================== -->
+
+    <div
+        id="olah"
+        class="kartu"
+        style="display:none;">
+
         <h2>OLAH</h2>
-        <p>Ruang OLAH.</p>
+
+        <p>
+            Ruang OLAH.
+        </p>
+
     </div>
 
-    <div id="sisa" class="kartu" style="display:none;">
+
+    <!-- =================================================
+         SISA
+    ================================================== -->
+
+    <div
+        id="sisa"
+        class="kartu"
+        style="display:none;">
+
         <h2>SISA</h2>
-        <p>Ruang SISA.</p>
+
+        <p>
+            Ruang SISA.
+        </p>
+
     </div>
+
 
 </div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
 
 function bukaRuang(nama,tombol){
 
-    document.getElementById("pasokan").style.display = "none";
-    document.getElementById("olah").style.display = "none";
-    document.getElementById("sisa").style.display = "none";
+    document
+        .getElementById("pasokan")
+        .style.display = "none";
 
-    document.getElementById(nama).style.display = "block";
+    document
+        .getElementById("olah")
+        .style.display = "none";
 
-    document.querySelectorAll(".menu button").forEach(function(btn){
-        btn.classList.remove("active");
-    });
+    document
+        .getElementById("sisa")
+        .style.display = "none";
+
+
+    document
+        .getElementById(nama)
+        .style.display = "block";
+
+
+    document
+        .querySelectorAll(".menu button")
+        .forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
 
     tombol.classList.add("active");
+
 }
 
 </script>
 
 </body>
+
 </html>
 
