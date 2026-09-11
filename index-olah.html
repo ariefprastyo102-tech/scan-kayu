@@ -175,6 +175,69 @@ body {
   background: #176b38;
 }
 
+
+/* =====================================================
+   PILIHAN JENIS OLAH & BULAN OLAH
+===================================================== */
+
+.pilihanOlah {
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+
+  background: white;
+  border-radius: 9px;
+  padding: 10px;
+
+  box-shadow: 0 2px 7px rgba(0,0,0,.07);
+}
+
+.pilihanOlahBaris {
+  display: flex;
+  gap: 8px;
+}
+
+.pilihanOlahItem {
+  flex: 1;
+  min-width: 0;
+}
+
+.pilihanOlahLabel {
+  display: block;
+  margin-bottom: 5px;
+
+  font-size: 11px;
+  font-weight: 900;
+  color: #666;
+}
+
+.pilihanOlahInput,
+.pilihanOlahSelect {
+  width: 100%;
+
+  border: 1px solid #ddd;
+  border-radius: 7px;
+
+  background: #fff;
+
+  padding: 10px 9px;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+
+  color: #222;
+
+  outline: none;
+}
+
+.pilihanOlahInput:focus,
+.pilihanOlahSelect:focus {
+  border-color: #176b38;
+}
+
 #status {
   margin-bottom: 8px;
   text-align: center;
@@ -639,6 +702,11 @@ body {
     font-size: 12px;
   }
 
+  .pilihanOlahBaris {
+    flex-direction: column;
+    gap: 7px;
+  }
+
 }
 
 </style>
@@ -729,6 +797,110 @@ body {
   </span>
 
 </div>
+
+
+<!-- =====================================================
+     PILIHAN JENIS OLAH & BULAN OLAH
+===================================================== -->
+
+<div class="pilihanOlah">
+
+  <div class="pilihanOlahBaris">
+
+    <div class="pilihanOlahItem">
+
+      <label
+        class="pilihanOlahLabel"
+        for="jenisOlah">
+
+        JENIS OLAH
+
+      </label>
+
+      <input
+        id="jenisOlah"
+        class="pilihanOlahInput"
+        type="text"
+        value="REGULER"
+        placeholder="Contoh: REGULER">
+
+    </div>
+
+
+    <div class="pilihanOlahItem">
+
+      <label
+        class="pilihanOlahLabel"
+        for="bulanOlah">
+
+        BULAN OLAH
+
+      </label>
+
+      <select
+        id="bulanOlah"
+        class="pilihanOlahSelect">
+
+        <option value="">
+          PILIH BULAN
+        </option>
+
+        <option value="JANUARI">
+          JANUARI
+        </option>
+
+        <option value="FEBRUARI">
+          FEBRUARI
+        </option>
+
+        <option value="MARET">
+          MARET
+        </option>
+
+        <option value="APRIL">
+          APRIL
+        </option>
+
+        <option value="MEI">
+          MEI
+        </option>
+
+        <option value="JUNI">
+          JUNI
+        </option>
+
+        <option value="JULI">
+          JULI
+        </option>
+
+        <option value="AGUSTUS">
+          AGUSTUS
+        </option>
+
+        <option value="SEPTEMBER">
+          SEPTEMBER
+        </option>
+
+        <option value="OKTOBER">
+          OKTOBER
+        </option>
+
+        <option value="NOVEMBER">
+          NOVEMBER
+        </option>
+
+        <option value="DESEMBER">
+          DESEMBER
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <div class="toolbar">
 
@@ -1972,6 +2144,72 @@ function selesaiOlah() {
 
   /*
    * =================================================
+   * AMBIL JENIS OLAH
+   * =================================================
+   */
+
+  const jenisOlah =
+    String(
+      document.getElementById(
+        "jenisOlah"
+      ).value || ""
+    ).trim();
+
+
+  /*
+   * =================================================
+   * AMBIL BULAN OLAH
+   * =================================================
+   */
+
+  const bulanOlah =
+    String(
+      document.getElementById(
+        "bulanOlah"
+      ).value || ""
+    ).trim();
+
+
+  /*
+   * JENIS OLAH WAJIB DIISI
+   */
+
+  if (!jenisOlah) {
+
+    alert(
+      "JENIS OLAH belum diisi."
+    );
+
+    document.getElementById(
+      "jenisOlah"
+    ).focus();
+
+    return;
+
+  }
+
+
+  /*
+   * BULAN OLAH WAJIB DIPILIH
+   */
+
+  if (!bulanOlah) {
+
+    alert(
+      "Silakan pilih BULAN OLAH."
+    );
+
+    document.getElementById(
+      "bulanOlah"
+    ).focus();
+
+    return;
+
+  }
+
+
+  /*
+   * =================================================
    * KEPUTUSAN DIAMBIL DARI STATUS SEMENTARA
    * =================================================
    *
@@ -2063,6 +2301,14 @@ function selesaiOlah() {
 
       "SELESAIKAN DATA?\n\n" +
 
+      "JENIS OLAH: " +
+      jenisOlah +
+      "\n" +
+
+      "BULAN OLAH: " +
+      bulanOlah +
+      "\n\n" +
+
       "🟢 DIOLAH: " +
       daftarOlah.length +
       " batang\n\n" +
@@ -2111,7 +2357,13 @@ function selesaiOlah() {
         daftarOlah.join(","),
 
       sisa:
-        daftarSisa.join(",")
+        daftarSisa.join(","),
+
+      jenisOlah:
+        jenisOlah,
+
+      bulanOlah:
+        bulanOlah
 
     },
 
@@ -2168,6 +2420,14 @@ function selesaiOlah() {
       alert(
 
         "SELESAI.\n\n" +
+
+        "JENIS OLAH: " +
+        jenisOlah +
+        "\n" +
+
+        "BULAN OLAH: " +
+        bulanOlah +
+        "\n\n" +
 
         "🟢 Diolah: " +
         hasil.diolah +
