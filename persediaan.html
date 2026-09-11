@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -156,22 +155,17 @@ tbody tr:last-child th{
 }
 
 /* =====================================================
-   TOTAL RINCIAN - WARNA KHUSUS
+   TOTAL RINCIAN - WARNA HIJAU
 ===================================================== */
 
-.rincian th.total-header{
-    background:#8b5a2b;
-    color:white;
-}
-
 .rincian td.total-cell{
-    background:#f3e4d2;
+    background:#e8f5e9;
     color:#222;
     font-weight:bold;
 }
 
 .rincian tr.baris-total td.total-cell{
-    background:#d9bd9a;
+    background:#c8e6c9;
     color:#222;
     font-weight:bold;
 }
@@ -1032,7 +1026,7 @@ function tampilkanRincian(data){
     if(tampilkanTotal){
 
         html +=
-            "<th colspan='2' class='total-header'>TOTAL</th>";
+            "<th colspan='2'>TOTAL</th>";
 
     }
 
@@ -1061,10 +1055,10 @@ function tampilkanRincian(data){
     if(tampilkanTotal){
 
         html +=
-            "<th class='total-header'>BTG</th>";
+            "<th>BTG</th>";
 
         html +=
-            "<th class='total-header'>M³</th>";
+            "<th>M³</th>";
 
     }
 
@@ -1486,4 +1480,3 @@ document.addEventListener(
 </body>
 
 </html>
-
