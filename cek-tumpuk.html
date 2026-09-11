@@ -2139,7 +2139,7 @@ function cariTumpukDenganNomor(
                     "...";
 
 
-                ambilDataTumpuk();
+                ambilDataTumpuk(false);
 
             }
             catch(error){
@@ -2473,9 +2473,11 @@ function prosesKodeTumpuk(
    AMBIL DATA TUMPUK
 ===================================================== */
 
-function ambilDataTumpuk(){
+function ambilDataTumpuk(tampilkanLoading = true){
 
-    showLoading();
+    if(tampilkanLoading){
+        showLoading();
+    }
 
 
     const callbackName =
