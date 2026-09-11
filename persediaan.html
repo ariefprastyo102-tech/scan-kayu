@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -613,10 +612,11 @@ tbody tr:last-child th{
 
 /* =====================================================
    URL APPS SCRIPT
+   DEPLOYMENT YANG SUDAH TERBUKTI MEMBACA OLAH
 ===================================================== */
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwARmnRs73166TJf_LH64jRsNAAZ9gEAZ4HmdfQ-NMJCOj9B08JfsXW2yKlYa89-Lg/exec";
+"https://script.google.com/macros/s/AKfycbxdGfbrUAHnlVe3e84OEHYmVNOjgtGpT02Mkt4j0Wi80HGOeJmOoeIwWTTS0wScr4g/exec";
 
 
 /* =====================================================
@@ -774,11 +774,6 @@ function tampilkanPasokan(hasil){
 ===================================================== */
 
 function normalisasiSortimen(nama){
-
-    /*
-     * Pastikan tidak pernah menampilkan
-     * [object Object]
-     */
 
     if(
         nama &&
@@ -1237,10 +1232,6 @@ function tampilkanRincian(data){
 
 function escapeHtml(value){
 
-    /*
-     * Cegah object masuk langsung ke String()
-     */
-
     if(
         value &&
         typeof value === "object"
@@ -1489,12 +1480,6 @@ function tampilkanOlah(data){
             item.status;
 
 
-        /*
-         * Jaga-jaga jika backend lama masih
-         * mengirim hara. Tidak digunakan sebagai
-         * nama kolom lagi.
-         */
-
         if(
             statusData === undefined ||
             statusData === null
@@ -1724,10 +1709,6 @@ function tampilkanOlah(data){
             "<tr>";
 
 
-        /* ---------------------------------------------
-           SORTIMEN
-        --------------------------------------------- */
-
         html +=
             "<td>" +
             escapeHtml(
@@ -1735,10 +1716,6 @@ function tampilkanOlah(data){
             ) +
             "</td>";
 
-
-        /* ---------------------------------------------
-           STATUS
-        --------------------------------------------- */
 
         html +=
             "<td>" +
@@ -1748,19 +1725,11 @@ function tampilkanOlah(data){
             "</td>";
 
 
-        /* ---------------------------------------------
-           BATANG
-        --------------------------------------------- */
-
         html +=
             "<td>" +
             item.batang +
             "</td>";
 
-
-        /* ---------------------------------------------
-           VOLUME
-        --------------------------------------------- */
 
         html +=
             "<td>" +
@@ -2002,4 +1971,3 @@ document.addEventListener(
 </body>
 
 </html>
-
