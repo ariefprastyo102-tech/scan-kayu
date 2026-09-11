@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -568,7 +569,6 @@ tbody tr:last-child th{
 
     </div>
 
-
     <!-- STATUS -->
 
     <div
@@ -578,7 +578,6 @@ tbody tr:last-child th{
         MEMUAT DATA OLAH...
 
     </div>
-
 
     <!-- RINCIAN -->
 
@@ -624,7 +623,7 @@ tbody tr:last-child th{
 <script>
 
 /* =====================================================
-   URL APPS SCRIPT BARU
+   URL APPS SCRIPT
 ===================================================== */
 
 const API_URL =
@@ -657,11 +656,6 @@ function formatTanggal(tanggal){
     const teks =
         String(tanggal).trim();
 
-
-    /*
-     * JIKA BACKEND SUDAH MENGIRIM
-     * FORMAT d-M-yyyy
-     */
     if(
         /^\d{1,2}-\d{1,2}-\d{4}$/.test(teks)
     ){
@@ -670,24 +664,14 @@ function formatTanggal(tanggal){
 
     }
 
-
-    /*
-     * JIKA YANG DATANG ADALAH ISO
-     * CONTOH:
-     * 2026-02-27T17:00:00.000Z
-     *
-     * UBAH KE TANGGAL LOKAL BROWSER
-     */
     const d =
         new Date(tanggal);
-
 
     if(isNaN(d.getTime())){
 
         return teks;
 
     }
-
 
     return d.getDate() +
         "-" +
@@ -730,11 +714,6 @@ function bukaRuang(nama,tombol){
 
     tombol.classList.add("active");
 
-
-    /* =================================================
-       KHUSUS RUANG OLAH
-    ================================================= */
-
     if(nama === "olah"){
 
         ambilOlah();
@@ -763,21 +742,11 @@ function tampilkanPasokan(hasil){
 
     const r = hasil.ringkasan || {};
 
-
-    /* -----------------------------------------------
-       A I
-    ----------------------------------------------- */
-
     document.getElementById("batangAI").textContent =
         (r.AI ? r.AI.batang : 0);
 
     document.getElementById("volumeAI").textContent =
         formatVolume(r.AI ? r.AI.volume : 0);
-
-
-    /* -----------------------------------------------
-       A II
-    ----------------------------------------------- */
 
     document.getElementById("batangAII").textContent =
         (r.AII ? r.AII.batang : 0);
@@ -785,21 +754,11 @@ function tampilkanPasokan(hasil){
     document.getElementById("volumeAII").textContent =
         formatVolume(r.AII ? r.AII.volume : 0);
 
-
-    /* -----------------------------------------------
-       A III
-    ----------------------------------------------- */
-
     document.getElementById("batangAIII").textContent =
         (r.AIII ? r.AIII.batang : 0);
 
     document.getElementById("volumeAIII").textContent =
         formatVolume(r.AIII ? r.AIII.volume : 0);
-
-
-    /* -----------------------------------------------
-       KBP
-    ----------------------------------------------- */
 
     document.getElementById("batangKBP").textContent =
         (r.KBP ? r.KBP.batang : 0);
@@ -807,26 +766,15 @@ function tampilkanPasokan(hasil){
     document.getElementById("volumeKBP").textContent =
         formatVolume(r.KBP ? r.KBP.volume : 0);
 
-
-    /* -----------------------------------------------
-       TOTAL
-    ----------------------------------------------- */
-
     document.getElementById("totalBatang").textContent =
         hasil.totalBatang || 0;
 
     document.getElementById("totalVolume").textContent =
         formatVolume(hasil.totalVolume);
 
-
     document.getElementById("statusPasokan").style.display =
         "none";
 
-
-    /*
-     * BACKEND BARU SUDAH MENGIRIM
-     * RINCIAN DALAM BENTUK KELOMPOK.
-     */
     tampilkanRincian(hasil.rincian || []);
 
 }
@@ -841,7 +789,8 @@ function normalisasiSortimen(nama){
     const s =
         String(nama || "")
             .toUpperCase()
-            .trim();
+            .trim()
+            .replace(/\s+/g," ");
 
     if(s === "AI"){
         return "A I";
@@ -862,14 +811,13 @@ function normalisasiSortimen(nama){
 
 /* =====================================================
    RINCIAN PASOKAN
-   BACKEND SUDAH MENGELOMPOKKAN DATA
+   BAGIAN PASOKAN DIPERTAHANKAN
 ===================================================== */
 
 function tampilkanRincian(data){
 
     const box =
         document.getElementById("rincianPasokan");
-
 
     if(!data || !data.length){
 
@@ -879,19 +827,12 @@ function tampilkanRincian(data){
         return;
     }
 
-
-    /* =================================================
-       AMBIL SEMUA SORTIMEN AKTIF
-    ================================================= */
-
     const sortimenSet = new Set();
-
 
     data.forEach(function(item){
 
         const daftar =
             item.sortimen || {};
-
 
         Object.keys(daftar)
             .forEach(function(sortimen){
@@ -908,18 +849,12 @@ function tampilkanRincian(data){
 
     });
 
-
-    /* =================================================
-       URUTAN SORTIMEN
-    ================================================= */
-
     const urutan = [
         "A I",
         "A II",
         "A III",
         "KBP"
     ];
-
 
     const sortimenAktif =
         Array.from(sortimenSet)
@@ -931,7 +866,6 @@ function tampilkanRincian(data){
                 const ib =
                     urutan.indexOf(b);
 
-
                 if(
                     ia === -1 &&
                     ib === -1
@@ -941,21 +875,17 @@ function tampilkanRincian(data){
 
                 }
 
-
                 if(ia === -1){
                     return 1;
                 }
-
 
                 if(ib === -1){
                     return -1;
                 }
 
-
                 return ia - ib;
 
             });
-
 
     if(!sortimenAktif.length){
 
@@ -963,21 +893,11 @@ function tampilkanRincian(data){
             '<div class="kosong">Tidak ada sortimen.</div>';
 
         return;
+
     }
-
-
-    /* =================================================
-       TOTAL KANAN HANYA JIKA
-       ADA LEBIH DARI 1 SORTIMEN
-    ================================================= */
 
     const tampilkanTotal =
         sortimenAktif.length > 1;
-
-
-    /* =================================================
-       TOTAL KESELURUHAN
-    ================================================= */
 
     const grandTotal = {
 
@@ -988,7 +908,6 @@ function tampilkanRincian(data){
         sortimen: {}
 
     };
-
 
     sortimenAktif.forEach(function(sortimen){
 
@@ -1002,33 +921,24 @@ function tampilkanRincian(data){
 
     });
 
-
-    /* =================================================
-       HITUNG GRAND TOTAL
-    ================================================= */
-
     data.forEach(function(item){
 
         const daftar =
             item.sortimen || {};
-
 
         sortimenAktif.forEach(function(sortimen){
 
             const nilai =
                 daftar[sortimen];
 
-
             if(!nilai){
                 return;
             }
-
 
             grandTotal
                 .sortimen[sortimen]
                 .batang +=
                     Number(nilai.batang || 0);
-
 
             grandTotal
                 .sortimen[sortimen]
@@ -1039,14 +949,12 @@ function tampilkanRincian(data){
 
     });
 
-
     sortimenAktif.forEach(function(sortimen){
 
         grandTotal.batang +=
             grandTotal
                 .sortimen[sortimen]
                 .batang;
-
 
         grandTotal.volume +=
             grandTotal
@@ -1055,41 +963,25 @@ function tampilkanRincian(data){
 
     });
 
-
-    /* =================================================
-       BIKIN TABEL
-    ================================================= */
-
     let html = "";
 
-
     html += "<table>";
-
-
-    /* =================================================
-       HEADER BARIS 1
-    ================================================= */
 
     html += "<thead>";
 
     html += "<tr>";
 
-
     html +=
         "<th rowspan='2'>NO</th>";
-
 
     html +=
         "<th rowspan='2'>SKSHH-KB</th>";
 
-
     html +=
         "<th rowspan='2'>TGL TERIMA</th>";
 
-
     html +=
         "<th rowspan='2'>TPK</th>";
-
 
     sortimenAktif.forEach(function(sortimen){
 
@@ -1100,7 +992,6 @@ function tampilkanRincian(data){
 
     });
 
-
     if(tampilkanTotal){
 
         html +=
@@ -1108,16 +999,9 @@ function tampilkanRincian(data){
 
     }
 
-
     html += "</tr>";
 
-
-    /* =================================================
-       HEADER BARIS 2
-    ================================================= */
-
     html += "<tr>";
-
 
     sortimenAktif.forEach(function(){
 
@@ -1129,7 +1013,6 @@ function tampilkanRincian(data){
 
     });
 
-
     if(tampilkanTotal){
 
         html +=
@@ -1140,33 +1023,20 @@ function tampilkanRincian(data){
 
     }
 
-
     html += "</tr>";
 
     html += "</thead>";
 
-
-    /* =================================================
-       BODY
-    ================================================= */
-
     html += "<tbody>";
-
 
     data.forEach(function(item,index){
 
         html += "<tr>";
 
-
-        /* NO */
-
         html +=
             "<td>" +
             (index + 1) +
             "</td>";
-
-
-        /* SKSHH-KB */
 
         html +=
             "<td>" +
@@ -1174,9 +1044,6 @@ function tampilkanRincian(data){
                 item.skshhkb || ""
             ) +
             "</td>";
-
-
-        /* TGL TERIMA */
 
         html +=
             "<td>" +
@@ -1187,9 +1054,6 @@ function tampilkanRincian(data){
             ) +
             "</td>";
 
-
-        /* TPK */
-
         html +=
             "<td>" +
             escapeHtml(
@@ -1197,23 +1061,12 @@ function tampilkanRincian(data){
             ) +
             "</td>";
 
-
-        /* =================================================
-           TOTAL PER BARIS
-        ================================================= */
-
         let totalBatangBaris = 0;
 
         let totalVolumeBaris = 0;
 
-
         const daftar =
             item.sortimen || {};
-
-
-        /* =================================================
-           SORTIMEN
-        ================================================= */
 
         sortimenAktif.forEach(function(sortimen){
 
@@ -1226,20 +1079,15 @@ function tampilkanRincian(data){
 
                 };
 
-
             const batang =
                 Number(
                     nilai.batang || 0
                 );
 
-
             const volume =
                 Number(
                     nilai.volume || 0
                 );
-
-
-            /* BTG */
 
             html +=
                 "<td>" +
@@ -1250,9 +1098,6 @@ function tampilkanRincian(data){
                 ) +
                 "</td>";
 
-
-            /* VOLUME */
-
             html +=
                 "<td>" +
                 (
@@ -1262,20 +1107,13 @@ function tampilkanRincian(data){
                 ) +
                 "</td>";
 
-
             totalBatangBaris +=
                 batang;
-
 
             totalVolumeBaris +=
                 volume;
 
         });
-
-
-        /* =================================================
-           TOTAL KANAN
-        ================================================= */
 
         if(tampilkanTotal){
 
@@ -1287,7 +1125,6 @@ function tampilkanRincian(data){
                         : totalBatangBaris
                 ) +
                 "</td>";
-
 
             html +=
                 "<td class='total-cell'>" +
@@ -1302,46 +1139,30 @@ function tampilkanRincian(data){
 
         }
 
-
         html += "</tr>";
 
     });
 
-
-    /* =================================================
-       TOTAL PALING BAWAH
-    ================================================= */
-
     html +=
         "<tr class='baris-total'>";
 
-
     html +=
         "<td class='total-label'></td>";
-
 
     html +=
         "<td class='total-label'><strong>TOTAL</strong></td>";
 
-
     html +=
         "<td class='total-label'></td>";
 
-
     html +=
         "<td class='total-label'></td>";
-
-
-    /* =================================================
-       TOTAL PER SORTIMEN
-    ================================================= */
 
     sortimenAktif.forEach(function(sortimen){
 
         const total =
             grandTotal
                 .sortimen[sortimen];
-
 
         html +=
             "<td class='total-label'><strong>" +
@@ -1351,7 +1172,6 @@ function tampilkanRincian(data){
                     : total.batang
             ) +
             "</strong></td>";
-
 
         html +=
             "<td class='total-label'><strong>" +
@@ -1366,11 +1186,6 @@ function tampilkanRincian(data){
 
     });
 
-
-    /* =================================================
-       TOTAL KESELURUHAN
-    ================================================= */
-
     if(tampilkanTotal){
 
         html +=
@@ -1381,7 +1196,6 @@ function tampilkanRincian(data){
                     : grandTotal.batang
             ) +
             "</strong></td>";
-
 
         html +=
             "<td class='total-cell'><strong>" +
@@ -1396,14 +1210,11 @@ function tampilkanRincian(data){
 
     }
 
-
     html += "</tr>";
-
 
     html += "</tbody>";
 
     html += "</table>";
-
 
     box.innerHTML =
         html;
@@ -1426,17 +1237,23 @@ function escapeHtml(value){
 
 }
 
+
 /* =====================================================
    AMBIL DATA OLAH
 ===================================================== */
 
 function ambilOlah(){
 
-    const status = document.getElementById("statusOlah");
-    const rincian = document.getElementById("rincianOlah");
+    const status =
+        document.getElementById("statusOlah");
+
+    const rincian =
+        document.getElementById("rincianOlah");
 
     status.style.display = "block";
-    status.textContent = "MEMUAT DATA OLAH...";
+
+    status.textContent =
+        "MEMUAT DATA OLAH...";
 
     const bulan =
         document.getElementById("bulanOlah").value;
@@ -1447,17 +1264,21 @@ function ambilOlah(){
     const url =
         API_URL +
         "?action=olah" +
-        "&bulan=" + encodeURIComponent(bulan) +
-        "&jenis=" + encodeURIComponent(jenis);
+        "&bulan=" +
+        encodeURIComponent(bulan) +
+        "&jenis=" +
+        encodeURIComponent(jenis);
 
     fetch(url)
 
         .then(function(response){
 
             if(!response.ok){
+
                 throw new Error(
                     "Gagal mengambil data OLAH."
                 );
+
             }
 
             return response.json();
@@ -1469,7 +1290,8 @@ function ambilOlah(){
             if(!data.sukses){
 
                 throw new Error(
-                    data.pesan || "Gagal mengambil data OLAH."
+                    data.pesan ||
+                    "Gagal mengambil data OLAH."
                 );
 
             }
@@ -1479,11 +1301,7 @@ function ambilOlah(){
                 jenis
             );
 
-            tampilkanOlah(
-                data,
-                data.totalBatang || 0,
-                data.totalVolume || 0
-            );
+            tampilkanOlah(data);
 
         })
 
@@ -1508,12 +1326,17 @@ function ambilOlah(){
    ISI JENIS OLAH
 ===================================================== */
 
-function isiJenisOlah(daftar, jenisAktif){
+function isiJenisOlah(
+    daftar,
+    jenisAktif
+){
 
     const select =
         document.getElementById("jenisOlah");
 
-    if(!select) return;
+    if(!select){
+        return;
+    }
 
     select.innerHTML =
         '<option value="SEMUA">SEMUA JENIS</option>';
@@ -1523,13 +1346,18 @@ function isiJenisOlah(daftar, jenisAktif){
         const nilai =
             String(jenis || "").trim();
 
-        if(!nilai) return;
+        if(!nilai){
+            return;
+        }
 
         const option =
             document.createElement("option");
 
-        option.value = nilai;
-        option.textContent = nilai;
+        option.value =
+            nilai;
+
+        option.textContent =
+            nilai;
 
         select.appendChild(option);
 
@@ -1538,14 +1366,21 @@ function isiJenisOlah(daftar, jenisAktif){
     if(
         jenisAktif &&
         jenisAktif !== "SEMUA" &&
-        daftar.indexOf(jenisAktif) !== -1
+        daftar.some(function(x){
+
+            return String(x).toUpperCase() ===
+                   String(jenisAktif).toUpperCase();
+
+        })
     ){
 
-        select.value = jenisAktif;
+        select.value =
+            jenisAktif;
 
     }else{
 
-        select.value = "SEMUA";
+        select.value =
+            "SEMUA";
 
     }
 
@@ -1554,13 +1389,23 @@ function isiJenisOlah(daftar, jenisAktif){
 
 /* =====================================================
    TAMPILKAN DATA OLAH
+=====================================================
+
+   PENTING:
+
+   BACKEND MENGIRIM:
+
+   sortimen = O
+   hara     = G / STATUS
+   batang
+   volume
+
+   K / STATUS OLAH hanya digunakan
+   sebagai filter backend.
+
 ===================================================== */
 
-function tampilkanOlah(
-    data,
-    totalBatang,
-    totalVolume
-){
+function tampilkanOlah(data){
 
     const status =
         document.getElementById("statusOlah");
@@ -1568,7 +1413,8 @@ function tampilkanOlah(
     const rincian =
         document.getElementById("rincianOlah");
 
-    status.style.display = "none";
+    status.style.display =
+        "none";
 
 
     if(
@@ -1588,12 +1434,10 @@ function tampilkanOlah(
 
 
     /* =================================================
-       NORMALISASI DATA OLAH
+       NORMALISASI BARIS
 
-       BACKEND BISA MENGIRIM:
-       1. sortimen = "A III"
-       2. sortimen = { "A III": {...} }
-       3. sortimen = { nama:"A III", batang:40, volume:1.234 }
+       SORTIMEN = O
+       HARA     = G / STATUS
     ================================================= */
 
     const baris = [];
@@ -1606,197 +1450,64 @@ function tampilkanOlah(
         }
 
 
-        /*
-         * KASUS 1
-         * sortimen berupa object
-         *
-         * contoh:
-         * sortimen: {
-         *     "A III": {
-         *         batang: 40,
-         *         volume: 1.234
-         *     }
-         * }
-         */
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen || ""
+            );
+
+
+        const hara =
+            String(
+                item.hara ||
+                ""
+            )
+            .trim();
+
+
+        const batang =
+            Number(
+                item.batang || 0
+            );
+
+
+        const volume =
+            Number(
+                item.volume || 0
+            );
+
 
         if(
-            item.sortimen &&
-            typeof item.sortimen === "object" &&
-            !Array.isArray(item.sortimen)
+            !sortimen &&
+            !hara &&
+            !batang &&
+            !volume
         ){
-
-            const obj =
-                item.sortimen;
-
-
-            /*
-             * JIKA OBJECT LANGSUNG MEMILIKI
-             * BATANG / VOLUME
-             *
-             * contoh:
-             * {
-             *   nama:"A III",
-             *   batang:40,
-             *   volume:1.2
-             * }
-             */
-
-            if(
-                obj.batang !== undefined ||
-                obj.volume !== undefined ||
-                obj.nama !== undefined ||
-                obj.sortimen !== undefined
-            ){
-
-                const nama =
-                    obj.nama ||
-                    obj.sortimen ||
-                    item.nama ||
-                    "";
-
-
-                baris.push({
-
-                    sortimen:
-                        normalisasiSortimen(nama),
-
-                    status:
-                        item.statusOlah ||
-                        item.status ||
-                        "SUDAH DIOLAH",
-
-                    batang:
-                        Number(
-                            obj.batang || 0
-                        ),
-
-                    volume:
-                        Number(
-                            obj.volume || 0
-                        )
-
-                });
-
-                return;
-
-            }
-
-
-            /*
-             * JIKA OBJECT BERISI BEBERAPA SORTIMEN
-             *
-             * contoh:
-             *
-             * sortimen:{
-             *   "A I":{
-             *      batang:40,
-             *      volume:1
-             *   },
-             *   "A II":{
-             *      batang:20,
-             *      volume:2
-             *   }
-             * }
-             */
-
-            Object.keys(obj)
-                .forEach(function(namaSortimen){
-
-                    const nilai =
-                        obj[namaSortimen];
-
-
-                    if(
-                        !nilai ||
-                        typeof nilai !== "object"
-                    ){
-                        return;
-                    }
-
-
-                    baris.push({
-
-                        sortimen:
-                            normalisasiSortimen(
-                                namaSortimen
-                            ),
-
-                        status:
-                            nilai.statusOlah ||
-                            nilai.status ||
-                            item.statusOlah ||
-                            item.status ||
-                            "SUDAH DIOLAH",
-
-                        batang:
-                            Number(
-                                nilai.batang || 0
-                            ),
-
-                        volume:
-                            Number(
-                                nilai.volume || 0
-                            )
-
-                    });
-
-                });
-
 
             return;
 
         }
 
 
-        /*
-         * KASUS 2
-         * sortimen memang berupa teks biasa
-         */
-
         baris.push({
 
             sortimen:
-                normalisasiSortimen(
-                    item.sortimen || ""
-                ),
+                sortimen,
 
-            status:
-                item.statusOlah ||
-                item.status ||
-                "SUDAH DIOLAH",
+            hara:
+                hara,
 
             batang:
-                Number(
-                    item.batang || 0
-                ),
+                batang,
 
             volume:
-                Number(
-                    item.volume || 0
-                )
+                volume
 
         });
 
     });
 
 
-    /* =================================================
-       BUANG BARIS KOSONG
-    ================================================= */
-
-    const barisValid =
-        baris.filter(function(item){
-
-            return (
-                item.sortimen ||
-                item.batang ||
-                item.volume
-            );
-
-        });
-
-
-    if(!barisValid.length){
+    if(!baris.length){
 
         rincian.innerHTML =
             '<div class="kosong">' +
@@ -1809,64 +1520,33 @@ function tampilkanOlah(
 
 
     /* =================================================
-       HITUNG TOTAL DARI DATA YANG SUDAH DINORMALISASI
-       SUPAYA TIDAK TERGANTUNG TOTAL BACKEND
-    ================================================= */
-
-    let hitungBatang = 0;
-    let hitungVolume = 0;
-
-
-    barisValid.forEach(function(item){
-
-        hitungBatang +=
-            Number(item.batang || 0);
-
-        hitungVolume +=
-            Number(item.volume || 0);
-
-    });
-
-
-    /*
-     * JIKA BACKEND MENGIRIM TOTAL YANG VALID,
-     * PAKAI TOTAL BACKEND.
-     *
-     * JIKA 0 PADAHAL ADA DATA,
-     * PAKAI HASIL HITUNG FRONTEND.
-     */
-
-    const totalBatangFinal =
-        Number(totalBatang || 0) > 0
-            ? Number(totalBatang)
-            : hitungBatang;
-
-
-    const totalVolumeFinal =
-        Number(totalVolume || 0) > 0
-            ? Number(totalVolume)
-            : hitungVolume;
-
-
-    /* =================================================
        URUTAN SORTIMEN
     ================================================= */
 
     const urutan = [
+
         "A I",
+
         "A II",
+
         "A III",
+
         "KBP"
+
     ];
 
 
-    barisValid.sort(function(a,b){
+    baris.sort(function(a,b){
 
         const ia =
-            urutan.indexOf(a.sortimen);
+            urutan.indexOf(
+                a.sortimen
+            );
 
         const ib =
-            urutan.indexOf(b.sortimen);
+            urutan.indexOf(
+                b.sortimen
+            );
 
 
         if(
@@ -1874,8 +1554,17 @@ function tampilkanOlah(
             ib === -1
         ){
 
-            return a.sortimen.localeCompare(
-                b.sortimen
+            const sort =
+                a.sortimen.localeCompare(
+                    b.sortimen
+                );
+
+            if(sort !== 0){
+                return sort;
+            }
+
+            return a.hara.localeCompare(
+                b.hara
             );
 
         }
@@ -1891,13 +1580,41 @@ function tampilkanOlah(
         }
 
 
-        return ia - ib;
+        if(ia !== ib){
+            return ia - ib;
+        }
+
+
+        return a.hara.localeCompare(
+            b.hara,
+            "id"
+        );
 
     });
 
 
     /* =================================================
-       BUAT TABEL
+       TOTAL
+    ================================================= */
+
+    let totalBatang = 0;
+
+    let totalVolume = 0;
+
+
+    baris.forEach(function(item){
+
+        totalBatang +=
+            item.batang;
+
+        totalVolume +=
+            item.volume;
+
+    });
+
+
+    /* =================================================
+       TABEL
     ================================================= */
 
     let html = "";
@@ -1913,7 +1630,7 @@ function tampilkanOlah(
 
         "<th>SORTIMEN</th>" +
 
-        "<th>STATUS</th>" +
+        "<th>HARA</th>" +
 
         "<th>BATANG</th>" +
 
@@ -1927,11 +1644,7 @@ function tampilkanOlah(
         "<tbody>";
 
 
-    /* =================================================
-       DATA
-    ================================================= */
-
-    barisValid.forEach(function(item){
+    baris.forEach(function(item){
 
         html +=
             "<tr>";
@@ -1942,17 +1655,17 @@ function tampilkanOlah(
         html +=
             "<td>" +
             escapeHtml(
-                item.sortimen || ""
+                item.sortimen
             ) +
             "</td>";
 
 
-        /* STATUS */
+        /* HARA */
 
         html +=
             "<td>" +
             escapeHtml(
-                item.status || ""
+                item.hara
             ) +
             "</td>";
 
@@ -1961,9 +1674,7 @@ function tampilkanOlah(
 
         html +=
             "<td>" +
-            (
-                Number(item.batang || 0)
-            ) +
+            item.batang +
             "</td>";
 
 
@@ -1972,7 +1683,7 @@ function tampilkanOlah(
         html +=
             "<td>" +
             formatVolume(
-                Number(item.volume || 0)
+                item.volume
             ) +
             "</td>";
 
@@ -2003,14 +1714,14 @@ function tampilkanOlah(
 
     html +=
         "<th>" +
-        totalBatangFinal +
+        totalBatang +
         "</th>";
 
 
     html +=
         "<th class='total-cell'>" +
         formatVolume(
-            totalVolumeFinal
+            totalVolume
         ) +
         "</th>";
 
@@ -2028,20 +1739,24 @@ function tampilkanOlah(
         html;
 
 }
+
+
 /* =====================================================
    ERROR
 ===================================================== */
 
 function tampilkanError(pesan){
 
-    document.getElementById("statusPasokan")
+    document
+        .getElementById("statusPasokan")
         .innerHTML =
         '<div class="error">' +
         escapeHtml(pesan) +
         '</div>';
 
 
-    document.getElementById("rincianPasokan")
+    document
+        .getElementById("rincianPasokan")
         .innerHTML =
         '<div class="error">' +
         escapeHtml(pesan) +
@@ -2051,22 +1766,28 @@ function tampilkanError(pesan){
 
 
 /* =====================================================
-   AMBIL DATA DARI APPS SCRIPT
+   AMBIL DATA PASOKAN
+   BAGIAN PASOKAN DIPERTAHANKAN
 ===================================================== */
 
 function ambilPasokan(){
 
-    document.getElementById("statusPasokan")
-        .style.display = "block";
+    document
+        .getElementById("statusPasokan")
+        .style.display =
+        "block";
 
 
-    document.getElementById("statusPasokan")
+    document
+        .getElementById("statusPasokan")
         .textContent =
         "MEMUAT DATA PASOKAN...";
 
 
     const select =
-        document.getElementById("bulanPasokan");
+        document.getElementById(
+            "bulanPasokan"
+        );
 
 
     const bulan =
@@ -2075,7 +1796,8 @@ function ambilPasokan(){
             : "SEMUA";
 
 
-    let url = API_URL;
+    let url =
+        API_URL;
 
 
     if(
@@ -2085,7 +1807,9 @@ function ambilPasokan(){
 
         url +=
             "?bulan=" +
-            encodeURIComponent(bulan);
+            encodeURIComponent(
+                bulan
+            );
 
     }
 
@@ -2097,7 +1821,8 @@ function ambilPasokan(){
             if(!response.ok){
 
                 throw new Error(
-                    "HTTP " + response.status
+                    "HTTP " +
+                    response.status
                 );
 
             }
@@ -2108,13 +1833,17 @@ function ambilPasokan(){
 
         .then(function(data){
 
-            tampilkanPasokan(data);
+            tampilkanPasokan(
+                data
+            );
 
         })
 
         .catch(function(error){
 
-            console.error(error);
+            console.error(
+                error
+            );
 
             tampilkanError(
                 "GAGAL MENGAMBIL DATA DARI APPS SCRIPT."
@@ -2124,8 +1853,9 @@ function ambilPasokan(){
 
 }
 
+
 /* =====================================================
-   FILTER BULAN
+   FILTER BULAN PASOKAN
 ===================================================== */
 
 document
@@ -2138,6 +1868,7 @@ document
 
         }
     );
+
 
 /* =====================================================
    FILTER BULAN OLAH
@@ -2169,6 +1900,8 @@ document
 
         }
     );
+
+
 /* =====================================================
    JALANKAN SAAT HALAMAN DIBUKA
 ===================================================== */
@@ -2187,3 +1920,4 @@ document.addEventListener(
 </body>
 
 </html>
+
