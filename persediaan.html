@@ -156,6 +156,33 @@ tbody tr:last-child th{
 }
 
 /* =====================================================
+   TOTAL RINCIAN - WARNA KHUSUS
+===================================================== */
+
+.rincian th.total-header{
+    background:#8b5a2b;
+    color:white;
+}
+
+.rincian td.total-cell{
+    background:#f3e4d2;
+    color:#222;
+    font-weight:bold;
+}
+
+.rincian tr.baris-total td.total-cell{
+    background:#d9bd9a;
+    color:#222;
+    font-weight:bold;
+}
+
+.rincian tr.baris-total td.total-label{
+    background:#e8f1eb;
+    color:#222;
+    font-weight:bold;
+}
+
+/* =====================================================
    RINCIAN
 ===================================================== */
 
@@ -566,11 +593,40 @@ function formatTanggal(tanggal){
         return "";
     }
 
-    const d = new Date(tanggal);
+    const teks =
+        String(tanggal).trim();
+
+
+    /*
+     * JIKA BACKEND SUDAH MENGIRIM
+     * FORMAT d-M-yyyy
+     */
+    if(
+        /^\d{1,2}-\d{1,2}-\d{4}$/.test(teks)
+    ){
+
+        return teks;
+
+    }
+
+
+    /*
+     * JIKA YANG DATANG ADALAH ISO
+     * CONTOH:
+     * 2026-02-27T17:00:00.000Z
+     *
+     * UBAH KE TANGGAL LOKAL BROWSER
+     */
+    const d =
+        new Date(tanggal);
+
 
     if(isNaN(d.getTime())){
-        return String(tanggal);
+
+        return teks;
+
     }
+
 
     return d.getDate() +
         "-" +
@@ -976,7 +1032,7 @@ function tampilkanRincian(data){
     if(tampilkanTotal){
 
         html +=
-            "<th colspan='2'>TOTAL</th>";
+            "<th colspan='2' class='total-header'>TOTAL</th>";
 
     }
 
@@ -1005,10 +1061,10 @@ function tampilkanRincian(data){
     if(tampilkanTotal){
 
         html +=
-            "<th>BTG</th>";
+            "<th class='total-header'>BTG</th>";
 
         html +=
-            "<th>M³</th>";
+            "<th class='total-header'>M³</th>";
 
     }
 
@@ -1048,15 +1104,14 @@ function tampilkanRincian(data){
             "</td>";
 
 
-        /* TGL TERIMA
-           Backend sudah mengirim
-           dalam format d-M-yyyy
-        */
+        /* TGL TERIMA */
 
         html +=
             "<td>" +
             escapeHtml(
-                item.tglTerima || ""
+                formatTanggal(
+                    item.tglTerima || ""
+                )
             ) +
             "</td>";
 
@@ -1153,7 +1208,7 @@ function tampilkanRincian(data){
         if(tampilkanTotal){
 
             html +=
-                "<td>" +
+                "<td class='total-cell'>" +
                 (
                     totalBatangBaris === 0
                         ? ""
@@ -1163,7 +1218,7 @@ function tampilkanRincian(data){
 
 
             html +=
-                "<td>" +
+                "<td class='total-cell'>" +
                 (
                     totalVolumeBaris === 0
                         ? ""
@@ -1190,19 +1245,19 @@ function tampilkanRincian(data){
 
 
     html +=
-        "<td></td>";
+        "<td class='total-label'></td>";
 
 
     html +=
-        "<td><strong>TOTAL</strong></td>";
+        "<td class='total-label'><strong>TOTAL</strong></td>";
 
 
     html +=
-        "<td></td>";
+        "<td class='total-label'></td>";
 
 
     html +=
-        "<td></td>";
+        "<td class='total-label'></td>";
 
 
     /* =================================================
@@ -1217,7 +1272,7 @@ function tampilkanRincian(data){
 
 
         html +=
-            "<td><strong>" +
+            "<td class='total-label'><strong>" +
             (
                 total.batang === 0
                     ? ""
@@ -1227,7 +1282,7 @@ function tampilkanRincian(data){
 
 
         html +=
-            "<td><strong>" +
+            "<td class='total-label'><strong>" +
             (
                 total.volume === 0
                     ? ""
@@ -1247,7 +1302,7 @@ function tampilkanRincian(data){
     if(tampilkanTotal){
 
         html +=
-            "<td><strong>" +
+            "<td class='total-cell'><strong>" +
             (
                 grandTotal.batang === 0
                     ? ""
@@ -1257,7 +1312,7 @@ function tampilkanRincian(data){
 
 
         html +=
-            "<td><strong>" +
+            "<td class='total-cell'><strong>" +
             (
                 grandTotal.volume === 0
                     ? ""
