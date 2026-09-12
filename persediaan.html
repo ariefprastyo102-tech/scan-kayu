@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="id">
@@ -228,7 +227,7 @@ tbody tr:last-child th{
 
 .filter-sisa{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
+    grid-template-columns:1fr 1fr;
     gap:15px;
     margin-top:20px;
 }
@@ -671,6 +670,33 @@ tbody tr:last-child th{
 
 
     <!-- =================================================
+         PILIH DASAR
+    ================================================== -->
+
+    <div class="filter">
+
+        <label for="dasarSisa">
+            TAMPILKAN BERDASARKAN
+        </label>
+
+        <select
+            id="dasarSisa"
+            onchange="ubahDasarSisa()">
+
+            <option value="STATUS">
+                STATUS
+            </option>
+
+            <option value="MUTU">
+                MUTU
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =================================================
          STATUS SISA
     ================================================== -->
 
@@ -703,7 +729,7 @@ tbody tr:last-child th{
 
 
     <!-- =================================================
-         FILTER RINCIAN SISA
+         FILTER PANJANG + DIAMETER
     ================================================== -->
 
     <h3>
@@ -711,49 +737,6 @@ tbody tr:last-child th{
     </h3>
 
     <div class="filter-sisa">
-
-
-        <!-- =============================================
-             STATUS / MUTU
-        ============================================== -->
-
-        <div class="filter-sisa-box">
-
-            <div class="filter-sisa-title">
-                STATUS / MUTU
-            </div>
-
-            <div class="filter-sisa-actions">
-
-                <button
-                    type="button"
-                    onclick="pilihSemuaStatusMutu()">
-
-                    PILIH SEMUA
-
-                </button>
-
-                <button
-                    type="button"
-                    onclick="batalSemuaStatusMutu()">
-
-                    BATAL SEMUA
-
-                </button>
-
-            </div>
-
-            <div
-                id="filterStatusMutu"
-                class="checkbox-list">
-
-                <div class="kosong">
-                    MEMUAT...
-                </div>
-
-            </div>
-
-        </div>
 
 
         <!-- =============================================
@@ -889,6 +872,8 @@ const API_URL =
 ===================================================== */
 
 let DATA_SISA = null;
+
+let DASAR_SISA = "STATUS";
 
 
 /* =====================================================
@@ -1130,7 +1115,6 @@ function tampilkanRincian(data){
             '<div class="kosong">Tidak ada data pasokan.</div>';
 
         return;
-
     }
 
     const sortimenSet = new Set();
@@ -2067,39 +2051,6 @@ function tampilkanOlah(data){
 
 
 /* =====================================================
-   AMBIL STATUS / MUTU DARI DATA SISA
-
-   STATUS dipakai terlebih dahulu.
-   Jika STATUS kosong, gunakan MUTU.
-===================================================== */
-
-function ambilStatusMutu(item){
-
-    if(!item){
-        return "";
-    }
-
-    const status =
-        String(
-            item.status == null
-                ? ""
-                : item.status
-        ).trim();
-
-    if(status){
-        return status;
-    }
-
-    return String(
-        item.mutu == null
-            ? ""
-            : item.mutu
-    ).trim();
-
-}
-
-
-/* =====================================================
    AMBIL DATA SISA
 ===================================================== */
 
@@ -2180,13 +2131,6 @@ function ambilSisa(){
                 "none";
 
 
-            isiFilterStatusMutu(
-                buatStatusMutuList(
-                    data.rincian || []
-                )
-            );
-
-
             isiFilterPanjang(
                 data.panjangList || []
             );
@@ -2234,45 +2178,30 @@ function ambilSisa(){
 
 
 /* =====================================================
-   BUAT LIST STATUS / MUTU
+   UBAH STATUS / MUTU
 ===================================================== */
 
-function buatStatusMutuList(data){
+function ubahDasarSisa(){
 
-    const set =
-        new Set();
-
-
-    (data || []).forEach(function(item){
-
-        const nilai =
-            ambilStatusMutu(item);
-
-        if(nilai){
-            set.add(nilai);
-        }
-
-    });
+    const select =
+        document.getElementById(
+            "dasarSisa"
+        );
 
 
-    return Array.from(set)
-        .sort(function(a,b){
+    DASAR_SISA =
+        select.value;
 
-            return a.localeCompare(
-                b,
-                "id"
-            );
 
-        });
+    tampilkanRingkasanSisa();
+
+    tampilkanRincianSisa();
 
 }
 
 
 /* =====================================================
    RINGKASAN SISA
-
-   DATA LANGSUNG DARI RINCIAN SISA
-   AGAR SORTIMEN TIDAK KOSONG.
 ===================================================== */
 
 function tampilkanRingkasanSisa(){
@@ -2298,8 +2227,20 @@ function tampilkanRingkasanSisa(){
     }
 
 
-    const data =
-        DATA_SISA.rincian || [];
+    let data;
+
+
+    if(DASAR_SISA === "STATUS"){
+
+        data =
+            DATA_SISA.ringkasanStatus || [];
+
+    }else{
+
+        data =
+            DATA_SISA.ringkasanMutu || [];
+
+    }
 
 
     if(!data.length){
@@ -2314,7 +2255,7 @@ function tampilkanRingkasanSisa(){
     }
 
 
-    const group = {};
+    const baris = [];
 
 
     data.forEach(function(item){
@@ -2330,70 +2271,43 @@ function tampilkanRingkasanSisa(){
             );
 
 
-        const statusMutu =
-            ambilStatusMutu(item);
+        const nilai =
+            DASAR_SISA === "STATUS"
+                ? item.status
+                : item.mutu;
 
 
-        if(!statusMutu){
-            return;
-        }
-
-
-        const key =
-            sortimen +
-            "||" +
-            statusMutu;
-
-
-        if(!group[key]){
-
-            group[key] = {
-
-                sortimen:
-                    sortimen,
-
-                statusMutu:
-                    statusMutu,
-
-                batang:
-                    0,
-
-                volume:
-                    0
-
-            };
-
-        }
-
-
-        group[key].batang +=
+        const batang =
             Number(
                 item.batang || 0
             );
 
 
-        group[key].volume +=
+        const volume =
             Number(
                 item.volume || 0
             );
 
+
+        baris.push({
+
+            sortimen:
+                sortimen,
+
+            nilai:
+                String(
+                    nilai || ""
+                ).trim(),
+
+            batang:
+                batang,
+
+            volume:
+                volume
+
+        });
+
     });
-
-
-    const baris =
-        Object.values(group);
-
-
-    if(!baris.length){
-
-        box.innerHTML =
-            '<div class="kosong">' +
-            'TIDAK ADA DATA SISA.' +
-            '</div>';
-
-        return;
-
-    }
 
 
     const urutan = [
@@ -2422,10 +2336,7 @@ function tampilkanRingkasanSisa(){
             );
 
 
-        if(
-            ia === -1 &&
-            ib === -1
-        ){
+        if(ia === -1 && ib === -1){
 
             const s =
                 a.sortimen.localeCompare(
@@ -2455,8 +2366,8 @@ function tampilkanRingkasanSisa(){
         }
 
 
-        return a.statusMutu.localeCompare(
-            b.statusMutu,
+        return a.nilai.localeCompare(
+            b.nilai,
             "id"
         );
 
@@ -2480,7 +2391,9 @@ function tampilkanRingkasanSisa(){
 
         "<th>SORTIMEN</th>" +
 
-        "<th>STATUS / MUTU</th>" +
+        "<th>" +
+        escapeHtml(DASAR_SISA) +
+        "</th>" +
 
         "<th>BATANG</th>" +
 
@@ -2514,7 +2427,7 @@ function tampilkanRingkasanSisa(){
 
             "<td>" +
             escapeHtml(
-                item.statusMutu
+                item.nilai
             ) +
             "</td>" +
 
@@ -2560,77 +2473,6 @@ function tampilkanRingkasanSisa(){
 
     box.innerHTML =
         html;
-
-}
-
-
-/* =====================================================
-   ISI FILTER STATUS / MUTU
-===================================================== */
-
-function isiFilterStatusMutu(list){
-
-    const box =
-        document.getElementById(
-            "filterStatusMutu"
-        );
-
-
-    box.innerHTML = "";
-
-
-    if(!list || !list.length){
-
-        box.innerHTML =
-            '<div class="kosong">' +
-            'TIDAK ADA DATA.' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    list.forEach(function(nilai){
-
-        const teks =
-            String(nilai);
-
-
-        const label =
-            document.createElement(
-                "label"
-            );
-
-
-        label.className =
-            "checkbox-item";
-
-
-        label.innerHTML =
-
-            '<input ' +
-
-            'type="checkbox" ' +
-
-            'class="checkStatusMutu" ' +
-
-            'value="' +
-            escapeHtml(teks) +
-            '" ' +
-
-            'onchange="tampilkanRincianSisa()">' +
-
-            '<span>' +
-            escapeHtml(teks) +
-            '</span>';
-
-
-        box.appendChild(
-            label
-        );
-
-    });
 
 }
 
@@ -2778,50 +2620,6 @@ function isiFilterDiameter(list){
 
 
 /* =====================================================
-   PILIH SEMUA STATUS / MUTU
-===================================================== */
-
-function pilihSemuaStatusMutu(){
-
-    document
-        .querySelectorAll(
-            ".checkStatusMutu"
-        )
-        .forEach(function(cb){
-
-            cb.checked = true;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
-   BATAL SEMUA STATUS / MUTU
-===================================================== */
-
-function batalSemuaStatusMutu(){
-
-    document
-        .querySelectorAll(
-            ".checkStatusMutu"
-        )
-        .forEach(function(cb){
-
-            cb.checked = false;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
    PILIH SEMUA PANJANG
 ===================================================== */
 
@@ -2910,27 +2708,6 @@ function batalSemuaDiameter(){
 
 
 /* =====================================================
-   AMBIL STATUS / MUTU YANG DIPILIH
-===================================================== */
-
-function getStatusMutuDipilih(){
-
-    return Array.from(
-        document.querySelectorAll(
-            ".checkStatusMutu:checked"
-        )
-    ).map(function(cb){
-
-        return String(
-            cb.value
-        );
-
-    });
-
-}
-
-
-/* =====================================================
    AMBIL PANJANG YANG DIPILIH
 ===================================================== */
 
@@ -3003,10 +2780,6 @@ function tampilkanRincianSisa(){
         DATA_SISA.rincian || [];
 
 
-    const statusMutuDipilih =
-        getStatusMutuDipilih();
-
-
     const panjangDipilih =
         getPanjangDipilih();
 
@@ -3016,25 +2789,10 @@ function tampilkanRincianSisa(){
 
 
     /* =================================================
-       FILTER STATUS / MUTU
-    ================================================= */
-
-    if(statusMutuDipilih.length > 0){
-
-        data =
-            data.filter(function(item){
-
-                return statusMutuDipilih.includes(
-                    ambilStatusMutu(item)
-                );
-
-            });
-
-    }
-
-
-    /* =================================================
        FILTER PANJANG
+
+       Kalau tidak ada yang dicentang,
+       berarti semua panjang ditampilkan.
     ================================================= */
 
     if(panjangDipilih.length > 0){
@@ -3055,6 +2813,9 @@ function tampilkanRincianSisa(){
 
     /* =================================================
        FILTER DIAMETER
+
+       Kalau tidak ada yang dicentang,
+       berarti semua diameter ditampilkan.
     ================================================= */
 
     if(diameterDipilih.length > 0){
@@ -3076,13 +2837,9 @@ function tampilkanRincianSisa(){
     /* =================================================
        GROUP
 
-       SORTIMEN
-       +
-       STATUS / MUTU
-       +
-       PANJANG
-       +
-       DIAMETER
+       STATUS/MUTU
+       + PANJANG
+       + DIAMETER
     ================================================= */
 
     const group = {};
@@ -3095,17 +2852,29 @@ function tampilkanRincianSisa(){
         }
 
 
-        const sortimen =
-            normalisasiSortimen(
-                item.sortimen || ""
-            );
+        let nilai;
 
 
-        const statusMutu =
-            ambilStatusMutu(item);
+        if(DASAR_SISA === "STATUS"){
+
+            nilai =
+                item.status;
+
+        }else{
+
+            nilai =
+                item.mutu;
+
+        }
 
 
-        if(!statusMutu){
+        nilai =
+            String(
+                nilai || ""
+            ).trim();
+
+
+        if(!nilai){
             return;
         }
 
@@ -3123,9 +2892,7 @@ function tampilkanRincianSisa(){
 
 
         const key =
-            sortimen +
-            "||" +
-            statusMutu +
+            nilai +
             "||" +
             panjang +
             "||" +
@@ -3136,11 +2903,8 @@ function tampilkanRincianSisa(){
 
             group[key] = {
 
-                sortimen:
-                    sortimen,
-
-                statusMutu:
-                    statusMutu,
+                nilai:
+                    nilai,
 
                 panjang:
                     panjang,
@@ -3193,74 +2957,17 @@ function tampilkanRincianSisa(){
        URUTAN
     ================================================= */
 
-    const urutan = [
-
-        "A I",
-
-        "A II",
-
-        "A III",
-
-        "KBP"
-
-    ];
-
-
     hasil.sort(function(a,b){
 
-        const ia =
-            urutan.indexOf(
-                a.sortimen
-            );
-
-        const ib =
-            urutan.indexOf(
-                b.sortimen
-            );
-
-
-        if(
-            ia === -1 &&
-            ib === -1
-        ){
-
-            const s =
-                a.sortimen.localeCompare(
-                    b.sortimen,
-                    "id"
-                );
-
-            if(s !== 0){
-                return s;
-            }
-
-        }
-
-
-        if(ia === -1){
-            return 1;
-        }
-
-
-        if(ib === -1){
-            return -1;
-        }
-
-
-        if(ia !== ib){
-            return ia - ib;
-        }
-
-
-        const sm =
-            a.statusMutu.localeCompare(
-                b.statusMutu,
+        const nilai =
+            a.nilai.localeCompare(
+                b.nilai,
                 "id"
             );
 
 
-        if(sm !== 0){
-            return sm;
+        if(nilai !== 0){
+            return nilai;
         }
 
 
@@ -3306,9 +3013,11 @@ function tampilkanRincianSisa(){
         "<thead>" +
         "<tr>" +
 
-        "<th>SORTIMEN</th>" +
-
-        "<th>STATUS / MUTU</th>" +
+        "<th>" +
+        escapeHtml(
+            DASAR_SISA
+        ) +
+        "</th>" +
 
         "<th>PANJANG</th>" +
 
@@ -3316,7 +3025,7 @@ function tampilkanRincianSisa(){
 
         "<th>BATANG</th>" +
 
-        "<th>VOLUME (M³)</th>" +
+        "<th>VOLUME</th>" +
 
         "</tr>" +
         "</thead>";
@@ -3340,13 +3049,7 @@ function tampilkanRincianSisa(){
 
             "<td>" +
             escapeHtml(
-                item.sortimen
-            ) +
-            "</td>" +
-
-            "<td>" +
-            escapeHtml(
-                item.statusMutu
+                item.nilai
             ) +
             "</td>" +
 
@@ -3381,8 +3084,6 @@ function tampilkanRincianSisa(){
         "<tr class='baris-total'>" +
 
         "<th>TOTAL</th>" +
-
-        "<th></th>" +
 
         "<th></th>" +
 
@@ -3628,4 +3329,3 @@ document.addEventListener(
 </body>
 
 </html>
-
