@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
@@ -227,7 +228,7 @@ tbody tr:last-child th{
 
 .filter-sisa{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr 1fr 1fr;
     gap:15px;
     margin-top:20px;
 }
@@ -288,39 +289,6 @@ tbody tr:last-child th{
 }
 
 /* =====================================================
-   FILTER BARU SISA
-===================================================== */
-
-.filter-sisa-utama{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:20px;
-}
-
-.filter-sisa-utama-box{
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:15px;
-    background:#fafafa;
-}
-
-.filter-sisa-utama-box label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:8px;
-}
-
-.filter-sisa-utama-box select{
-    width:100%;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:15px;
-    background:white;
-}
-
-/* =====================================================
    RESPONSIVE
 ===================================================== */
 
@@ -352,10 +320,6 @@ tbody tr:last-child th{
         grid-template-columns:1fr;
     }
 
-    .filter-sisa-utama{
-        grid-template-columns:1fr;
-    }
-
 }
 
 </style>
@@ -376,6 +340,7 @@ tbody tr:last-child th{
 
 </div>
 
+
 <!-- =====================================================
      MENU
 ===================================================== -->
@@ -383,19 +348,23 @@ tbody tr:last-child th{
 <div class="menu">
 
 <button
- class="active"
- onclick="bukaRuang('pasokan',this)">
-PASOKAN </button>
+    class="active"
+    onclick="bukaRuang('pasokan',this)">
+    PASOKAN
+</button>
 
 <button
- onclick="bukaRuang('olah',this)">
-OLAH </button>
+    onclick="bukaRuang('olah',this)">
+    OLAH
+</button>
 
 <button
- onclick="bukaRuang('sisa',this)">
-SISA </button>
+    onclick="bukaRuang('sisa',this)">
+    SISA
+</button>
 
 </div>
+
 
 <!-- =====================================================
      RUANG
@@ -403,121 +372,214 @@ SISA </button>
 
 <div class="ruang">
 
+
 <!-- =====================================================
      PASOKAN
 ===================================================== -->
 
 <div id="pasokan" class="kartu">
 
+    <h2>PASOKAN</h2>
 
-<h2>PASOKAN</h2>
+    <div class="filter">
 
-<div class="filter">
+        <label for="bulanPasokan">
+            FILTER BULAN
+        </label>
 
-    <label for="bulanPasokan">
-        FILTER BULAN
-    </label>
+        <select id="bulanPasokan">
 
-    <select id="bulanPasokan">
+            <option value="SEMUA">
+                SEMUA BULAN
+            </option>
 
-        <option value="SEMUA">
-            SEMUA BULAN
-        </option>
+            <option value="JANUARI">
+                JANUARI
+            </option>
 
-        <option value="JANUARI">JANUARI</option>
-        <option value="FEBRUARI">FEBRUARI</option>
-        <option value="MARET">MARET</option>
-        <option value="APRIL">APRIL</option>
-        <option value="MEI">MEI</option>
-        <option value="JUNI">JUNI</option>
-        <option value="JULI">JULI</option>
-        <option value="AGUSTUS">AGUSTUS</option>
-        <option value="SEPTEMBER">SEPTEMBER</option>
-        <option value="OKTOBER">OKTOBER</option>
-        <option value="NOVEMBER">NOVEMBER</option>
-        <option value="DESEMBER">DESEMBER</option>
+            <option value="FEBRUARI">
+                FEBRUARI
+            </option>
 
-    </select>
+            <option value="MARET">
+                MARET
+            </option>
 
-</div>
+            <option value="APRIL">
+                APRIL
+            </option>
 
-<div id="statusPasokan"
-     class="loading">
+            <option value="MEI">
+                MEI
+            </option>
 
-    MEMUAT DATA PASOKAN...
+            <option value="JUNI">
+                JUNI
+            </option>
 
-</div>
+            <option value="JULI">
+                JULI
+            </option>
 
-<h3>
-    TOTAL PASOKAN
-</h3>
+            <option value="AGUSTUS">
+                AGUSTUS
+            </option>
 
-<table>
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
 
-    <thead>
+            <option value="OKTOBER">
+                OKTOBER
+            </option>
 
-        <tr>
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
 
-            <th>SORTIMEN</th>
-            <th>BATANG</th>
-            <th>VOLUME (M³)</th>
+            <option value="DESEMBER">
+                DESEMBER
+            </option>
 
-        </tr>
+        </select>
 
-    </thead>
+    </div>
 
-    <tbody>
+    <div id="statusPasokan"
+         class="loading">
 
-        <tr>
-            <td>A I</td>
-            <td id="batangAI">0</td>
-            <td id="volumeAI">0,000</td>
-        </tr>
+        MEMUAT DATA PASOKAN...
 
-        <tr>
-            <td>A II</td>
-            <td id="batangAII">0</td>
-            <td id="volumeAII">0,000</td>
-        </tr>
+    </div>
 
-        <tr>
-            <td>A III</td>
-            <td id="batangAIII">0</td>
-            <td id="volumeAIII">0,000</td>
-        </tr>
+    <h3>
+        TOTAL PASOKAN
+    </h3>
 
-        <tr>
-            <td>KBP</td>
-            <td id="batangKBP">0</td>
-            <td id="volumeKBP">0,000</td>
-        </tr>
+    <table>
 
-        <tr>
+        <thead>
 
-            <th>TOTAL</th>
+            <tr>
 
-            <th id="totalBatang">0</th>
+                <th>
+                    SORTIMEN
+                </th>
 
-            <th id="totalVolume">0,000</th>
+                <th>
+                    BATANG
+                </th>
 
-        </tr>
+                <th>
+                    VOLUME (M³)
+                </th>
 
-    </tbody>
+            </tr>
 
-</table>
+        </thead>
 
-<h3>RINCIAN PASOKAN</h3>
+        <tbody>
 
-<div id="rincianPasokan" class="rincian">
+            <tr>
 
-    <div class="loading">
-        MEMUAT RINCIAN...
+                <td>
+                    A I
+                </td>
+
+                <td id="batangAI">
+                    0
+                </td>
+
+                <td id="volumeAI">
+                    0,000
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    A II
+                </td>
+
+                <td id="batangAII">
+                    0
+                </td>
+
+                <td id="volumeAII">
+                    0,000
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    A III
+                </td>
+
+                <td id="batangAIII">
+                    0
+                </td>
+
+                <td id="volumeAIII">
+                    0,000
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    KBP
+                </td>
+
+                <td id="batangKBP">
+                    0
+                </td>
+
+                <td id="volumeKBP">
+                    0,000
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <th>
+                    TOTAL
+                </th>
+
+                <th id="totalBatang">
+                    0
+                </th>
+
+                <th id="totalVolume">
+                    0,000
+                </th>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <h3>
+        RINCIAN PASOKAN
+    </h3>
+
+    <div
+        id="rincianPasokan"
+        class="rincian">
+
+        <div class="loading">
+            MEMUAT RINCIAN...
+        </div>
+
     </div>
 
 </div>
 
-
-</div>
 
 <!-- =====================================================
      OLAH
@@ -528,63 +590,73 @@ SISA </button>
     class="kartu"
     style="display:none;">
 
+    <h2>OLAH</h2>
 
-<h2>OLAH</h2>
+    <div class="filter">
 
-<div class="filter">
+        <label for="bulanOlah">
+            FILTER BULAN
+        </label>
 
-    <label for="bulanOlah">
-        FILTER BULAN
-    </label>
+        <select id="bulanOlah">
 
-    <select id="bulanOlah">
+            <option value="SEMUA">
+                SEMUA BULAN
+            </option>
 
-        <option value="SEMUA">SEMUA BULAN</option>
-        <option value="JANUARI">JANUARI</option>
-        <option value="FEBRUARI">FEBRUARI</option>
-        <option value="MARET">MARET</option>
-        <option value="APRIL">APRIL</option>
-        <option value="MEI">MEI</option>
-        <option value="JUNI">JUNI</option>
-        <option value="JULI">JULI</option>
-        <option value="AGUSTUS">AGUSTUS</option>
-        <option value="SEPTEMBER">SEPTEMBER</option>
-        <option value="OKTOBER">OKTOBER</option>
-        <option value="NOVEMBER">NOVEMBER</option>
-        <option value="DESEMBER">DESEMBER</option>
+            <option value="JANUARI">JANUARI</option>
+            <option value="FEBRUARI">FEBRUARI</option>
+            <option value="MARET">MARET</option>
+            <option value="APRIL">APRIL</option>
+            <option value="MEI">MEI</option>
+            <option value="JUNI">JUNI</option>
+            <option value="JULI">JULI</option>
+            <option value="AGUSTUS">AGUSTUS</option>
+            <option value="SEPTEMBER">SEPTEMBER</option>
+            <option value="OKTOBER">OKTOBER</option>
+            <option value="NOVEMBER">NOVEMBER</option>
+            <option value="DESEMBER">DESEMBER</option>
 
-    </select>
+        </select>
 
-    <label for="jenisOlah">
-        JENIS OLAH
-    </label>
+        <label for="jenisOlah">
+            JENIS OLAH
+        </label>
 
-    <select id="jenisOlah">
+        <select id="jenisOlah">
 
-        <option value="SEMUA">
-            SEMUA JENIS
-        </option>
+            <option value="SEMUA">
+                SEMUA JENIS
+            </option>
 
-    </select>
+        </select>
 
-</div>
+    </div>
 
-<div id="statusOlah" class="loading">
-    MEMUAT DATA OLAH...
-</div>
+    <div
+        id="statusOlah"
+        class="loading">
 
-<h3>RINCIAN OLAH</h3>
+        MEMUAT DATA OLAH...
 
-<div id="rincianOlah" class="rincian">
+    </div>
 
-    <div class="loading">
-        MEMUAT RINCIAN...
+    <h3>
+        RINCIAN OLAH
+    </h3>
+
+    <div
+        id="rincianOlah"
+        class="rincian">
+
+        <div class="loading">
+            MEMUAT RINCIAN...
+        </div>
+
     </div>
 
 </div>
 
-
-</div>
 
 <!-- =====================================================
      SISA
@@ -595,122 +667,176 @@ SISA </button>
     class="kartu"
     style="display:none;">
 
-
-<h2>SISA</h2>
-
-<div id="statusSisa" class="loading">
-    MEMUAT DATA SISA...
-</div>
+    <h2>SISA</h2>
 
 
-<!-- =================================================
-     FILTER SORTIMEN + STATUS/MUTU
-================================================== -->
+    <!-- =================================================
+         STATUS SISA
+    ================================================== -->
 
-<h3>
-    FILTER SISA
-</h3>
+    <div
+        id="statusSisa"
+        class="loading">
 
-<div class="filter-sisa-utama">
-
-    <div class="filter-sisa-utama-box">
-
-        <label for="filterSortimenSisa">
-            SORTIMEN
-        </label>
-
-        <select
-            id="filterSortimenSisa"
-            onchange="tampilkanRincianSisa()">
-
-            <option value="SEMUA">
-                SEMUA SORTIMEN
-            </option>
-
-        </select>
+        MEMUAT DATA SISA...
 
     </div>
 
 
-    <div class="filter-sisa-utama-box">
+    <!-- =================================================
+         RINGKASAN SISA
+    ================================================== -->
 
-        <label for="filterStatusMutuSisa">
-            STATUS / MUTU
-        </label>
+    <h3>
+        RINGKASAN SISA
+    </h3>
 
-        <select
-            id="filterStatusMutuSisa"
-            onchange="tampilkanRincianSisa()">
+    <div
+        id="rincianRingkasanSisa"
+        class="rincian">
 
-            <option value="SEMUA">
-                SEMUA
-            </option>
-
-        </select>
-
-    </div>
-
-</div>
-
-
-<!-- =================================================
-     RINGKASAN SISA
-================================================== -->
-
-<h3>
-    RINGKASAN SISA
-</h3>
-
-<div
-    id="rincianRingkasanSisa"
-    class="rincian">
-
-    <div class="loading">
-        MEMUAT RINGKASAN...
-    </div>
-
-</div>
-
-
-<!-- =================================================
-     FILTER PANJANG + DIAMETER
-================================================== -->
-
-<h3>
-    FILTER RINCIAN SISA
-</h3>
-
-<div class="filter-sisa">
-
-
-    <div class="filter-sisa-box">
-
-        <div class="filter-sisa-title">
-            PANJANG
+        <div class="loading">
+            MEMUAT RINGKASAN...
         </div>
 
-        <div class="filter-sisa-actions">
+    </div>
 
-            <button
-                type="button"
-                onclick="pilihSemuaPanjang()">
-                PILIH SEMUA
-            </button>
 
-            <button
-                type="button"
-                onclick="batalSemuaPanjang()">
-                BATAL SEMUA
-            </button>
+    <!-- =================================================
+         FILTER RINCIAN SISA
+    ================================================== -->
+
+    <h3>
+        FILTER RINCIAN SISA
+    </h3>
+
+    <div class="filter-sisa">
+
+
+        <!-- =============================================
+             STATUS / MUTU
+        ============================================== -->
+
+        <div class="filter-sisa-box">
+
+            <div class="filter-sisa-title">
+                STATUS / MUTU
+            </div>
+
+            <div class="filter-sisa-actions">
+
+                <button
+                    type="button"
+                    onclick="pilihSemuaStatusMutu()">
+
+                    PILIH SEMUA
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="batalSemuaStatusMutu()">
+
+                    BATAL SEMUA
+
+                </button>
+
+            </div>
+
+            <div
+                id="filterStatusMutu"
+                class="checkbox-list">
+
+                <div class="kosong">
+                    MEMUAT...
+                </div>
+
+            </div>
 
         </div>
 
-        <div
-            id="filterPanjang"
-            class="checkbox-list">
 
-            <div class="kosong">
-                MEMUAT...
+        <!-- =============================================
+             PANJANG
+        ============================================== -->
+
+        <div class="filter-sisa-box">
+
+            <div class="filter-sisa-title">
+                PANJANG
+            </div>
+
+            <div class="filter-sisa-actions">
+
+                <button
+                    type="button"
+                    onclick="pilihSemuaPanjang()">
+
+                    PILIH SEMUA
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="batalSemuaPanjang()">
+
+                    BATAL SEMUA
+
+                </button>
+
+            </div>
+
+            <div
+                id="filterPanjang"
+                class="checkbox-list">
+
+                <div class="kosong">
+                    MEMUAT...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =============================================
+             DIAMETER
+        ============================================== -->
+
+        <div class="filter-sisa-box">
+
+            <div class="filter-sisa-title">
+                DIAMETER
+            </div>
+
+            <div class="filter-sisa-actions">
+
+                <button
+                    type="button"
+                    onclick="pilihSemuaDiameter()">
+
+                    PILIH SEMUA
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="batalSemuaDiameter()">
+
+                    BATAL SEMUA
+
+                </button>
+
+            </div>
+
+            <div
+                id="filterDiameter"
+                class="checkbox-list">
+
+                <div class="kosong">
+                    MEMUAT...
+                </div>
+
             </div>
 
         </div>
@@ -718,70 +844,40 @@ SISA </button>
     </div>
 
 
-    <div class="filter-sisa-box">
+    <!-- =================================================
+         RINCIAN SISA
+    ================================================== -->
 
-        <div class="filter-sisa-title">
-            DIAMETER
-        </div>
+    <h3>
+        RINCIAN SISA
+    </h3>
 
-        <div class="filter-sisa-actions">
+    <div
+        id="rincianSisa"
+        class="rincian">
 
-            <button
-                type="button"
-                onclick="pilihSemuaDiameter()">
-                PILIH SEMUA
-            </button>
-
-            <button
-                type="button"
-                onclick="batalSemuaDiameter()">
-                BATAL SEMUA
-            </button>
-
-        </div>
-
-        <div
-            id="filterDiameter"
-            class="checkbox-list">
-
-            <div class="kosong">
-                MEMUAT...
-            </div>
-
+        <div class="loading">
+            MEMUAT RINCIAN...
         </div>
 
     </div>
 
 </div>
 
-
-<!-- =================================================
-     RINCIAN SISA
-================================================== -->
-
-<h3>
-    RINCIAN SISA
-</h3>
-
-<div
-    id="rincianSisa"
-    class="rincian">
-
-    <div class="loading">
-        MEMUAT RINCIAN...
-    </div>
-
 </div>
 
 
-</div>
-
-</div>
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
 
+
 /* =====================================================
    URL APPS SCRIPT
+
+   TETAP SAMA
 ===================================================== */
 
 const API_URL =
@@ -796,7 +892,7 @@ let DATA_SISA = null;
 
 
 /* =====================================================
-   FORMAT VOLUME
+   FORMAT ANGKA VOLUME
 ===================================================== */
 
 function formatVolume(angka){
@@ -804,6 +900,24 @@ function formatVolume(angka){
     return Number(angka || 0)
         .toFixed(3)
         .replace(".", ",");
+
+}
+
+
+/* =====================================================
+   FORMAT ANGKA UMUM
+===================================================== */
+
+function formatAngka(nilai,desimal){
+
+    return Number(nilai || 0)
+        .toLocaleString(
+            "id-ID",
+            {
+                minimumFractionDigits:desimal,
+                maximumFractionDigits:desimal
+            }
+        );
 
 }
 
@@ -824,14 +938,18 @@ function formatTanggal(tanggal){
     if(
         /^\d{1,2}-\d{1,2}-\d{4}$/.test(teks)
     ){
+
         return teks;
+
     }
 
     const d =
         new Date(tanggal);
 
     if(isNaN(d.getTime())){
+
         return teks;
+
     }
 
     return d.getDate() +
@@ -849,27 +967,105 @@ function formatTanggal(tanggal){
 
 function bukaRuang(nama,tombol){
 
-    document.getElementById("pasokan").style.display = "none";
-    document.getElementById("olah").style.display = "none";
-    document.getElementById("sisa").style.display = "none";
+    document
+        .getElementById("pasokan")
+        .style.display = "none";
 
-    document.getElementById(nama).style.display = "block";
+    document
+        .getElementById("olah")
+        .style.display = "none";
+
+    document
+        .getElementById("sisa")
+        .style.display = "none";
+
+
+    document
+        .getElementById(nama)
+        .style.display = "block";
+
 
     document
         .querySelectorAll(".menu button")
         .forEach(function(btn){
+
             btn.classList.remove("active");
+
         });
+
 
     tombol.classList.add("active");
 
+
     if(nama === "olah"){
+
         ambilOlah();
+
     }
 
+
     if(nama === "sisa"){
+
         ambilSisa();
+
     }
+
+}
+
+
+/* =====================================================
+   TAMPILKAN DATA PASOKAN
+===================================================== */
+
+function tampilkanPasokan(hasil){
+
+    if(!hasil || !hasil.sukses){
+
+        tampilkanError(
+            (hasil && hasil.pesan)
+            ? hasil.pesan
+            : "Data tidak dapat dibaca."
+        );
+
+        return;
+    }
+
+    const r = hasil.ringkasan || {};
+
+    document.getElementById("batangAI").textContent =
+        (r.AI ? r.AI.batang : 0);
+
+    document.getElementById("volumeAI").textContent =
+        formatVolume(r.AI ? r.AI.volume : 0);
+
+    document.getElementById("batangAII").textContent =
+        (r.AII ? r.AII.batang : 0);
+
+    document.getElementById("volumeAII").textContent =
+        formatVolume(r.AII ? r.AII.volume : 0);
+
+    document.getElementById("batangAIII").textContent =
+        (r.AIII ? r.AIII.batang : 0);
+
+    document.getElementById("volumeAIII").textContent =
+        formatVolume(r.AIII ? r.AIII.volume : 0);
+
+    document.getElementById("batangKBP").textContent =
+        (r.KBP ? r.KBP.batang : 0);
+
+    document.getElementById("volumeKBP").textContent =
+        formatVolume(r.KBP ? r.KBP.volume : 0);
+
+    document.getElementById("totalBatang").textContent =
+        hasil.totalBatang || 0;
+
+    document.getElementById("totalVolume").textContent =
+        formatVolume(hasil.totalVolume);
+
+    document.getElementById("statusPasokan").style.display =
+        "none";
+
+    tampilkanRincian(hasil.rincian || []);
 
 }
 
@@ -899,4 +1095,2537 @@ function normalisasiSortimen(nama){
         String(nama || "")
             .toUpperCase()
             .trim()
-            .replace(/\s+/g,"
+            .replace(/\s+/g," ");
+
+    if(s === "AI"){
+        return "A I";
+    }
+
+    if(s === "AII"){
+        return "A II";
+    }
+
+    if(s === "AIII"){
+        return "A III";
+    }
+
+    return s;
+
+}
+
+
+/* =====================================================
+   RINCIAN PASOKAN
+   BAGIAN PASOKAN DIPERTAHANKAN
+===================================================== */
+
+function tampilkanRincian(data){
+
+    const box =
+        document.getElementById("rincianPasokan");
+
+    if(!data || !data.length){
+
+        box.innerHTML =
+            '<div class="kosong">Tidak ada data pasokan.</div>';
+
+        return;
+
+    }
+
+    const sortimenSet = new Set();
+
+    data.forEach(function(item){
+
+        const daftar =
+            item.sortimen || {};
+
+        Object.keys(daftar)
+            .forEach(function(sortimen){
+
+                if(sortimen){
+
+                    sortimenSet.add(
+                        normalisasiSortimen(sortimen)
+                    );
+
+                }
+
+            });
+
+    });
+
+    const urutan = [
+        "A I",
+        "A II",
+        "A III",
+        "KBP"
+    ];
+
+    const sortimenAktif =
+        Array.from(sortimenSet)
+            .sort(function(a,b){
+
+                const ia =
+                    urutan.indexOf(a);
+
+                const ib =
+                    urutan.indexOf(b);
+
+                if(
+                    ia === -1 &&
+                    ib === -1
+                ){
+
+                    return a.localeCompare(b);
+
+                }
+
+                if(ia === -1){
+                    return 1;
+                }
+
+                if(ib === -1){
+                    return -1;
+                }
+
+                return ia - ib;
+
+            });
+
+    if(!sortimenAktif.length){
+
+        box.innerHTML =
+            '<div class="kosong">Tidak ada sortimen.</div>';
+
+        return;
+
+    }
+
+    const tampilkanTotal =
+        sortimenAktif.length > 1;
+
+    const grandTotal = {
+
+        batang: 0,
+
+        volume: 0,
+
+        sortimen: {}
+
+    };
+
+    sortimenAktif.forEach(function(sortimen){
+
+        grandTotal.sortimen[sortimen] = {
+
+            batang: 0,
+
+            volume: 0
+
+        };
+
+    });
+
+    data.forEach(function(item){
+
+        const daftar =
+            item.sortimen || {};
+
+        sortimenAktif.forEach(function(sortimen){
+
+            const nilai =
+                daftar[sortimen];
+
+            if(!nilai){
+                return;
+            }
+
+            grandTotal
+                .sortimen[sortimen]
+                .batang +=
+                    Number(nilai.batang || 0);
+
+            grandTotal
+                .sortimen[sortimen]
+                .volume +=
+                    Number(nilai.volume || 0);
+
+        });
+
+    });
+
+    sortimenAktif.forEach(function(sortimen){
+
+        grandTotal.batang +=
+            grandTotal
+                .sortimen[sortimen]
+                .batang;
+
+        grandTotal.volume +=
+            grandTotal
+                .sortimen[sortimen]
+                .volume;
+
+    });
+
+    let html = "";
+
+    html += "<table>";
+
+    html += "<thead>";
+
+    html += "<tr>";
+
+    html +=
+        "<th rowspan='2'>NO</th>";
+
+    html +=
+        "<th rowspan='2'>SKSHH-KB</th>";
+
+    html +=
+        "<th rowspan='2'>TGL TERIMA</th>";
+
+    html +=
+        "<th rowspan='2'>TPK</th>";
+
+    sortimenAktif.forEach(function(sortimen){
+
+        html +=
+            "<th colspan='2'>" +
+            escapeHtml(sortimen) +
+            "</th>";
+
+    });
+
+    if(tampilkanTotal){
+
+        html +=
+            "<th colspan='2'>TOTAL</th>";
+
+    }
+
+    html += "</tr>";
+
+    html += "<tr>";
+
+    sortimenAktif.forEach(function(){
+
+        html +=
+            "<th>BTG</th>";
+
+        html +=
+            "<th>M³</th>";
+
+    });
+
+    if(tampilkanTotal){
+
+        html +=
+            "<th>BTG</th>";
+
+        html +=
+            "<th>M³</th>";
+
+    }
+
+    html += "</tr>";
+
+    html += "</thead>";
+
+    html += "<tbody>";
+
+    data.forEach(function(item,index){
+
+        html += "<tr>";
+
+        html +=
+            "<td>" +
+            (index + 1) +
+            "</td>";
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.skshhkb || ""
+            ) +
+            "</td>";
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                formatTanggal(
+                    item.tglTerima || ""
+                )
+            ) +
+            "</td>";
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.tpk || ""
+            ) +
+            "</td>";
+
+        let totalBatangBaris = 0;
+
+        let totalVolumeBaris = 0;
+
+        const daftar =
+            item.sortimen || {};
+
+        sortimenAktif.forEach(function(sortimen){
+
+            const nilai =
+                daftar[sortimen] || {
+
+                    batang: 0,
+
+                    volume: 0
+
+                };
+
+            const batang =
+                Number(
+                    nilai.batang || 0
+                );
+
+            const volume =
+                Number(
+                    nilai.volume || 0
+                );
+
+            html +=
+                "<td>" +
+                (
+                    batang === 0
+                        ? ""
+                        : batang
+                ) +
+                "</td>";
+
+            html +=
+                "<td>" +
+                (
+                    volume === 0
+                        ? ""
+                        : formatVolume(volume)
+                ) +
+                "</td>";
+
+            totalBatangBaris +=
+                batang;
+
+            totalVolumeBaris +=
+                volume;
+
+        });
+
+        if(tampilkanTotal){
+
+            html +=
+                "<td class='total-cell'>" +
+                (
+                    totalBatangBaris === 0
+                        ? ""
+                        : totalBatangBaris
+                ) +
+                "</td>";
+
+            html +=
+                "<td class='total-cell'>" +
+                (
+                    totalVolumeBaris === 0
+                        ? ""
+                        : formatVolume(
+                            totalVolumeBaris
+                          )
+                ) +
+                "</td>";
+
+        }
+
+        html += "</tr>";
+
+    });
+
+    html +=
+        "<tr class='baris-total'>";
+
+    html +=
+        "<td class='total-label'></td>";
+
+    html +=
+        "<td class='total-label'><strong>TOTAL</strong></td>";
+
+    html +=
+        "<td class='total-label'></td>";
+
+    html +=
+        "<td class='total-label'></td>";
+
+    sortimenAktif.forEach(function(sortimen){
+
+        const total =
+            grandTotal
+                .sortimen[sortimen];
+
+        html +=
+            "<td class='total-label'><strong>" +
+            (
+                total.batang === 0
+                    ? ""
+                    : total.batang
+            ) +
+            "</strong></td>";
+
+        html +=
+            "<td class='total-label'><strong>" +
+            (
+                total.volume === 0
+                    ? ""
+                    : formatVolume(
+                        total.volume
+                      )
+            ) +
+            "</strong></td>";
+
+    });
+
+    if(tampilkanTotal){
+
+        html +=
+            "<td class='total-cell'><strong>" +
+            (
+                grandTotal.batang === 0
+                    ? ""
+                    : grandTotal.batang
+            ) +
+            "</strong></td>";
+
+        html +=
+            "<td class='total-cell'><strong>" +
+            (
+                grandTotal.volume === 0
+                    ? ""
+                    : formatVolume(
+                        grandTotal.volume
+                      )
+            ) +
+            "</strong></td>";
+
+    }
+
+    html += "</tr>";
+
+    html += "</tbody>";
+
+    html += "</table>";
+
+    box.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    if(
+        value &&
+        typeof value === "object"
+    ){
+
+        value =
+            value.value ||
+            value.nama ||
+            value.name ||
+            value.text ||
+            "";
+
+    }
+
+    return String(value == null ? "" : value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   AMBIL DATA OLAH
+   BAGIAN OLAH TETAP
+===================================================== */
+
+function ambilOlah(){
+
+    const status =
+        document.getElementById("statusOlah");
+
+    const rincian =
+        document.getElementById("rincianOlah");
+
+    status.style.display =
+        "block";
+
+    status.textContent =
+        "MEMUAT DATA OLAH...";
+
+    const bulan =
+        document.getElementById("bulanOlah").value;
+
+    const jenis =
+        document.getElementById("jenisOlah").value;
+
+    const url =
+        API_URL +
+        "?action=olah" +
+        "&bulan=" +
+        encodeURIComponent(bulan) +
+        "&jenis=" +
+        encodeURIComponent(jenis);
+
+    fetch(url)
+
+        .then(function(response){
+
+            if(!response.ok){
+
+                throw new Error(
+                    "Gagal mengambil data OLAH."
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data){
+
+            if(!data.sukses){
+
+                throw new Error(
+                    data.pesan ||
+                    "Gagal mengambil data OLAH."
+                );
+
+            }
+
+            isiJenisOlah(
+                data.jenisList || [],
+                jenis
+            );
+
+            tampilkanOlah(data);
+
+        })
+
+        .catch(function(error){
+
+            status.innerHTML =
+                '<div class="error">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+            rincian.innerHTML =
+                '<div class="error">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+        });
+
+}
+
+
+/* =====================================================
+   ISI JENIS OLAH
+===================================================== */
+
+function isiJenisOlah(
+    daftar,
+    jenisAktif
+){
+
+    const select =
+        document.getElementById("jenisOlah");
+
+    if(!select){
+        return;
+    }
+
+    select.innerHTML =
+        '<option value="SEMUA">SEMUA JENIS</option>';
+
+    daftar.forEach(function(jenis){
+
+        const nilai =
+            String(jenis || "").trim();
+
+        if(!nilai){
+            return;
+        }
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            nilai;
+
+        option.textContent =
+            nilai;
+
+        select.appendChild(option);
+
+    });
+
+    if(
+        jenisAktif &&
+        jenisAktif !== "SEMUA" &&
+        daftar.some(function(x){
+
+            return String(x).toUpperCase() ===
+                   String(jenisAktif).toUpperCase();
+
+        })
+    ){
+
+        select.value =
+            jenisAktif;
+
+    }else{
+
+        select.value =
+            "SEMUA";
+
+    }
+
+}
+
+
+/* =====================================================
+   TAMPILKAN DATA OLAH
+
+   BACKEND:
+
+   O = SORTIMEN
+   G = STATUS
+   H = VOLUME
+   K = STATUS OLAH
+       hanya sebagai filter
+   S = JENIS OLAH
+   T = BULAN OLAH
+===================================================== */
+
+function tampilkanOlah(data){
+
+    const status =
+        document.getElementById("statusOlah");
+
+    const rincian =
+        document.getElementById("rincianOlah");
+
+    status.style.display =
+        "none";
+
+
+    if(
+        !data ||
+        !data.rincian ||
+        !data.rincian.length
+    ){
+
+        rincian.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA OLAH.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const baris = [];
+
+
+    data.rincian.forEach(function(item){
+
+        if(!item){
+            return;
+        }
+
+
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen || ""
+            );
+
+
+        let statusData =
+            item.status;
+
+
+        if(
+            statusData === undefined ||
+            statusData === null
+        ){
+
+            statusData = "";
+
+        }
+
+
+        if(
+            typeof statusData === "object"
+        ){
+
+            statusData =
+                statusData.status ||
+                statusData.value ||
+                statusData.nama ||
+                statusData.name ||
+                statusData.text ||
+                "";
+
+        }
+
+
+        statusData =
+            String(
+                statusData
+            )
+            .trim();
+
+
+        const batang =
+            Number(
+                item.batang || 0
+            );
+
+
+        const volume =
+            Number(
+                item.volume || 0
+            );
+
+
+        if(
+            !sortimen &&
+            !statusData &&
+            !batang &&
+            !volume
+        ){
+
+            return;
+
+        }
+
+
+        baris.push({
+
+            sortimen:
+                sortimen,
+
+            status:
+                statusData,
+
+            batang:
+                batang,
+
+            volume:
+                volume
+
+        });
+
+    });
+
+
+    if(!baris.length){
+
+        rincian.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA OLAH.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const urutan = [
+
+        "A I",
+
+        "A II",
+
+        "A III",
+
+        "KBP"
+
+    ];
+
+
+    baris.sort(function(a,b){
+
+        const ia =
+            urutan.indexOf(
+                a.sortimen
+            );
+
+        const ib =
+            urutan.indexOf(
+                b.sortimen
+            );
+
+
+        if(
+            ia === -1 &&
+            ib === -1
+        ){
+
+            const hasilSortimen =
+                a.sortimen.localeCompare(
+                    b.sortimen,
+                    "id"
+                );
+
+            if(
+                hasilSortimen !== 0
+            ){
+
+                return hasilSortimen;
+
+            }
+
+        }
+
+
+        if(ia === -1){
+            return 1;
+        }
+
+
+        if(ib === -1){
+            return -1;
+        }
+
+
+        if(ia !== ib){
+            return ia - ib;
+        }
+
+
+        return String(
+            a.status
+        ).localeCompare(
+            String(b.status),
+            "id"
+        );
+
+    });
+
+
+    let totalBatang = 0;
+
+    let totalVolume = 0;
+
+
+    baris.forEach(function(item){
+
+        totalBatang +=
+            item.batang;
+
+        totalVolume +=
+            item.volume;
+
+    });
+
+
+    let html = "";
+
+
+    html +=
+        "<table>";
+
+
+    html +=
+        "<thead>" +
+        "<tr>" +
+
+        "<th>SORTIMEN</th>" +
+
+        "<th>STATUS</th>" +
+
+        "<th>BATANG</th>" +
+
+        "<th>VOLUME (M³)</th>" +
+
+        "</tr>" +
+        "</thead>";
+
+
+    html +=
+        "<tbody>";
+
+
+    baris.forEach(function(item){
+
+        html +=
+            "<tr>";
+
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.sortimen
+            ) +
+            "</td>";
+
+
+        html +=
+            "<td>" +
+            escapeHtml(
+                item.status
+            ) +
+            "</td>";
+
+
+        html +=
+            "<td>" +
+            item.batang +
+            "</td>";
+
+
+        html +=
+            "<td>" +
+            formatVolume(
+                item.volume
+            ) +
+            "</td>";
+
+
+        html +=
+            "</tr>";
+
+    });
+
+
+    html +=
+        "<tr class='baris-total'>";
+
+
+    html +=
+        "<th class='total-label'>" +
+        "TOTAL" +
+        "</th>";
+
+
+    html +=
+        "<th></th>";
+
+
+    html +=
+        "<th>" +
+        totalBatang +
+        "</th>";
+
+
+    html +=
+        "<th class='total-cell'>" +
+        formatVolume(
+            totalVolume
+        ) +
+        "</th>";
+
+
+    html +=
+        "</tr>";
+
+
+    html +=
+        "</tbody>" +
+        "</table>";
+
+
+    rincian.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   =====================================================
+   SISA
+   =====================================================
+===================================================== */
+
+
+/* =====================================================
+   AMBIL STATUS / MUTU DARI DATA SISA
+
+   STATUS dipakai terlebih dahulu.
+   Jika STATUS kosong, gunakan MUTU.
+===================================================== */
+
+function ambilStatusMutu(item){
+
+    if(!item){
+        return "";
+    }
+
+    const status =
+        String(
+            item.status == null
+                ? ""
+                : item.status
+        ).trim();
+
+    if(status){
+        return status;
+    }
+
+    return String(
+        item.mutu == null
+            ? ""
+            : item.mutu
+    ).trim();
+
+}
+
+
+/* =====================================================
+   AMBIL DATA SISA
+===================================================== */
+
+function ambilSisa(){
+
+    const status =
+        document.getElementById(
+            "statusSisa"
+        );
+
+    const ringkasan =
+        document.getElementById(
+            "rincianRingkasanSisa"
+        );
+
+    const rincian =
+        document.getElementById(
+            "rincianSisa"
+        );
+
+
+    status.style.display =
+        "block";
+
+    status.textContent =
+        "MEMUAT DATA SISA...";
+
+
+    ringkasan.innerHTML =
+        '<div class="loading">' +
+        'MEMUAT RINGKASAN...' +
+        '</div>';
+
+
+    rincian.innerHTML =
+        '<div class="loading">' +
+        'MEMUAT RINCIAN...' +
+        '</div>';
+
+
+    const url =
+        API_URL +
+        "?action=sisa";
+
+
+    fetch(url)
+
+        .then(function(response){
+
+            if(!response.ok){
+
+                throw new Error(
+                    "Gagal mengambil data SISA."
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data){
+
+            if(!data.sukses){
+
+                throw new Error(
+                    data.pesan ||
+                    "Gagal mengambil data SISA."
+                );
+
+            }
+
+
+            DATA_SISA = data;
+
+
+            status.style.display =
+                "none";
+
+
+            isiFilterStatusMutu(
+                buatStatusMutuList(
+                    data.rincian || []
+                )
+            );
+
+
+            isiFilterPanjang(
+                data.panjangList || []
+            );
+
+
+            isiFilterDiameter(
+                data.diameterList || []
+            );
+
+
+            tampilkanRingkasanSisa();
+
+            tampilkanRincianSisa();
+
+        })
+
+        .catch(function(error){
+
+            status.innerHTML =
+                '<div class="error">' +
+                escapeHtml(
+                    error.message
+                ) +
+                '</div>';
+
+
+            ringkasan.innerHTML =
+                '<div class="error">' +
+                escapeHtml(
+                    error.message
+                ) +
+                '</div>';
+
+
+            rincian.innerHTML =
+                '<div class="error">' +
+                escapeHtml(
+                    error.message
+                ) +
+                '</div>';
+
+        });
+
+}
+
+
+/* =====================================================
+   BUAT LIST STATUS / MUTU
+===================================================== */
+
+function buatStatusMutuList(data){
+
+    const set =
+        new Set();
+
+
+    (data || []).forEach(function(item){
+
+        const nilai =
+            ambilStatusMutu(item);
+
+        if(nilai){
+            set.add(nilai);
+        }
+
+    });
+
+
+    return Array.from(set)
+        .sort(function(a,b){
+
+            return a.localeCompare(
+                b,
+                "id"
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   RINGKASAN SISA
+
+   DATA LANGSUNG DARI RINCIAN SISA
+   AGAR SORTIMEN TIDAK KOSONG.
+===================================================== */
+
+function tampilkanRingkasanSisa(){
+
+    const box =
+        document.getElementById(
+            "rincianRingkasanSisa"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!DATA_SISA){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'DATA SISA BELUM DIMUAT.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const data =
+        DATA_SISA.rincian || [];
+
+
+    if(!data.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA SISA.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const group = {};
+
+
+    data.forEach(function(item){
+
+        if(!item){
+            return;
+        }
+
+
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen || ""
+            );
+
+
+        const statusMutu =
+            ambilStatusMutu(item);
+
+
+        if(!statusMutu){
+            return;
+        }
+
+
+        const key =
+            sortimen +
+            "||" +
+            statusMutu;
+
+
+        if(!group[key]){
+
+            group[key] = {
+
+                sortimen:
+                    sortimen,
+
+                statusMutu:
+                    statusMutu,
+
+                batang:
+                    0,
+
+                volume:
+                    0
+
+            };
+
+        }
+
+
+        group[key].batang +=
+            Number(
+                item.batang || 0
+            );
+
+
+        group[key].volume +=
+            Number(
+                item.volume || 0
+            );
+
+    });
+
+
+    const baris =
+        Object.values(group);
+
+
+    if(!baris.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA SISA.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const urutan = [
+
+        "A I",
+
+        "A II",
+
+        "A III",
+
+        "KBP"
+
+    ];
+
+
+    baris.sort(function(a,b){
+
+        const ia =
+            urutan.indexOf(
+                a.sortimen
+            );
+
+        const ib =
+            urutan.indexOf(
+                b.sortimen
+            );
+
+
+        if(
+            ia === -1 &&
+            ib === -1
+        ){
+
+            const s =
+                a.sortimen.localeCompare(
+                    b.sortimen,
+                    "id"
+                );
+
+            if(s !== 0){
+                return s;
+            }
+
+        }
+
+
+        if(ia === -1){
+            return 1;
+        }
+
+
+        if(ib === -1){
+            return -1;
+        }
+
+
+        if(ia !== ib){
+            return ia - ib;
+        }
+
+
+        return a.statusMutu.localeCompare(
+            b.statusMutu,
+            "id"
+        );
+
+    });
+
+
+    let totalBatang = 0;
+
+    let totalVolume = 0;
+
+
+    let html = "";
+
+
+    html += "<table>";
+
+
+    html +=
+        "<thead>" +
+        "<tr>" +
+
+        "<th>SORTIMEN</th>" +
+
+        "<th>STATUS / MUTU</th>" +
+
+        "<th>BATANG</th>" +
+
+        "<th>VOLUME (M³)</th>" +
+
+        "</tr>" +
+        "</thead>";
+
+
+    html += "<tbody>";
+
+
+    baris.forEach(function(item){
+
+        totalBatang +=
+            item.batang;
+
+
+        totalVolume +=
+            item.volume;
+
+
+        html +=
+            "<tr>" +
+
+            "<td>" +
+            escapeHtml(
+                item.sortimen
+            ) +
+            "</td>" +
+
+            "<td>" +
+            escapeHtml(
+                item.statusMutu
+            ) +
+            "</td>" +
+
+            "<td>" +
+            item.batang +
+            "</td>" +
+
+            "<td>" +
+            formatVolume(
+                item.volume
+            ) +
+            "</td>" +
+
+            "</tr>";
+
+    });
+
+
+    html +=
+        "<tr class='baris-total'>" +
+
+        "<th>TOTAL</th>" +
+
+        "<th></th>" +
+
+        "<th>" +
+        totalBatang +
+        "</th>" +
+
+        "<th>" +
+        formatVolume(
+            totalVolume
+        ) +
+        "</th>" +
+
+        "</tr>";
+
+
+    html +=
+        "</tbody>" +
+        "</table>";
+
+
+    box.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   ISI FILTER STATUS / MUTU
+===================================================== */
+
+function isiFilterStatusMutu(list){
+
+    const box =
+        document.getElementById(
+            "filterStatusMutu"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!list || !list.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    list.forEach(function(nilai){
+
+        const teks =
+            String(nilai);
+
+
+        const label =
+            document.createElement(
+                "label"
+            );
+
+
+        label.className =
+            "checkbox-item";
+
+
+        label.innerHTML =
+
+            '<input ' +
+
+            'type="checkbox" ' +
+
+            'class="checkStatusMutu" ' +
+
+            'value="' +
+            escapeHtml(teks) +
+            '" ' +
+
+            'onchange="tampilkanRincianSisa()">' +
+
+            '<span>' +
+            escapeHtml(teks) +
+            '</span>';
+
+
+        box.appendChild(
+            label
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   ISI FILTER PANJANG
+===================================================== */
+
+function isiFilterPanjang(list){
+
+    const box =
+        document.getElementById(
+            "filterPanjang"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!list || !list.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    list.forEach(function(nilai,index){
+
+        const teks =
+            String(nilai);
+
+
+        const label =
+            document.createElement(
+                "label"
+            );
+
+
+        label.className =
+            "checkbox-item";
+
+
+        label.innerHTML =
+
+            '<input ' +
+
+            'type="checkbox" ' +
+
+            'class="checkPanjang" ' +
+
+            'value="' +
+            escapeHtml(teks) +
+            '" ' +
+
+            'onchange="tampilkanRincianSisa()">' +
+
+            '<span>' +
+            escapeHtml(teks) +
+            '</span>';
+
+
+        box.appendChild(
+            label
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   ISI FILTER DIAMETER
+===================================================== */
+
+function isiFilterDiameter(list){
+
+    const box =
+        document.getElementById(
+            "filterDiameter"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!list || !list.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    list.forEach(function(nilai,index){
+
+        const teks =
+            String(nilai);
+
+
+        const label =
+            document.createElement(
+                "label"
+            );
+
+
+        label.className =
+            "checkbox-item";
+
+
+        label.innerHTML =
+
+            '<input ' +
+
+            'type="checkbox" ' +
+
+            'class="checkDiameter" ' +
+
+            'value="' +
+            escapeHtml(teks) +
+            '" ' +
+
+            'onchange="tampilkanRincianSisa()">' +
+
+            '<span>' +
+            escapeHtml(teks) +
+            '</span>';
+
+
+        box.appendChild(
+            label
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   PILIH SEMUA STATUS / MUTU
+===================================================== */
+
+function pilihSemuaStatusMutu(){
+
+    document
+        .querySelectorAll(
+            ".checkStatusMutu"
+        )
+        .forEach(function(cb){
+
+            cb.checked = true;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   BATAL SEMUA STATUS / MUTU
+===================================================== */
+
+function batalSemuaStatusMutu(){
+
+    document
+        .querySelectorAll(
+            ".checkStatusMutu"
+        )
+        .forEach(function(cb){
+
+            cb.checked = false;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   PILIH SEMUA PANJANG
+===================================================== */
+
+function pilihSemuaPanjang(){
+
+    document
+        .querySelectorAll(
+            ".checkPanjang"
+        )
+        .forEach(function(cb){
+
+            cb.checked = true;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   BATAL SEMUA PANJANG
+===================================================== */
+
+function batalSemuaPanjang(){
+
+    document
+        .querySelectorAll(
+            ".checkPanjang"
+        )
+        .forEach(function(cb){
+
+            cb.checked = false;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   PILIH SEMUA DIAMETER
+===================================================== */
+
+function pilihSemuaDiameter(){
+
+    document
+        .querySelectorAll(
+            ".checkDiameter"
+        )
+        .forEach(function(cb){
+
+            cb.checked = true;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   BATAL SEMUA DIAMETER
+===================================================== */
+
+function batalSemuaDiameter(){
+
+    document
+        .querySelectorAll(
+            ".checkDiameter"
+        )
+        .forEach(function(cb){
+
+            cb.checked = false;
+
+        });
+
+
+    tampilkanRincianSisa();
+
+}
+
+
+/* =====================================================
+   AMBIL STATUS / MUTU YANG DIPILIH
+===================================================== */
+
+function getStatusMutuDipilih(){
+
+    return Array.from(
+        document.querySelectorAll(
+            ".checkStatusMutu:checked"
+        )
+    ).map(function(cb){
+
+        return String(
+            cb.value
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   AMBIL PANJANG YANG DIPILIH
+===================================================== */
+
+function getPanjangDipilih(){
+
+    return Array.from(
+        document.querySelectorAll(
+            ".checkPanjang:checked"
+        )
+    ).map(function(cb){
+
+        return String(
+            cb.value
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   AMBIL DIAMETER YANG DIPILIH
+===================================================== */
+
+function getDiameterDipilih(){
+
+    return Array.from(
+        document.querySelectorAll(
+            ".checkDiameter:checked"
+        )
+    ).map(function(cb){
+
+        return String(
+            cb.value
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   RINCIAN SISA
+===================================================== */
+
+function tampilkanRincianSisa(){
+
+    const box =
+        document.getElementById(
+            "rincianSisa"
+        );
+
+
+    box.innerHTML = "";
+
+
+    if(!DATA_SISA){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'DATA SISA BELUM DIMUAT.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    let data =
+        DATA_SISA.rincian || [];
+
+
+    const statusMutuDipilih =
+        getStatusMutuDipilih();
+
+
+    const panjangDipilih =
+        getPanjangDipilih();
+
+
+    const diameterDipilih =
+        getDiameterDipilih();
+
+
+    /* =================================================
+       FILTER STATUS / MUTU
+    ================================================= */
+
+    if(statusMutuDipilih.length > 0){
+
+        data =
+            data.filter(function(item){
+
+                return statusMutuDipilih.includes(
+                    ambilStatusMutu(item)
+                );
+
+            });
+
+    }
+
+
+    /* =================================================
+       FILTER PANJANG
+    ================================================= */
+
+    if(panjangDipilih.length > 0){
+
+        data =
+            data.filter(function(item){
+
+                return panjangDipilih.includes(
+                    normalisasiNilaiFilter(
+                        item.panjang
+                    )
+                );
+
+            });
+
+    }
+
+
+    /* =================================================
+       FILTER DIAMETER
+    ================================================= */
+
+    if(diameterDipilih.length > 0){
+
+        data =
+            data.filter(function(item){
+
+                return diameterDipilih.includes(
+                    normalisasiNilaiFilter(
+                        item.diameter
+                    )
+                );
+
+            });
+
+    }
+
+
+    /* =================================================
+       GROUP
+
+       SORTIMEN
+       +
+       STATUS / MUTU
+       +
+       PANJANG
+       +
+       DIAMETER
+    ================================================= */
+
+    const group = {};
+
+
+    data.forEach(function(item){
+
+        if(!item){
+            return;
+        }
+
+
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen || ""
+            );
+
+
+        const statusMutu =
+            ambilStatusMutu(item);
+
+
+        if(!statusMutu){
+            return;
+        }
+
+
+        const panjang =
+            normalisasiNilaiFilter(
+                item.panjang
+            );
+
+
+        const diameter =
+            normalisasiNilaiFilter(
+                item.diameter
+            );
+
+
+        const key =
+            sortimen +
+            "||" +
+            statusMutu +
+            "||" +
+            panjang +
+            "||" +
+            diameter;
+
+
+        if(!group[key]){
+
+            group[key] = {
+
+                sortimen:
+                    sortimen,
+
+                statusMutu:
+                    statusMutu,
+
+                panjang:
+                    panjang,
+
+                diameter:
+                    diameter,
+
+                batang:
+                    0,
+
+                volume:
+                    0
+
+            };
+
+        }
+
+
+        group[key].batang +=
+            Number(
+                item.batang || 0
+            );
+
+
+        group[key].volume +=
+            Number(
+                item.volume || 0
+            );
+
+    });
+
+
+    const hasil =
+        Object.values(group);
+
+
+    if(!hasil.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA SESUAI FILTER.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    /* =================================================
+       URUTAN
+    ================================================= */
+
+    const urutan = [
+
+        "A I",
+
+        "A II",
+
+        "A III",
+
+        "KBP"
+
+    ];
+
+
+    hasil.sort(function(a,b){
+
+        const ia =
+            urutan.indexOf(
+                a.sortimen
+            );
+
+        const ib =
+            urutan.indexOf(
+                b.sortimen
+            );
+
+
+        if(
+            ia === -1 &&
+            ib === -1
+        ){
+
+            const s =
+                a.sortimen.localeCompare(
+                    b.sortimen,
+                    "id"
+                );
+
+            if(s !== 0){
+                return s;
+            }
+
+        }
+
+
+        if(ia === -1){
+            return 1;
+        }
+
+
+        if(ib === -1){
+            return -1;
+        }
+
+
+        if(ia !== ib){
+            return ia - ib;
+        }
+
+
+        const sm =
+            a.statusMutu.localeCompare(
+                b.statusMutu,
+                "id"
+            );
+
+
+        if(sm !== 0){
+            return sm;
+        }
+
+
+        const p =
+            Number(a.panjang) -
+            Number(b.panjang);
+
+
+        if(
+            !isNaN(p) &&
+            p !== 0
+        ){
+
+            return p;
+
+        }
+
+
+        return (
+            Number(a.diameter) -
+            Number(b.diameter)
+        );
+
+    });
+
+
+    /* =================================================
+       TABEL
+    ================================================= */
+
+    let totalBatang = 0;
+
+    let totalVolume = 0;
+
+
+    let html = "";
+
+
+    html += "<table>";
+
+
+    html +=
+        "<thead>" +
+        "<tr>" +
+
+        "<th>SORTIMEN</th>" +
+
+        "<th>STATUS / MUTU</th>" +
+
+        "<th>PANJANG</th>" +
+
+        "<th>DIAMETER</th>" +
+
+        "<th>BATANG</th>" +
+
+        "<th>VOLUME (M³)</th>" +
+
+        "</tr>" +
+        "</thead>";
+
+
+    html += "<tbody>";
+
+
+    hasil.forEach(function(item){
+
+        totalBatang +=
+            item.batang;
+
+
+        totalVolume +=
+            item.volume;
+
+
+        html +=
+            "<tr>" +
+
+            "<td>" +
+            escapeHtml(
+                item.sortimen
+            ) +
+            "</td>" +
+
+            "<td>" +
+            escapeHtml(
+                item.statusMutu
+            ) +
+            "</td>" +
+
+            "<td>" +
+            escapeHtml(
+                item.panjang
+            ) +
+            "</td>" +
+
+            "<td>" +
+            escapeHtml(
+                item.diameter
+            ) +
+            "</td>" +
+
+            "<td>" +
+            item.batang +
+            "</td>" +
+
+            "<td>" +
+            formatVolume(
+                item.volume
+            ) +
+            "</td>" +
+
+            "</tr>";
+
+    });
+
+
+    html +=
+        "<tr class='baris-total'>" +
+
+        "<th>TOTAL</th>" +
+
+        "<th></th>" +
+
+        "<th></th>" +
+
+        "<th></th>" +
+
+        "<th>" +
+        totalBatang +
+        "</th>" +
+
+        "<th>" +
+        formatVolume(
+            totalVolume
+        ) +
+        "</th>" +
+
+        "</tr>";
+
+
+    html +=
+        "</tbody>" +
+        "</table>";
+
+
+    box.innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   NORMALISASI NILAI FILTER
+===================================================== */
+
+function normalisasiNilaiFilter(nilai){
+
+    if(
+        nilai === null ||
+        nilai === undefined ||
+        nilai === ""
+    ){
+
+        return "";
+
+    }
+
+
+    const angka =
+        Number(nilai);
+
+
+    if(!isNaN(angka)){
+
+        return String(
+            angka
+        );
+
+    }
+
+
+    return String(
+        nilai
+    ).trim();
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function tampilkanError(pesan){
+
+    document
+        .getElementById("statusPasokan")
+        .innerHTML =
+        '<div class="error">' +
+        escapeHtml(pesan) +
+        '</div>';
+
+
+    document
+        .getElementById("rincianPasokan")
+        .innerHTML =
+        '<div class="error">' +
+        escapeHtml(pesan) +
+        '</div>';
+
+}
+
+
+/* =====================================================
+   AMBIL DATA PASOKAN
+   BAGIAN PASOKAN DIPERTAHANKAN
+===================================================== */
+
+function ambilPasokan(){
+
+    document
+        .getElementById("statusPasokan")
+        .style.display =
+        "block";
+
+
+    document
+        .getElementById("statusPasokan")
+        .textContent =
+        "MEMUAT DATA PASOKAN...";
+
+
+    const select =
+        document.getElementById(
+            "bulanPasokan"
+        );
+
+
+    const bulan =
+        select
+            ? select.value
+            : "SEMUA";
+
+
+    let url =
+        API_URL;
+
+
+    if(
+        bulan &&
+        bulan !== "SEMUA"
+    ){
+
+        url +=
+            "?bulan=" +
+            encodeURIComponent(
+                bulan
+            );
+
+    }
+
+
+    fetch(url)
+
+        .then(function(response){
+
+            if(!response.ok){
+
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data){
+
+            tampilkanPasokan(
+                data
+            );
+
+        })
+
+        .catch(function(error){
+
+            console.error(
+                error
+            );
+
+            tampilkanError(
+                "GAGAL MENGAMBIL DATA DARI APPS SCRIPT."
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   FILTER BULAN PASOKAN
+===================================================== */
+
+document
+    .getElementById("bulanPasokan")
+    .addEventListener(
+        "change",
+        function(){
+
+            ambilPasokan();
+
+        }
+    );
+
+
+/* =====================================================
+   FILTER BULAN OLAH
+===================================================== */
+
+document
+    .getElementById("bulanOlah")
+    .addEventListener(
+        "change",
+        function(){
+
+            ambilOlah();
+
+        }
+    );
+
+
+/* =====================================================
+   FILTER JENIS OLAH
+===================================================== */
+
+document
+    .getElementById("jenisOlah")
+    .addEventListener(
+        "change",
+        function(){
+
+            ambilOlah();
+
+        }
+    );
+
+
+/* =====================================================
+   JALANKAN SAAT HALAMAN DIBUKA
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        ambilPasokan();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
+
