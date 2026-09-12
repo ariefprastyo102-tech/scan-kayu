@@ -668,64 +668,36 @@ tbody tr:last-child th{
 
     <h2>SISA</h2>
 
+<!-- =================================================
+     STATUS SISA
+================================================== -->
 
-    <!-- =================================================
-         PILIH DASAR
-    ================================================== -->
+<div
+    id="statusSisa"
+    class="loading">
 
-    <div class="filter">
+    MEMUAT DATA SISA...
 
-        <label for="dasarSisa">
-            TAMPILKAN BERDASARKAN
-        </label>
+</div>
 
-        <select
-            id="dasarSisa"
-            onchange="ubahDasarSisa()">
 
-            <option value="STATUS">
-                STATUS
-            </option>
+<!-- =================================================
+     RINGKASAN SISA
+================================================== -->
 
-            <option value="MUTU">
-                MUTU
-            </option>
+<h3>
+    RINGKASAN SISA
+</h3>
 
-        </select>
+<div
+    id="rincianRingkasanSisa"
+    class="rincian">
 
+    <div class="loading">
+        MEMUAT RINGKASAN...
     </div>
 
-
-    <!-- =================================================
-         STATUS SISA
-    ================================================== -->
-
-    <div
-        id="statusSisa"
-        class="loading">
-
-        MEMUAT DATA SISA...
-
-    </div>
-
-
-    <!-- =================================================
-         RINGKASAN SISA
-    ================================================== -->
-
-    <h3>
-        RINGKASAN SISA
-    </h3>
-
-    <div
-        id="rincianRingkasanSisa"
-        class="rincian">
-
-        <div class="loading">
-            MEMUAT RINGKASAN...
-        </div>
-
-    </div>
+</div>
 
 
     <!-- =================================================
@@ -2385,6 +2357,11 @@ function tampilkanRingkasanSisa(){
     html += "<table>";
 
 
+    /* =================================================
+       HEADER
+       STATUS / MUTU SEKARANG ADA DI KOLOM KEDUA
+    ================================================= */
+
     html +=
         "<thead>" +
         "<tr>" +
@@ -2392,7 +2369,28 @@ function tampilkanRingkasanSisa(){
         "<th>SORTIMEN</th>" +
 
         "<th>" +
-        escapeHtml(DASAR_SISA) +
+
+        '<select id="dasarSisa" ' +
+        'onchange="ubahDasarSisa()">' +
+
+        '<option value="STATUS"' +
+        (
+            DASAR_SISA === "STATUS"
+                ? " selected"
+                : ""
+        ) +
+        '>STATUS</option>' +
+
+        '<option value="MUTU"' +
+        (
+            DASAR_SISA === "MUTU"
+                ? " selected"
+                : ""
+        ) +
+        '>MUTU</option>' +
+
+        '</select>' +
+
         "</th>" +
 
         "<th>BATANG</th>" +
@@ -2475,6 +2473,7 @@ function tampilkanRingkasanSisa(){
         html;
 
 }
+
 
 
 /* =====================================================
