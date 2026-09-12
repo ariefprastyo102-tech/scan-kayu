@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -1068,6 +1069,226 @@ let sedangMenyimpan = false;
 
 
 // =====================================================
+// PENYIMPANAN CENTANG SEMENTARA
+// =====================================================
+//
+// Hanya menyimpan REGISTER yang dipilih sementara.
+//
+// Tidak dikirim ke Apps Script.
+// Tidak mengubah DATABASE.
+// Tetap ada walaupun halaman di-refresh.
+//
+// Setelah SELESAI OLAH berhasil,
+// penyimpanan ini dibersihkan.
+//
+
+const STORAGE_CENTANG =
+  "DATA_OLAH_CENTANG_SEMENTARA";
+
+
+function ambilCentangTersimpan() {
+
+  try {
+
+    const data =
+      localStorage.getItem(
+        STORAGE_CENTANG
+      );
+
+    if (!data) {
+      return [];
+    }
+
+
+    const hasil =
+      JSON.parse(data);
+
+
+    return Array.isArray(hasil)
+      ? hasil.map(function(register) {
+
+          return String(
+            register
+          ).trim();
+
+        })
+        .filter(Boolean)
+
+      : [];
+
+  }
+
+  catch(e) {
+
+    return [];
+
+  }
+
+}
+
+
+function simpanCentangTersimpan(
+  daftar
+) {
+
+  try {
+
+    const unik =
+      [
+        ...new Set(
+          daftar
+            .map(function(register) {
+
+              return String(
+                register
+              ).trim();
+
+            })
+            .filter(Boolean)
+        )
+      ];
+
+
+    localStorage.setItem(
+
+      STORAGE_CENTANG,
+
+      JSON.stringify(
+        unik
+      )
+
+    );
+
+  }
+
+  catch(e) {
+
+    console.error(
+      "Gagal menyimpan centang:",
+      e
+    );
+
+  }
+
+}
+
+
+function tambahCentangTersimpan(
+  register
+) {
+
+  register =
+    String(
+      register || ""
+    ).trim();
+
+
+  if (!register) {
+    return;
+  }
+
+
+  const daftar =
+    ambilCentangTersimpan();
+
+
+  if (
+    !daftar.includes(
+      register
+    )
+  ) {
+
+    daftar.push(
+      register
+    );
+
+  }
+
+
+  simpanCentangTersimpan(
+    daftar
+  );
+
+}
+
+
+function hapusCentangTersimpan(
+  register
+) {
+
+  register =
+    String(
+      register || ""
+    ).trim();
+
+
+  if (!register) {
+    return;
+  }
+
+
+  const daftar =
+    ambilCentangTersimpan()
+      .filter(function(item) {
+
+        return item !== register;
+
+      });
+
+
+  simpanCentangTersimpan(
+    daftar
+  );
+
+}
+
+
+function centangTersimpan(
+  register
+) {
+
+  register =
+    String(
+      register || ""
+    ).trim();
+
+
+  if (!register) {
+    return false;
+  }
+
+
+  return ambilCentangTersimpan()
+    .includes(
+      register
+    );
+
+}
+
+
+function bersihkanCentangTersimpan() {
+
+  try {
+
+    localStorage.removeItem(
+      STORAGE_CENTANG
+    );
+
+  }
+
+  catch(e) {
+
+    console.error(
+      "Gagal membersihkan centang:",
+      e
+    );
+
+  }
+
+}
+
+
+// =====================================================
 // JSONP
 // =====================================================
 
@@ -1258,15 +1479,51 @@ function muatData() {
 
 
       /*
-       * Pilihan sementara TIDAK disimpan di server.
+       * =================================================
+       * TERAPKAN KEMBALI CENTANG YANG TERSIMPAN
+       * =================================================
        *
-       * Status sementara hanya berada di:
+       * Data dari server baru saja masuk.
        *
-       * item._statusSementara
+       * Kalau register sebelumnya sudah dicentang,
+       * kembalikan status sementara menjadi SISA.
        *
-       * Saat refresh dari server,
-       * pilihan sementara akan hilang.
+       * Register baru yang belum pernah dicentang
+       * tidak disentuh, sehingga tetap DATA BARU.
        */
+
+      const daftarCentang =
+        ambilCentangTersimpan();
+
+
+      semuaData.forEach(
+        function(item) {
+
+          const register =
+            String(
+              item.register ||
+              (
+                item.data &&
+                item.data[0]
+              ) ||
+              ""
+            ).trim();
+
+
+          if (
+            register &&
+            daftarCentang.includes(
+              register
+            )
+          ) {
+
+            item._statusSementara =
+              "SISA";
+
+          }
+
+        }
+      );
 
 
       tampilkanData();
@@ -1754,6 +2011,9 @@ function buatItem(
    *   default dicentang
    *   lepas → DIOLAH
    *
+   * CENTANG YANG DISIMPAN DI LOCALSTORAGE
+   * juga akan tetap dicentang setelah refresh.
+   *
    */
 
   const checkboxHTML = `
@@ -1981,19 +2241,55 @@ function ubahStatusSementara(
 
   /*
    * =================================================
-   * INI INTI LOGIKA BARU
+   * SIMPAN PILIHAN KE LOCALSTORAGE
    * =================================================
    *
-   * CENTANG     → SISA
+   * Ini yang membuat centangan tidak hilang
+   * ketika halaman di-refresh.
+   */
+
+  if (
+    checkbox.checked
+  ) {
+
+    /*
+     * CENTANG
+     * → simpan register
+     */
+
+    tambahCentangTersimpan(
+      register
+    );
+
+  }
+
+  else {
+
+    /*
+     * TIDAK DICENTANG
+     * → hapus register dari penyimpanan
+     */
+
+    hapusCentangTersimpan(
+      register
+    );
+
+  }
+
+
+  /*
+   * =================================================
+   * INI INTI LOGIKA STATUS SEMENTARA
+   * =================================================
+   *
+   * CENTANG       → SISA
    * TIDAK CENTANG → DIOLAH
    *
    * Berlaku untuk:
    *
    * - DATA BARU
    * - SISA SEBELUMNYA
-   *
    */
-
 
   item._statusSementara =
     checkbox.checked
@@ -2323,7 +2619,6 @@ function selesaiOlah() {
       "Setelah klik OK:\n" +
 
       "• ⬜ TIDAK DICENTANG → DATA OLAH\n" +
-
       "• ☑️ DICENTANG → SISA\n\n" +
 
       "Lanjutkan?"
@@ -2398,14 +2693,34 @@ function selesaiOlah() {
           "❌ Gagal menyimpan";
 
 
+        /*
+         * PENTING:
+         *
+         * Kalau penyimpanan gagal,
+         * centangan LOCALSTORAGE TIDAK DIHAPUS.
+         *
+         * Jadi keputusan sementara masih aman.
+         */
+
         return;
 
       }
 
 
       /*
-       * Setelah benar-benar tersimpan,
-       * hapus keputusan sementara.
+       * =================================================
+       * SELESAI BERHASIL
+       * =================================================
+       *
+       * Baru sekarang centangan sementara
+       * dibersihkan.
+       */
+
+      bersihkanCentangTersimpan();
+
+
+      /*
+       * Hapus status sementara dari memory.
        */
 
       semuaData.forEach(
@@ -2790,3 +3105,4 @@ muatData();
 </body>
 
 </html>
+
