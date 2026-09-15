@@ -3320,18 +3320,18 @@ function ambilPasokan(){
             );
 
         })
+.catch(function(error){
 
-        .catch(function(error){
+    console.error(
+        error
+    );
 
-            console.error(
-                error
-            );
+    tampilkanError(
+        "GAGAL MENGAMBIL DATA DARI APPS SCRIPT: " +
+        error.message
+    );
 
-            tampilkanError(
-                "GAGAL MENGAMBIL DATA DARI APPS SCRIPT."
-            );
-
-        });
+});
 
 }
 
