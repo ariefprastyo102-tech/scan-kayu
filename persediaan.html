@@ -243,7 +243,54 @@ tbody tr:last-child th{
     font-weight:bold;
     margin-bottom:10px;
 }
+.rincian-table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:#fff;
+}
 
+.rincian-table{
+    width:100%;
+    min-width:650px;
+    border-collapse:collapse;
+    font-size:13px;
+}
+
+.rincian-table th{
+    background:#f3f3f3;
+    padding:10px 8px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.rincian-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #eee;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.rincian-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+.rincian-table tbody tr:hover{
+    background:#fafafa;
+}
+    
+.filter-sisa-input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+    font-family:Arial,sans-serif;
+    resize:vertical;
+}
 .filter-sisa-actions{
     display:flex;
     gap:7px;
@@ -742,95 +789,6 @@ tbody tr:last-child th{
     </div>
 
 </div>
-
-        <!-- =============================================
-             PANJANG
-        ============================================== -->
-
-        <div class="filter-sisa-box">
-
-            <div class="filter-sisa-title">
-                PANJANG
-            </div>
-
-            <div class="filter-sisa-actions">
-
-                <button
-                    type="button"
-                    onclick="pilihSemuaPanjang()">
-
-                    PILIH SEMUA
-
-                </button>
-
-                <button
-                    type="button"
-                    onclick="batalSemuaPanjang()">
-
-                    BATAL SEMUA
-
-                </button>
-
-            </div>
-
-            <div
-                id="filterPanjang"
-                class="checkbox-list">
-
-                <div class="kosong">
-                    MEMUAT...
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =============================================
-             DIAMETER
-        ============================================== -->
-
-        <div class="filter-sisa-box">
-
-            <div class="filter-sisa-title">
-                DIAMETER
-            </div>
-
-            <div class="filter-sisa-actions">
-
-                <button
-                    type="button"
-                    onclick="pilihSemuaDiameter()">
-
-                    PILIH SEMUA
-
-                </button>
-
-                <button
-                    type="button"
-                    onclick="batalSemuaDiameter()">
-
-                    BATAL SEMUA
-
-                </button>
-
-            </div>
-
-            <div
-                id="filterDiameter"
-                class="checkbox-list">
-
-                <div class="kosong">
-                    MEMUAT...
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
     <!-- =================================================
          RINCIAN SISA
     ================================================== -->
@@ -850,9 +808,6 @@ tbody tr:last-child th{
     </div>
 
 </div>
-
-</div>
-
 
 <!-- =====================================================
      JAVASCRIPT
@@ -2496,280 +2451,6 @@ function tampilkanRingkasanSisa(){
 
 }
 
-
-
-/* =====================================================
-   ISI FILTER PANJANG
-===================================================== */
-
-function isiFilterPanjang(list){
-
-    const box =
-        document.getElementById(
-            "filterPanjang"
-        );
-
-
-    box.innerHTML = "";
-
-
-    if(!list || !list.length){
-
-        box.innerHTML =
-            '<div class="kosong">' +
-            'TIDAK ADA DATA.' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    list.forEach(function(nilai,index){
-
-        const teks =
-            String(nilai);
-
-
-        const label =
-            document.createElement(
-                "label"
-            );
-
-
-        label.className =
-            "checkbox-item";
-
-
-        label.innerHTML =
-
-            '<input ' +
-
-            'type="checkbox" ' +
-
-            'class="checkPanjang" ' +
-
-            'value="' +
-            escapeHtml(teks) +
-            '" ' +
-
-            'onchange="tampilkanRincianSisa()">' +
-
-            '<span>' +
-            escapeHtml(teks) +
-            '</span>';
-
-
-        box.appendChild(
-            label
-        );
-
-    });
-
-}
-
-
-/* =====================================================
-   ISI FILTER DIAMETER
-===================================================== */
-
-function isiFilterDiameter(list){
-
-    const box =
-        document.getElementById(
-            "filterDiameter"
-        );
-
-
-    box.innerHTML = "";
-
-
-    if(!list || !list.length){
-
-        box.innerHTML =
-            '<div class="kosong">' +
-            'TIDAK ADA DATA.' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    list.forEach(function(nilai,index){
-
-        const teks =
-            String(nilai);
-
-
-        const label =
-            document.createElement(
-                "label"
-            );
-
-
-        label.className =
-            "checkbox-item";
-
-
-        label.innerHTML =
-
-            '<input ' +
-
-            'type="checkbox" ' +
-
-            'class="checkDiameter" ' +
-
-            'value="' +
-            escapeHtml(teks) +
-            '" ' +
-
-            'onchange="tampilkanRincianSisa()">' +
-
-            '<span>' +
-            escapeHtml(teks) +
-            '</span>';
-
-
-        box.appendChild(
-            label
-        );
-
-    });
-
-}
-
-
-/* =====================================================
-   PILIH SEMUA PANJANG
-===================================================== */
-
-function pilihSemuaPanjang(){
-
-    document
-        .querySelectorAll(
-            ".checkPanjang"
-        )
-        .forEach(function(cb){
-
-            cb.checked = true;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
-   BATAL SEMUA PANJANG
-===================================================== */
-
-function batalSemuaPanjang(){
-
-    document
-        .querySelectorAll(
-            ".checkPanjang"
-        )
-        .forEach(function(cb){
-
-            cb.checked = false;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
-   PILIH SEMUA DIAMETER
-===================================================== */
-
-function pilihSemuaDiameter(){
-
-    document
-        .querySelectorAll(
-            ".checkDiameter"
-        )
-        .forEach(function(cb){
-
-            cb.checked = true;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
-   BATAL SEMUA DIAMETER
-===================================================== */
-
-function batalSemuaDiameter(){
-
-    document
-        .querySelectorAll(
-            ".checkDiameter"
-        )
-        .forEach(function(cb){
-
-            cb.checked = false;
-
-        });
-
-
-    tampilkanRincianSisa();
-
-}
-
-
-/* =====================================================
-   AMBIL PANJANG YANG DIPILIH
-===================================================== */
-
-function getPanjangDipilih(){
-
-    return Array.from(
-        document.querySelectorAll(
-            ".checkPanjang:checked"
-        )
-    ).map(function(cb){
-
-        return String(
-            cb.value
-        );
-
-    });
-
-}
-
-
-/* =====================================================
-   AMBIL DIAMETER YANG DIPILIH
-===================================================== */
-
-function getDiameterDipilih(){
-
-    return Array.from(
-        document.querySelectorAll(
-            ".checkDiameter:checked"
-        )
-    ).map(function(cb){
-
-        return String(
-            cb.value
-        );
-
-    });
-
-}
-
-
 /* =====================================================
    RINCIAN SISA
 ===================================================== */
@@ -2853,7 +2534,6 @@ function tampilkanRincianSisa(){
             });
 
     }
-
 
     /* =================================================
        KALAU DATA KOSONG
@@ -2939,66 +2619,93 @@ function tampilkanRincianSisa(){
 
 
     /* =================================================
-       TAMPILKAN RINCIAN
+       TABEL RINCIAN
     ================================================== */
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "rincian-table-wrap";
+
+
+    const table =
+        document.createElement("table");
+
+    table.className =
+        "rincian-table";
+
+
+    table.innerHTML =
+
+        '<thead>' +
+            '<tr>' +
+                '<th>Sortimen</th>' +
+                '<th>Mutu</th>' +
+                '<th>Panjang</th>' +
+                '<th>Diameter</th>' +
+                '<th>Status</th>' +
+                '<th>Batang</th>' +
+                '<th>Volume</th>' +
+            '</tr>' +
+        '</thead>' +
+
+        '<tbody></tbody>';
+
+
+    const tbody =
+        table.querySelector("tbody");
+
 
     hasil.forEach(function(item){
 
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "rincian-item";
+        const tr =
+            document.createElement("tr");
 
 
-        div.innerHTML =
+        tr.innerHTML =
 
-            '<div>' +
-                '<b>' +
+            '<td>' +
                 item.sortimen +
-                '</b>' +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Mutu: ' +
+            '<td>' +
                 item.mutu +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Panjang: ' +
+            '<td>' +
                 item.panjang +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Diameter: ' +
+            '<td>' +
                 item.diameter +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Status: ' +
+            '<td>' +
                 item.status +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Batang: ' +
+            '<td>' +
                 item.batang +
-            '</div>' +
+            '</td>' +
 
-            '<div>' +
-                'Volume: ' +
-                Number(item.volume || 0)
-                    .toFixed(6) +
+            '<td>' +
+                Number(
+                    item.volume || 0
+                ).toFixed(6) +
                 ' m³' +
-            '</div>';
+            '</td>';
 
 
-        box.appendChild(div);
+        tbody.appendChild(tr);
 
     });
 
+
+    wrap.appendChild(table);
+
+    box.appendChild(wrap);
 }
-
-
 /* =====================================================
    FILTER ANGKA
 ===================================================== */
