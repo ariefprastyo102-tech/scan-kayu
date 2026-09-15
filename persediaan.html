@@ -2645,23 +2645,21 @@ tampilkanRingkasanFilterSisa(data);
     table.className =
         "rincian-table";
 
+table.innerHTML =
 
-    table.innerHTML =
+    '<thead>' +
+        '<tr>' +
+            '<th>Sortimen</th>' +
+            '<th>Panjang</th>' +
+            '<th>Diameter</th>' +
+            '<th>Mutu</th>' +
+            '<th>Status</th>' +
+            '<th>Batang</th>' +
+            '<th>Volume</th>' +
+        '</tr>' +
+    '</thead>' +
 
-        '<thead>' +
-            '<tr>' +
-                '<th>Sortimen</th>' +
-                '<th>Mutu</th>' +
-                '<th>Panjang</th>' +
-                '<th>Diameter</th>' +
-                '<th>Status</th>' +
-                '<th>Batang</th>' +
-                '<th>Volume</th>' +
-            '</tr>' +
-        '</thead>' +
-
-        '<tbody></tbody>';
-
+    '<tbody></tbody>';
 
     const tbody =
         table.querySelector("tbody");
@@ -2676,20 +2674,20 @@ tampilkanRingkasanFilterSisa(data);
         tr.innerHTML =
 
             '<td>' +
-                item.sortimen +
-            '</td>' +
+    item.sortimen +
+'</td>' +
 
-            '<td>' +
-                item.mutu +
-            '</td>' +
+'<td>' +
+    item.panjang +
+'</td>' +
 
-            '<td>' +
-                item.panjang +
-            '</td>' +
+'<td>' +
+    item.diameter +
+'</td>' +
 
-            '<td>' +
-                item.diameter +
-            '</td>' +
+'<td>' +
+    item.mutu +
+'</td>' +
 
             '<td>' +
                 item.status +
