@@ -954,10 +954,13 @@ function bukaRuang(nama,tombol){
 
 if(nama === "olah"){
 
-    ambilOlah();
+    if(!SUDAH_LOAD_OLAH){
+
+        ambilOlah();
+
+    }
 
 }
-
 
 if(nama === "sisa"){
 
@@ -2095,7 +2098,8 @@ function ambilSisa(){
                 );
 
             }
-
+            
+SUDAH_LOAD_OLAH = true;
 
             DATA_SISA = data;
             
