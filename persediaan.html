@@ -790,6 +790,15 @@ tbody tr:last-child th{
 
 </div>
     <!-- =================================================
+     RINGKASAN HASIL FILTER
+================================================== -->
+
+<h3>
+    RINGKASAN HASIL FILTER
+</h3>
+
+<div id="ringkasanFilterSisa"></div>
+    <!-- =================================================
          RINCIAN SISA
     ================================================== -->
 
@@ -2534,7 +2543,7 @@ function tampilkanRincianSisa(){
             });
 
     }
-
+tampilkanRingkasanFilterSisa(data);
     /* =================================================
        KALAU DATA KOSONG
     ================================================== */
@@ -2832,7 +2841,295 @@ function cocokFilterAngka(
     });
 
 }
- 
+
+/* =====================================================
+   RINGKASAN HASIL FILTER SISA
+===================================================== */
+
+function tampilkanRingkasanFilterSisa(data){
+
+    const box =
+        document.getElementById(
+            "ringkasanFilterSisa"
+        );
+
+
+    if(!box){
+        return;
+    }
+
+
+    if(!data || !data.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'TIDAK ADA DATA HASIL FILTER.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const group = {};
+
+
+    data.forEach(function(item){
+
+        if(!item){
+            return;
+        }
+
+
+        const sortimen =
+            normalisasiSortimen(
+                item.sortimen || ""
+            );
+
+
+        const nilai =
+            DASAR_SISA === "STATUS"
+                ? item.status
+                : item.mutu;
+
+
+        const key =
+            sortimen +
+            "|" +
+            String(
+                nilai || ""
+            ).trim();
+
+
+        if(!group[key]){
+
+            group[key] = {
+
+                sortimen:
+                    sortimen,
+
+                nilai:
+                    String(
+                        nilai || ""
+                    ).trim(),
+
+                batang:
+                    0,
+
+                volume:
+                    0
+
+            };
+
+        }
+
+
+        group[key].batang +=
+            Number(
+                item.batang || 0
+            );
+
+
+        group[key].volume +=
+            Number(
+                item.volume || 0
+            );
+
+    });
+
+
+    const baris =
+        Object.values(group);
+
+
+    const urutan = [
+
+        "A I",
+
+        "A II",
+
+        "A III",
+
+        "KBP"
+
+    ];
+
+
+    baris.sort(function(a,b){
+
+        const ia =
+            urutan.indexOf(
+                a.sortimen
+            );
+
+        const ib =
+            urutan.indexOf(
+                b.sortimen
+            );
+
+
+        if(ia === -1 && ib === -1){
+
+            const s =
+                a.sortimen.localeCompare(
+                    b.sortimen,
+                    "id"
+                );
+
+            if(s !== 0){
+                return s;
+            }
+
+        }
+
+
+        if(ia === -1){
+            return 1;
+        }
+
+
+        if(ib === -1){
+            return -1;
+        }
+
+
+        if(ia !== ib){
+            return ia - ib;
+        }
+
+
+        return a.nilai.localeCompare(
+            b.nilai,
+            "id"
+        );
+
+    });
+
+
+    let totalBatang = 0;
+
+    let totalVolume = 0;
+
+
+    let html = "";
+
+
+    html += "<table>";
+
+
+    html +=
+        "<thead>" +
+        "<tr>" +
+
+        "<th>SORTIMEN</th>" +
+
+        "<th>" +
+
+        '<select id="dasarSisaFilter" ' +
+        'onchange="ubahDasarSisaFilter()">' +
+
+        '<option value="STATUS"' +
+        (
+            DASAR_SISA === "STATUS"
+                ? " selected"
+                : ""
+        ) +
+        '>STATUS</option>' +
+
+        '<option value="MUTU"' +
+        (
+            DASAR_SISA === "MUTU"
+                ? " selected"
+                : ""
+        ) +
+        '>MUTU</option>' +
+
+        '</select>' +
+
+        "</th>" +
+
+        "<th>BATANG</th>" +
+
+        "<th>VOLUME (M³)</th>" +
+
+        "</tr>" +
+        "</thead>";
+
+
+    html += "<tbody>";
+
+
+    baris.forEach(function(item){
+
+        totalBatang +=
+            item.batang;
+
+
+        totalVolume +=
+            item.volume;
+
+
+        html +=
+            "<tr>" +
+
+            "<td>" +
+            escapeHtml(
+                item.sortimen
+            ) +
+            "</td>" +
+
+            "<td>" +
+            escapeHtml(
+                item.nilai
+            ) +
+            "</td>" +
+
+            "<td>" +
+            item.batang +
+            "</td>" +
+
+            "<td>" +
+            formatVolume(
+                item.volume
+            ) +
+            "</td>" +
+
+            "</tr>";
+
+    });
+
+
+    html +=
+        "<tr class='baris-total'>" +
+
+        "<th>TOTAL</th>" +
+
+        "<th></th>" +
+
+        "<th>" +
+        totalBatang +
+        "</th>" +
+
+        "<th>" +
+        formatVolume(
+            totalVolume
+        ) +
+
+        "</th>" +
+
+        "</tr>";
+
+
+    html +=
+        "</tbody>" +
+        "</table>";
+
+
+    box.innerHTML =
+        html;
+
+}
+
 /* =====================================================
    NORMALISASI NILAI FILTER
 ===================================================== */
