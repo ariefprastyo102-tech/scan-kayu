@@ -704,12 +704,44 @@ tbody tr:last-child th{
          FILTER PANJANG + DIAMETER
     ================================================== -->
 
-    <h3>
-        FILTER RINCIAN SISA
-    </h3>
+<h3>
+    FILTER RINCIAN SISA
+</h3>
 
-    <div class="filter-sisa">
+<div class="filter-sisa">
 
+    <div class="filter-sisa-box">
+
+        <div class="filter-sisa-title">
+            PANJANG
+        </div>
+
+        <textarea
+            id="cariPanjang"
+            class="filter-sisa-input"
+            rows="2"
+            placeholder="200&#10;200-400&#10;200 UP"
+            oninput="tampilkanRincianSisa()"></textarea>
+
+    </div>
+
+
+    <div class="filter-sisa-box">
+
+        <div class="filter-sisa-title">
+            DIAMETER
+        </div>
+
+        <textarea
+            id="cariDiameter"
+            class="filter-sisa-input"
+            rows="2"
+            placeholder="30&#10;30-50&#10;30 UP"
+            oninput="tampilkanRincianSisa()"></textarea>
+
+    </div>
+
+</div>
 
         <!-- =============================================
              PANJANG
@@ -2103,16 +2135,6 @@ function ambilSisa(){
                 "none";
 
 
-            isiFilterPanjang(
-                data.panjangList || []
-            );
-
-
-            isiFilterDiameter(
-                data.diameterList || []
-            );
-
-
             tampilkanRingkasanSisa();
 
             tampilkanRincianSisa();
@@ -2779,30 +2801,36 @@ function tampilkanRincianSisa(){
         DATA_SISA.rincian || [];
 
 
-    const panjangDipilih =
-        getPanjangDipilih();
+    /* =================================================
+       FILTER PANJANG
+    ================================================== */
 
-
-    const diameterDipilih =
-        getDiameterDipilih();
+    const cariPanjang =
+        document.getElementById(
+            "cariPanjang"
+        ).value;
 
 
     /* =================================================
-       FILTER PANJANG
+       FILTER DIAMETER
+    ================================================== */
 
-       Kalau tidak ada yang dicentang,
-       berarti semua panjang ditampilkan.
-    ================================================= */
+    const cariDiameter =
+        document.getElementById(
+            "cariDiameter"
+        ).value;
 
-    if(panjangDipilih.length > 0){
+
+    if(
+        String(cariPanjang).trim() !== ""
+    ){
 
         data =
             data.filter(function(item){
 
-                return panjangDipilih.includes(
-                    normalisasiNilaiFilter(
-                        item.panjang
-                    )
+                return cocokFilterAngka(
+                    item.panjang,
+                    cariPanjang
                 );
 
             });
@@ -2810,6 +2838,294 @@ function tampilkanRincianSisa(){
     }
 
 
+    if(
+        String(cariDiameter).trim() !== ""
+    ){
+
+        data =
+            data.filter(function(item){
+
+                return cocokFilterAngka(
+                    item.diameter,
+                    cariDiameter
+                );
+
+            });
+
+    }
+
+
+    /* =================================================
+       KALAU DATA KOSONG
+    ================================================== */
+
+    if(!data.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'DATA TIDAK DITEMUKAN.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    /* =================================================
+       GROUPING RINCIAN
+    ================================================== */
+
+    const group = {};
+
+
+    data.forEach(function(item){
+
+        const key =
+            String(item.sortimen || "") +
+            "|" +
+            String(item.mutu || "") +
+            "|" +
+            String(item.panjang || "") +
+            "|" +
+            String(item.diameter || "") +
+            "|" +
+            String(item.status || "");
+
+
+        if(!group[key]){
+
+            group[key] = {
+
+                sortimen:
+                    item.sortimen || "",
+
+                mutu:
+                    item.mutu || "",
+
+                panjang:
+                    item.panjang || "",
+
+                diameter:
+                    item.diameter || "",
+
+                status:
+                    item.status || "",
+
+                batang:0,
+
+                volume:0
+
+            };
+
+        }
+
+
+        group[key].batang +=
+            Number(
+                item.batang || 0
+            );
+
+
+        group[key].volume +=
+            Number(
+                item.volume || 0
+            );
+
+    });
+
+
+    const hasil =
+        Object.values(group);
+
+
+    /* =================================================
+       TAMPILKAN RINCIAN
+    ================================================== */
+
+    hasil.forEach(function(item){
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "rincian-item";
+
+
+        div.innerHTML =
+
+            '<div>' +
+                '<b>' +
+                item.sortimen +
+                '</b>' +
+            '</div>' +
+
+            '<div>' +
+                'Mutu: ' +
+                item.mutu +
+            '</div>' +
+
+            '<div>' +
+                'Panjang: ' +
+                item.panjang +
+            '</div>' +
+
+            '<div>' +
+                'Diameter: ' +
+                item.diameter +
+            '</div>' +
+
+            '<div>' +
+                'Status: ' +
+                item.status +
+            '</div>' +
+
+            '<div>' +
+                'Batang: ' +
+                item.batang +
+            '</div>' +
+
+            '<div>' +
+                'Volume: ' +
+                Number(item.volume || 0)
+                    .toFixed(6) +
+                ' m³' +
+            '</div>';
+
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================================
+   FILTER ANGKA
+===================================================== */
+
+function ambilFilterAngka(teks){
+
+    return String(teks || "")
+        .toUpperCase()
+        .split(/\r?\n/)
+        .map(function(baris){
+
+            return baris.trim();
+
+        })
+        .filter(function(baris){
+
+            return baris !== "";
+
+        });
+
+}
+
+
+/* =====================================================
+   CEK FILTER ANGKA
+===================================================== */
+
+function cocokFilterAngka(
+    nilai,
+    teks
+){
+
+    const angka =
+        Number(nilai);
+
+
+    if(isNaN(angka)){
+
+        return false;
+
+    }
+
+
+    const daftar =
+        ambilFilterAngka(teks);
+
+
+    if(!daftar.length){
+
+        return true;
+
+    }
+
+
+    return daftar.some(function(filter){
+
+        /* =============================================
+           CONTOH: 200 UP
+        ============================================== */
+
+        const matchUp =
+            filter.match(
+                /^(\d+(?:\.\d+)?)\s*UP$/
+            );
+
+
+        if(matchUp){
+
+            return angka >=
+                Number(
+                    matchUp[1]
+                );
+
+        }
+
+
+        /* =============================================
+           CONTOH: 200-400
+        ============================================== */
+
+        const matchRange =
+            filter.match(
+                /^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)$/
+            );
+
+
+        if(matchRange){
+
+            const min =
+                Number(
+                    matchRange[1]
+                );
+
+
+            const max =
+                Number(
+                    matchRange[2]
+                );
+
+
+            return angka >= min &&
+                   angka <= max;
+
+        }
+
+
+        /* =============================================
+           CONTOH: 200
+        ============================================== */
+
+        const exact =
+            Number(filter);
+
+
+        if(!isNaN(exact)){
+
+            return angka === exact;
+
+        }
+
+
+        return false;
+
+    });
+
+}
+  
     /* =================================================
        FILTER DIAMETER
 
