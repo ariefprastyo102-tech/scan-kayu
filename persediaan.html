@@ -842,7 +842,8 @@ const API_URL =
 let DATA_SISA = null;
 
 let DASAR_SISA = "STATUS";
-
+    
+let DASAR_FILTER_SISA = "STATUS";
 
 /* =====================================================
    FORMAT ANGKA VOLUME
@@ -2229,10 +2230,10 @@ function tampilkanRingkasanSisa(){
             );
 
 
-        const nilai =
-            DASAR_SISA === "STATUS"
-                ? item.status
-                : item.mutu;
+       const nilai =
+    DASAR_SISA === "STATUS"
+        ? item.status
+        : item.mutu;
 
 
         const batang =
@@ -2887,10 +2888,10 @@ function tampilkanRingkasanFilterSisa(data){
             );
 
 
-        const nilai =
-            DASAR_SISA === "STATUS"
-                ? item.status
-                : item.mutu;
+       const nilai =
+    DASAR_FILTER_SISA === "STATUS"
+        ? item.status
+        : item.mutu;
 
 
         const key =
@@ -3030,7 +3031,7 @@ function tampilkanRingkasanFilterSisa(data){
 
         '<option value="STATUS"' +
         (
-            DASAR_SISA === "STATUS"
+           DASAR_FILTER_SISA === "STATUS"
                 ? " selected"
                 : ""
         ) +
@@ -3038,7 +3039,7 @@ function tampilkanRingkasanFilterSisa(data){
 
         '<option value="MUTU"' +
         (
-            DASAR_SISA === "MUTU"
+            DASAR_FILTER_SISA === "MUTU"
                 ? " selected"
                 : ""
         ) +
@@ -3129,8 +3130,28 @@ function tampilkanRingkasanFilterSisa(data){
         html;
 
 }
-
 /* =====================================================
+   UBAH DASAR RINGKASAN HASIL FILTER
+===================================================== */
+
+function ubahDasarSisaFilter(){
+
+    const select =
+        document.getElementById(
+            "dasarSisaFilter"
+        );
+
+    if(!select){
+        return;
+    }
+
+    DASAR_FILTER_SISA =
+        select.value;
+
+    tampilkanRincianSisa();
+
+}
+    /* =====================================================
    NORMALISASI NILAI FILTER
 ===================================================== */
 
