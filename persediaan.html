@@ -840,7 +840,9 @@ const API_URL =
 ===================================================== */
 
 let DATA_SISA = null;
-
+let SUDAH_LOAD_PASOKAN = false;
+let SUDAH_LOAD_OLAH = false;
+let SUDAH_LOAD_SISA = false;
 let DASAR_SISA = "STATUS";
     
 let DASAR_FILTER_SISA = "STATUS";
@@ -950,22 +952,22 @@ function bukaRuang(nama,tombol){
 
     tombol.classList.add("active");
 
+if(nama === "olah"){
 
-    if(nama === "olah"){
+    ambilOlah();
 
-        ambilOlah();
-
-    }
+}
 
 
-    if(nama === "sisa"){
+if(nama === "sisa"){
+
+    if(!SUDAH_LOAD_SISA){
 
         ambilSisa();
 
     }
 
 }
-
 
 /* =====================================================
    TAMPILKAN DATA PASOKAN
@@ -2094,7 +2096,8 @@ function ambilSisa(){
 
 
             DATA_SISA = data;
-
+            
+            SUDAH_LOAD_SISA = true;
 
             status.style.display =
                 "none";
