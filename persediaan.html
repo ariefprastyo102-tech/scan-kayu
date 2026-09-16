@@ -3377,13 +3377,12 @@ function ambilMutasi(){
 
     function cekSelesai(){
 
-        selesai++;
+    selesai++;
 
+    console.log("CALLBACK MUTASI SELESAI:", selesai);
 
-        if(selesai < 4){
-
-            return;
-
+    if(selesai < 4){
+        return;
         }
 
 
@@ -3523,7 +3522,8 @@ function ambilMutasi(){
             action +
             "&callback=" +
             namaCallback;
-
+        
+        console.log("MINTA MUTASI:", action);
 
         document
             .body
