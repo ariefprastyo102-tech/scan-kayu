@@ -436,6 +436,10 @@ tbody tr:last-child th{
     SISA
 </button>
 
+<button
+    onclick="bukaRuang('mutasi',this)">
+    MUTASI
+</button>
 </div>
 
 
@@ -846,6 +850,23 @@ tbody tr:last-child th{
 </div>
 
 <!-- =====================================================
+     MUTASI
+===================================================== -->
+
+<div
+    id="mutasi"
+    class="kartu"
+    style="display:none;">
+
+    <h2>MUTASI RINGKASAN</h2>
+
+    <div class="loading">
+        BAGIAN MUTASI AKAN DIISI BERIKUTNYA...
+    </div>
+
+</div>
+
+<!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
 
@@ -962,6 +983,9 @@ function bukaRuang(nama,tombol){
         .getElementById("sisa")
         .style.display = "none";
 
+    document
+    .getElementById("mutasi")
+    .style.display = "none";
 
     document
         .getElementById(nama)
