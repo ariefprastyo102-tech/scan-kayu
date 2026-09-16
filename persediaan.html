@@ -892,8 +892,15 @@ let SUDAH_LOAD_PASOKAN = false;
 let SUDAH_LOAD_OLAH = false;
 let SUDAH_LOAD_SISA = false;
 let DASAR_SISA = "STATUS";
-    
+
 let DASAR_FILTER_SISA = "STATUS";
+    
+let DATA_MUTASI_AWAL = null;
+let DATA_MUTASI_PASOKAN = null;
+let DATA_MUTASI_OLAH = null;
+let DATA_MUTASI_SISA = null;
+
+let SUDAH_LOAD_MUTASI = false;   
 
 /* =====================================================
    FORMAT ANGKA VOLUME
@@ -1018,6 +1025,16 @@ if(nama === "sisa"){
     if(!SUDAH_LOAD_SISA){
 
         ambilSisa();
+
+    }
+
+}
+
+if(nama === "mutasi"){
+
+    if(!SUDAH_LOAD_MUTASI){
+
+        ambilMutasi();
 
     }
 
@@ -3268,7 +3285,176 @@ function tampilkanError(pesan){
         '</div>';
 
 }
+/* =====================================================
+   AMBIL DATA MUTASI
+===================================================== */
 
+function ambilMutasi(){
+
+    const box =
+        document.querySelector(
+            "#mutasi .loading"
+        );
+
+    if(box){
+
+        box.innerHTML =
+            "MEMUAT DATA MUTASI...";
+
+    }
+
+
+    DATA_MUTASI_AWAL = null;
+    DATA_MUTASI_PASOKAN = null;
+    DATA_MUTASI_OLAH = null;
+    DATA_MUTASI_SISA = null;
+
+
+    let selesai = 0;
+
+
+    function cekSelesai(){
+
+        selesai++;
+
+
+        if(selesai < 4){
+
+            return;
+
+        }
+
+
+        SUDAH_LOAD_MUTASI = true;
+
+
+        if(box){
+
+            box.innerHTML =
+                "DATA MUTASI BERHASIL DIMUAT.";
+
+        }
+
+    }
+
+
+    function ambil(url,callback){
+
+        const script =
+            document.createElement(
+                "script"
+            );
+
+
+        const namaCallback =
+            "callbackMutasi_" +
+            Date.now() +
+            "_" +
+            Math.floor(
+                Math.random() * 100000
+            );
+
+
+        window[namaCallback] =
+            function(data){
+
+                callback(data);
+
+                cekSelesai();
+
+
+                delete window[
+                    namaCallback
+                ];
+
+                script.remove();
+
+            };
+
+
+        script.src =
+            url +
+            "&callback=" +
+            namaCallback;
+
+
+        script.onerror =
+            function(){
+
+                callback({
+                    sukses:false,
+                    pesan:
+                        "Gagal mengambil data MUTASI."
+                });
+
+
+                cekSelesai();
+
+
+                delete window[
+                    namaCallback
+                ];
+
+                script.remove();
+
+            };
+
+
+        document
+            .body
+            .appendChild(script);
+
+    }
+
+
+    ambil(
+        API_URL +
+        "?action=mutasi",
+        function(data){
+
+            DATA_MUTASI_AWAL =
+                data;
+
+        }
+    );
+
+
+    ambil(
+        API_URL +
+        "?action=pasokanMutasi",
+        function(data){
+
+            DATA_MUTASI_PASOKAN =
+                data;
+
+        }
+    );
+
+
+    ambil(
+        API_URL +
+        "?action=olahMutasi",
+        function(data){
+
+            DATA_MUTASI_OLAH =
+                data;
+
+        }
+    );
+
+
+    ambil(
+        API_URL +
+        "?action=sisaMutasi",
+        function(data){
+
+            DATA_MUTASI_SISA =
+                data;
+
+        }
+    );
+
+}
 
 /* =====================================================
    AMBIL DATA PASOKAN
