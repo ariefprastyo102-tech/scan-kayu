@@ -853,6 +853,10 @@ tbody tr:last-child th{
      MUTASI
 ===================================================== -->
 
+<!-- =====================================================
+     MUTASI
+===================================================== -->
+
 <div
     id="mutasi"
     class="kartu"
@@ -860,8 +864,52 @@ tbody tr:last-child th{
 
     <h2>MUTASI RINGKASAN</h2>
 
-    <div class="loading">
-        BAGIAN MUTASI AKAN DIISI BERIKUTNYA...
+    <div class="filter">
+
+        <label for="bulanMutasi">
+            BULAN
+        </label>
+
+        <select
+            id="bulanMutasi">
+
+            <option value="">
+                SEMUA BULAN
+            </option>
+
+            <option value="JANUARI">JANUARI</option>
+            <option value="FEBRUARI">FEBRUARI</option>
+            <option value="MARET">MARET</option>
+            <option value="APRIL">APRIL</option>
+            <option value="MEI">MEI</option>
+            <option value="JUNI">JUNI</option>
+            <option value="JULI">JULI</option>
+            <option value="AGUSTUS">AGUSTUS</option>
+            <option value="SEPTEMBER">SEPTEMBER</option>
+            <option value="OKTOBER">OKTOBER</option>
+            <option value="NOVEMBER">NOVEMBER</option>
+            <option value="DESEMBER">DESEMBER</option>
+
+        </select>
+
+    </div>
+
+    <div
+        id="statusMutasi"
+        class="loading">
+
+        MEMUAT DATA MUTASI...
+
+    </div>
+
+    <div
+        id="rincianMutasi"
+        class="rincian">
+
+        <div class="loading">
+            MEMUAT RINGKASAN MUTASI...
+        </div>
+
     </div>
 
 </div>
@@ -3325,15 +3373,9 @@ function ambilMutasi(){
         }
 
 
-        SUDAH_LOAD_MUTASI = true;
+      SUDAH_LOAD_MUTASI = true;
 
-
-        if(box){
-
-            box.innerHTML =
-                "DATA MUTASI BERHASIL DIMUAT.";
-
-        }
+tampilkanMutasi();
 
     }
 
@@ -3457,6 +3499,621 @@ function ambilMutasi(){
 }
 
 /* =====================================================
+   TAMPILKAN MUTASI
+===================================================== */
+
+function tampilkanMutasi(){
+
+    const box =
+        document.getElementById(
+            "rincianMutasi"
+        );
+
+    const status =
+        document.getElementById(
+            "statusMutasi"
+        );
+
+    if(
+        !DATA_MUTASI_AWAL ||
+        !DATA_MUTASI_PASOKAN ||
+        !DATA_MUTASI_OLAH ||
+        !DATA_MUTASI_SISA
+    ){
+
+        if(status){
+
+            status.innerHTML =
+                "DATA MUTASI BELUM LENGKAP.";
+
+        }
+
+        return;
+
+    }
+
+
+    const bulan =
+        document
+            .getElementById(
+                "bulanMutasi"
+            )
+            .value
+            .trim()
+            .toUpperCase();
+
+
+    function angka(nilai){
+
+        return Number(nilai || 0);
+
+    }
+
+
+    function volume(nilai){
+
+        return angka(nilai)
+            .toFixed(2);
+
+    }
+
+
+    function selamat(nilai){
+
+        return escapeHtml(
+            String(nilai)
+        );
+
+    }
+
+
+    function dataKosong(){
+
+        return {
+
+            batang:0,
+            volume:0
+
+        };
+
+    }
+
+
+    function ambilDataBulan(
+        sumber,
+        namaBulan
+    ){
+
+        if(
+            !sumber ||
+            !Array.isArray(
+                sumber.data
+            )
+        ){
+
+            return null;
+
+        }
+
+
+        return sumber.data.find(
+            function(item){
+
+                return String(
+                    item.bulan || ""
+                )
+                .trim()
+                .toUpperCase()
+                === namaBulan;
+
+            }
+        ) || null;
+
+    }
+
+
+    function buatBaris(
+        label,
+        data
+    ){
+
+        const AIII =
+            data &&
+            data.AIII
+                ? data.AIII
+                : dataKosong();
+
+        const KBP =
+            data &&
+            data.KBP
+                ? data.KBP
+                : dataKosong();
+
+        const TOTAL =
+            data &&
+            data.TOTAL
+                ? data.TOTAL
+                : dataKosong();
+
+
+        return `
+            <tr>
+                <td>${selamat(label)}</td>
+
+                <td>
+                    ${angka(AIII.batang)}
+                </td>
+
+                <td>
+                    ${volume(AIII.volume)}
+                </td>
+
+                <td>
+                    ${angka(KBP.batang)}
+                </td>
+
+                <td>
+                    ${volume(KBP.volume)}
+                </td>
+
+                <td class="total-cell">
+                    ${angka(TOTAL.batang)}
+                </td>
+
+                <td class="total-cell">
+                    ${volume(TOTAL.volume)}
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    function buatTabel(
+        judul,
+        isi
+    ){
+
+        return `
+            <h3>
+                ${selamat(judul)}
+            </h3>
+
+            <div class="rincian-table-wrap">
+
+                <table class="rincian-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                KETERANGAN
+                            </th>
+
+                            <th>
+                                A III<br>BTG
+                            </th>
+
+                            <th>
+                                A III<br>M³
+                            </th>
+
+                            <th>
+                                KBP<br>BTG
+                            </th>
+
+                            <th>
+                                KBP<br>M³
+                            </th>
+
+                            <th>
+                                TOTAL<br>BTG
+                            </th>
+
+                            <th>
+                                TOTAL<br>M³
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${isi}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        `;
+
+    }
+
+
+    let html = "";
+
+
+    /* =================================================
+       SEMUA BULAN
+    ================================================= */
+
+    if(!bulan){
+
+        const bulanUrut = [
+
+            "JANUARI",
+            "FEBRUARI",
+            "MARET",
+            "APRIL",
+            "MEI",
+            "JUNI",
+            "JULI",
+            "AGUSTUS",
+            "SEPTEMBER",
+            "OKTOBER",
+            "NOVEMBER",
+            "DESEMBER"
+
+        ];
+
+
+        html +=
+            `<h3>PERSEDIAAN AWAL 2026</h3>`;
+
+
+        const awal =
+            DATA_MUTASI_AWAL;
+
+
+        html += `
+            <div class="rincian-table-wrap">
+
+                <table class="rincian-table">
+
+                    <thead>
+                        <tr>
+                            <th>SUMBER</th>
+                            <th>A III BTG</th>
+                            <th>A III M³</th>
+                            <th>KBP BTG</th>
+                            <th>KBP M³</th>
+                            <th>TOTAL BTG</th>
+                            <th>TOTAL M³</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        ${buatBaris(
+                            "AWAL 2026",
+                            awal
+                        )}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        `;
+
+
+        bulanUrut.forEach(
+            function(namaBulan){
+
+                const pasokan =
+                    ambilDataBulan(
+                        DATA_MUTASI_PASOKAN,
+                        namaBulan
+                    );
+
+                const olah =
+                    ambilDataBulan(
+                        DATA_MUTASI_OLAH,
+                        namaBulan
+                    );
+
+                const sisa =
+                    ambilDataBulan(
+                        DATA_MUTASI_SISA,
+                        namaBulan
+                    );
+
+
+                html +=
+                    `<h3>${selamat(namaBulan)}</h3>`;
+
+
+                html += `
+                    <div class="rincian-table-wrap">
+
+                        <table class="rincian-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        KETERANGAN
+                                    </th>
+
+                                    <th>
+                                        A III BTG
+                                    </th>
+
+                                    <th>
+                                        A III M³
+                                    </th>
+
+                                    <th>
+                                        KBP BTG
+                                    </th>
+
+                                    <th>
+                                        KBP M³
+                                    </th>
+
+                                    <th>
+                                        TOTAL BTG
+                                    </th>
+
+                                    <th>
+                                        TOTAL M³
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                ${buatBaris(
+                                    "PASOKAN",
+                                    pasokan
+                                )}
+
+                                ${buatBaris(
+                                    "PENGOLAHAN 25",
+                                    olah
+                                        ? olah.OLAH25
+                                        : null
+                                )}
+
+                                ${buatBaris(
+                                    "PENGOLAHAN 26",
+                                    olah
+                                        ? olah.OLAH26
+                                        : null
+                                )}
+
+                                ${buatBaris(
+                                    "SISA 2025",
+                                    sisa
+                                        ? sisa.SISA25
+                                        : null
+                                )}
+
+                                ${buatBaris(
+                                    "SISA 2026",
+                                    sisa
+                                        ? sisa.SISA26
+                                        : null
+                                )}
+
+                                ${buatBaris(
+                                    "TOTAL SISA",
+                                    sisa
+                                        ? sisa.TOTAL
+                                        : null
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                `;
+
+            }
+        );
+
+    }
+
+    /* =================================================
+       SATU BULAN
+    ================================================= */
+
+    else{
+
+        const pasokan =
+            ambilDataBulan(
+                DATA_MUTASI_PASOKAN,
+                bulan
+            );
+
+        const olah =
+            ambilDataBulan(
+                DATA_MUTASI_OLAH,
+                bulan
+            );
+
+        const sisa =
+            ambilDataBulan(
+                DATA_MUTASI_SISA,
+                bulan
+            );
+
+
+        html += `
+            <h3>
+                PERSEDIAAN AWAL 2026
+            </h3>
+
+            <div class="rincian-table-wrap">
+
+                <table class="rincian-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                SUMBER
+                            </th>
+
+                            <th>
+                                A III BTG
+                            </th>
+
+                            <th>
+                                A III M³
+                            </th>
+
+                            <th>
+                                KBP BTG
+                            </th>
+
+                            <th>
+                                KBP M³
+                            </th>
+
+                            <th>
+                                TOTAL BTG
+                            </th>
+
+                            <th>
+                                TOTAL M³
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${buatBaris(
+                            "AWAL 2026",
+                            DATA_MUTASI_AWAL
+                        )}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <h3>
+                MUTASI ${selamat(bulan)}
+            </h3>
+
+            <div class="rincian-table-wrap">
+
+                <table class="rincian-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                KETERANGAN
+                            </th>
+
+                            <th>
+                                A III BTG
+                            </th>
+
+                            <th>
+                                A III M³
+                            </th>
+
+                            <th>
+                                KBP BTG
+                            </th>
+
+                            <th>
+                                KBP M³
+                            </th>
+
+                            <th>
+                                TOTAL BTG
+                            </th>
+
+                            <th>
+                                TOTAL M³
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${buatBaris(
+                            "PASOKAN",
+                            pasokan
+                        )}
+
+                        ${buatBaris(
+                            "PENGOLAHAN 2025",
+                            olah
+                                ? olah.OLAH25
+                                : null
+                        )}
+
+                        ${buatBaris(
+                            "PENGOLAHAN 2026",
+                            olah
+                                ? olah.OLAH26
+                                : null
+                        )}
+
+                        ${buatBaris(
+                            "SISA 2025",
+                            sisa
+                                ? sisa.SISA25
+                                : null
+                        )}
+
+                        ${buatBaris(
+                            "SISA 2026",
+                            sisa
+                                ? sisa.SISA26
+                                : null
+                        )}
+
+                        ${buatBaris(
+                            "TOTAL SISA",
+                            sisa
+                                ? sisa.TOTAL
+                                : null
+                        )}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        `;
+
+    }
+
+
+    box.innerHTML = html;
+
+
+    if(status){
+
+        status.innerHTML =
+            "DATA MUTASI SIAP.";
+
+    }
+
+}
+    
+/* =====================================================
    AMBIL DATA PASOKAN
    BAGIAN PASOKAN DIPERTAHANKAN
 ===================================================== */
@@ -3560,7 +4217,16 @@ document
 
         }
     );
+document
+    .getElementById("bulanMutasi")
+    .addEventListener(
+        "change",
+        function(){
 
+            tampilkanMutasi();
+
+        }
+    );
 
 /* =====================================================
    FILTER BULAN OLAH
