@@ -3339,15 +3339,29 @@ function tampilkanError(pesan){
 
 function ambilMutasi(){
 
-    const box =
-        document.querySelector(
-            "#mutasi .loading"
+    const status =
+        document.getElementById(
+            "statusMutasi"
         );
+
+    const box =
+        document.getElementById(
+            "rincianMutasi"
+        );
+
+
+    if(status){
+
+        status.innerHTML =
+            "MEMUAT DATA MUTASI...";
+
+    }
+
 
     if(box){
 
         box.innerHTML =
-            "MEMUAT DATA MUTASI...";
+            '<div class="loading">MEMUAT RINGKASAN MUTASI...</div>';
 
     }
 
@@ -3373,14 +3387,74 @@ function ambilMutasi(){
         }
 
 
-      SUDAH_LOAD_MUTASI = true;
+        SUDAH_LOAD_MUTASI = true;
 
-tampilkanMutasi();
+
+        if(
+            DATA_MUTASI_AWAL &&
+            DATA_MUTASI_PASOKAN &&
+            DATA_MUTASI_OLAH &&
+            DATA_MUTASI_SISA
+        ){
+
+            tampilkanMutasi();
+
+        }
+
+        else{
+
+            let pesan = [];
+
+            if(!DATA_MUTASI_AWAL){
+
+                pesan.push(
+                    "AWAL"
+                );
+
+            }
+
+            if(!DATA_MUTASI_PASOKAN){
+
+                pesan.push(
+                    "PASOKAN"
+                );
+
+            }
+
+            if(!DATA_MUTASI_OLAH){
+
+                pesan.push(
+                    "OLAH"
+                );
+
+            }
+
+            if(!DATA_MUTASI_SISA){
+
+                pesan.push(
+                    "SISA"
+                );
+
+            }
+
+
+            if(status){
+
+                status.innerHTML =
+                    "DATA MUTASI BELUM LENGKAP: " +
+                    pesan.join(", ");
+
+            }
+
+        }
 
     }
 
 
-    function ambil(url,callback){
+    function ambil(
+        action,
+        callback
+    ){
 
         const script =
             document.createElement(
@@ -3393,7 +3467,7 @@ tampilkanMutasi();
             Date.now() +
             "_" +
             Math.floor(
-                Math.random() * 100000
+                Math.random() * 1000000
             );
 
 
@@ -3405,9 +3479,38 @@ tampilkanMutasi();
                 cekSelesai();
 
 
-                delete window[
-                    namaCallback
-                ];
+                try{
+
+                    delete window[
+                        namaCallback
+                    ];
+
+                }
+                catch(e){}
+
+
+                script.remove();
+
+            };
+
+
+        script.onerror =
+            function(){
+
+                callback(null);
+
+                cekSelesai();
+
+
+                try{
+
+                    delete window[
+                        namaCallback
+                    ];
+
+                }
+                catch(e){}
+
 
                 script.remove();
 
@@ -3415,43 +3518,24 @@ tampilkanMutasi();
 
 
         script.src =
-            url +
+            API_URL +
+            "?action=" +
+            action +
             "&callback=" +
             namaCallback;
 
 
-        script.onerror =
-            function(){
-
-                callback({
-                    sukses:false,
-                    pesan:
-                        "Gagal mengambil data MUTASI."
-                });
-
-
-                cekSelesai();
-
-
-                delete window[
-                    namaCallback
-                ];
-
-                script.remove();
-
-            };
-
-
         document
             .body
-            .appendChild(script);
+            .appendChild(
+                script
+            );
 
     }
 
 
     ambil(
-        API_URL +
-        "?action=mutasi",
+        "mutasi",
         function(data){
 
             DATA_MUTASI_AWAL =
@@ -3462,8 +3546,7 @@ tampilkanMutasi();
 
 
     ambil(
-        API_URL +
-        "?action=pasokanMutasi",
+        "pasokanmutasi",
         function(data){
 
             DATA_MUTASI_PASOKAN =
@@ -3474,8 +3557,7 @@ tampilkanMutasi();
 
 
     ambil(
-        API_URL +
-        "?action=olahMutasi",
+        "olahmutasi",
         function(data){
 
             DATA_MUTASI_OLAH =
@@ -3486,8 +3568,7 @@ tampilkanMutasi();
 
 
     ambil(
-        API_URL +
-        "?action=sisaMutasi",
+        "sisamutasi",
         function(data){
 
             DATA_MUTASI_SISA =
