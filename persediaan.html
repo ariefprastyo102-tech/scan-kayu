@@ -853,10 +853,6 @@ tbody tr:last-child th{
      MUTASI
 ===================================================== -->
 
-<!-- =====================================================
-     MUTASI
-===================================================== -->
-
 <div
     id="mutasi"
     class="kartu"
@@ -2825,7 +2821,7 @@ table.innerHTML =
             '<td>' +
                 Number(
                     item.volume || 0
-                ).toFixed(6) +
+                ).toFixed(3) +
                 ' m³' +
             '</td>';
 
@@ -3632,9 +3628,9 @@ function tampilkanMutasi(){
 
 
     function volume(nilai){
-
-        return angka(nilai)
-            .toFixed(2);
+    return angka(nilai)
+        .toFixed(3);
+}
 
     }
 
@@ -3882,30 +3878,44 @@ function tampilkanMutasi(){
 
 
         bulanUrut.forEach(
-            function(namaBulan){
+    function(namaBulan){
 
-                const pasokan =
-                    ambilDataBulan(
-                        DATA_MUTASI_PASOKAN,
-                        namaBulan
-                    );
+        const pasokan =
+            ambilDataBulan(
+                DATA_MUTASI_PASOKAN,
+                namaBulan
+            );
 
-                const olah =
-                    ambilDataBulan(
-                        DATA_MUTASI_OLAH,
-                        namaBulan
-                    );
+        const olah =
+            ambilDataBulan(
+                DATA_MUTASI_OLAH,
+                namaBulan
+            );
 
-                const sisa =
-                    ambilDataBulan(
-                        DATA_MUTASI_SISA,
-                        namaBulan
-                    );
+        const sisa =
+            ambilDataBulan(
+                DATA_MUTASI_SISA,
+                namaBulan
+            );
 
 
-                html +=
-                    `<h3>${selamat(namaBulan)}</h3>`;
+        /* =========================================
+           LEWATI BULAN YANG BELUM ADA DATA
+        ========================================= */
 
+        if(
+            !pasokan &&
+            !olah &&
+            !sisa
+        ){
+
+            return;
+
+        }
+
+
+        html +=
+            `<h3>${selamat(namaBulan)}</h3>`;
 
                 html += `
                     <div class="rincian-table-wrap">
