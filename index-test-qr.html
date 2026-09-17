@@ -3572,15 +3572,12 @@ function renderPerTumpuk() {
 
 
   info.innerHTML =
-    "SESI AKTIF : " +
-    (sesiAktif || "-") +
-    "<br>TOTAL BATANG : " +
-    keys.reduce(
-      (total, key) =>
-        total + group[key],
-      0
-    );
-
+  "TOTAL BATANG : " +
+  keys.reduce(
+    (total, key) =>
+      total + group[key],
+    0
+  );
 
   if (!keys.length) {
 
