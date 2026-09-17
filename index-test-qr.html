@@ -289,7 +289,30 @@ body {
 #btnHistory:active {
   transform: scale(0.94);
 }
+#btnTumpuk {
+  position: fixed;
+  right: 15px;
+  bottom: 70px;
+  width: auto;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 14px;
+  margin: 0;
+  border: none;
+  border-radius: 24px;
+  background: #8b5e00;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.25);
+}
 
+#btnTumpuk:active {
+  transform: scale(0.94);
+}
 /* ==============================
    TOTAL BATANG
 ============================== */
@@ -463,6 +486,41 @@ body {
   width: 100%;
   max-width: 500px;
   margin: 15px auto;
+}
+
+#tumpukPanel {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  z-index: 2000;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.tumpukItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+.tumpukNama {
+  font-weight: bold;
+}
+
+.tumpukJumlah {
+  font-weight: bold;
 }
 
 .historyHeader {
@@ -639,7 +697,14 @@ body {
     padding: 0 13px;
     font-size: 14px;
   }
-
+#btnTumpuk {
+  right: 12px;
+  bottom: 66px;
+  height: 46px;
+  min-width: 46px;
+  padding: 0 13px;
+  font-size: 14px;
+}
 }
 
 /* ==============================
@@ -836,6 +901,13 @@ body {
   📋 HISTORY
 </button>
 
+  <button
+  id="btnTumpuk"
+  onclick="tampilkanPerTumpuk()"
+  title="Cek Per Tumpuk"
+>
+  📦 PER TUMPUK
+</button>
 <div id="historyPanel">
 
   <div class="historyHeader">
@@ -853,12 +925,35 @@ body {
 
   </div>
 
-  <div id="isiHistory"></div>
+   <div id="isiHistory"></div>
+
+</div>
+
+<div id="tumpukPanel">
+
+  <div class="historyHeader">
+
+    <div class="historyJudul">
+      📦 PER TUMPUK
+    </div>
+
+    <button
+      class="tutupHistory"
+      onclick="tutupPerTumpuk()"
+    >
+      TUTUP
+    </button>
+
+  </div>
+
+  <div id="tumpukInfo"></div>
+
+  <div id="isiTumpuk"></div>
 
 </div>
 
 <script>
-
+  
 /* =====================================================
    API
 ===================================================== */
@@ -926,7 +1021,11 @@ const INTERVAL_SINKRONISASI = 2000;
 
 let detailTerbuka = new Set();
 
+/* =====================================================
+   PANEL PER TUMPUK
+===================================================== */
 
+let tumpukPanelTerbuka = false;
 /* =====================================================
    JSONP REQUEST
 ===================================================== */
@@ -3382,7 +3481,141 @@ function hapusSemuaHistory() {
 
 }
 
+function tampilkanPerTumpuk() {
 
+  const panel =
+    document.getElementById("tumpukPanel");
+
+  panel.style.display = "block";
+
+  tumpukPanelTerbuka = true;
+
+  renderPerTumpuk();
+}
+
+
+function tutupPerTumpuk() {
+
+  const panel =
+    document.getElementById("tumpukPanel");
+
+  panel.style.display = "none";
+
+  tumpukPanelTerbuka = false;
+}
+
+
+function renderPerTumpuk() {
+
+  const isi =
+    document.getElementById("isiTumpuk");
+
+  const info =
+    document.getElementById("tumpukInfo");
+
+  if (!isi || !info)
+    return;
+
+
+  const group = {};
+
+
+  dataScanTersimpan.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        item.tipe !== "success"
+      ) {
+        return;
+      }
+
+
+      const data =
+        item.data || [];
+
+
+      const tumpuk =
+        String(data[4] || "-").trim();
+
+
+      if (!group[tumpuk]) {
+        group[tumpuk] = 0;
+      }
+
+
+      group[tumpuk]++;
+    }
+  );
+
+
+  const keys =
+    Object.keys(group);
+
+
+  keys.sort(
+    function(a, b) {
+
+      const na = Number(a);
+      const nb = Number(b);
+
+      if (
+        !isNaN(na) &&
+        !isNaN(nb)
+      ) {
+        return na - nb;
+      }
+
+      return a.localeCompare(b);
+    }
+  );
+
+
+  info.innerHTML =
+    "SESI AKTIF : " +
+    (sesiAktif || "-") +
+    "<br>TOTAL BATANG : " +
+    keys.reduce(
+      (total, key) =>
+        total + group[key],
+      0
+    );
+
+
+  if (!keys.length) {
+
+    isi.innerHTML =
+      "<div class='tumpukItem'>" +
+      "BELUM ADA DATA TUMPUK PADA SESI INI" +
+      "</div>";
+
+    return;
+  }
+
+
+  isi.innerHTML = "";
+
+
+  keys.forEach(
+    function(key) {
+
+      isi.innerHTML +=
+        "<div class='tumpukItem'>" +
+
+          "<div class='tumpukNama'>" +
+            "TUMPUK " + escapeHtml(key) +
+          "</div>" +
+
+          "<div class='tumpukJumlah'>" +
+            group[key] +
+            " BATANG" +
+          "</div>" +
+
+        "</div>";
+    }
+  );
+}
+  
 /* =====================================================
    LOAD AWAL
 ===================================================== */
