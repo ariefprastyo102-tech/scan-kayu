@@ -319,6 +319,16 @@ body {
   font-weight: 900;
 }
 
+.btn-kembali {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-left: 2px;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .registerOlah {
   color: #176b38;
 }
@@ -1060,6 +1070,8 @@ body {
 const API_URL =
 "https://script.google.com/macros/s/AKfycbx3wriyYJKQAUWp_QMWR3J0TxwdjVL0Htigd2g59vawku1c4abcwORWT8rwHzdlsg/exec";
 
+const API_BARCODE_URL =
+"https://script.google.com/macros/s/AKfycbyRZ4zVWMuOBxsVQHvrd5DzFdztNtcKcF_Te6Y7fXCsV8-hAQGqT8nio2vfAoB4x-t-/exec";
 
 let semuaData = [];
 
@@ -1425,7 +1437,84 @@ function requestJSONP(
 
 }
 
+function requestJSONPBarcode(parameter, callback) {
+  const callbackName =
+    "callbackBarcode_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
+  window[callbackName] = function(data) {
+    try {
+      callback(data);
+    } finally {
+      delete window[callbackName];
+      script.remove();
+    }
+  };
+
+  const script = document.createElement("script");
+
+  const params = new URLSearchParams(parameter);
+  params.set("callback", callbackName);
+
+  script.src =
+    API_BARCODE_URL + "?" + params.toString();
+
+  script.onerror = function() {
+    callback({
+      status: "error",
+      message: "Gagal terhubung ke API barcode"
+    });
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  document.body.appendChild(script);
+} 
+
+function kembaliKeTumpuk(register) {
+
+  if (!register) {
+    alert("Register tidak ditemukan.");
+    return;
+  }
+
+  if (!confirm(
+    "Register " + register +
+    " akan dikembalikan ke tumpukan.\n\nLanjutkan?"
+  )) {
+    return;
+  }
+
+  requestJSONPBarcode(
+    {
+      kembaliKeTumpuk: register
+    },
+    function(res) {
+
+      if (res && res.status === "success") {
+
+        alert(
+          res.message ||
+          "Register " + register +
+          " berhasil dikembalikan ke tumpukan."
+        );
+
+        // Nanti di langkah berikutnya kita refresh DATA OLAH
+        muatData();
+
+      } else {
+
+        alert(
+          (res && res.message) ||
+          "Gagal mengembalikan register ke tumpukan."
+        );
+
+      }
+
+    }
+  );
+}
+  
 // =====================================================
 // MUAT DATA
 // =====================================================
@@ -2105,16 +2194,25 @@ function buatItem(
 
       ${checkboxHTML}
 
-      <div
-        class="register ${
-          isSisa
-            ? "registerSisa"
-            : "registerOlah"
-        }">
+     <div
+  class="register ${
+    isSisa
+      ? "registerSisa"
+      : "registerOlah"
+  }">
 
-        ${register}
+  ${register}
 
-      </div>
+</div>
+
+<button
+  class="btn-kembali"
+  title="Kembali ke tumpuk"
+  onclick="kembaliKeTumpuk('${escapeHTML(registerRaw)}')">
+
+  ↩
+
+</button>
 
 
       <div class="dataRingkas">
