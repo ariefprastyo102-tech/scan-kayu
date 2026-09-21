@@ -417,17 +417,13 @@ button:hover{
         flex-shrink:0;
     }
 
-    .print-tumpuk-label{
-
-        font-size:14mm;
-
-        font-weight:900;
-
-        line-height:.85;
-
-        flex-shrink:0;
-    }
-
+  .print-tumpuk-label{
+    font-size:16mm;
+    font-weight:900;
+    line-height:.85;
+    flex-shrink:0;
+    text-align:center;
+}
     .print-tumpuk-number{
 
         display:inline-flex;
@@ -1216,8 +1212,7 @@ function tampilkanData(data){
 
 
         labelTumpuk.textContent=
-            "TUMPUK";
-
+                  "TP";
 
         card.appendChild(labelTumpuk);
 
@@ -1546,7 +1541,7 @@ function prosesCetak(dataCetak){
 
 
             labelTumpuk.textContent=
-                "TUMPUK";
+                "TP";
 
 
             const nomor=
