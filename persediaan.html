@@ -869,10 +869,6 @@ tbody tr:last-child th{
         <select
             id="bulanMutasi">
 
-            <option value="">
-                SEMUA BULAN
-            </option>
-
             <option value="JANUARI">JANUARI</option>
             <option value="FEBRUARI">FEBRUARI</option>
             <option value="MARET">MARET</option>
@@ -3386,15 +3382,16 @@ function ambilMutasi(){
 
 
         if(
-            DATA_MUTASI_AWAL &&
-            DATA_MUTASI_PASOKAN &&
-            DATA_MUTASI_OLAH &&
-            DATA_MUTASI_SISA
-        ){
+    DATA_MUTASI_AWAL &&
+    DATA_MUTASI_PASOKAN &&
+    DATA_MUTASI_OLAH &&
+    DATA_MUTASI_SISA
+){
 
-            tampilkanMutasi();
+    buatFilterBulanMutasi();
+    tampilkanMutasi();
 
-        }
+}
 
         else{
 
@@ -3575,6 +3572,89 @@ function ambilMutasi(){
 
 }
 
+function buatFilterBulanMutasi(){
+
+    const select =
+        document.getElementById(
+            "bulanMutasi"
+        );
+
+    if(!select){
+        return;
+    }
+
+    const urutanBulan = [
+        "JANUARI",
+        "FEBRUARI",
+        "MARET",
+        "APRIL",
+        "MEI",
+        "JUNI",
+        "JULI",
+        "AGUSTUS",
+        "SEPTEMBER",
+        "OKTOBER",
+        "NOVEMBER",
+        "DESEMBER"
+    ];
+
+    const bulanAda = new Set();
+
+    const sumber = [
+        DATA_MUTASI_PASOKAN,
+        DATA_MUTASI_OLAH,
+        DATA_MUTASI_SISA
+    ];
+
+    sumber.forEach(function(data){
+
+        if(
+            !data ||
+            !Array.isArray(data.data)
+        ){
+            return;
+        }
+
+        data.data.forEach(function(item){
+
+            const bulan =
+                String(item.bulan || "")
+                    .trim()
+                    .toUpperCase();
+
+            if(
+                bulan &&
+                urutanBulan.includes(bulan)
+            ){
+
+                bulanAda.add(bulan);
+
+            }
+
+        });
+
+    });
+
+    select.innerHTML = "";
+
+    urutanBulan.forEach(function(bulan){
+
+        if(bulanAda.has(bulan)){
+
+            const option =
+                document.createElement("option");
+
+            option.value = bulan;
+            option.textContent = bulan;
+
+            select.appendChild(option);
+
+        }
+
+    });
+
+}
+    
 /* =====================================================
    TAMPILKAN MUTASI BBI
 ===================================================== */
