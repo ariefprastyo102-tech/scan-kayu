@@ -340,7 +340,7 @@
 
             tpk: item.tpk,
 
-            tumpuk: item.tumpuk,
+           tumpuk: Number(item.tumpuk) || 0,
 
             batang: 0,
 
@@ -463,8 +463,6 @@
                     class="tumpuk-header"
                     onclick="toggleTumpuk('${id}')"
                   >
-                      ▲ TUTUP TUMPUK
-                    </button>
 
                     <div>
 
@@ -536,7 +534,15 @@
                       </div>
 
                     `).join('')}
-
+<button
+  class="tutup-tumpuk"
+  onclick="
+    event.stopPropagation();
+    toggleTumpuk('${id}')
+  "
+>
+  ▲
+</button>
                   </div>
 
                 </div>
