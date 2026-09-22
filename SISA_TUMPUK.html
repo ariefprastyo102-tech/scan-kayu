@@ -241,3 +241,338 @@
           delete window[callbackName];
 
           if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+
+        }
+      };
+
+      const script =
+        document.createElement('script');
+
+      script.src =
+        API_URL +
+        '?action=sisa' +
+        '&bulan=' +
+        encodeURIComponent(bulan) +
+        '&callback=' +
+        encodeURIComponent(callbackName);
+
+      script.onerror = function() {
+
+        document.getElementById('isi').innerHTML =
+          '<div class="kosong">' +
+          'Gagal terhubung ke server.' +
+          '</div>';
+
+        delete window[callbackName];
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+      };
+
+      document.body.appendChild(script);
+    }
+
+
+    function tampilkanData(data) {
+
+      if (!data || data.length === 0) {
+
+        document.getElementById('isi').innerHTML =
+          '<div class="kosong">' +
+          'Tidak ada data.' +
+          '</div>';
+
+        return;
+      }
+
+
+      let totalBatang = data.length;
+
+      let totalVolume = 0;
+
+      data.forEach(item => {
+        totalVolume += Number(item.m3) || 0;
+      });
+
+
+      const kelompok = {};
+
+
+      data.forEach(item => {
+
+        const key =
+          item.tahun +
+          '|' +
+          item.tpk +
+          '|' +
+          item.tumpuk;
+
+
+        if (!kelompok[key]) {
+
+          kelompok[key] = {
+
+            tahun: item.tahun,
+
+            tpk: item.tpk,
+
+            tumpuk: item.tumpuk,
+
+            batang: 0,
+
+            volume: 0,
+
+            register: []
+
+          };
+
+        }
+
+
+        kelompok[key].batang++;
+
+        kelompok[key].volume +=
+          Number(item.m3) || 0;
+
+        kelompok[key].register.push(item);
+
+      });
+
+
+      const tahunKelompok = {};
+
+
+      Object.values(kelompok).forEach(item => {
+
+        if (!tahunKelompok[item.tahun]) {
+
+          tahunKelompok[item.tahun] = [];
+
+        }
+
+        tahunKelompok[item.tahun].push(item);
+
+      });
+
+
+      let html = '';
+
+
+      html += `
+        <div class="ringkasan">
+
+          TOTAL SISA:
+          ${totalBatang.toLocaleString('id-ID')}
+          batang
+
+          |
+
+          ${totalVolume.toLocaleString(
+            'id-ID',
+            {
+              minimumFractionDigits: 3,
+              maximumFractionDigits: 3
+            }
+          )}
+          m³
+
+        </div>
+      `;
+
+
+      Object.keys(tahunKelompok)
+
+        .sort()
+
+        .forEach(tahun => {
+
+          html +=
+            '<div class="tahun">' +
+            'TAHUN KAYU ' +
+            tahun +
+            '</div>';
+
+
+          tahunKelompok[tahun]
+
+            .sort((a, b) => {
+
+              const tpkA =
+                String(a.tpk || '');
+
+              const tpkB =
+                String(b.tpk || '');
+
+              if (tpkA !== tpkB) {
+
+                return tpkA.localeCompare(
+                  tpkB
+                );
+
+              }
+
+              return (
+                Number(a.tumpuk) -
+                Number(b.tumpuk)
+              );
+
+            })
+
+            .forEach(item => {
+
+              const id =
+                't_' +
+                item.tahun +
+                '_' +
+                item.tpk +
+                '_' +
+                item.tumpuk;
+
+
+              html += `
+
+                <div class="tumpuk">
+
+                  <div
+                    class="tumpuk-header"
+                    onclick="toggleTumpuk('${id}')"
+                  >
+
+                    <div>
+
+                      <div class="tumpuk-nama">
+
+                        ${item.tpk}
+                        —
+                        TUMPUK ${item.tumpuk}
+
+                      </div>
+
+                      <div class="tumpuk-info">
+
+                        ${item.batang}
+                        batang
+
+                        |
+
+                        ${item.volume.toLocaleString(
+                          'id-ID',
+                          {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                          }
+                        )}
+                        m³
+
+                      </div>
+
+                    </div>
+
+                    <div
+                      class="arrow"
+                      id="arrow_${id}"
+                    >
+                      ▶
+                    </div>
+
+                  </div>
+
+
+                  <div
+                    class="register-list"
+                    id="${id}"
+                  >
+
+                    ${item.register.map(reg => `
+
+                      <div class="register">
+
+                        <span>
+                          ${reg.register}
+                        </span>
+
+                        <button
+                          class="detail-btn"
+                          onclick="
+                            event.stopPropagation();
+                            detailRegister('${reg.register}')
+                          "
+                        >
+                          DETAIL
+                        </button>
+
+                      </div>
+
+                    `).join('')}
+
+                  </div>
+
+                </div>
+
+              `;
+
+            });
+
+        });
+
+
+      document.getElementById('isi').innerHTML =
+        html;
+    }
+
+
+    function toggleTumpuk(id) {
+
+      const el =
+        document.getElementById(id);
+
+      const arrow =
+        document.getElementById(
+          'arrow_' + id
+        );
+
+
+      if (el.style.display === 'block') {
+
+        el.style.display = 'none';
+
+        arrow.textContent = '▶';
+
+      } else {
+
+        el.style.display = 'block';
+
+        arrow.textContent = '▼';
+
+      }
+
+    }
+
+
+    function detailRegister(register) {
+
+      alert(
+        'DETAIL REGISTER\n\n' +
+        register
+      );
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function() {
+
+        muatData('JANUARI');
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
