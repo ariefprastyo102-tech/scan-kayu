@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SISA DAFTAR TUMPUK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    .header {
+      background: #1f2937;
+      color: white;
+      padding: 18px 15px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .filter-box {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .filter-box label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    select {
+      width: 100%;
+      padding: 11px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      background: white;
+    }
+
+    .kosong {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>SISA DAFTAR TUMPUK</h1>
+  </div>
+
+  <div class="container">
+
+    <div class="filter-box">
+      <label>BULAN</label>
+
+      <select id="bulan">
+        <option value="JANUARI">JANUARI 2026</option>
+        <option value="FEBRUARI">FEBRUARI 2026</option>
+        <option value="MARET">MARET 2026</option>
+        <option value="APRIL">APRIL 2026</option>
+        <option value="MEI">MEI 2026</option>
+        <option value="JUNI">JUNI 2026</option>
+        <option value="JULI">JULI 2026</option>
+        <option value="AGUSTUS">AGUSTUS 2026</option>
+        <option value="SEPTEMBER">SEPTEMBER 2026</option>
+        <option value="OKTOBER">OKTOBER 2026</option>
+        <option value="NOVEMBER">NOVEMBER 2026</option>
+        <option value="DESEMBER">DESEMBER 2026</option>
+      </select>
+    </div>
+
+    <div id="isi">
+      <div class="kosong">
+        Pilih bulan untuk melihat SISA DAFTAR TUMPUK
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
