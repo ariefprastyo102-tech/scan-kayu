@@ -59,6 +59,85 @@
       background: white;
     }
 
+    .ringkasan {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .tahun {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+    }
+
+    .tumpuk {
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 7px rgba(0,0,0,.08);
+    }
+
+    .tumpuk-header {
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tumpuk-nama {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .tumpuk-info {
+      color: #555;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .arrow {
+      font-size: 20px;
+    }
+
+    .register-list {
+      display: none;
+      border-top: 1px solid #eee;
+      padding: 8px 14px 14px;
+    }
+
+    .register {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .register:last-child {
+      border-bottom: none;
+    }
+
+    .detail-btn {
+      border: none;
+      background: #2563eb;
+      color: white;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .loading {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+    }
+
     .kosong {
       background: white;
       border-radius: 10px;
@@ -78,9 +157,11 @@
   <div class="container">
 
     <div class="filter-box">
+
       <label>BULAN</label>
 
-      <select id="bulan">
+      <select id="bulan" onchange="ubahBulan()">
+
         <option value="JANUARI">JANUARI 2026</option>
         <option value="FEBRUARI">FEBRUARI 2026</option>
         <option value="MARET">MARET 2026</option>
@@ -93,16 +174,349 @@
         <option value="OKTOBER">OKTOBER 2026</option>
         <option value="NOVEMBER">NOVEMBER 2026</option>
         <option value="DESEMBER">DESEMBER 2026</option>
+
       </select>
+
     </div>
 
     <div id="isi">
-      <div class="kosong">
-        Pilih bulan untuk melihat SISA DAFTAR TUMPUK
+      <div class="loading">
+        Memuat data...
       </div>
     </div>
 
   </div>
+
+
+  <script>
+
+    function ubahBulan() {
+
+      const bulan =
+        document.getElementById('bulan').value;
+
+      muatData(bulan);
+    }
+
+
+    function muatData(bulan) {
+
+      document.getElementById('isi').innerHTML =
+        '<div class="loading">Memuat data...</div>';
+
+      google.script.run
+
+        .withSuccessHandler(tampilkanData)
+
+        .withFailureHandler(function(error) {
+
+          document.getElementById('isi').innerHTML =
+            '<div class="kosong">' +
+            'Gagal mengambil data.<br><br>' +
+            error.message +
+            '</div>';
+
+        })
+
+        .ambilSisaBulan(bulan);
+    }
+
+
+    function tampilkanData(data) {
+
+      if (!data || data.length === 0) {
+
+        document.getElementById('isi').innerHTML =
+          '<div class="kosong">' +
+          'Tidak ada data.' +
+          '</div>';
+
+        return;
+      }
+
+
+      let totalBatang = data.length;
+
+      let totalVolume = 0;
+
+      data.forEach(item => {
+        totalVolume += Number(item.m3) || 0;
+      });
+
+
+      const kelompok = {};
+
+
+      data.forEach(item => {
+
+        const key =
+          item.tahun +
+          '|' +
+          item.tpk +
+          '|' +
+          item.tumpuk;
+
+
+        if (!kelompok[key]) {
+
+          kelompok[key] = {
+
+            tahun: item.tahun,
+
+            tpk: item.tpk,
+
+            tumpuk: item.tumpuk,
+
+            batang: 0,
+
+            volume: 0,
+
+            register: []
+
+          };
+
+        }
+
+
+        kelompok[key].batang++;
+
+        kelompok[key].volume +=
+          Number(item.m3) || 0;
+
+        kelompok[key].register.push(item);
+
+      });
+
+
+      const tahunKelompok = {};
+
+
+      Object.values(kelompok).forEach(item => {
+
+        if (!tahunKelompok[item.tahun]) {
+
+          tahunKelompok[item.tahun] = [];
+
+        }
+
+        tahunKelompok[item.tahun].push(item);
+
+      });
+
+
+      let html = '';
+
+
+      html += `
+        <div class="ringkasan">
+
+          TOTAL SISA:
+          ${totalBatang.toLocaleString('id-ID')}
+          batang
+
+          |
+          ${totalVolume.toLocaleString(
+            'id-ID',
+            {
+              minimumFractionDigits: 3,
+              maximumFractionDigits: 3
+            }
+          )}
+          m³
+
+        </div>
+      `;
+
+
+      Object.keys(tahunKelompok)
+
+        .sort()
+
+        .forEach(tahun => {
+
+          html +=
+            '<div class="tahun">' +
+            'TAHUN KAYU ' +
+            tahun +
+            '</div>';
+
+
+          tahunKelompok[tahun]
+
+            .sort((a, b) => {
+
+              const tpkA =
+                String(a.tpk || '');
+
+              const tpkB =
+                String(b.tpk || '');
+
+              if (tpkA !== tpkB) {
+
+                return tpkA.localeCompare(
+                  tpkB
+                );
+
+              }
+
+              return (
+                Number(a.tumpuk) -
+                Number(b.tumpuk)
+              );
+
+            })
+
+            .forEach(item => {
+
+              const id =
+                't_' +
+                item.tahun +
+                '_' +
+                item.tpk +
+                '_' +
+                item.tumpuk;
+
+
+              html += `
+
+                <div class="tumpuk">
+
+                  <div
+                    class="tumpuk-header"
+                    onclick="toggleTumpuk('${id}')"
+                  >
+
+                    <div>
+
+                      <div class="tumpuk-nama">
+
+                        ${item.tpk}
+                        —
+                        TUMPUK ${item.tumpuk}
+
+                      </div>
+
+                      <div class="tumpuk-info">
+
+                        ${item.batang}
+                        batang
+
+                        |
+
+                        ${item.volume.toLocaleString(
+                          'id-ID',
+                          {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                          }
+                        )}
+                        m³
+
+                      </div>
+
+                    </div>
+
+                    <div
+                      class="arrow"
+                      id="arrow_${id}"
+                    >
+                      ▶
+                    </div>
+
+                  </div>
+
+
+                  <div
+                    class="register-list"
+                    id="${id}"
+                  >
+
+                    ${item.register.map(reg => `
+
+                      <div class="register">
+
+                        <span>
+                          ${reg.register}
+                        </span>
+
+                        <button
+                          class="detail-btn"
+                          onclick="
+                            event.stopPropagation();
+                            detailRegister('${reg.register}')
+                          "
+                        >
+                          DETAIL
+                        </button>
+
+                      </div>
+
+                    `).join('')}
+
+                  </div>
+
+                </div>
+
+              `;
+
+            });
+
+        });
+
+
+      document.getElementById('isi').innerHTML =
+        html;
+    }
+
+
+    function toggleTumpuk(id) {
+
+      const el =
+        document.getElementById(id);
+
+      const arrow =
+        document.getElementById(
+          'arrow_' + id
+        );
+
+
+      if (el.style.display === 'block') {
+
+        el.style.display = 'none';
+
+        arrow.textContent = '▶';
+
+      } else {
+
+        el.style.display = 'block';
+
+        arrow.textContent = '▼';
+
+      }
+
+    }
+
+
+    function detailRegister(register) {
+
+      alert(
+        'DETAIL REGISTER\\n\\n' +
+        register
+      );
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function() {
+
+        muatData('JANUARI');
+
+      }
+    );
+
+  </script>
 
 </body>
 </html>
