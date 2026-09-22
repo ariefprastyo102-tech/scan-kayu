@@ -225,6 +225,8 @@
 
             return;
           }
+          
+          window.dataSisa = data;
 
           tampilkanData(data);
 
@@ -555,26 +557,46 @@
     }
 
 
-    function detailRegister(register) {
+  function detailRegister(register) {
 
-      alert(
-        'DETAIL REGISTER\n\n' +
-        register
-      );
+  const item = window.dataSisa.find(
+    x => String(x.register) === String(register)
+  );
 
-    }
+  if (!item) {
+    alert('Data register tidak ditemukan.');
+    return;
+  }
+
+  const tglOlah =
+    item.tglOlah
+      ? new Date(item.tglOlah).toLocaleDateString('id-ID')
+      : '-';
+
+  alert(
+    'RINCIAN REGISTER\n\n' +
+    'REGISTER : ' + item.register + '\n' +
+    'PANJANG : ' + item.panjang + '\n' +
+    'DIAMETER : ' + item.diameter + '\n' +
+    'MUTU : ' + item.mutu + '\n' +
+    'STATUS : ' + (item.status || '-') + '\n' +
+    'VOLUME : ' + Number(item.m3 || 0).toFixed(6) + ' m³\n' +
+    'TGL PENGOLAHAN : ' + tglOlah
+  );
+
+}
 
 
-    document.addEventListener(
-      'DOMContentLoaded',
-      function() {
+document.addEventListener(
+  'DOMContentLoaded',
+  function() {
 
-        muatData('JANUARI');
+    muatData('JANUARI');
 
-      }
-    );
+  }
+);
 
-  </script>
+</script>
 
 </body>
 </html>
