@@ -335,7 +335,7 @@ const key =
   '|' +
   item.tpk +
   '|' +
-  Number(item.tumpuk);
+  nomorTumpuk;
 
         if (!kelompok[key]) {
 
@@ -424,18 +424,21 @@ const key =
 
           tahunKelompok[tahun]
 
-           .sort((a, b) => {
+            .sort((a, b) => {
 
-  const tpkA = String(a.tpk || '');
-  const tpkB = String(b.tpk || '');
+  const tpkA =
+    String(a.tpk || '');
+
+  const tpkB =
+    String(b.tpk || '');
 
   if (tpkA !== tpkB) {
-    return tpkA.localeCompare(tpkB);
+
+    return tpkA.localeCompare(
+      tpkB
+    );
+
   }
-
-  return Number(a.tumpuk) - Number(b.tumpuk);
-
-})
 
   const tumpukA =
     Number(a.tumpuk) || 0;
