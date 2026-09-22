@@ -401,27 +401,29 @@
 
             .sort((a, b) => {
 
-              const tpkA =
-                String(a.tpk || '');
+  const tpkA =
+    String(a.tpk || '');
 
-              const tpkB =
-                String(b.tpk || '');
+  const tpkB =
+    String(b.tpk || '');
 
-              if (tpkA !== tpkB) {
+  if (tpkA !== tpkB) {
 
-                return tpkA.localeCompare(
-                  tpkB
-                );
+    return tpkA.localeCompare(
+      tpkB
+    );
 
-              }
+  }
 
-              return (
-                Number(a.tumpuk) -
-                Number(b.tumpuk)
-              );
+  const tumpukA =
+    Number(a.tumpuk) || 0;
 
-            })
+  const tumpukB =
+    Number(b.tumpuk) || 0;
 
+  return tumpukA - tumpukB;
+
+})
             .forEach(item => {
 
               const id =
