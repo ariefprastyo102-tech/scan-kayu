@@ -190,6 +190,20 @@
 
   <script>
 
+<script>
+
+  const API_URL =
+    'https://script.google.com/macros/s/AKfycbyIoHn7BVTCesqxdOa7PE_cuaqwmUx4aT730WtCypF67zeWD2fdzeqtaPTKArEjWmc/exec';
+
+
+  function ubahBulan() {
+
+    const bulan =
+      document.getElementById('bulan').value;
+
+    muatData(bulan);
+  }
+    
     function ubahBulan() {
 
       const bulan =
@@ -199,28 +213,78 @@
     }
 
 
-    function muatData(bulan) {
+   function muatData(bulan) {
+
+  document.getElementById('isi').innerHTML =
+    '<div class="loading">Memuat data...</div>';
+
+  const callbackName =
+    'sisaCallback_' + Date.now();
+
+  window[callbackName] = function(data) {
+
+    try {
+
+      if (data && data.error) {
+
+        document.getElementById('isi').innerHTML =
+          '<div class="kosong">' +
+          'Gagal mengambil data.<br><br>' +
+          data.message +
+          '</div>';
+
+        return;
+      }
+
+      tampilkanData(data);
+
+    } catch (error) {
 
       document.getElementById('isi').innerHTML =
-        '<div class="loading">Memuat data...</div>';
+        '<div class="kosong">' +
+        'Gagal menampilkan data.<br><br>' +
+        error.message +
+        '</div>';
 
-      google.script.run
+    } finally {
 
-        .withSuccessHandler(tampilkanData)
+      delete window[callbackName];
 
-        .withFailureHandler(function(error) {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
 
-          document.getElementById('isi').innerHTML =
-            '<div class="kosong">' +
-            'Gagal mengambil data.<br><br>' +
-            error.message +
-            '</div>';
+    }
+  };
 
-        })
+  const script =
+    document.createElement('script');
 
-        .ambilSisaBulan(bulan);
+  script.src =
+    API_URL +
+    '?action=sisa' +
+    '&bulan=' +
+    encodeURIComponent(bulan) +
+    '&callback=' +
+    encodeURIComponent(callbackName);
+
+  script.onerror = function() {
+
+    document.getElementById('isi').innerHTML =
+      '<div class="kosong">' +
+      'Gagal terhubung ke server.' +
+      '</div>';
+
+    delete window[callbackName];
+
+    if (script.parentNode) {
+      script.parentNode.removeChild(script);
     }
 
+  };
+
+  document.body.appendChild(script);
+}
 
     function tampilkanData(data) {
 
