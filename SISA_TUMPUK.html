@@ -508,7 +508,11 @@
                         </span>
 
                         <button
-  class="detail-btn"
+  class="detail-btn ${
+    reg.statusOlah === 'SUDAH DIOLAH'
+      ? 'status-olah'
+      : 'status-persediaan'
+  }"
   onclick="
     event.stopPropagation();
     detailRegister('${reg.register}')
