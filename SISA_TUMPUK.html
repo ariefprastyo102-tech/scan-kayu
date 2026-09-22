@@ -424,21 +424,7 @@ const key =
 
           tahunKelompok[tahun]
 
-            .sort((a, b) => {
-
-  const tpkA =
-    String(a.tpk || '');
-
-  const tpkB =
-    String(b.tpk || '');
-
-  if (tpkA !== tpkB) {
-
-    return tpkA.localeCompare(
-      tpkB
-    );
-
-  }
+           .sort((a, b) => {
 
   const tumpukA =
     Number(a.tumpuk) || 0;
@@ -446,7 +432,19 @@ const key =
   const tumpukB =
     Number(b.tumpuk) || 0;
 
-  return tumpukA - tumpukB;
+  if (tumpukA !== tumpukB) {
+
+    return tumpukA - tumpukB;
+
+  }
+
+  const tpkA =
+    String(a.tpk || '');
+
+  const tpkB =
+    String(b.tpk || '');
+
+  return tpkA.localeCompare(tpkB);
 
 })
             .forEach(item => {
