@@ -498,14 +498,14 @@
                         </span>
 
                         <button
-                          class="detail-btn"
-                          onclick="
-                            event.stopPropagation();
-                            detailRegister('${reg.register}')
-                          "
-                        >
-                          DETAIL
-                        </button>
+  class="detail-btn"
+  onclick="
+    event.stopPropagation();
+    detailRegister('${reg.register}')
+  "
+>
+  ${reg.statusOlah === 'SUDAH DIOLAH' ? 'OLAH' : 'MASIH'}
+</button>
 
                       </div>
 
