@@ -324,13 +324,15 @@
 
       data.forEach(item => {
 
-        const key =
-          item.tahun +
-          '|' +
-          item.tpk +
-          '|' +
-          item.tumpuk;
+        const nomorTumpuk =
+  Number(item.tumpuk) || 0;
 
+const key =
+  item.tahun +
+  '|' +
+  item.tpk +
+  '|' +
+  nomorTumpuk;
 
         if (!kelompok[key]) {
 
