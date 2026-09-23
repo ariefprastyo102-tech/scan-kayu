@@ -2100,14 +2100,17 @@ function cariTumpukDenganNomor(
 
 
                 const data =
-                    Array.isArray(
-                        response.data
-                    )
-                    ?
-                    response.data
-                    :
-                    [];
+    response.data;
 
+console.log(
+    "HASIL getTumpukList:",
+    response
+);
+
+console.log(
+    "DATA:",
+    data
+);
 
                 const target =
                     data.find(
