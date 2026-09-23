@@ -3274,19 +3274,45 @@ function tampilkanRegister(
                 "";
 
 
-          const detailButton =
-    document.createElement(
-        "button"
-    );
+            const detailButton =
+                document.createElement(
+                    "button"
+                );
 
-detailButton.type =
-    "button";
 
-detailButton.className =
-    "btn-detail";
+            detailButton.type =
+                "button";
 
-detailButton.textContent =
-    "DETAIL";
+
+            detailButton.className =
+                "btn-detail";
+
+
+            detailButton.textContent =
+                "DETAIL";
+
+
+            const statusOlah =
+                String(
+                    item.statusOlah || ""
+                ).trim().toUpperCase();
+
+
+            if(
+                statusOlah ===
+                "SUDAH DIOLAH"
+            ){
+
+                detailButton.style.background =
+                    "#dc2626";
+
+            }else{
+
+                detailButton.style.background =
+                    "#2563eb";
+
+            }
+
 
             const detailBox =
                 document.createElement(
@@ -3294,21 +3320,9 @@ detailButton.textContent =
                 );
 
 
-            const statusOlah =
-    String(
-        item.statusOlah ||
-        ""
-    ).trim().toUpperCase();
+            detailBox.className =
+                "detail-register-box";
 
-detailBox.className =
-    "detail-register-box " +
-    (
-        statusOlah === "SUDAH DIOLAH"
-        ?
-        "detail-olah"
-        :
-        "detail-persediaan"
-    );
 
             detailBox.innerHTML =
                 buatDetailRegister(
@@ -3407,7 +3421,6 @@ detailBox.className =
     updateJumlahCek();
 
 }
-
 
 /* =====================================================
    BUAT DETAIL REGISTER
