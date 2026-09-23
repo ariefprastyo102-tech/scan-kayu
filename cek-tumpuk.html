@@ -2113,19 +2113,18 @@ console.log(
 );
 
                 const target =
-                    data.find(
-                        function(item){
+    data.find(
+        function(item){
 
-                            return String(
-                                item.tumpuk
-                            ) ===
-                            String(
-                                nomor
-                            );
+            return String(
+                item.tumpuk
+            ).trim() ===
+            String(
+                nomor
+            ).trim();
 
-                        }
-                    );
-
+        }
+    );
 
                 if(!target){
 
