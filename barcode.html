@@ -228,7 +228,7 @@ button{
         display:grid;
 
        grid-template-columns:
-    52mm 52mm 52mm 52mm;
+       52mm 52mm 52mm 52mm;
 
 grid-template-rows:
     repeat(9,36mm);
@@ -254,8 +254,8 @@ grid-template-rows:
 
     .labelCetak{
 
-    width:52mm;
-    height:36mm;
+  width:52mm;
+height:36mm;
 
         border:0.25mm solid black;
 
@@ -269,10 +269,10 @@ grid-template-rows:
     }
     .labelBarcode{
     position:absolute;
-    left:6mm;
-    top:6mm;
-    width:27mm;
-    height:27mm;
+    left:3mm;
+top:6mm;
+width:27mm;
+height:27mm;
     border:0.2mm solid black;
 }
 .labelBarcode img{
@@ -288,7 +288,7 @@ left:32mm;
 top:6mm;
 width:19mm;
 height:22mm;
-
+font-size:3.8mm;
     display:flex;
 
     flex-direction:column;
@@ -428,7 +428,7 @@ onclick="batalSemua()">
 class="btnDownload"
 onclick="cetakF4()">
 
-🖨️ CETAK F4 — 33 BARCODE / LEMBAR
+🖨️ CETAK F4 — 36 BARCODE / LEMBAR
 
 </button>
 
@@ -1382,7 +1382,7 @@ label.appendChild(barcodeBox);
         daftar.length +
         " barcode — " +
         Math.ceil(
-            daftar.length / 33
+            daftar.length / 36
         ) +
         " lembar";
 
