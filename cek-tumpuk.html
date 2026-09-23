@@ -586,6 +586,15 @@ body{
     word-break:break-word;
 }
 
+.detail-register-box.detail-olah
+.detail-register-value{
+    color:#dc2626;
+}
+
+.detail-register-box.detail-persediaan
+.detail-register-value{
+    color:#2563eb;
+} 
 
 /* =====================================================
    HISTORY
@@ -1024,7 +1033,39 @@ body{
         <!-- =================================================
              SUMMARY
         ================================================= -->
-
+<div
+    id="filterBulan"
+    style="
+        margin:10px 0;
+        text-align:center;
+    "
+>
+    <select
+        id="bulanSisa"
+        onchange="ambilDataTumpuk(true, this.value)"
+        style="
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            font-size:15px;
+        "
+    >
+        <option value="">SAAT INI</option>
+        <option value="JANUARI">JANUARI</option>
+        <option value="FEBRUARI">FEBRUARI</option>
+        <option value="MARET">MARET</option>
+        <option value="APRIL">APRIL</option>
+        <option value="MEI">MEI</option>
+        <option value="JUNI">JUNI</option>
+        <option value="JULI">JULI</option>
+        <option value="AGUSTUS">AGUSTUS</option>
+        <option value="SEPTEMBER">SEPTEMBER</option>
+        <option value="OKTOBER">OKTOBER</option>
+        <option value="NOVEMBER">NOVEMBER</option>
+        <option value="DESEMBER">DESEMBER</option>
+    </select>
+</div>
         <div class="summary-grid">
 
             <div class="summary-box jumlah-utama">
@@ -2464,7 +2505,10 @@ function prosesKodeTumpuk(
    AMBIL DATA TUMPUK
 ===================================================== */
 
-function ambilDataTumpuk(tampilkanLoading = true){
+function ambilDataTumpuk(
+    tampilkanLoading = true,
+    bulan = ""
+){
 
     if(tampilkanLoading){
         showLoading();
@@ -2586,21 +2630,36 @@ function ambilDataTumpuk(tampilkanLoading = true){
         };
 
 
-    const url =
-        API_URL +
-        "?action=getTumpukData" +
-        "&tpk=" +
-        encodeURIComponent(
-            currentTPK
-        ) +
-        "&tumpuk=" +
-        encodeURIComponent(
-            currentTumpuk
-        ) +
-        "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
+    const action =
+    bulan
+        ? "sisa"
+        : "getTumpukData";
+
+
+const url =
+    API_URL +
+    "?action=" +
+    action +
+    "&tpk=" +
+    encodeURIComponent(
+        currentTPK
+    ) +
+    "&tumpuk=" +
+    encodeURIComponent(
+        currentTumpuk
+    ) +
+    (
+        bulan
+            ? "&bulan=" +
+              encodeURIComponent(
+                  bulan
+              )
+            : ""
+    ) +
+    "&callback=" +
+    callbackName +
+    "&_=" +
+    Date.now();
 
 
     console.log(
@@ -2704,6 +2763,9 @@ function tampilkanData(
     data
 ){
 hideLoading();
+   
+   const modeSisa =
+    data.bulan !== undefined;
     currentStackId =
         data.stackId ||
         (
@@ -2799,9 +2861,11 @@ hideLoading();
         );
 
 
+    if (!modeSisa) {
     tampilkanRincianTPK(
         data
     );
+}
 
 
     const registers =
@@ -2829,6 +2893,8 @@ hideLoading();
        HISTORY BACKEND TERBARU
     ================================================= */
 
+    if (!modeSisa) {
+
     const history =
         Array.isArray(data.history)
         ?
@@ -2836,17 +2902,16 @@ hideLoading();
         :
         [];
 
-
     document
         .getElementById("historyBadge")
         .textContent =
         history.length;
 
-
     tampilkanHistory(
         history
     );
 
+}
 
     updateJumlahCek();
 
@@ -3233,9 +3298,21 @@ function tampilkanRegister(
                 );
 
 
-            detailBox.className =
-                "detail-register-box";
+            const statusOlah =
+    String(
+        item.statusOlah ||
+        ""
+    ).trim().toUpperCase();
 
+detailBox.className =
+    "detail-register-box " +
+    (
+        statusOlah === "SUDAH DIOLAH"
+        ?
+        "detail-olah"
+        :
+        "detail-persediaan"
+    );
 
             detailBox.innerHTML =
                 buatDetailRegister(
@@ -3455,12 +3532,25 @@ function buatDetailRegister(
         ) +
 
         buatBarisDetail(
-            "VOLUME",
-            formatVolume3(
-                volume
-            ) +
-            " m³"
-        )
+    "VOLUME",
+    formatVolume3(
+        volume
+    ) +
+    " m³"
+) +
+
+buatBarisDetail(
+    "TGL PENGOLAHAN",
+    ambilFieldDetail(
+        item,
+        [
+            "tglOlah",
+            "TGL OLAH",
+            "tglPengolahan",
+            "TGL PENGOLAHAN"
+        ]
+    )
+)
 
     );
 
