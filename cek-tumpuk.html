@@ -2072,9 +2072,9 @@ function cariTumpukDenganNomor(
 
                 if(!berhasil){
 
-                    hideLoading();
+    hideLoading();
 
-                    showError(
+    showError(
                         response &&
                         (
                             response.message ||
@@ -2100,37 +2100,35 @@ function cariTumpukDenganNomor(
 
 
                 const data =
-    response.data;
+                    Array.isArray(
+                        response.data
+                    )
+                    ?
+                    response.data
+                    :
+                    [];
 
-console.log(
-    "HASIL getTumpukList:",
-    response
-);
-
-console.log(
-    "DATA:",
-    data
-);
 
                 const target =
-    data.find(
-        function(item){
+                    data.find(
+                        function(item){
 
-            return String(
-                item.tumpuk
-            ).trim() ===
-            String(
-                nomor
-            ).trim();
+                            return String(
+                                item.tumpuk
+                            ) ===
+                            String(
+                                nomor
+                            );
 
-        }
-    );
+                        }
+                    );
+
 
                 if(!target){
 
-                    hideLoading();
+    hideLoading();
 
-                    showError(
+    showError(
                         "TUMPUK " +
                         nomor +
                         " tidak ditemukan."
@@ -2186,7 +2184,7 @@ console.log(
 
                 }
 
-
+      
                 ambilDataTumpuk(false);
 
             }
@@ -2309,6 +2307,7 @@ console.log(
         );
 
 }
+
 
 /* =====================================================
    PROSES KODE TUMPUK
@@ -2655,7 +2654,10 @@ const url =
     API_URL +
     "?action=" +
     action +
-   
+    "&tpk=" +
+    encodeURIComponent(
+        currentTPK
+    ) +
     "&tumpuk=" +
     encodeURIComponent(
         currentTumpuk
