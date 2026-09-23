@@ -3274,30 +3274,19 @@ function tampilkanRegister(
                 "";
 
 
-            const detailButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            detailButton.type =
-                "button";
-
-
-           detailButton.className =
-    "btn-detail " +
-    (
-        statusOlah === "SUDAH DIOLAH"
-        ?
-        "detail-button-olah"
-        :
-        "detail-button-persediaan"
+          const detailButton =
+    document.createElement(
+        "button"
     );
 
+detailButton.type =
+    "button";
 
-            detailButton.textContent =
-                "DETAIL";
+detailButton.className =
+    "btn-detail";
 
+detailButton.textContent =
+    "DETAIL";
 
             const detailBox =
                 document.createElement(
