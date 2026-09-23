@@ -2072,9 +2072,9 @@ function cariTumpukDenganNomor(
 
                 if(!berhasil){
 
-    hideLoading();
+                    hideLoading();
 
-    showError(
+                    showError(
                         response &&
                         (
                             response.message ||
@@ -2099,23 +2099,15 @@ function cariTumpukDenganNomor(
                 }
 
 
-               const data =
-    Array.isArray(
-        response.data
-    )
-    ?
-    response.data
-    :
-    (
-        response.data &&
-        Array.isArray(
-            response.data.registers
-        )
-        ?
-        [response.data]
-        :
-        []
-    );
+                const data =
+                    Array.isArray(
+                        response.data
+                    )
+                    ?
+                    response.data
+                    :
+                    [];
+
 
                 const target =
                     data.find(
@@ -2134,9 +2126,9 @@ function cariTumpukDenganNomor(
 
                 if(!target){
 
-    hideLoading();
+                    hideLoading();
 
-    showError(
+                    showError(
                         "TUMPUK " +
                         nomor +
                         " tidak ditemukan."
@@ -2192,7 +2184,7 @@ function cariTumpukDenganNomor(
 
                 }
 
-      
+
                 ambilDataTumpuk(false);
 
             }
@@ -2229,13 +2221,13 @@ function cariTumpukDenganNomor(
         };
 
 
-const url =
-    API_URL +
-    "?action=getTumpukList" +
-    "&callback=" +
-    callbackName +
-    "&_=" +
-    Date.now();
+    const url =
+        API_URL +
+        "?action=getTumpukList" +
+        "&callback=" +
+        callbackName +
+        "&_=" +
+        Date.now();
 
 
     script =
@@ -2315,7 +2307,6 @@ const url =
         );
 
 }
-
 
 /* =====================================================
    PROSES KODE TUMPUK
