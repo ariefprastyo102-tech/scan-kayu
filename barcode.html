@@ -288,7 +288,7 @@ left:32.5mm;
 top:7mm;
 width:19mm;
 height:22mm;
-font-size:3.8mm;
+
     display:flex;
 
     flex-direction:column;
@@ -299,9 +299,9 @@ font-size:3.8mm;
 
     font-family:Arial,sans-serif;
 
-    font-size:3.8mm;
+    font-size:4.2mm;
 
-    font-weight:bold;
+    font-weight:normal;
 
     line-height:1.25;
 
@@ -1332,14 +1332,16 @@ label.appendChild(barcodeBox);
                         data.tpk
                     );
 
-               angka.innerHTML =
+    angka.innerHTML =
     data.register +
     "<br>" +
     data.panjang +
     "/" +
     data.diameter +
     "<br>" +
-    data.tumpuk +
+    data.m3 +
+    "<br>" +
+    "TP " + data.tumpuk +
     "<br>" +
     kode;
 
