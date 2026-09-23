@@ -2221,13 +2221,30 @@ function cariTumpukDenganNomor(
         };
 
 
-    const url =
-        API_URL +
-        "?action=getTumpukList" +
-        "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
+   const url =
+    API_URL +
+    "?action=" +
+    (
+        bulanSisaAktif
+        ?
+        "sisaList"
+        :
+        "getTumpukList"
+    ) +
+    (
+        bulanSisaAktif
+        ?
+        "&bulan=" +
+        encodeURIComponent(
+            bulanSisaAktif
+        )
+        :
+        ""
+    ) +
+    "&callback=" +
+    callbackName +
+    "&_=" +
+    Date.now();
 
 
     script =
