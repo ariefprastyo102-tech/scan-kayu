@@ -2214,17 +2214,29 @@ async function mulaiKamera() {
             }
 
             else if (
-              format ===
-              ZXingBrowser
-                .BarcodeFormat
-                .QR_CODE
-            ) {
+  format ===
+  ZXingBrowser
+    .BarcodeFormat
+    .QR_CODE
+) {
 
-              cekQR(
-                kode
-              );
+  if (
+    kode.startsWith("PHT")
+  ) {
 
-            }
+    cekQR(
+      kode
+    );
+
+  } else {
+
+    cekRegister(
+      kode
+    );
+
+  }
+
+}
 
             else {
 
