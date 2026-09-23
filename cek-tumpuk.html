@@ -2792,12 +2792,20 @@ if(infoSisaBulan){
         "SAAT INI";
 
     const jumlah =
-        formatAngka(
-            data.jumlahBatang || 0
-        );
+    formatAngka(
+        data.jumlahSisaTotal !== undefined
+        ?
+        data.jumlahSisaTotal
+        :
+        data.jumlahBatang || 0
+    );
 
-    const volume =
+const volume =
     Number(
+        data.volumeSisaTotal !== undefined
+        ?
+        data.volumeSisaTotal
+        :
         data.volume || 0
     ).toFixed(3);
 
@@ -2815,25 +2823,36 @@ if(infoSisaBulan){
     data.bulan !== "SAAT INI"
 ){
 
-    infoSisaBulan.textContent +=
-        " | OLAH : " +
-        formatAngka(
-            data.jumlahOlah || 0
-        ) +
-        " BTG • " +
-        Number(
-            data.volumeOlah || 0
-        ).toFixed(3) +
-        " m³" +
-        " | SISA SAAT INI : " +
-        formatAngka(
-            data.jumlahSisaSaatIni || 0
-        ) +
-        " BTG • " +
-        Number(
-            data.volumeSisaSaatIni || 0
-        ).toFixed(3) +
-        " m³";
+    const infoPerbandingan =
+    "OLAH : " +
+    formatAngka(
+        data.jumlahOlah || 0
+    ) +
+    " BTG • " +
+    Number(
+        data.volumeOlah || 0
+    ).toFixed(3) +
+    " m³" +
+    " | SISA SAAT INI : " +
+    formatAngka(
+        data.jumlahSisaSaatIni || 0
+    ) +
+    " BTG • " +
+    Number(
+        data.volumeSisaSaatIni || 0
+    ).toFixed(3) +
+    " m³";
+
+infoSisaBulan.innerHTML =
+    "SISA " +
+    labelBulan +
+    " : " +
+    jumlah +
+    " BTG • " +
+    volume +
+    " m³" +
+    "<br>" +
+    infoPerbandingan;
 }
     currentStackId =
         data.stackId ||
