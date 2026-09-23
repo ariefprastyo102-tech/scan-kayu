@@ -2775,85 +2775,86 @@ const url =
 function tampilkanData(
     data
 ){
-hideLoading();
-   
-   const modeSisa =
-    data.bulan !== undefined;
+    hideLoading();
 
-   const infoSisaBulan =
-    document.getElementById(
-        "infoSisaBulan"
-    );
+    const modeSisa =
+        data.bulan !== undefined;
 
-if(infoSisaBulan){
+    const infoSisaBulan =
+        document.getElementById(
+            "infoSisaBulan"
+        );
 
     const labelBulan =
         data.bulan ||
         "SAAT INI";
 
     const jumlah =
-    formatAngka(
-        data.jumlahSisaTotal !== undefined
-        ?
-        data.jumlahSisaTotal
-        :
-        data.jumlahBatang || 0
-    );
+        formatAngka(
+            data.jumlahSisaTotal !== undefined
+            ?
+            data.jumlahSisaTotal
+            :
+            data.jumlahBatang || 0
+        );
 
-const volume =
-    Number(
-        data.volumeSisaTotal !== undefined
-        ?
-        data.volumeSisaTotal
-        :
-        data.volume || 0
-    ).toFixed(3);
+    const volume =
+        Number(
+            data.volumeSisaTotal !== undefined
+            ?
+            data.volumeSisaTotal
+            :
+            data.volume || 0
+        ).toFixed(3);
 
-    infoSisaBulan.textContent =
-        "SISA " +
-        labelBulan +
-        " : " +
-        jumlah +
-        " BTG • " +
-        volume +
-        " m³";
-}
-   if(
-    modeSisa &&
-    data.bulan !== "SAAT INI"
-){
 
-    const infoPerbandingan =
-    "OLAH : " +
-    formatAngka(
-        data.jumlahOlah || 0
-    ) +
-    " BTG • " +
-    Number(
-        data.volumeOlah || 0
-    ).toFixed(3) +
-    " m³" +
-    " | SISA SAAT INI : " +
-    formatAngka(
-        data.jumlahSisaSaatIni || 0
-    ) +
-    " BTG • " +
-    Number(
-        data.volumeSisaSaatIni || 0
-    ).toFixed(3) +
-    " m³";
+    if(infoSisaBulan){
 
-infoSisaBulan.innerHTML =
-    "SISA " +
-    labelBulan +
-    " : " +
-    jumlah +
-    " BTG • " +
-    volume +
-    " m³" +
-    "<br>" +
-    infoPerbandingan;
-}
+        infoSisaBulan.innerHTML =
+            "SISA " +
+            labelBulan +
+            " : " +
+            jumlah +
+            " BTG • " +
+            volume +
+            " m³";
+
+
+        if(
+            modeSisa &&
+            data.bulan !== "SAAT INI"
+        ){
+
+            const infoPerbandingan =
+                "OLAH : " +
+                formatAngka(
+                    data.jumlahOlah || 0
+                ) +
+                " BTG • " +
+                Number(
+                    data.volumeOlah || 0
+                ).toFixed(3) +
+                " m³" +
+                " | SISA SAAT INI : " +
+                formatAngka(
+                    data.jumlahSisaSaatIni || 0
+                ) +
+                " BTG • " +
+                Number(
+                    data.volumeSisaSaatIni || 0
+                ).toFixed(3) +
+                " m³";
+
+
+            infoSisaBulan.innerHTML +=
+                "<br>" +
+                infoPerbandingan;
+
+        }
+
+    }
+
+
     currentStackId =
         data.stackId ||
         (
@@ -2865,8 +2866,7 @@ infoSisaBulan.innerHTML =
             "|" +
             currentTumpuk
         );
-
-
+   
     if(data.tpk !== undefined){
 
         currentTPK =
