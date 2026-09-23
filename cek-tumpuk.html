@@ -1042,7 +1042,7 @@ body{
 >
     <select
         id="bulanSisa"
-        onchange="ambilDataTumpuk(true, this.value)"
+        onchange="bulanSisaAktif = this.value; ambilDataTumpuk(true)"
         style="
             width:100%;
             padding:10px;
@@ -1265,6 +1265,7 @@ let currentTPK = "";
 let currentTumpuk = "";
 let currentStackId = "";
 let currentRegisters = [];
+let bulanSisaAktif = "";
 
 
 /* =====================================================
@@ -2520,7 +2521,7 @@ function prosesKodeTumpuk(
 
 function ambilDataTumpuk(
     tampilkanLoading = true,
-    bulan = ""
+     bulan = bulanSisaAktif
 ){
 
     if(tampilkanLoading){
@@ -5049,7 +5050,11 @@ function kembaliScan(){
     currentTumpuk = "";
     currentStackId = "";
     currentRegisters = [];
+   bulanSisaAktif = "";
 
+   document
+    .getElementById("bulanSisa")
+    .value = "";
 
     sedangProses =
         false;
