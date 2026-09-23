@@ -2340,54 +2340,94 @@ function prosesKodeTumpuk(
     kode =
         String(kode || "")
         .trim();
-console.log("HASIL SCAN TUMPUK:", kode);
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    const urlTPK =
-        params.get("tpk");
+    console.log(
+        "HASIL SCAN TUMPUK:",
+        kode
+    );
 
 
-    const urlTumpuk =
-        params.get("tumpuk");
-
+    /* ================================================
+       FORMAT LINK QR TUMPUK
+    ================================================ */
 
     if(
-        urlTumpuk
+        kode.indexOf(
+            "cek-tumpuk.html?"
+        ) !== -1
     ){
 
-        currentTumpuk =
-            String(urlTumpuk);
+        try{
+
+            const url =
+                new URL(kode);
 
 
-        if(
-            String(currentTumpuk) === "29"
-        ){
+            const urlTPK =
+                url.searchParams.get(
+                    "tpk"
+                );
 
-            currentTPK =
-                "";
 
-            currentStackId =
-                "TUMPUK|29";
+            const urlTumpuk =
+                url.searchParams.get(
+                    "tumpuk"
+                );
+
+
+            if(
+                urlTumpuk
+            ){
+
+                currentTPK =
+                    urlTPK
+                    ?
+                    String(urlTPK).trim()
+                    :
+                    "";
+
+
+                currentTumpuk =
+                    String(
+                        urlTumpuk
+                    ).trim();
+
+
+                if(
+                    currentTumpuk === "29"
+                ){
+
+                    currentTPK =
+                        "";
+
+                    currentStackId =
+                        "TUMPUK|29";
+
+                }
+                else{
+
+                    currentStackId =
+                        currentTPK +
+                        "|" +
+                        currentTumpuk;
+
+                }
+
+
+                ambilDataTumpuk();
+
+
+                return;
+
+            }
 
         }
-        else{
+        catch(error){
 
-            currentTPK =
-                urlTPK
-                ?
-                String(urlTPK)
-                :
-                "";
-
-            currentStackId =
-                currentTPK +
-                "|" +
-                currentTumpuk;
+            console.error(
+                "LINK TUMPUK TIDAK VALID:",
+                error
+            );
 
         }
 
@@ -2484,9 +2524,9 @@ console.log("HASIL SCAN TUMPUK:", kode);
         !currentTumpuk
     ){
 
-       showError(
-    "KODE TERBACA: " + kode
-);
+        showError(
+            "Kode TUMPUK tidak valid."
+        );
 
 
         sedangProses =
@@ -2524,13 +2564,12 @@ console.log("HASIL SCAN TUMPUK:", kode);
 
 
     /* =================================================
-       7. AMBIL DATA
+       AMBIL DATA
     ================================================= */
 
     ambilDataTumpuk();
 
 }
-
 
 /* =====================================================
    AMBIL DATA TUMPUK
