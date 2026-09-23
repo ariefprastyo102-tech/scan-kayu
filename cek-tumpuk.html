@@ -2231,32 +2231,7 @@ function cariTumpukDenganNomor(
 
 const url =
     API_URL +
-    "?action=" +
-    (
-        bulanSisaAktif
-        ?
-        "sisa"
-        :
-        "getTumpukList"
-    ) +
-    (
-        bulanSisaAktif
-        ?
-        "&tpk=" +
-        encodeURIComponent(
-            currentTPK
-        ) +
-        "&tumpuk=" +
-        encodeURIComponent(
-            nomor
-        ) +
-        "&bulan=" +
-        encodeURIComponent(
-            bulanSisaAktif
-        )
-        :
-        ""
-    ) +
+    "?action=getTumpukList" +
     "&callback=" +
     callbackName +
     "&_=" +
