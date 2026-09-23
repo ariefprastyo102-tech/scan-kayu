@@ -588,6 +588,11 @@ function ambilDatabase(){
                     String(
                         item.tumpuk || ""
                     ).trim();
+                
+                const m3 =
+    String(
+        item.m3 || ""
+    ).trim();
 
                 /*
                    Baca TPK dari API.
@@ -618,19 +623,21 @@ function ambilDatabase(){
 
                 database.push({
 
-                    register:register,
+    register:register,
 
-                    panjang:panjang,
+    panjang:panjang,
 
-                    diameter:diameter,
+    diameter:diameter,
 
-                    tumpuk:tumpuk,
+    m3:m3,
 
-                    tpk:kodeTPKItem,
+    tumpuk:tumpuk,
 
-                    dipilih:true
+    tpk:kodeTPKItem,
 
-                });
+    dipilih:true
+
+});
 
             });
 
