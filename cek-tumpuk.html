@@ -544,6 +544,14 @@ body{
     white-space:nowrap;
 }
 
+.btn-detail.detail-button-olah{
+    background:#dc2626;
+}
+
+.btn-detail.detail-button-persediaan{
+    background:#2563eb;
+}   
+   
 .btn-detail:active{
     transform:scale(.96);
 }
@@ -566,36 +574,28 @@ body{
 
 .detail-register-row{
     display:flex;
-    gap:6px;
-    padding:2px 0;
+    gap:10px;
+    padding:3px 0;
+    align-items:center;
 }
 
 .detail-register-label{
-    width:90px;
+    width:105px;
     flex-shrink:0;
-    font-weight:800;
-    color:#475569;
+    font-size:13px;
+    font-weight:700;
+    color:#64748b;
     display:flex;
     align-items:center;
 }
 
 .detail-register-value{
-    font-size:16px;
-    font-weight:900;
+    font-size:14px;
+    font-weight:600;
     color:#15803d;
     word-break:break-word;
+    line-height:1.4;
 }
-
-.detail-register-box.detail-olah
-.detail-register-value{
-    color:#dc2626;
-}
-
-.detail-register-box.detail-persediaan
-.detail-register-value{
-    color:#2563eb;
-} 
-
 /* =====================================================
    HISTORY
 ===================================================== */
@@ -3284,8 +3284,15 @@ function tampilkanRegister(
                 "button";
 
 
-            detailButton.className =
-                "btn-detail";
+           detailButton.className =
+    "btn-detail " +
+    (
+        statusOlah === "SUDAH DIOLAH"
+        ?
+        "detail-button-olah"
+        :
+        "detail-button-persediaan"
+    );
 
 
             detailButton.textContent =
@@ -3541,22 +3548,58 @@ function buatDetailRegister(
 
 buatBarisDetail(
     "TGL PENGOLAHAN",
-    ambilFieldDetail(
-        item,
-        [
-            "tglOlah",
-            "TGL OLAH",
-            "tglPengolahan",
-            "TGL PENGOLAHAN"
-        ]
+    formatTanggalPengolahan(
+        item
     )
 )
-
     );
 
 }
 
+function formatTanggalPengolahan(
+    item
+){
 
+    const nilai =
+        item &&
+        item.tglOlah !== undefined
+        ?
+        item.tglOlah
+        :
+        "";
+
+    if(!nilai){
+        return "-";
+    }
+
+    const tanggal =
+        new Date(
+            nilai
+        );
+
+    if(
+        isNaN(
+            tanggal.getTime()
+        )
+    ){
+        return String(
+            nilai
+        );
+    }
+
+    return (
+        String(
+            tanggal.getUTCDate()
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            tanggal.getUTCMonth() + 1
+        ).padStart(2,"0") +
+        "-" +
+        tanggal.getUTCFullYear()
+    );
+
+}
 /* =====================================================
    AMBIL FIELD DETAIL
 ===================================================== */
