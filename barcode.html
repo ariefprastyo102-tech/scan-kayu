@@ -11,8 +11,7 @@ content="width=device-width, initial-scale=1.0">
 
 <title>Barcode Kayu</title>
 
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 
 *{
@@ -269,31 +268,19 @@ button{
         display:block;
     }
 
-    .labelBarcode{
-
-        position:absolute;
-
-        left:11mm;
-
-        top:0.8mm;
-
-        width:48mm;
-
-        height:21mm;
-
-        overflow:hidden;
-    }
-
-    .labelBarcode svg{
-
-        display:block;
-
-        width:48mm !important;
-
-        height:21mm !important;
-
-    }
-
+   .labelBarcode{
+    position:absolute;
+    left:22.5mm;
+    top:0.8mm;
+    width:25mm;
+    height:25mm;
+    overflow:hidden;
+}
+.labelBarcode img{
+    display:block;
+    width:25mm !important;
+    height:25mm !important;
+}
     .angkaCetak{
 
         position:absolute;
@@ -768,15 +755,24 @@ item.appendChild(
     svg
 );
 
-JsBarcode(
-    svg,
-    data.register,
+new QRCode(
+    item,
     {
-        format:"CODE128",
-        width:1.8,
-        height:55,
-        displayValue:false,
-        margin:6
+        text:
+            data.register +
+            " " +
+            data.panjang +
+            "/" +
+            data.diameter +
+            " " +
+            data.tumpuk +
+            " " +
+            getKodeTPK(data.tpk),
+
+        width:160,
+        height:160,
+        correctLevel:
+            QRCode.CorrectLevel.H
     }
 );
 
@@ -1312,23 +1308,24 @@ function cetakF4(){
 barcodeBox.className =
     "labelBarcode";
 
-const svg =
-    document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "svg"
-    );
-
-barcodeBox.appendChild(svg);
-
-JsBarcode(
-    svg,
-    data.register,
+new QRCode(
+    barcodeBox,
     {
-        format:"CODE128",
-        width:1.8,
-        height:55,
-        displayValue:false,
-        margin:6
+        text:
+            data.register +
+            " " +
+            data.panjang +
+            "/" +
+            data.diameter +
+            " " +
+            data.tumpuk +
+            " " +
+            getKodeTPK(data.tpk),
+
+        width:160,
+        height:160,
+        correctLevel:
+            QRCode.CorrectLevel.H
     }
 );
 
