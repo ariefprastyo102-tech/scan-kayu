@@ -2171,15 +2171,14 @@ async function mulaiKamera() {
               return;
 
 
-            const kode =
-              String(
-                result.getText() ||
-                ""
-              ).trim();
+           const kode =
+  ambilRegisterDariQR(
+    result.getText()
+  );
 
 
-            if (!kode)
-              return;
+if (!kode)
+  return;
 
 
             sedangProses =
