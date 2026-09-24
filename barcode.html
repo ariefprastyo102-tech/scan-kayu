@@ -217,56 +217,55 @@ button{
         width:215.9mm;
     }
 
-    .lembar{
+   .lembar{
 
-        width:215.9mm;
-        height:330.2mm;
+    width:215.9mm;
+    height:330.2mm;
 
-        page-break-after:always;
-        page-break-inside:avoid;
+    page-break-after:always;
+    page-break-inside:avoid;
 
-        display:grid;
+    display:grid;
 
-       grid-template-columns:
-       52mm 52mm 52mm 52mm;
+    grid-template-columns:
+    53.5mm 53.5mm 53.5mm 53.5mm;
 
-grid-template-rows:
+    grid-template-rows:
     repeat(9,36mm);
 
-        column-gap:0;
+    column-gap:0;
+    row-gap:0;
 
-        row-gap:0;
+    padding-left:0;
+    padding-right:0;
 
-        padding-left:2.95mm;
-        padding-right:2.95mm;
+    padding-top:0;
+    padding-bottom:0;
 
-        padding-top:0;
-        padding-bottom:0;
+    box-sizing:border-box;
 
-        box-sizing:border-box;
+    overflow:hidden;
+}
 
-        overflow:hidden;
-    }
+.lembar:last-child{
+    page-break-after:auto;
+}
 
-    .lembar:last-child{
-        page-break-after:auto;
-    }
+.labelCetak{
 
-    .labelCetak{
+    width:53.5mm;
+    height:36mm;
 
-  width:52mm;
-height:36mm;
+    border:0.25mm solid black;
 
-        border:0.25mm solid black;
+    background:white;
 
-        background:white;
+    position:relative;
 
-        position:relative;
+    overflow:hidden;
 
-        overflow:hidden;
-
-        display:block;
-    }
+    display:block;
+}
     .labelBarcode{
     position:absolute;
     left:3mm;
