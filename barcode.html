@@ -774,75 +774,34 @@ new QRCode(
 );
 
             const info =
-                document.createElement(
-                    "div"
-                );
-
-            info.className =
-                "info";
-
-            const register =
-                document.createElement(
-                    "span"
-                );
-
-            register.textContent =
-                data.register;
-
-            const ukuran =
-                document.createElement(
-                    "span"
-                );
-
-            ukuran.textContent =
-                data.panjang +
-                "/" +
-                data.diameter;
-
-            const tumpuk =
     document.createElement(
-        "span"
+        "div"
     );
 
-tumpuk.textContent =
-    data.tumpuk;
+info.className =
+    "info";
 
-const tpk =
-    document.createElement(
-        "span"
+const kode =
+    getKodeTPK(
+        data.tpk
     );
 
-tpk.textContent =
-    getKodeTPK(data.tpk);
+info.innerHTML =
+    data.register +
+    "<br>" +
+    data.panjang +
+    "/" +
+    data.diameter +
+    "<br>" +
+    data.m3 +
+    "<br>" +
+    "TP " + data.tumpuk +
+    "<br>" +
+    kode;
 
-info.appendChild(
-    register
+item.appendChild(
+    info
 );
-
-info.appendChild(
-    ukuran
-);
-
-info.appendChild(
-    tumpuk
-);
-
-info.appendChild(
-    tpk
-);
-
-            item.appendChild(
-                info
-            );
-
-            grid.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
 
 
 /* =====================================================
