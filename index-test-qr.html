@@ -953,6 +953,25 @@ body {
 </div>
 
 <script>
+
+function ambilRegisterDariQR(teks){
+
+    teks = String(teks || "").trim();
+
+    try {
+        const url = new URL(teks);
+
+        const register =
+            url.searchParams.get("register");
+
+        if(register){
+            return register.trim();
+        }
+
+    } catch(e) {}
+
+    return teks;
+}
   
 /* =====================================================
    API
