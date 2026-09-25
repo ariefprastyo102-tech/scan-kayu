@@ -2572,8 +2572,9 @@ function prosesKodeTumpuk(
 }
 
 /* =====================================================
-   AMBIL DATA TUMPUK — VERSI LEBIH CEPAT
-   HANYA OPTIMASI PROSES REQUEST
+   AMBIL DATA TUMPUK
+   OPTIMASI REQUEST SAJA
+   FUNGSI SCAN TIDAK DIUBAH
 ===================================================== */
 
 function ambilDataTumpuk(
@@ -2597,6 +2598,7 @@ function ambilDataTumpuk(
     window[callbackName] =
         function(response){
 
+            // Cegah callback ganda
             if(selesai){
                 return;
             }
@@ -2635,7 +2637,9 @@ function ambilDataTumpuk(
                         "Backend tidak mengembalikan data TUMPUK."
                     );
 
-                    sedangProses = false;
+
+                    sedangProses =
+                        false;
 
                     return;
                 }
@@ -2650,32 +2654,39 @@ function ambilDataTumpuk(
                         "Format data TUMPUK tidak sesuai."
                     );
 
-                    sedangProses = false;
+
+                    sedangProses =
+                        false;
 
                     return;
                 }
 
 
                 /*
-                 * LANGSUNG TAMPILKAN DATA
-                 * Tidak ada proses tambahan di sini.
+                 * TETAP SAMA
+                 * HASIL REQUEST LANGSUNG KE FUNGSI LAMA
                  */
                 tampilkanData(
                     response.data
                 );
 
-                sedangProses = false;
+
+                sedangProses =
+                    false;
 
             }
             catch(error){
 
                 console.error(error);
 
+
                 showError(
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
-                sedangProses = false;
+
+                sedangProses =
+                    false;
 
             }
             finally{
@@ -2689,6 +2700,7 @@ function ambilDataTumpuk(
                     timeoutId = null;
 
                 }
+
 
                 cleanupJSONP(
                     callbackName,
@@ -2710,7 +2722,7 @@ function ambilDataTumpuk(
 
 
     /*
-     * URL TETAP SAMA
+     * PARAMETER TETAP SAMA
      */
     const url =
         API_URL +
@@ -2733,7 +2745,9 @@ function ambilDataTumpuk(
                 : ""
         ) +
         "&callback=" +
-        callbackName;
+        callbackName +
+        "&_=" +
+        Date.now();
 
 
     console.log(
@@ -2745,16 +2759,18 @@ function ambilDataTumpuk(
 
 
     /*
-     * BUAT SCRIPT SEKALI
+     * SCRIPT JSONP
      */
     script =
         document.createElement(
             "script"
         );
 
-    script.src = url;
+    script.src =
+        url;
 
-    script.async = true;
+    script.async =
+        true;
 
 
     script.onerror =
@@ -2766,6 +2782,7 @@ function ambilDataTumpuk(
 
             selesai = true;
 
+
             if(timeoutId){
 
                 clearTimeout(
@@ -2776,13 +2793,18 @@ function ambilDataTumpuk(
 
             }
 
+
             hideLoading();
+
 
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
 
-            sedangProses = false;
+
+            sedangProses =
+                false;
+
 
             cleanupJSONP(
                 callbackName,
@@ -2793,7 +2815,7 @@ function ambilDataTumpuk(
 
 
     /*
-     * LANGSUNG KIRIM REQUEST
+     * REQUEST LANGSUNG
      */
     document.body.appendChild(
         script
@@ -2801,7 +2823,7 @@ function ambilDataTumpuk(
 
 
     /*
-     * TIMEOUT DIPERKECIL
+     * TIMEOUT 10 DETIK
      * Tidak mengubah fungsi normal.
      */
     timeoutId =
@@ -2814,18 +2836,23 @@ function ambilDataTumpuk(
 
                 selesai = true;
 
+
                 cleanupJSONP(
                     callbackName,
                     script
                 );
 
+
                 hideLoading();
+
 
                 showError(
                     "Waktu koneksi habis. Coba lagi."
                 );
 
-                sedangProses = false;
+
+                sedangProses =
+                    false;
 
             },
             10000
