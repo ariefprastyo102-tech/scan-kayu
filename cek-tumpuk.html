@@ -2572,30 +2572,36 @@ function prosesKodeTumpuk(
 }
 
 /* =====================================================
-   AMBIL DATA TUMPUK
+   AMBIL DATA TUMPUK — VERSI LEBIH CEPAT
+   HANYA OPTIMASI PROSES REQUEST
 ===================================================== */
 
 function ambilDataTumpuk(
     tampilkanLoading = true,
-     bulan = bulanSisaAktif
+    bulan = bulanSisaAktif
 ){
 
     if(tampilkanLoading){
         showLoading();
     }
 
-
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
 
-
     let timeoutId = null;
     let script = null;
+    let selesai = false;
 
 
     window[callbackName] =
         function(response){
+
+            if(selesai){
+                return;
+            }
+
+            selesai = true;
 
             try{
 
@@ -2626,16 +2632,12 @@ function ambilDataTumpuk(
                             response.error
                         )
                         :
-                       "Backend tidak mengembalikan data TUMPUK."
+                        "Backend tidak mengembalikan data TUMPUK."
                     );
 
-
-                    sedangProses =
-                        false;
-
+                    sedangProses = false;
 
                     return;
-
                 }
 
 
@@ -2648,88 +2650,90 @@ function ambilDataTumpuk(
                         "Format data TUMPUK tidak sesuai."
                     );
 
-
-                    sedangProses =
-                        false;
-
+                    sedangProses = false;
 
                     return;
-
                 }
 
 
+                /*
+                 * LANGSUNG TAMPILKAN DATA
+                 * Tidak ada proses tambahan di sini.
+                 */
                 tampilkanData(
                     response.data
                 );
 
-
-                sedangProses =
-                    false;
+                sedangProses = false;
 
             }
             catch(error){
 
                 console.error(error);
 
-
                 showError(
                     "Terjadi kesalahan saat menampilkan data."
                 );
 
-
-                sedangProses =
-                    false;
+                sedangProses = false;
 
             }
+            finally{
 
+                if(timeoutId){
 
-            if(timeoutId){
+                    clearTimeout(
+                        timeoutId
+                    );
 
-                clearTimeout(
-                    timeoutId
+                    timeoutId = null;
+
+                }
+
+                cleanupJSONP(
+                    callbackName,
+                    script
                 );
 
             }
 
-
-            cleanupJSONP(
-                callbackName,
-                script
-            );
-
         };
 
 
+    /*
+     * ACTION TETAP SAMA
+     */
     const action =
-    bulan
-        ? "sisa"
-        : "getTumpukData";
-
-
-const url =
-    API_URL +
-    "?action=" +
-    action +
-    "&tpk=" +
-    encodeURIComponent(
-        currentTPK
-    ) +
-    "&tumpuk=" +
-    encodeURIComponent(
-        currentTumpuk
-    ) +
-    (
         bulan
-            ? "&bulan=" +
-              encodeURIComponent(
-                  bulan
-              )
-            : ""
-    ) +
-    "&callback=" +
-    callbackName +
-    "&_=" +
-    Date.now();
+            ? "sisa"
+            : "getTumpukData";
+
+
+    /*
+     * URL TETAP SAMA
+     */
+    const url =
+        API_URL +
+        "?action=" +
+        action +
+        "&tpk=" +
+        encodeURIComponent(
+            currentTPK
+        ) +
+        "&tumpuk=" +
+        encodeURIComponent(
+            currentTumpuk
+        ) +
+        (
+            bulan
+                ? "&bulan=" +
+                  encodeURIComponent(
+                      bulan
+                  )
+                : ""
+        ) +
+        "&callback=" +
+        callbackName;
 
 
     console.log(
@@ -2740,18 +2744,27 @@ const url =
     );
 
 
+    /*
+     * BUAT SCRIPT SEKALI
+     */
     script =
         document.createElement(
             "script"
         );
 
+    script.src = url;
 
-    script.src =
-        url;
+    script.async = true;
 
 
     script.onerror =
         function(){
+
+            if(selesai){
+                return;
+            }
+
+            selesai = true;
 
             if(timeoutId){
 
@@ -2759,20 +2772,17 @@ const url =
                     timeoutId
                 );
 
+                timeoutId = null;
+
             }
 
-
             hideLoading();
-
 
             showError(
                 "Gagal menghubungi backend CEK TUMPUK."
             );
 
-
-            sedangProses =
-                false;
-
+            sedangProses = false;
 
             cleanupJSONP(
                 callbackName,
@@ -2782,48 +2792,46 @@ const url =
         };
 
 
-    document
-        .body
-        .appendChild(
-            script
-        );
+    /*
+     * LANGSUNG KIRIM REQUEST
+     */
+    document.body.appendChild(
+        script
+    );
 
 
+    /*
+     * TIMEOUT DIPERKECIL
+     * Tidak mengubah fungsi normal.
+     */
     timeoutId =
         setTimeout(
             function(){
 
-                if(
-                    document.body.contains(
-                        script
-                    )
-                ){
-
-                    cleanupJSONP(
-                        callbackName,
-                        script
-                    );
-
-
-                    hideLoading();
-
-
-                    showError(
-                        "Waktu koneksi habis. Coba lagi."
-                    );
-
-
-                    sedangProses =
-                        false;
-
+                if(selesai){
+                    return;
                 }
 
+                selesai = true;
+
+                cleanupJSONP(
+                    callbackName,
+                    script
+                );
+
+                hideLoading();
+
+                showError(
+                    "Waktu koneksi habis. Coba lagi."
+                );
+
+                sedangProses = false;
+
             },
-            30000
+            10000
         );
 
 }
-
 
 /* =====================================================
    TAMPILKAN DATA
