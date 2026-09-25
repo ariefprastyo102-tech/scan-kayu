@@ -1577,45 +1577,89 @@ async function mulaiScanner(){
 
 }
 
-
 /* =====================================================
    TUTUP KAMERA
+   PERBAIKAN AGAR BISA SCAN BERULANG
 ===================================================== */
 
 function tutupKamera(){
 
     try{
 
-        if(
-            scannerControls
-        ){
+        /*
+         * HENTIKAN CONTROL ZXING
+         */
+        if(scannerControls){
 
-            scannerControls.stop();
+            try{
+
+                scannerControls.stop();
+
+            }
+            catch(error){
+
+                console.log(
+                    "Stop scanner:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+         * RESET READER ZXING
+         * Supaya instance lama tidak mengunci kamera.
+         */
+        if(scannerReader){
+
+            try{
+
+                if(
+                    typeof scannerReader.reset ===
+                    "function"
+                ){
+
+                    scannerReader.reset();
+
+                }
+
+            }
+            catch(error){
+
+                console.log(
+                    "Reset scanner:",
+                    error
+                );
+
+            }
 
         }
 
     }
     catch(error){
 
-        console.log(error);
+        console.log(
+            "Tutup scanner:",
+            error
+        );
 
     }
 
 
-    scannerControls =
-        null;
-
-
-    scannerReader =
-        null;
-
-
+    /*
+     * AMBIL VIDEO
+     */
     const video =
         document.getElementById(
             "video"
         );
 
 
+    /*
+     * MATIKAN SEMUA TRACK KAMERA
+     */
     if(video){
 
         try{
@@ -1626,24 +1670,47 @@ function tutupKamera(){
 
             if(stream){
 
-                stream
-                    .getTracks()
-                    .forEach(
-                        function(track){
+                const tracks =
+                    stream.getTracks();
+
+
+                tracks.forEach(
+                    function(track){
+
+                        try{
 
                             track.stop();
 
                         }
-                    );
+                        catch(error){
+
+                            console.log(
+                                "Stop track:",
+                                error
+                            );
+
+                        }
+
+                    }
+                );
 
             }
 
         }
         catch(error){
 
-            console.log(error);
+            console.log(
+                "Stop video stream:",
+                error
+            );
 
         }
+
+
+        /*
+         * LEPAS STREAM DARI VIDEO
+         */
+        video.pause();
 
 
         video.srcObject =
@@ -1652,44 +1719,81 @@ function tutupKamera(){
     }
 
 
+    /*
+     * HAPUS INSTANCE LAMA
+     */
+    scannerControls =
+        null;
+
+
+    scannerReader =
+        null;
+
+
     kameraAktif =
         false;
 
 
-    document
-        .getElementById(
+    /*
+     * SEMBUNYIKAN CAMERA SECTION
+     */
+    const cameraSection =
+        document.getElementById(
             "cameraSection"
-        )
-        .style.display =
-        "none";
+        );
 
 
+    if(cameraSection){
+
+        cameraSection.style.display =
+            "none";
+
+    }
+
+
+    /*
+     * KEMBALIKAN TOMBOL
+     */
     const button =
         document.getElementById(
             "cameraToggleBtn"
         );
 
 
-    button.textContent =
-        "📷 BUKA KAMERA";
+    if(button){
+
+        button.textContent =
+            "📷 BUKA KAMERA";
 
 
-    button.classList.remove(
-        "close"
-    );
+        button.classList.remove(
+            "close"
+        );
+
+    }
 
 
+    /*
+     * STATUS
+     */
     if(!sedangProses){
 
-        document
-            .getElementById("scanStatus")
-            .textContent =
-            "Kamera ditutup. Ketik nomor TUMPUK atau buka kamera untuk scan.";
+        const scanStatus =
+            document.getElementById(
+                "scanStatus"
+            );
+
+
+        if(scanStatus){
+
+            scanStatus.textContent =
+                "Kamera ditutup. Ketik nomor TUMPUK atau buka kamera untuk scan.";
+
+        }
 
     }
 
 }
-
 
 /* =====================================================
    INDIKATOR HIJAU
