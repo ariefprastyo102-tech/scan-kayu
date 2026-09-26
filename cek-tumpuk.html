@@ -3024,18 +3024,12 @@ function tampilkanData(
             data.bulan !== "SAAT INI"
         ){
 
-           let infoPerbandingan =
+     let infoPerbandingan =
     "DIOLAH SETELAH " +
     String(data.bulan).toUpperCase() +
     " : " +
     formatAngka(
         data.jumlahOlah || 0
-    ) +
-    " BATANG" +
-    "<br>" +
-    "SISA SAAT INI : " +
-    formatAngka(
-        data.jumlahSisaSaatIni || 0
     ) +
     " BATANG";
 
@@ -3055,6 +3049,17 @@ if (
             data.jumlahTambahan
         ) +
         " BATANG";
+
+}
+
+
+infoPerbandingan +=
+    "<br>" +
+    "SISA SAAT INI : " +
+    formatAngka(
+        data.jumlahSisaSaatIni || 0
+    ) +
+    " BATANG";
 
 }
            
