@@ -227,11 +227,11 @@ button{
 
     display:grid;
 
-    grid-template-columns:
-    53.5mm 53.5mm 53.5mm 53.5mm;
+  grid-template-columns:
+70mm 70mm 70mm;
 
-    grid-template-rows:
-    repeat(9,36mm);
+grid-template-rows:
+repeat(11,30mm);
 
     column-gap:0;
     row-gap:0;
@@ -251,9 +251,8 @@ button{
 }
 
 .labelCetak{
-
-    width:53.5mm;
-    height:36mm;
+    width:70mm;
+    height:30mm;
 
     box-sizing:border-box;
 
@@ -267,28 +266,27 @@ button{
 
     display:block;
 }
-    .labelBarcode{
+ .labelBarcode{
     position:absolute;
     left:5mm;
-    top:5.5mm;
-    width:25mm;
-    height:25mm;
+    top:0mm;
+    width:30mm;
+    height:30mm;
     border:none;
 }
 
 .labelBarcode img{
     display:block;
-    width:25mm !important;
-    height:25mm !important;
+    width:30mm !important;
+    height:30mm !important;
 }
-   .angkaCetak{
-
+  .angkaCetak{
     position:absolute;
 
-left:32.5mm;
-top:7mm;
-width:19mm;
-height:22mm;
+    left:37mm;
+    top:2mm;
+    width:30mm;
+    height:26mm;
 
     display:flex;
 
@@ -1265,8 +1263,7 @@ function cetakF4(){
 
     area.innerHTML="";
 
-    const PER_LEMBAR =
-        36;
+    const PER_LEMBAR = 33;
 
     for(
         let awal=0;
