@@ -3022,25 +3022,18 @@ function tampilkanData(
         ){
 
             const infoPerbandingan =
-                "OLAH : " +
-                formatAngka(
-                    data.jumlahOlah || 0
-                ) +
-                " BTG • " +
-                Number(
-                    data.volumeOlah || 0
-                ).toFixed(3) +
-                " m³" +
-                " | SISA SAAT INI : " +
-                formatAngka(
-                    data.jumlahSisaSaatIni || 0
-                ) +
-                " BTG • " +
-                Number(
-                    data.volumeSisaSaatIni || 0
-                ).toFixed(3) +
-                " m³";
-
+    "DIOLAH SETELAH " +
+    String(data.bulan).toUpperCase() +
+    " : " +
+    formatAngka(
+        data.jumlahOlah || 0
+    ) +
+    " BATANG" +
+    " | MASIH ADA SAAT INI : " +
+    formatAngka(
+        data.jumlahSisaSaatIni || 0
+    ) +
+    " BATANG";
 
             infoSisaBulan.innerHTML +=
                 "<br>" +
