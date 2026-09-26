@@ -3855,18 +3855,14 @@ function formatTanggalPengolahan(
     }
 
     const tanggal =
-        new Date(
-            nilai
-        );
+        new Date(nilai);
 
     if(
         isNaN(
             tanggal.getTime()
         )
     ){
-        return String(
-            nilai
-        );
+        return String(nilai);
     }
 
     return (
