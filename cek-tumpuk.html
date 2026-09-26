@@ -3021,7 +3021,7 @@ function tampilkanData(
             data.bulan !== "SAAT INI"
         ){
 
-            const infoPerbandingan =
+           const infoPerbandingan =
     "DIOLAH SETELAH " +
     String(data.bulan).toUpperCase() +
     " : " +
@@ -3029,12 +3029,12 @@ function tampilkanData(
         data.jumlahOlah || 0
     ) +
     " BATANG" +
-    " | MASIH ADA SAAT INI : " +
+    "<br>" +
+    "SISA SAAT INI : " +
     formatAngka(
         data.jumlahSisaSaatIni || 0
     ) +
     " BATANG";
-
             infoSisaBulan.innerHTML +=
                 "<br>" +
                 infoPerbandingan;
