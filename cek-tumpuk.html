@@ -2692,7 +2692,7 @@ function ambilDataTumpuk(
     if(tampilkanLoading){
         showLoading();
     }
-
+   console.time("WAKTU LOAD TUMPUK");
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
@@ -2714,7 +2714,9 @@ function ambilDataTumpuk(
 
             try{
 
-                hideLoading();
+    hideLoading();
+
+    console.timeEnd("WAKTU LOAD TUMPUK");
 
 
                 const berhasil =
