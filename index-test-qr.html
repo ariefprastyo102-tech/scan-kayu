@@ -13,750 +13,1036 @@ content="width=device-width, initial-scale=1.0">
 <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
-
-* {
-  box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f6f4;
-  margin: 0;
-  padding: 15px;
-  color: #222;
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    overflow-x:hidden;
 }
 
-/* ==============================
+body{
+    font-family:Arial,sans-serif;
+    background:#eef3f0;
+    color:#202923;
+    padding:10px;
+    padding-bottom:82px;
+}
+
+/* =====================================================
    HEADER
-============================== */
+===================================================== */
 
-.header {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto 15px;
-  background: white;
-  border-radius: 14px;
-  padding: 12px 15px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-  border-top: 4px solid #176b38;
+.header{
+    width:100%;
+    max-width:540px;
+    margin:0 auto 10px;
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:10px 14px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,.08);
+
+    border:1px solid #dbe5df;
+
+    overflow:hidden;
 }
 
-.headerIsi {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transform: translateX(-10px);
+.headerIsi{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:13px;
+
+    transform:none;
 }
 
-.logo {
-  width: 100px;
-  height: 90px;
-  object-fit: contain;
-  flex-shrink: 0;
+.logo{
+    width:76px;
+    height:68px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+    background:#fff;
+
+    border-radius:10px;
+
+    padding:2px;
 }
 
-.judulBox {
-  flex: 0 0 auto;
-  text-align: left;
+.judulBox{
+    min-width:0;
+
+    flex:1;
+
+    text-align:left;
 }
 
-.judul {
-  font-size: 22px;
-  font-weight: 800;
-  color: #176b38;
-  line-height: 1.2;
-  white-space: nowrap;
+.judul{
+    font-size:24px;
+
+    font-weight:900;
+
+    color:#176b38;
+
+    line-height:1.05;
+
+    white-space:nowrap;
+
+    letter-spacing:-.3px;
 }
 
-.subjudul {
-  font-size: 17px;
-  font-weight: bold;
-  color: #555;
-  letter-spacing: 1.5px;
-  margin-top: 6px;
-  white-space: nowrap;
+.subjudul{
+    font-size:11px;
+
+    font-weight:800;
+
+    color:#78857e;
+
+    letter-spacing:1.6px;
+
+    margin-top:6px;
+
+    white-space:nowrap;
 }
 
-/* ==============================
+/* =====================================================
    CAMERA
-============================== */
+===================================================== */
 
-.camera-card {
-  width: 100%;
-  max-width: 500px;
-  margin: auto;
-  background: white;
-  border-radius: 14px;
-  padding: 8px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+.camera-card{
+    width:100%;
+    max-width:540px;
+
+    margin:0 auto 10px;
+
+    background:#101513;
+
+    border-radius:18px;
+
+    padding:6px;
+
+    box-shadow:
+        0 7px 20px rgba(0,0,0,.18);
+
+    border:1px solid #26332c;
 }
 
-.camera-wrapper {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: black;
+.camera-wrapper{
+    position:relative;
+
+    width:100%;
+
+    height:310px;
+
+    border-radius:13px;
+
+    overflow:hidden;
+
+    background:#050807;
 }
 
-#video {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  display: block;
+#video{
+    width:100%;
+
+    height:310px;
+
+    object-fit:cover;
+
+    display:block;
 }
 
-/* ==============================
-   GARIS POJOK
-============================== */
+/* =====================================================
+   SCANNER FRAME
+===================================================== */
 
-.qr-frame {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 250px;
-  height: 250px;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 10;
+.qr-frame{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:230px;
+    height:230px;
+
+    transform:translate(-50%,-50%);
+
+    pointer-events:none;
+
+    z-index:10;
 }
 
-.corner {
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  border-color: #00e676;
-  border-style: solid;
+.corner{
+    position:absolute;
+
+    width:48px;
+    height:48px;
+
+    border-color:#00e676;
+
+    border-style:solid;
+
+    filter:
+        drop-shadow(0 0 5px rgba(0,230,118,.7));
 }
 
-.tl {
-  left: 0;
-  top: 0;
-  border-width: 5px 0 0 5px;
-  border-radius: 6px 0 0 0;
+.tl{
+    left:0;
+    top:0;
+
+    border-width:5px 0 0 5px;
+
+    border-radius:7px 0 0 0;
 }
 
-.tr {
-  right: 0;
-  top: 0;
-  border-width: 5px 5px 0 0;
-  border-radius: 0 6px 0 0;
+.tr{
+    right:0;
+    top:0;
+
+    border-width:5px 5px 0 0;
+
+    border-radius:0 7px 0 0;
 }
 
-.bl {
-  left: 0;
-  bottom: 0;
-  border-width: 0 0 5px 5px;
-  border-radius: 0 0 0 6px;
+.bl{
+    left:0;
+    bottom:0;
+
+    border-width:0 0 5px 5px;
+
+    border-radius:0 0 0 7px;
 }
 
-.br {
-  right: 0;
-  bottom: 0;
-  border-width: 0 5px 5px 0;
-  border-radius: 0 0 6px 0;
+.br{
+    right:0;
+    bottom:0;
+
+    border-width:0 5px 5px 0;
+
+    border-radius:0 0 7px 0;
 }
 
-/* ==============================
-   INDIKATOR BERHASIL
-============================== */
+/* =====================================================
+   SCAN BERHASIL
+===================================================== */
 
-#scanBerhasil {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 250px;
-  height: 250px;
-  transform: translate(-50%, -50%);
-  border: 6px solid #00e676;
-  border-radius: 12px;
-  display: none;
-  z-index: 20;
-  pointer-events: none;
-  box-shadow:
-    0 0 10px rgba(0,230,118,0.9),
-    0 0 25px rgba(0,230,118,0.8);
+#scanBerhasil{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:230px;
+    height:230px;
+
+    transform:translate(-50%,-50%);
+
+    border:5px solid #00e676;
+
+    border-radius:13px;
+
+    display:none;
+
+    z-index:20;
+
+    pointer-events:none;
+
+    box-shadow:
+        0 0 12px rgba(0,230,118,.9),
+        0 0 28px rgba(0,230,118,.65);
 }
 
-#scanBerhasil::after {
-  content: "✓";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #00c853;
-  color: white;
-  font-size: 40px;
-  font-weight: bold;
-  line-height: 60px;
-  text-align: center;
+#scanBerhasil::after{
+    content:"✓";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:58px;
+    height:58px;
+
+    border-radius:50%;
+
+    background:#00c853;
+
+    color:white;
+
+    font-size:38px;
+
+    font-weight:900;
+
+    line-height:58px;
+
+    text-align:center;
 }
 
-/* ==============================
-   BUTTON
-============================== */
+/* =====================================================
+   TOTAL + PENGAMBILAN
+===================================================== */
+
+.status-card{
+    width:100%;
+    max-width:540px;
+
+    margin:10px auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f2faf5
+        );
+
+    border:2px solid #176b38;
+
+    border-radius:18px;
+
+    padding:16px 12px;
+
+    text-align:center;
+
+    box-shadow:
+        0 6px 18px rgba(23,107,56,.12);
+}
+
+#jumlah{
+    margin:0;
+
+    display:flex;
+
+    align-items:baseline;
+
+    justify-content:center;
+
+    gap:8px;
+
+    white-space:nowrap;
+
+    color:#176b38;
+
+    line-height:1;
+}
+
+#jumlah .angkaTotal{
+    font-size:68px;
+
+    font-weight:900;
+
+    line-height:.9;
+
+    letter-spacing:-2px;
+}
+
+#jumlah .teksBatang{
+    font-size:22px;
+
+    font-weight:900;
+}
+
+.pengambilan-card{
+    width:100%;
+    max-width:540px;
+
+    margin:10px auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f1f7ff
+        );
+
+    border:2px solid #1976d2;
+
+    border-radius:18px;
+
+    padding:14px 12px;
+
+    text-align:center;
+
+    box-shadow:
+        0 6px 18px rgba(25,118,210,.10);
+}
+
+.pengambilanJudul{
+    font-size:10px;
+
+    font-weight:900;
+
+    color:#68756e;
+
+    letter-spacing:1px;
+
+    margin-bottom:6px;
+}
+
+#jumlahPengambilan{
+    font-size:54px;
+
+    font-weight:900;
+
+    color:#1976d2;
+
+    line-height:.95;
+
+    letter-spacing:-1px;
+}
+
+.teksPengambilan{
+    font-size:17px;
+
+    font-weight:900;
+
+    color:#1976d2;
+}
+
+#status{
+    margin-top:8px;
+
+    font-weight:800;
+
+    line-height:1.45;
+
+    font-size:13px;
+}
+
+/* =====================================================
+   ACTION BUTTON
+===================================================== */
 
 #btnScan,
-#btnScanBaru {
-  display: block;
-  width: 100%;
-  max-width: 500px;
-  margin: 15px auto;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
+#btnScanBaru,
+#btnLanjut{
+    display:block;
+
+    width:100%;
+    max-width:540px;
+
+    margin:8px auto;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:11px;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:
+        transform .12s ease,
+        box-shadow .12s ease;
 }
 
-#btnScan {
-  background: #1976d2;
-  box-shadow:
-    0 3px 8px rgba(25,118,210,0.25);
+#btnScan{
+    background:#1976d2;
+
+    box-shadow:
+        0 5px 12px rgba(25,118,210,.22);
 }
 
-#btnScanBaru {
-  background: #c62828;
-  box-shadow:
-    0 3px 8px rgba(198,40,40,0.20);
+#btnScanBaru{
+    background:#c62828;
+
+    box-shadow:
+        0 5px 12px rgba(198,40,40,.18);
+}
+
+#btnLanjut{
+    background:#176b38;
+
+    box-shadow:
+        0 5px 12px rgba(23,107,56,.22);
+
+    margin-bottom:12px;
 }
 
 #btnScan:active,
 #btnScanBaru:active,
-#btnLanjut:active {
-  transform: scale(0.98);
+#btnLanjut:active{
+    transform:scale(.98);
 }
 
-/* ==============================
-   TOMBOL LANJUT
-============================== */
+#btnLanjut:disabled{
+    background:#aeb7b2;
 
-#btnLanjut {
-  display: block;
-  width: 100%;
-  max-width: 500px;
-  margin: 10px auto 15px;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  background: #176b38;
-  color: white;
-  cursor: pointer;
-  box-shadow:
-    0 3px 8px rgba(23,107,56,0.25);
+    box-shadow:none;
+
+    cursor:not-allowed;
 }
 
-#btnLanjut:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-  box-shadow: none;
+/* =====================================================
+   HASIL REGISTER
+===================================================== */
+
+#daftar{
+    width:100%;
+    max-width:540px;
+
+    margin:12px auto;
 }
 
-/* ==============================
-   HISTORY FLOATING
-============================== */
+.item{
+    background:white;
 
-#btnHistory {
-  position: fixed;
-  right: 15px;
-  bottom: 15px;
-  width: auto;
-  min-width: 48px;
-  height: 48px;
-  padding: 0 14px;
-  margin: 0;
-  border: none;
-  border-radius: 24px;
-  background: #176b38;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.25);
+    margin-bottom:8px;
+
+    border-radius:13px;
+
+    padding:12px;
+
+    border:1px solid #dbe5df;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.055);
 }
 
-#btnHistory:active {
-  transform: scale(0.94);
-}
-#btnTumpuk {
-  position: fixed;
-  right: 15px;
-  bottom: 70px;
-  width: auto;
-  min-width: 48px;
-  height: 48px;
-  padding: 0 14px;
-  margin: 0;
-  border: none;
-  border-radius: 24px;
-  background: #8b5e00;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.25);
+.baris{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
 }
 
-#btnTumpuk:active {
-  transform: scale(0.94);
-}
-/* ==============================
-   TOTAL BATANG
-============================== */
+.nomor{
+    font-size:20px;
 
-.status-card {
-  position: sticky;
-  top: 8px;
-  z-index: 100;
-  width: 100%;
-  max-width: 500px;
-  margin: 10px auto;
-  background: white;
-  border-radius: 14px;
-  padding: 12px;
-  text-align: center;
-  border: 2px solid #176b38;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.15);
+    font-weight:900;
+
+    word-break:break-all;
+
+    color:#26332b;
 }
 
-#jumlah {
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8px;
-  white-space: nowrap;
-  color: #176b38;
-  line-height: 1;
+.detailBtn{
+    width:auto;
+
+    min-width:76px;
+
+    padding:8px 12px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#53625a;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    flex-shrink:0;
 }
 
-#jumlah .angkaTotal {
-  font-size: 56px;
-  font-weight: 900;
-  line-height: 1;
+.detail{
+    display:none;
+
+    margin-top:11px;
+
+    padding-top:10px;
+
+    border-top:1px solid #e1e8e4;
+
+    font-size:14px;
+
+    line-height:1.7;
 }
 
-#jumlah .teksBatang {
-  font-size: 25px;
-  font-weight: 800;
+.label{
+    display:inline-block;
+
+    width:115px;
+
+    font-weight:900;
+
+    color:#65726b;
 }
 
-/* ==============================
-   PENGAMBILAN SAAT INI
-============================== */
-
-.pengambilan-card {
-  width: 100%;
-  max-width: 500px;
-  margin: 10px auto;
-  background: white;
-  border-radius: 14px;
-  padding: 12px;
-  text-align: center;
-  border: 2px solid #1976d2;
-  box-shadow:
-    0 3px 10px rgba(0,0,0,0.10);
+.success{
+    color:#16833a;
 }
 
-.pengambilanJudul {
-  font-size: 14px;
-  font-weight: bold;
-  color: #555;
-  margin-bottom: 4px;
+.duplicate{
+    color:#d32f2f;
 }
 
-#jumlahPengambilan {
-  font-size: 44px;
-  font-weight: 900;
-  color: #1976d2;
-  line-height: 1;
+.notfound{
+    color:#e67e00;
 }
 
-.teksPengambilan {
-  font-size: 20px;
-  font-weight: 800;
-  color: #1976d2;
+.duplicateBtn{
+    background:#c62828;
 }
 
-#status {
-  margin-top: 7px;
-  font-weight: bold;
-  line-height: 1.5;
-  font-size: 14px;
+/* =====================================================
+   FLOATING BUTTON
+===================================================== */
+
+#btnHistory,
+#btnTumpuk{
+    position:fixed;
+
+    right:13px;
+
+    width:50px;
+    height:50px;
+
+    padding:0;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:50%;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    z-index:1000;
+
+    box-shadow:
+        0 5px 16px rgba(0,0,0,.22);
+
+    transition:
+        transform .12s ease;
 }
 
-/* ==============================
-   HASIL
-============================== */
+#btnHistory{
+    bottom:12px;
 
-#daftar {
-  width: 100%;
-  max-width: 500px;
-  margin: 15px auto;
+    background:#176b38;
 }
 
-.item {
-  background: white;
-  margin-bottom: 9px;
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
+#btnTumpuk{
+    bottom:70px;
+
+    background:#986600;
 }
 
-.baris {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+#btnHistory:active,
+#btnTumpuk:active{
+    transform:scale(.92);
 }
 
-.nomor {
-  font-size: 20px;
-  font-weight: bold;
-  word-break: break-all;
+/* =====================================================
+   TUMPUK PANEL
+===================================================== */
+
+#tumpukPanel{
+    display:none;
+
+    position:fixed;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:92%;
+    max-width:430px;
+
+    max-height:80vh;
+
+    overflow-y:auto;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    z-index:2000;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.30);
 }
 
-.detailBtn {
-  width: auto;
-  min-width: 80px;
-  padding: 8px 12px;
-  margin: 0;
-  background: #555;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  flex-shrink: 0;
+.tumpukItem{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px;
+
+    margin-bottom:8px;
+
+    border-radius:10px;
+
+    background:#f1f6f3;
+
+    border:1px solid #dce7e0;
 }
 
-.detail {
-  display: none;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-  font-size: 15px;
-  line-height: 1.7;
+.tumpukNama{
+    font-weight:900;
 }
 
-.success {
-  color: #16833a;
+.tumpukJumlah{
+    font-size:17px;
+
+    font-weight:900;
+
+    color:#176b38;
 }
 
-.duplicate {
-  color: #d32f2f;
+/* =====================================================
+   HISTORY
+===================================================== */
+
+#historyPanel{
+    display:none;
+
+    width:100%;
+    max-width:540px;
+
+    margin:12px auto;
 }
 
-.notfound {
-  color: #e67e00;
+.historyHeader{
+    background:white;
+
+    border-radius:14px;
+
+    padding:13px;
+
+    margin-bottom:9px;
+
+    border:1px solid #dbe5df;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.06);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
 }
 
-.duplicateBtn {
-  background: #c62828;
+.historyJudul{
+    font-size:20px;
+
+    font-weight:900;
+
+    color:#176b38;
 }
 
-.label {
-  display: inline-block;
-  width: 115px;
-  font-weight: bold;
+.tutupHistory{
+    border:none;
+
+    background:#53625a;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:8px;
+
+    font-weight:900;
+
+    cursor:pointer;
 }
 
-/* ==============================
-   HISTORY PANEL
-============================== */
+.historyItem{
+    background:white;
 
-#historyPanel {
-  display: none;
-  width: 100%;
-  max-width: 500px;
-  margin: 15px auto;
+    border-radius:13px;
+
+    margin-bottom:9px;
+
+    padding:13px;
+
+    border:1px solid #dbe5df;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.055);
 }
 
-#tumpukPanel {
-  display: none;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 420px;
-  max-height: 80vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  z-index: 2000;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+.historyTop{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
 }
 
-.tumpukItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-  background: #f2f2f2;
+.historyNomor{
+    font-size:17px;
+
+    font-weight:900;
+
+    color:#176b38;
 }
 
-.tumpukNama {
-  font-weight: bold;
+.historyTanggal{
+    margin-top:4px;
+
+    font-size:12px;
+
+    color:#748078;
 }
 
-.tumpukJumlah {
-  font-weight: bold;
+.historyJumlah{
+    color:#176b38;
+
+    font-size:29px;
+
+    font-weight:900;
+
+    white-space:nowrap;
 }
 
-.historyHeader {
-  background: white;
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 10px;
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.historyDetail{
+    display:none;
+
+    margin-top:11px;
+
+    padding-top:10px;
+
+    border-top:1px solid #e1e8e4;
 }
 
-.historyJudul {
-  font-size: 20px;
-  font-weight: bold;
-  color: #176b38;
+.historyRegister{
+    padding:8px 0;
+
+    border-bottom:1px solid #edf1ef;
+
+    font-weight:bold;
+
+    word-break:break-all;
 }
 
-.tutupHistory {
-  border: none;
-  background: #555;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
+.historyRegister.success{
+    color:#16833a;
 }
 
-/* ==============================
-   SATU SESI HISTORY
-============================== */
-
-.historyItem {
-  background: white;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  padding: 13px;
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.07);
+.historyRegister.duplicate{
+    color:#d32f2f;
 }
 
-.historyTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.historyRegister.notfound{
+    color:#e67e00;
 }
 
-.historyNomor {
-  font-size: 18px;
-  font-weight: 900;
-  color: #176b38;
+.btnHistoryDetail{
+    margin-top:9px;
+
+    border:none;
+
+    background:#176b38;
+
+    color:white;
+
+    padding:9px 12px;
+
+    border-radius:8px;
+
+    font-weight:900;
+
+    cursor:pointer;
 }
 
-.historyTanggal {
-  margin-top: 4px;
-  font-size: 14px;
-  color: #666;
+.btnHapusHistory{
+    width:100%;
+
+    margin-top:9px;
+
+    padding:11px;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#c62828;
+
+    color:white;
+
+    font-weight:900;
+
+    cursor:pointer;
 }
 
-.historyJumlah {
-  color: #176b38;
-  font-size: 27px;
-  font-weight: 900;
-  white-space: nowrap;
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:500px){
+
+    body{
+        padding:7px;
+
+        padding-bottom:78px;
+    }
+
+    .header{
+        border-radius:14px;
+
+        padding:9px 10px;
+    }
+
+    .headerIsi{
+        gap:9px;
+    }
+
+    .logo{
+        width:65px;
+        height:58px;
+    }
+
+    .judul{
+        font-size:19px;
+    }
+
+    .subjudul{
+        font-size:9px;
+
+        letter-spacing:1.1px;
+    }
+
+    .camera-card{
+        padding:5px;
+
+        border-radius:15px;
+    }
+
+    .camera-wrapper,
+    #video{
+        height:295px;
+    }
+
+    .qr-frame,
+    #scanBerhasil{
+        width:220px;
+        height:220px;
+    }
+
+    .status-card{
+        padding:14px 10px;
+    }
+
+    #jumlah .angkaTotal{
+        font-size:58px;
+    }
+
+    #jumlah .teksBatang{
+        font-size:20px;
+    }
+
+    .pengambilan-card{
+        padding:13px 10px;
+    }
+
+    #jumlahPengambilan{
+        font-size:47px;
+    }
+
+    #btnHistory,
+    #btnTumpuk{
+        width:47px;
+        height:47px;
+    }
+
+    #btnHistory{
+        bottom:9px;
+        right:9px;
+    }
+
+    #btnTumpuk{
+        bottom:64px;
+        right:9px;
+    }
 }
 
-.historyDetail {
-  display: none;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-}
-
-.historyRegister {
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  font-weight: bold;
-  word-break: break-all;
-}
-
-.historyRegister.success {
-  color: #16833a;
-}
-
-.historyRegister.duplicate {
-  color: #d32f2f;
-}
-
-.historyRegister.notfound {
-  color: #e67e00;
-}
-
-.btnHistoryDetail {
-  margin-top: 10px;
-  border: none;
-  background: #176b38;
-  color: white;
-  padding: 9px 12px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btnHapusHistory {
-  width: 100%;
-  margin-top: 10px;
-  padding: 11px;
-  border: none;
-  border-radius: 8px;
-  background: #c62828;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* ==============================
-   HP
-============================== */
-
-@media(max-width:500px) {
-
-  body {
-    padding: 10px;
-  }
-
-  .header {
-    padding: 10px 8px;
-  }
-
-  .headerIsi {
-    gap: 8px;
-    transform: translateX(-8px);
-  }
-
-  .logo {
-    width: 95px;
-    height: 85px;
-  }
-
-  .judul {
-    font-size: 22px;
-  }
-
-  .subjudul {
-    font-size: 17px;
-  }
-
-  .camera-wrapper,
-  #video {
-    height: 300px;
-  }
-
-  #jumlah .angkaTotal {
-    font-size: 52px;
-  }
-
-  #jumlah .teksBatang {
-    font-size: 23px;
-  }
-
-  #jumlahPengambilan {
-    font-size: 42px;
-  }
-
-  #btnHistory {
-    right: 12px;
-    bottom: 12px;
-    height: 46px;
-    min-width: 46px;
-    padding: 0 13px;
-    font-size: 14px;
-  }
-#btnTumpuk {
-  right: 12px;
-  bottom: 66px;
-  height: 46px;
-  min-width: 46px;
-  padding: 0 13px;
-  font-size: 14px;
-}
-}
-
-/* ==============================
+/* =====================================================
    HP KECIL
-============================== */
+===================================================== */
 
-@media(max-width:380px) {
+@media(max-width:380px){
 
-  .logo {
-    width: 85px;
-    height: 75px;
-  }
+    .header{
+        padding:8px;
+    }
 
-  .judul {
-    font-size: 20px;
-  }
+    .logo{
+        width:58px;
+        height:53px;
+    }
 
-  .subjudul {
-    font-size: 16px;
-  }
+    .judul{
+        font-size:17px;
+    }
 
-  .camera-wrapper,
-  #video {
-    height: 280px;
-  }
+    .subjudul{
+        font-size:8px;
+    }
 
-  .qr-frame,
-  #scanBerhasil {
-    width: 220px;
-    height: 220px;
-  }
+    .camera-wrapper,
+    #video{
+        height:275px;
+    }
 
-  #jumlah .angkaTotal {
-    font-size: 46px;
-  }
+    .qr-frame,
+    #scanBerhasil{
+        width:205px;
+        height:205px;
+    }
 
-  #jumlah .teksBatang {
-    font-size: 21px;
-  }
+    #jumlah .angkaTotal{
+        font-size:51px;
+    }
 
-  #jumlahPengambilan {
-    font-size: 38px;
-  }
+    #jumlah .teksBatang{
+        font-size:19px;
+    }
 
+    #jumlahPengambilan{
+        font-size:42px;
+    }
 }
-
-body {
-  padding-bottom: 80px;
-}
-
 </style>
-
+  
 </head>
 
 <body>
