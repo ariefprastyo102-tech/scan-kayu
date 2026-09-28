@@ -15,25 +15,29 @@ content="width=device-width, initial-scale=1.0">
 <style>
 
 /* =====================================================
-   DASAR
+   RESET & DASAR
 ===================================================== */
 
 *{
     box-sizing:border-box;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     margin:0;
-    background:#f1f5f9;
-    font-family:Arial, Helvetica, sans-serif;
-    color:#111827;
+    background:#f3f6f4;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#17221c;
 }
 
 .container{
     width:100%;
-    max-width:600px;
+    max-width:620px;
     margin:0 auto;
-    padding:16px;
+    padding:14px;
 }
 
 
@@ -42,99 +46,210 @@ body{
 ===================================================== */
 
 .header{
-    background:#ffffff;
-    border:1px solid #d1fae5;
-    border-top:5px solid #15803d;
-    border-bottom:5px solid #15803d;
-    border-radius:18px;
-    padding:12px 15px;
+    position:relative;
+
+    background:linear-gradient(
+        135deg,
+        #0d5c36,
+        #176b3a,
+        #23834d
+    );
+
+    color:white;
+
+    border:none;
+    border-radius:16px;
+
+    padding:14px 16px;
+
     display:flex;
     align-items:center;
     gap:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
+
+    box-shadow:
+        0 6px 18px rgba(20,80,45,.18);
 }
+
 .header img{
-    width:90px;
-    height:90px;
+    width:76px;
+    height:76px;
+
     object-fit:contain;
+
     flex-shrink:0;
+
+    background:white;
+
+    padding:6px;
+
+    border-radius:12px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
+
 .header h1{
     margin:0;
-    font-size:28px;
+
+    font-size:26px;
+
     font-weight:900;
-    color:#166534;
+
+    color:white;
+
+    letter-spacing:.2px;
 }
 
 .header .sub{
-    margin-top:3px;
-    font-size:14px;
-    font-weight:800;
-    color:#64748b;
+    margin-top:4px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:rgba(255,255,255,.78);
+
+    letter-spacing:.3px;
 }
 
 
 /* =====================================================
-   SCANNER
+   SCANNER CARD
 ===================================================== */
 
 .scanner-card{
-    background:#ffffff;
-    border-radius:16px;
-    padding:15px;
-    margin-top:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    background:white;
+
+    border:1px solid #e0e8e3;
+
+    border-radius:15px;
+
+    padding:16px;
+
+    margin-top:13px;
+
+    box-shadow:
+        0 4px 14px rgba(20,40,28,.06);
 }
 
 .section-title{
-    font-size:14px;
+    font-size:13px;
+
     font-weight:900;
-    color:#334155;
+
+    color:#34453b;
+
     margin-bottom:9px;
+
+    letter-spacing:.2px;
 }
 
 .manual-row{
     display:flex;
+
     gap:8px;
 }
 
 .manual-row input{
     flex:1;
+
     min-width:0;
-    padding:12px;
-    border:1px solid #cbd5e1;
+
+    padding:12px 13px;
+
+    border:1px solid #cbd8d0;
+
     border-radius:9px;
+
+    background:#fbfcfb;
+
+    color:#17221c;
+
     font-size:16px;
+
     outline:none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.manual-row input::placeholder{
+    color:#9aa8a0;
 }
 
 .manual-row input:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 2px rgba(37,99,235,.1);
+    background:white;
+
+    border-color:#176b3a;
+
+    box-shadow:
+        0 0 0 3px rgba(23,107,58,.10);
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 .btn{
     border:none;
+
     border-radius:9px;
-    padding:11px 14px;
+
+    padding:11px 15px;
+
     font-weight:800;
+
     cursor:pointer;
+
+    transition:
+        transform .12s ease,
+        box-shadow .15s ease,
+        opacity .15s ease;
+}
+
+.btn:active{
+    transform:scale(.97);
 }
 
 .btn-search{
-    background:#2563eb;
+    background:#176b3a;
+
     color:white;
+
+    box-shadow:
+        0 3px 8px rgba(23,107,58,.20);
+}
+
+.btn-search:hover{
+    background:#125b30;
 }
 
 .btn-camera{
     width:100%;
+
     margin-top:10px;
-    background:#15803d;
-    color:white;
+
+    background:#eef7f1;
+
+    color:#176b3a;
+
+    border:1px solid #cfe2d5;
+
+    box-shadow:none;
+}
+
+.btn-camera:hover{
+    background:#e1f0e6;
 }
 
 .btn-camera.close{
-    background:#dc2626;
+    background:#fff1f1;
+
+    color:#c62828;
+
+    border-color:#f0cccc;
 }
 
 
@@ -144,82 +259,124 @@ body{
 
 #cameraSection{
     display:none;
+
     margin-top:12px;
 }
 
 .camera-box{
     position:relative;
+
     width:100%;
+
     max-width:500px;
+
     height:300px;
+
     margin:0 auto;
+
     overflow:hidden;
-    background:#000;
+
+    background:#07100b;
+
     border-radius:14px;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.08),
+        0 5px 15px rgba(0,0,0,.12);
 }
 
 #video{
     width:100%;
     height:100%;
+
     object-fit:cover;
 }
 
 .qr-frame{
     position:absolute;
+
     left:50%;
     top:50%;
+
     width:220px;
     height:220px;
+
     transform:translate(-50%,-50%);
+
     pointer-events:none;
 }
 
 .qr-frame::before,
 .qr-frame::after{
     content:"";
+
     position:absolute;
-    width:40px;
-    height:40px;
-    border-color:#22c55e;
+
+    width:42px;
+    height:42px;
+
+    border-color:#39d477;
+
     border-style:solid;
+
+    filter:drop-shadow(
+        0 0 5px rgba(57,212,119,.35)
+    );
 }
 
 .qr-frame::before{
     top:0;
     left:0;
+
     border-width:4px 0 0 4px;
 }
 
 .qr-frame::after{
     right:0;
     bottom:0;
+
     border-width:0 4px 4px 0;
 }
 
 .qr-indicator{
     position:absolute;
+
     left:50%;
     top:50%;
+
     width:220px;
     height:220px;
+
     transform:translate(-50%,-50%);
-    border:2px solid rgba(255,255,255,.25);
+
+    border:1px solid rgba(255,255,255,.28);
+
     border-radius:10px;
+
     pointer-events:none;
 }
 
 .scan-success{
     position:absolute;
+
     left:50%;
     top:50%;
+
     transform:translate(-50%,-50%);
+
     width:220px;
     height:220px;
-    border:5px solid #22c55e;
+
+    border:5px solid #39d477;
+
     border-radius:12px;
+
     display:none;
+
     pointer-events:none;
-    box-shadow:0 0 25px rgba(34,197,94,.65);
+
+    box-shadow:
+        0 0 25px rgba(57,212,119,.55);
 }
 
 .scan-success.show{
@@ -228,14 +385,18 @@ body{
 
 
 /* =====================================================
-   STATUS
+   SCAN STATUS
 ===================================================== */
 
 .scan-status{
     margin-top:9px;
+
     text-align:center;
+
     font-size:12px;
-    color:#64748b;
+
+    color:#718078;
+
     font-weight:700;
 }
 
@@ -246,14 +407,27 @@ body{
 
 #loading{
     display:none;
-    background:#ffffff;
-    margin-top:14px;
+
+    background:white;
+
+    margin-top:13px;
+
     padding:18px;
-    border-radius:14px;
+
+    border-radius:13px;
+
     text-align:center;
+
     font-weight:800;
-    color:#2563eb;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
+
+    font-size:13px;
+
+    color:#176b3a;
+
+    border:1px solid #e0e8e3;
+
+    box-shadow:
+        0 4px 14px rgba(20,40,28,.05);
 }
 
 #loading.show{
@@ -267,13 +441,23 @@ body{
 
 #errorBox{
     display:none;
-    margin-top:14px;
-    background:#fef2f2;
-    border:1px solid #fecaca;
-    color:#b91c1c;
-    padding:12px;
+
+    margin-top:13px;
+
+    background:#fff5f5;
+
+    border:1px solid #f0cccc;
+
+    border-left:4px solid #c62828;
+
+    color:#b42323;
+
+    padding:12px 13px;
+
     border-radius:10px;
+
     font-size:13px;
+
     font-weight:700;
 }
 
@@ -288,7 +472,8 @@ body{
 
 #result{
     display:none;
-    margin-top:14px;
+
+    margin-top:13px;
 }
 
 #result.show{
@@ -296,25 +481,49 @@ body{
 }
 
 .result-card{
-    background:#ffffff;
-    border-radius:16px;
-    padding:15px;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    background:white;
+
+    border:1px solid #e0e8e3;
+
+    border-radius:15px;
+
+    padding:16px;
+
+    box-shadow:
+        0 5px 16px rgba(20,40,28,.06);
 }
+
+
+/* =====================================================
+   TUMPUK TITLE
+===================================================== */
 
 .tumpuk-title{
     text-align:center;
-    font-size:28px;
+
+    font-size:30px;
+
+    line-height:1.1;
+
     font-weight:900;
-    color:#166534;
+
+    color:#176b3a;
+
+    letter-spacing:.5px;
 }
 
 .tpk-title{
     text-align:center;
-    margin-top:3px;
-    font-size:14px;
+
+    margin-top:5px;
+
+    font-size:12px;
+
     font-weight:800;
-    color:#64748b;
+
+    color:#7a8880;
+
+    letter-spacing:.3px;
 }
 
 
@@ -324,53 +533,74 @@ body{
 
 .summary-grid{
     display:grid;
+
     grid-template-columns:1fr 1fr;
+
     gap:10px;
-    margin-top:14px;
+
+    margin-top:15px;
 }
 
 .summary-box{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:12px;
+    background:#f7faf8;
+
+    border:1px solid #dfe8e2;
+
+    border-radius:11px;
+
     padding:12px;
+
     text-align:center;
 }
 
 .jumlah-utama{
     grid-column:1 / -1;
-    padding:16px 12px;
+
+    padding:17px 12px;
+
+    background:#eef7f1;
+
+    border-color:#cfe2d5;
 }
 
 .jumlah-utama .summary-label{
-    font-size:14px;
+    font-size:12px;
+
+    color:#557063;
 }
 
 .jumlah-angka{
-    margin-top:6px;
-    font-size:48px;
+    margin-top:5px;
+
+    font-size:46px;
+
     line-height:1;
+
     font-weight:900;
-    color:#166534;
+
+    color:#176b3a;
 }
 
 .summary-label{
-    font-size:11px;
-    color:#64748b;
+    font-size:10px;
+
+    color:#7a8880;
+
     font-weight:800;
+
+    letter-spacing:.2px;
 }
 
 .summary-value{
     margin-top:4px;
-    font-size:21px;
+
+    font-size:20px;
+
     font-weight:900;
-    color:#111827;
+
+    color:#202d25;
 }
-.jumlah-angka{
-    font-size:42px;
-    line-height:1;
-    color:#166534;
-}
+
 
 /* =====================================================
    RINCIAN TPK
@@ -378,10 +608,15 @@ body{
 
 #tpkDetailBox{
     display:none;
-    margin-top:14px;
-    background:#f8fafc;
-    border:1px solid #dbeafe;
-    border-radius:12px;
+
+    margin-top:13px;
+
+    background:#f7faf8;
+
+    border:1px solid #dfe8e2;
+
+    border-radius:11px;
+
     padding:12px;
 }
 
@@ -390,39 +625,55 @@ body{
 }
 
 .tpk-detail-title{
-    font-size:13px;
+    font-size:12px;
+
     font-weight:900;
-    color:#334155;
+
+    color:#34453b;
+
     margin-bottom:8px;
 }
 
 .tpk-detail-list{
     display:flex;
+
     flex-direction:column;
+
     gap:7px;
 }
 
 .tpk-detail-item{
-    background:#ffffff;
-    border:1px solid #e2e8f0;
+    background:white;
+
+    border:1px solid #e1e9e4;
+
     border-radius:9px;
+
     padding:9px 11px;
 }
 
 .tpk-detail-name{
-    font-size:14px;
+    font-size:13px;
+
     font-weight:900;
-    color:#166534;
+
+    color:#176b3a;
 }
 
 .tpk-detail-info{
     display:flex;
+
     justify-content:space-between;
+
     gap:10px;
+
     margin-top:4px;
-    font-size:12px;
+
+    font-size:11px;
+
     font-weight:800;
-    color:#475569;
+
+    color:#66766d;
 }
 
 .tpk-detail-volume{
@@ -435,136 +686,203 @@ body{
 ===================================================== */
 
 .section{
-    margin-top:14px;
+    margin-top:15px;
 }
 
 .section-head{
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     gap:10px;
+
     margin-bottom:8px;
 }
 
 .section-title-main{
-    font-size:14px;
+    font-size:13px;
+
     font-weight:900;
-    color:#334155;
+
+    color:#34453b;
 }
 
 .badge{
-    background:#e2e8f0;
-    color:#475569;
+    background:#edf2ef;
+
+    color:#607068;
+
     border-radius:999px;
+
     padding:5px 9px;
-    font-size:11px;
+
+    font-size:10px;
+
     font-weight:900;
 }
 
 
 /* =====================================================
-   REGISTER
+   REGISTER LIST
 ===================================================== */
 
 .register-list{
     display:flex;
+
     flex-direction:column;
-    gap:8px;
+
+    gap:7px;
 }
 
 .register-item{
     display:flex;
+
     flex-wrap:wrap;
+
     align-items:center;
+
     gap:0;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:11px;
-    padding:10px 12px;
-    transition:.15s;
+
+    background:#f9fbfa;
+
+    border:1px solid #e0e8e3;
+
+    border-radius:10px;
+
+    padding:10px 11px;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease;
+}
+
+.register-item:hover{
+    background:#f4f8f5;
 }
 
 .register-main{
     width:100%;
+
     display:flex;
+
     align-items:center;
-    gap:10px;
+
+    gap:9px;
 }
 
 .register-item input{
-    width:20px;
-    height:20px;
-    accent-color:#2563eb;
+    width:19px;
+    height:19px;
+
+    accent-color:#176b3a;
+
     cursor:pointer;
+
     flex-shrink:0;
 }
 
 .register-number{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:17px;
+    font-family:Arial,Helvetica,sans-serif;
+
+    font-size:16px;
+
     font-weight:700;
-    letter-spacing:.3px;
+
+    letter-spacing:.2px;
+
     flex:1;
-    color:#111827;
+
+    color:#202c25;
 }
 
 .register-item.checked{
-    background:#f0fdf4;
-    border-color:#bbf7d0;
+    background:#eff9f2;
+
+    border-color:#bfe0ca;
 }
 
 .register-item.checked .register-number{
-    color:#15803d;
+    color:#176b3a;
 }
 
 .register-actions{
     display:flex;
+
     align-items:center;
-    gap:7px;
+
+    gap:6px;
+
     margin-left:auto;
+
     flex-shrink:0;
 }
 
 .check-status{
-    font-size:11px;
+    font-size:10px;
+
     font-weight:800;
-    color:#16a34a;
+
+    color:#169447;
+
     white-space:nowrap;
 }
 
 .btn-detail{
     border:none;
-    background:#2563eb;
+
+    background:#176b3a;
+
     color:white;
+
     padding:7px 10px;
+
     border-radius:7px;
-    font-size:12px;
+
+    font-size:11px;
+
     font-weight:800;
+
     cursor:pointer;
+
     white-space:nowrap;
 }
 
 .btn-detail.detail-button-olah{
-    background:#dc2626;
+    background:#c62828;
 }
 
 .btn-detail.detail-button-persediaan{
     background:#2563eb;
-}   
-   
+}
+
 .btn-detail:active{
     transform:scale(.96);
 }
 
+
+/* =====================================================
+   DETAIL REGISTER
+===================================================== */
+
 .detail-register-box{
     flex:0 0 100%;
+
     display:none;
+
     margin-top:9px;
+
     padding:10px 11px;
-    background:#ffffff;
-    border:1px solid #dbeafe;
+
+    background:white;
+
+    border:1px solid #dce8e0;
+
     border-radius:9px;
+
     font-size:13px;
+
     line-height:1.7;
 }
 
@@ -574,69 +892,102 @@ body{
 
 .detail-register-row{
     display:flex;
+
     gap:10px;
+
     padding:3px 0;
+
     align-items:center;
 }
 
 .detail-register-label{
     width:105px;
+
     flex-shrink:0;
-    font-size:13px;
+
+    font-size:12px;
+
     font-weight:700;
-    color:#64748b;
+
+    color:#718078;
+
     display:flex;
+
     align-items:center;
 }
 
 .detail-register-value{
-    font-size:14px;
+    font-size:13px;
+
     font-weight:600;
-    color:#15803d;
+
+    color:#176b3a;
+
     word-break:break-word;
+
     line-height:1.4;
 }
+
+
 /* =====================================================
    HISTORY
 ===================================================== */
 
 .history-list{
     display:flex;
+
     flex-direction:column;
-    gap:9px;
+
+    gap:8px;
 }
 
 .history-item{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:13px;
+    background:#f9fbfa;
+
+    border:1px solid #e0e8e3;
+
+    border-radius:11px;
+
     overflow:hidden;
 }
 
 .history-head{
-    padding:14px;
+    padding:12px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:10px;
+
     cursor:pointer;
 }
 
 .history-date{
-    font-size:15px;
+    font-size:14px;
+
     font-weight:900;
+
+    color:#26362d;
 }
 
 .history-taken{
-    font-size:13px;
-    color:#dc2626;
+    font-size:12px;
+
+    color:#c62828;
+
     font-weight:800;
+
     margin-top:3px;
 }
 
 .history-arrow{
-    font-size:18px;
-    color:#64748b;
+    font-size:17px;
+
+    color:#718078;
+
     transition:.2s;
 }
 
@@ -646,8 +997,10 @@ body{
 
 .history-detail{
     display:none;
-    padding:0 14px 14px;
-    border-top:1px solid #e2e8f0;
+
+    padding:0 12px 12px;
+
+    border-top:1px solid #e1e8e3;
 }
 
 .history-item.open .history-detail{
@@ -655,19 +1008,27 @@ body{
 }
 
 .detail-title{
-    font-size:12px;
-    color:#64748b;
+    font-size:11px;
+
+    color:#7a8880;
+
     font-weight:700;
-    margin:12px 0 8px;
+
+    margin:11px 0 7px;
 }
 
 .history-detail .detail-register{
     display:block;
+
     font-family:monospace;
-    font-size:15px;
+
+    font-size:14px;
+
     font-weight:800;
+
     padding:7px 0;
-    border-bottom:1px dashed #cbd5e1;
+
+    border-bottom:1px dashed #ccd8d0;
 }
 
 .history-detail .detail-register:last-child{
@@ -680,37 +1041,56 @@ body{
 ===================================================== */
 
 .history-register-item{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:10px;
-    padding:9px 11px;
+    background:white;
+
+    border:1px solid #e0e8e3;
+
+    border-radius:9px;
+
+    padding:9px 10px;
+
     margin-top:7px;
 }
 
 .history-register-main{
     display:flex;
+
     align-items:center;
+
     gap:8px;
 }
 
 .history-register-number{
     flex:1;
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:16px;
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    font-size:15px;
+
     font-weight:700;
-    color:#111827;
+
+    color:#202c25;
+
     word-break:break-word;
 }
 
 .history-detail-button{
     border:none;
+
     background:#2563eb;
-    color:#fff;
+
+    color:white;
+
     padding:6px 9px;
+
     border-radius:7px;
-    font-size:11px;
+
+    font-size:10px;
+
     font-weight:800;
+
     cursor:pointer;
+
     white-space:nowrap;
 }
 
@@ -720,12 +1100,19 @@ body{
 
 .history-register-detail{
     display:none;
-    margin-top:9px;
+
+    margin-top:8px;
+
     padding:9px 10px;
-    background:#fff;
-    border:1px solid #dbeafe;
+
+    background:#f8faf9;
+
+    border:1px solid #dce8e0;
+
     border-radius:8px;
+
     font-size:12px;
+
     line-height:1.7;
 }
 
@@ -735,25 +1122,36 @@ body{
 
 .history-detail-row{
     display:flex;
+
     align-items:center;
+
     gap:6px;
+
     padding:3px 0;
 }
 
 .history-detail-label{
     width:75px;
+
     flex-shrink:0;
+
     font-weight:800;
-    color:#475569;
+
+    color:#65746c;
 }
 
-..history-detail-value{
+.history-detail-value{
     flex:1;
-    font-size:16px;
-    font-weight:900;
-    color:#111827;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    color:#202c25;
+
     word-break:break-word;
 }
+
 
 /* =====================================================
    BUTTON BAWAH
@@ -761,7 +1159,9 @@ body{
 
 .bottom-buttons{
     display:flex;
+
     gap:8px;
+
     margin-top:14px;
 }
 
@@ -770,13 +1170,15 @@ body{
 }
 
 .btn-refresh{
-    background:#2563eb;
-    color:#fff;
+    background:#176b3a;
+
+    color:white;
 }
 
 .btn-back{
-    background:#64748b;
-    color:#fff;
+    background:#64746b;
+
+    color:white;
 }
 
 
@@ -785,13 +1187,20 @@ body{
 ===================================================== */
 
 .empty{
-    background:#f8fafc;
-    border:1px dashed #cbd5e1;
-    color:#64748b;
+    background:#f8faf9;
+
+    border:1px dashed #cbd8d0;
+
+    color:#718078;
+
     border-radius:10px;
+
     padding:14px;
+
     text-align:center;
+
     font-size:12px;
+
     font-weight:700;
 }
 
@@ -802,10 +1211,14 @@ body{
 
 .footer{
     text-align:center;
-    color:#94a3b8;
-    font-size:11px;
+
+    color:#9aa7a0;
+
+    font-size:10px;
+
     font-weight:700;
-    margin:18px 0 5px;
+
+    margin:17px 0 5px;
 }
 
 
@@ -820,37 +1233,49 @@ body{
     }
 
     .header{
-        padding:12px;
+        padding:12px 13px;
     }
 
     .header img{
-        width:80px;
-        height:80px;
+        width:68px;
+        height:68px;
     }
 
     .header h1{
-        font-size:25px;
+        font-size:23px;
+    }
+
+    .scanner-card,
+    .result-card{
+        padding:14px;
     }
 
     .camera-box{
         height:300px;
     }
-
 }
 
 @media(max-width:380px){
 
+    .container{
+        padding:8px;
+    }
+
+    .header{
+        gap:10px;
+    }
+
     .header img{
-        width:74px;
-        height:74px;
+        width:60px;
+        height:60px;
     }
 
     .header h1{
-        font-size:24px;
+        font-size:20px;
     }
 
     .header .sub{
-        font-size:12px;
+        font-size:10px;
     }
 
     .camera-box{
@@ -860,8 +1285,8 @@ body{
     .qr-frame,
     .qr-indicator,
     .scan-success{
-        width:220px;
-        height:220px;
+        width:210px;
+        height:210px;
     }
 
     .register-number{
@@ -869,13 +1294,17 @@ body{
     }
 
     .check-status{
-        font-size:10px;
+        font-size:9px;
     }
 
     .btn-detail{
-        font-size:11px;
+        font-size:10px;
+        padding:6px 8px;
     }
 
+    .jumlah-angka{
+        font-size:40px;
+    }
 }
 
 </style>
