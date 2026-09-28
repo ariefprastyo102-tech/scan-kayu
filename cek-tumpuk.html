@@ -2137,190 +2137,298 @@ cariTumpukDenganNomor(
 
 }
 
+
 /* =====================================================
    CARI TUMPUK DENGAN NOMOR
 ===================================================== */
 
-async function cariTumpukDenganNomor(
+function cariTumpukDenganNomor(
     nomor
 ){
 
-    nomor =
-        String(nomor).trim();
+    const callbackName =
+        "callbackList_" +
+        Date.now();
 
-    /*
-     * Cegah pencarian ganda
-     */
-    if(sedangProses){
-        return;
-    }
 
-    /*
-     * Jangan kunci proses kalau nomor kosong
-     */
-    if(!nomor){
-        return;
-    }
+    let timeoutId =
+        null;
 
-    sedangProses = true;
 
-    console.log(
-        "CARI TUMPUK LANGSUNG SUPABASE:",
-        nomor
-    );
+    let script =
+        null;
 
-    try{
 
-        const url =
-            "https://wohkicuybdsvicnzezgy.supabase.co" +
-            "/rest/v1/database" +
-            "?select=tpk,tumpuk,sudah_diolah" +
-            "&tumpuk=eq." +
-            encodeURIComponent(nomor);
+    window[callbackName] =
+        function(response){
 
-        const response =
-            await fetch(
-                url,
-                {
-                    method: "GET",
-                    headers: {
-                        "apikey":
-                            "sb_publishable_EHcF4e1yfinNYhvNGzUmUg_z2cmiiKX",
-                        "Authorization":
-                            "Bearer sb_publishable_EHcF4e1yfinNYhvNGzUmUg_z2cmiiKX"
-                    }
-                }
-            );
+            try{
 
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        console.log(
-            "HASIL CARI TUMPUK SUPABASE:",
-            data
-        );
-
-        if(
-            !Array.isArray(data) ||
-            data.length === 0
-        ){
-
-            hideLoading();
-
-            showError(
-                "TUMPUK " +
-                nomor +
-                " tidak ditemukan."
-            );
-
-            sedangProses = false;
-
-            return;
-        }
-
-        /*
-         * Cari TPK yang masih mempunyai
-         * batang belum diolah.
-         */
-        const aktif =
-            data.filter(
-                function(item){
-
-                    return (
-                        item.sudah_diolah !== true
+                const berhasil =
+                    response &&
+                    (
+                        response.ok === "success" ||
+                        response.ok === true ||
+                        response.status === "success" ||
+                        response.success === true
                     );
 
+
+                if(!berhasil){
+
+    hideLoading();
+
+    showError(
+                        response &&
+                        (
+                            response.message ||
+                            response.error
+                        )
+                        ?
+                        (
+                            response.message ||
+                            response.error
+                        )
+                        :
+                        "Data TUMPUK tidak ditemukan."
+                    );
+
+
+                    sedangProses =
+                        false;
+
+
+                    return;
+
                 }
+
+
+                const data =
+                    Array.isArray(
+                        response.data
+                    )
+                    ?
+                    response.data
+                    :
+                    [];
+
+
+                const target =
+                    data.find(
+                        function(item){
+
+                            return String(
+                                item.tumpuk
+                            ) ===
+                            String(
+                                nomor
+                            );
+
+                        }
+                    );
+
+
+                if(!target){
+
+    hideLoading();
+
+    showError(
+                        "TUMPUK " +
+                        nomor +
+                        " tidak ditemukan."
+                    );
+
+
+                    sedangProses =
+                        false;
+
+
+                    return;
+
+                }
+
+
+                currentTumpuk =
+                    String(
+                        nomor
+                    );
+
+
+                if(
+                    String(nomor) === "29"
+                ){
+
+                    currentTPK =
+                        "";
+
+                    currentStackId =
+                        "TUMPUK|29";
+
+                }
+                else{
+
+                    const tpkText =
+                        target.tpk !== undefined
+                        ?
+                        String(target.tpk)
+                        :
+                        "";
+
+
+                    currentTPK =
+                        tpkText
+                        .split(",")[0]
+                        .trim();
+
+
+                    currentStackId =
+                        currentTPK +
+                        "|" +
+                        currentTumpuk;
+
+                }
+
+      
+                ambilDataTumpuk(false);
+
+            }
+            catch(error){
+
+                console.error(error);
+
+
+                showError(
+                    "Terjadi kesalahan saat mencari TUMPUK."
+                );
+
+
+                sedangProses =
+                    false;
+
+            }
+
+
+            if(timeoutId){
+
+                clearTimeout(
+                    timeoutId
+                );
+
+            }
+
+
+            cleanupJSONP(
+                callbackName,
+                script
             );
 
-        if(
-            aktif.length === 0
-        ){
+        };
 
-            /*
-             * Kalau semuanya sudah diolah,
-             * gunakan TPK pertama sebagai
-             * fallback.
-             */
-            currentTPK =
-                String(
-                    data[0].tpk || ""
-                )
-                .split(",")[0]
-                .trim();
 
-        }
-        else{
+   const url =
+    API_URL +
+    "?action=" +
+    (
+        bulanSisaAktif
+        ?
+        "sisaList"
+        :
+        "getTumpukList"
+    ) +
+    (
+        bulanSisaAktif
+        ?
+        "&bulan=" +
+        encodeURIComponent(
+            bulanSisaAktif
+        )
+        :
+        ""
+    ) +
+    "&callback=" +
+    callbackName +
+    "&_=" +
+    Date.now();
 
-            currentTPK =
-                String(
-                    aktif[0].tpk || ""
-                )
-                .split(",")[0]
-                .trim();
 
-        }
-
-        currentTumpuk =
-            nomor;
-
-        if(nomor === "29"){
-
-            currentTPK =
-                "";
-
-            currentStackId =
-                "TUMPUK|29";
-
-        }
-        else{
-
-            currentStackId =
-                currentTPK +
-                "|" +
-                currentTumpuk;
-
-        }
-
-        console.log(
-            "TPK TERPILIH:",
-            currentTPK
+    script =
+        document.createElement(
+            "script"
         );
 
-        /*
-         * Ambil detail langsung.
-         */
-        ambilDataTumpuk(false);
 
-    }
-    catch(error){
+    script.src =
+        url;
 
-        console.error(
-            "GAGAL CARI TUMPUK SUPABASE:",
-            error
+
+    script.onerror =
+        function(){
+
+            if(timeoutId){
+
+                clearTimeout(
+                    timeoutId
+                );
+
+            }
+
+
+            showError(
+                "Gagal menghubungi backend CEK TUMPUK."
+            );
+
+
+            sedangProses =
+                false;
+
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    document
+        .body
+        .appendChild(
+            script
         );
 
-        hideLoading();
 
-        showError(
-            "Gagal mencari TUMPUK."
+    timeoutId =
+        setTimeout(
+            function(){
+
+                if(
+                    document.body.contains(
+                        script
+                    )
+                ){
+
+                    cleanupJSONP(
+                        callbackName,
+                        script
+                    );
+
+
+                    showError(
+                        "Waktu koneksi habis. Coba lagi."
+                    );
+
+
+                    sedangProses =
+                        false;
+
+                }
+
+            },
+            15000
         );
-
-        sedangProses =
-            false;
-
-    }
 
 }
+
 
 /* =====================================================
    PROSES KODE TUMPUK
@@ -2584,7 +2692,7 @@ function ambilDataTumpuk(
     if(tampilkanLoading){
         showLoading();
     }
-   console.time("WAKTU LOAD TUMPUK");
+
     const callbackName =
         "callbackTumpuk_" +
         Date.now();
@@ -2606,9 +2714,7 @@ function ambilDataTumpuk(
 
             try{
 
-    hideLoading();
-
-    console.timeEnd("WAKTU LOAD TUMPUK");
+                hideLoading();
 
 
                 const berhasil =
@@ -2667,13 +2773,9 @@ function ambilDataTumpuk(
                  * TETAP SAMA
                  * HASIL REQUEST LANGSUNG KE FUNGSI LAMA
                  */
-                console.time("WAKTU TAMPILKAN DATA");
-
-tampilkanData(
-    response.data
-);
-
-console.timeEnd("WAKTU TAMPILKAN DATA");
+                tampilkanData(
+                    response.data
+                );
 
 
                 sedangProses =
@@ -2720,10 +2822,10 @@ console.timeEnd("WAKTU TAMPILKAN DATA");
     /*
      * ACTION TETAP SAMA
      */
-  const action =
-    bulan
-        ? "sisaSupabase"
-        : "getTumpukDataSupabase";
+    const action =
+        bulan
+            ? "sisa"
+            : "getTumpukData";
 
 
     /*
@@ -5480,56 +5582,6 @@ function cleanupJSONP(
 
 }
 
-function tesRequestSisaSupabase(){
-
-    const callbackName =
-        "callbackTesSisa_" +
-        Date.now();
-
-    window[callbackName] =
-        function(response){
-
-            console.log(
-                "HASIL SISA SUPABASE:",
-                response
-            );
-
-            cleanupJSONP(
-                callbackName,
-                script
-            );
-
-        };
-
-
-    const script =
-        document.createElement(
-            "script"
-        );
-
-
-    const url =
-        API_URL +
-        "?action=sisaSupabase" +
-        "&tpk=TAMANAN" +
-        "&tumpuk=13" +
-        "&bulan=MARET" +
-        "&callback=" +
-        callbackName +
-        "&_=" +
-        Date.now();
-
-
-    script.src =
-        url;
-
-
-    document.body.appendChild(
-        script
-    );
-
-}
-   
 </script>
 
 </body>
