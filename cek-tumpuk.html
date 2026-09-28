@@ -5582,6 +5582,56 @@ function cleanupJSONP(
 
 }
 
+function tesRequestSisaSupabase(){
+
+    const callbackName =
+        "callbackTesSisa_" +
+        Date.now();
+
+    window[callbackName] =
+        function(response){
+
+            console.log(
+                "HASIL SISA SUPABASE:",
+                response
+            );
+
+            cleanupJSONP(
+                callbackName,
+                script
+            );
+
+        };
+
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    const url =
+        API_URL +
+        "?action=sisaSupabase" +
+        "&tpk=TAMANAN" +
+        "&tumpuk=13" +
+        "&bulan=MARET" +
+        "&callback=" +
+        callbackName +
+        "&_=" +
+        Date.now();
+
+
+    script.src =
+        url;
+
+
+    document.body.appendChild(
+        script
+    );
+
+}
+   
 </script>
 
 </body>
