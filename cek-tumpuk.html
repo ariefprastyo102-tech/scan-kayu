@@ -2137,7 +2137,6 @@ cariTumpukDenganNomor(
 
 }
 
-
 /* =====================================================
    CARI TUMPUK DENGAN NOMOR
 ===================================================== */
@@ -2149,9 +2148,21 @@ async function cariTumpukDenganNomor(
     nomor =
         String(nomor).trim();
 
+    /*
+     * Cegah pencarian ganda
+     */
+    if(sedangProses){
+        return;
+    }
+
+    /*
+     * Jangan kunci proses kalau nomor kosong
+     */
     if(!nomor){
         return;
     }
+
+    sedangProses = true;
 
     console.log(
         "CARI TUMPUK LANGSUNG SUPABASE:",
@@ -2211,8 +2222,7 @@ async function cariTumpukDenganNomor(
                 " tidak ditemukan."
             );
 
-            sedangProses =
-                false;
+            sedangProses = false;
 
             return;
         }
@@ -2286,6 +2296,9 @@ async function cariTumpukDenganNomor(
             currentTPK
         );
 
+        /*
+         * Ambil detail langsung.
+         */
         ambilDataTumpuk(false);
 
     }
