@@ -2163,7 +2163,7 @@ async function cariTumpukDenganNomor(
         const url =
             "https://wohkicuybdsvicnzezgy.supabase.co" +
             "/rest/v1/database" +
-            "?select=tpk,tumpuk" +
+            "?select=tpk,tumpuk,sudah_diolah" +
             "&tumpuk=eq." +
             encodeURIComponent(nomor);
 
@@ -2215,6 +2215,48 @@ async function cariTumpukDenganNomor(
                 false;
 
             return;
+        }
+
+        /*
+         * Cari TPK yang masih mempunyai
+         * batang belum diolah.
+         */
+        const aktif =
+            data.filter(
+                function(item){
+
+                    return (
+                        item.sudah_diolah !== true
+                    );
+
+                }
+            );
+
+        if(
+            aktif.length === 0
+        ){
+
+            /*
+             * Kalau semuanya sudah diolah,
+             * gunakan TPK pertama sebagai
+             * fallback.
+             */
+            currentTPK =
+                String(
+                    data[0].tpk || ""
+                )
+                .split(",")[0]
+                .trim();
+
+        }
+        else{
+
+            currentTPK =
+                String(
+                    aktif[0].tpk || ""
+                )
+                .split(",")[0]
+                .trim();
 
         }
 
@@ -2232,13 +2274,6 @@ async function cariTumpukDenganNomor(
         }
         else{
 
-            currentTPK =
-                String(
-                    data[0].tpk || ""
-                )
-                .split(",")[0]
-                .trim();
-
             currentStackId =
                 currentTPK +
                 "|" +
@@ -2247,14 +2282,10 @@ async function cariTumpukDenganNomor(
         }
 
         console.log(
-            "HASIL TPK:",
+            "TPK TERPILIH:",
             currentTPK
         );
 
-        /*
-         * Untuk sementara detail masih
-         * lewat fungsi yang sudah ada.
-         */
         ambilDataTumpuk(false);
 
     }
