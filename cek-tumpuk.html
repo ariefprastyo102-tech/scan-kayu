@@ -2775,9 +2775,13 @@ function ambilDataTumpuk(
                  * TETAP SAMA
                  * HASIL REQUEST LANGSUNG KE FUNGSI LAMA
                  */
-                tampilkanData(
-                    response.data
-                );
+                console.time("WAKTU TAMPILKAN DATA");
+
+tampilkanData(
+    response.data
+);
+
+console.timeEnd("WAKTU TAMPILKAN DATA");
 
 
                 sedangProses =
