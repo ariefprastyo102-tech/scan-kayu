@@ -13,16 +13,11 @@ content="width=device-width, initial-scale=1.0">
 <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
 
 <style>
-/* =========================================================
-   RESET
-========================================================= */
-
 *{
     box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
     margin:0;
     padding:0;
     width:100%;
@@ -31,84 +26,83 @@ body{
 
 body{
     font-family:Arial,sans-serif;
-    background:#f2f5f3;
+    background:#edf3ef;
     color:#202923;
-    padding:14px;
-    padding-bottom:90px;
+    padding:10px;
+    padding-bottom:82px;
 }
 
-/* =========================================================
-   MAIN WIDTH
-========================================================= */
-
-.header,
-.camera-card,
-#btnScan,
-#btnScanBaru,
-#btnLanjut,
-.status-card,
-.pengambilan-card,
-#daftar,
-#historyPanel{
-    width:100%;
-    max-width:560px;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-/* =========================================================
+/* =========================
    HEADER
-========================================================= */
+========================= */
 
 .header{
-    margin-bottom:12px;
+    width:100%;
+    max-width:540px;
+    margin:0 auto 10px;
 
-    background:#176b38;
-
-    border-radius:14px;
-
-    padding:13px 16px;
+    background:linear-gradient(135deg,#075b32,#0f7a43,#21a05d);
 
     color:white;
 
-    box-shadow:0 5px 15px rgba(23,107,56,.16);
+    border-radius:15px;
+
+    padding:12px 14px;
+
+    box-shadow:0 6px 18px rgba(7,91,50,.20);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.header::after{
+    content:"";
+
+    position:absolute;
+
+    width:130px;
+    height:130px;
+
+    right:-55px;
+    top:-70px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.09);
 }
 
 .headerIsi{
     display:flex;
-
     align-items:center;
+    gap:11px;
 
-    gap:13px;
-
-    width:100%;
+    position:relative;
+    z-index:1;
 }
 
 .logo{
-    width:66px;
-    height:58px;
-
-    flex-shrink:0;
+    width:68px;
+    height:62px;
 
     object-fit:contain;
 
     background:white;
 
-    border-radius:9px;
+    border-radius:10px;
 
     padding:3px;
+
+    flex-shrink:0;
+
+    box-shadow:0 3px 8px rgba(0,0,0,.13);
 }
 
 .judulBox{
     min-width:0;
-    flex:1;
 }
 
 .judul{
-    margin:0;
-
     font-size:22px;
-
     font-weight:900;
 
     line-height:1.1;
@@ -122,57 +116,59 @@ body{
     margin-top:5px;
 
     font-size:10px;
+    font-weight:800;
 
-    font-weight:700;
-
-    color:#d9eee1;
+    color:#dff4e7;
 
     letter-spacing:1.5px;
 
     white-space:nowrap;
 }
 
-/* =========================================================
+/* =========================
    CAMERA
-========================================================= */
+========================= */
 
 .camera-card{
-    margin-bottom:10px;
+    width:100%;
+    max-width:540px;
+
+    margin:0 auto 10px;
 
     background:#111714;
 
-    border-radius:14px;
+    border-radius:15px;
 
     padding:6px;
 
-    box-shadow:0 5px 15px rgba(0,0,0,.16);
+    box-shadow:0 6px 17px rgba(0,0,0,.15);
 }
 
 .camera-wrapper{
     position:relative;
 
     width:100%;
-    height:315px;
-
-    overflow:hidden;
+    height:300px;
 
     background:#050807;
 
-    border-radius:10px;
+    border-radius:11px;
+
+    overflow:hidden;
 }
 
 #video{
-    display:block;
-
     width:100%;
-    height:315px;
+    height:300px;
 
     object-fit:cover;
+
+    display:block;
 }
 
-/* =========================================================
+/* =========================
    QR FRAME
-========================================================= */
+========================= */
 
 .qr-frame{
     position:absolute;
@@ -180,8 +176,8 @@ body{
     left:50%;
     top:50%;
 
-    width:225px;
-    height:225px;
+    width:230px;
+    height:230px;
 
     transform:translate(-50%,-50%);
 
@@ -193,47 +189,47 @@ body{
 .corner{
     position:absolute;
 
-    width:48px;
-    height:48px;
+    width:50px;
+    height:50px;
 
     border-color:#00e676;
 
     border-style:solid;
 
-    filter:drop-shadow(0 0 4px rgba(0,230,118,.7));
+    filter:drop-shadow(0 0 5px rgba(0,230,118,.65));
 }
 
 .tl{
     left:0;
     top:0;
-
     border-width:5px 0 0 5px;
+    border-radius:7px 0 0 0;
 }
 
 .tr{
     right:0;
     top:0;
-
     border-width:5px 5px 0 0;
+    border-radius:0 7px 0 0;
 }
 
 .bl{
     left:0;
     bottom:0;
-
     border-width:0 0 5px 5px;
+    border-radius:0 0 0 7px;
 }
 
 .br{
     right:0;
     bottom:0;
-
     border-width:0 5px 5px 0;
+    border-radius:0 0 7px 0;
 }
 
-/* =========================================================
-   SCAN SUCCESS
-========================================================= */
+/* =========================
+   SCAN BERHASIL
+========================= */
 
 #scanBerhasil{
     position:absolute;
@@ -241,8 +237,8 @@ body{
     left:50%;
     top:50%;
 
-    width:225px;
-    height:225px;
+    width:230px;
+    height:230px;
 
     transform:translate(-50%,-50%);
 
@@ -250,15 +246,15 @@ body{
 
     border:5px solid #00e676;
 
-    border-radius:10px;
+    border-radius:11px;
 
     z-index:20;
 
     pointer-events:none;
 
     box-shadow:
-        0 0 10px rgba(0,230,118,.9),
-        0 0 24px rgba(0,230,118,.65);
+        0 0 12px rgba(0,230,118,.9),
+        0 0 25px rgba(0,230,118,.7);
 }
 
 #scanBerhasil::after{
@@ -271,8 +267,8 @@ body{
 
     transform:translate(-50%,-50%);
 
-    width:56px;
-    height:56px;
+    width:58px;
+    height:58px;
 
     border-radius:50%;
 
@@ -283,92 +279,54 @@ body{
     font-size:38px;
     font-weight:900;
 
-    line-height:56px;
+    line-height:58px;
 
     text-align:center;
 }
 
-/* =========================================================
-   PRIMARY ACTIONS
-========================================================= */
-
-#btnScan,
-#btnScanBaru,
-#btnLanjut{
-    display:block;
-
-    border:none;
-
-    border-radius:9px;
-
-    padding:13px 15px;
-
-    margin-top:8px;
-    margin-bottom:8px;
-
-    font-size:15px;
-
-    font-weight:900;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:
-        transform .12s ease,
-        opacity .12s ease;
-}
-
-#btnScan{
-    background:#1976d2;
-}
-
-#btnScanBaru{
-    background:#c62828;
-}
-
-#btnLanjut{
-    background:#176b38;
-
-    margin-bottom:12px;
-}
-
-#btnScan:active,
-#btnScanBaru:active,
-#btnLanjut:active{
-    transform:scale(.985);
-}
-
-#btnLanjut:disabled{
-    background:#aeb7b2;
-
-    cursor:not-allowed;
-
-    opacity:.8;
-}
-
-/* =========================================================
+/* =========================
    TOTAL BATANG
-========================================================= */
+========================= */
 
 .status-card{
-    margin-top:10px;
-    margin-bottom:9px;
+    width:100%;
+    max-width:540px;
 
-    background:white;
+    margin:10px auto;
 
-    border:1px solid #d7e1db;
+    padding:15px 12px;
 
-    border-radius:13px;
+    background:linear-gradient(135deg,#ffffff,#f0f8f3);
 
-    padding:13px 15px;
+    border:1px solid #cfe0d5;
 
-    box-shadow:0 3px 10px rgba(0,0,0,.055);
+    border-radius:15px;
 
     text-align:center;
+
+    box-shadow:0 4px 13px rgba(23,107,56,.09);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.status-card::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:4px;
+
+    background:#198754;
 }
 
 #jumlah{
+    margin:0;
+
     display:flex;
 
     align-items:baseline;
@@ -377,74 +335,91 @@ body{
 
     gap:7px;
 
-    margin:0;
-
     color:#176b38;
 
     line-height:1;
 }
 
 #jumlah .angkaTotal{
-    font-size:62px;
+    font-size:64px;
 
     font-weight:900;
 
-    letter-spacing:-2px;
-
     line-height:.9;
+
+    letter-spacing:-2px;
 }
 
 #jumlah .teksBatang{
-    font-size:20px;
+    font-size:21px;
 
     font-weight:900;
 }
 
-/* =========================================================
+/* =========================
    PENGAMBILAN
-========================================================= */
+========================= */
 
 .pengambilan-card{
-    margin-top:0;
-    margin-bottom:11px;
+    width:100%;
+    max-width:540px;
 
-    background:white;
+    margin:10px auto;
 
-    border:1px solid #d7e1db;
+    padding:13px 12px;
 
-    border-radius:13px;
+    background:linear-gradient(135deg,#ffffff,#f1f7ff);
 
-    padding:11px 15px;
+    border:1px solid #cddff0;
 
-    box-shadow:0 3px 10px rgba(0,0,0,.055);
+    border-radius:15px;
 
     text-align:center;
+
+    box-shadow:0 4px 13px rgba(25,118,210,.08);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.pengambilan-card::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:4px;
+
+    background:#1976d2;
 }
 
 .pengambilanJudul{
-    margin-bottom:4px;
-
-    color:#76827b;
-
     font-size:10px;
 
     font-weight:900;
 
+    color:#69766f;
+
     letter-spacing:1px;
+
+    margin-bottom:5px;
 }
 
 #jumlahPengambilan{
-    font-size:45px;
+    font-size:48px;
 
     font-weight:900;
 
     color:#1976d2;
 
-    line-height:1;
+    line-height:.95;
 }
 
 .teksPengambilan{
-    font-size:16px;
+    font-size:17px;
 
     font-weight:900;
 
@@ -452,7 +427,7 @@ body{
 }
 
 #status{
-    margin-top:6px;
+    margin-top:7px;
 
     font-size:12px;
 
@@ -461,26 +436,90 @@ body{
     line-height:1.45;
 }
 
-/* =========================================================
+/* =========================
+   BUTTON UTAMA
+========================= */
+
+#btnScan,
+#btnScanBaru,
+#btnLanjut{
+    display:block;
+
+    width:100%;
+    max-width:540px;
+
+    margin:8px auto;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.12s ease;
+}
+
+#btnScan{
+    background:#1976d2;
+
+    box-shadow:0 4px 10px rgba(25,118,210,.20);
+}
+
+#btnScanBaru{
+    background:#c62828;
+
+    box-shadow:0 4px 10px rgba(198,40,40,.18);
+}
+
+#btnLanjut{
+    background:#176b38;
+
+    box-shadow:0 4px 10px rgba(23,107,56,.18);
+}
+
+#btnScan:active,
+#btnScanBaru:active,
+#btnLanjut:active{
+    transform:scale(.98);
+}
+
+#btnLanjut:disabled{
+    background:#aeb7b2;
+    box-shadow:none;
+    cursor:not-allowed;
+}
+
+/* =========================
    HASIL SCAN
-========================================================= */
+========================= */
 
 #daftar{
-    margin-top:12px;
+    width:100%;
+    max-width:540px;
+
+    margin:13px auto;
 }
 
 .item{
     background:white;
 
-    border:1px solid #dbe4df;
+    border:1px solid #d9e4dd;
 
-    border-radius:10px;
+    border-radius:11px;
+
+    padding:11px 12px;
 
     margin-bottom:7px;
 
-    padding:10px 11px;
-
-    box-shadow:0 2px 7px rgba(0,0,0,.045);
+    box-shadow:0 3px 9px rgba(0,0,0,.045);
 }
 
 .baris{
@@ -494,11 +533,11 @@ body{
 }
 
 .nomor{
-    color:#243029;
-
-    font-size:18px;
+    font-size:19px;
 
     font-weight:900;
+
+    color:#26332b;
 
     word-break:break-all;
 }
@@ -506,18 +545,17 @@ body{
 .detailBtn{
     flex-shrink:0;
 
-    width:auto;
-    min-width:72px;
+    min-width:75px;
 
-    padding:7px 10px;
+    padding:8px 11px;
 
     margin:0;
 
     border:none;
 
-    border-radius:7px;
+    border-radius:8px;
 
-    background:#52605a;
+    background:#596760;
 
     color:white;
 
@@ -529,11 +567,11 @@ body{
 .detail{
     display:none;
 
-    margin-top:9px;
+    margin-top:10px;
 
-    padding-top:9px;
+    padding-top:10px;
 
-    border-top:1px solid #e4e9e6;
+    border-top:1px solid #e2e9e5;
 
     font-size:13px;
 
@@ -545,9 +583,9 @@ body{
 
     width:110px;
 
-    color:#657169;
-
     font-weight:800;
+
+    color:#647169;
 }
 
 .success{
@@ -566,46 +604,63 @@ body{
     background:#c62828;
 }
 
-/* =========================================================
-   FLOATING NAVIGATION
-========================================================= */
+/* =========================
+   BOTTOM MENU
+========================= */
 
 #btnTumpuk,
 #btnHistory{
     position:fixed;
 
-    right:14px;
+    bottom:10px;
 
-    width:100px;
-    height:40px;
+    height:46px;
+
+    margin:0;
+
+    padding:0 15px;
 
     border:none;
 
-    border-radius:9px;
-
     color:white;
 
-    font-size:11px;
+    font-family:Arial,sans-serif;
+
+    font-size:12px;
 
     font-weight:900;
 
     white-space:nowrap;
 
-    cursor:pointer;
-
     z-index:1000;
 
-    box-shadow:0 4px 12px rgba(0,0,0,.18);
+    box-shadow:0 5px 16px rgba(0,0,0,.20);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:11px;
+
+    cursor:pointer;
 }
 
 #btnTumpuk{
-    bottom:61px;
+    left:10px;
+    right:auto;
 
-    background:#9a6800;
+    width:calc(50% - 15px);
+
+    background:#a36d00;
 }
 
 #btnHistory{
-    bottom:13px;
+    right:10px;
+    left:auto;
+
+    width:calc(50% - 15px);
 
     background:#176b38;
 }
@@ -615,9 +670,9 @@ body{
     transform:scale(.97);
 }
 
-/* =========================================================
+/* =========================
    TUMPUK PANEL
-========================================================= */
+========================= */
 
 #tumpukPanel{
     display:none;
@@ -636,33 +691,31 @@ body{
 
     overflow-y:auto;
 
-    padding:17px;
+    padding:16px;
 
     background:white;
 
-    border-radius:14px;
+    border-radius:15px;
 
     z-index:2000;
 
-    box-shadow:0 15px 40px rgba(0,0,0,.28);
+    box-shadow:0 15px 40px rgba(0,0,0,.30);
 }
 
 .tumpukItem{
     display:flex;
 
-    align-items:center;
-
     justify-content:space-between;
 
-    gap:10px;
+    align-items:center;
 
     padding:11px;
 
     margin-bottom:7px;
 
-    background:#f2f6f3;
+    background:#f2f7f4;
 
-    border:1px solid #dce5e0;
+    border:1px solid #dce7e0;
 
     border-radius:9px;
 }
@@ -677,14 +730,17 @@ body{
     font-weight:900;
 }
 
-/* =========================================================
+/* =========================
    HISTORY
-========================================================= */
+========================= */
 
 #historyPanel{
     display:none;
 
-    margin-top:12px;
+    width:100%;
+    max-width:540px;
+
+    margin:12px auto;
 }
 
 .historyHeader{
@@ -702,7 +758,7 @@ body{
 
     background:white;
 
-    border:1px solid #dbe4df;
+    border:1px solid #d9e4dd;
 
     border-radius:12px;
 
@@ -710,25 +766,23 @@ body{
 }
 
 .historyJudul{
-    color:#176b38;
-
     font-size:19px;
 
     font-weight:900;
+
+    color:#176b38;
 }
 
 .tutupHistory{
-    padding:7px 11px;
-
     border:none;
 
-    border-radius:7px;
-
-    background:#52605a;
+    background:#596760;
 
     color:white;
 
-    font-size:11px;
+    padding:8px 11px;
+
+    border-radius:8px;
 
     font-weight:900;
 }
@@ -736,15 +790,15 @@ body{
 .historyItem{
     background:white;
 
-    border:1px solid #dbe4df;
+    border:1px solid #d9e4dd;
 
     border-radius:11px;
 
+    padding:12px;
+
     margin-bottom:8px;
 
-    padding:11px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,.045);
+    box-shadow:0 3px 9px rgba(0,0,0,.045);
 }
 
 .historyTop{
@@ -758,27 +812,27 @@ body{
 }
 
 .historyNomor{
-    color:#176b38;
-
     font-size:16px;
 
     font-weight:900;
+
+    color:#176b38;
 }
 
 .historyTanggal{
     margin-top:3px;
 
-    color:#758078;
-
     font-size:11px;
+
+    color:#758079;
 }
 
 .historyJumlah{
-    color:#176b38;
-
     font-size:27px;
 
     font-weight:900;
+
+    color:#176b38;
 
     white-space:nowrap;
 }
@@ -790,7 +844,7 @@ body{
 
     padding-top:9px;
 
-    border-top:1px solid #e4e9e6;
+    border-top:1px solid #e3e9e5;
 }
 
 .historyRegister{
@@ -801,6 +855,18 @@ body{
     font-weight:700;
 
     word-break:break-all;
+}
+
+.historyRegister.success{
+    color:#16833a;
+}
+
+.historyRegister.duplicate{
+    color:#d32f2f;
+}
+
+.historyRegister.notfound{
+    color:#df7900;
 }
 
 .btnHistoryDetail{
@@ -837,31 +903,27 @@ body{
     font-weight:900;
 }
 
-/* =========================================================
+/* =========================
    MOBILE
-========================================================= */
+========================= */
 
 @media(max-width:500px){
 
     body{
         padding:7px;
 
-        padding-bottom:76px;
+        padding-bottom:68px;
     }
 
     .header{
         padding:10px 11px;
 
-        border-radius:12px;
-    }
-
-    .headerIsi{
-        gap:9px;
+        border-radius:13px;
     }
 
     .logo{
-        width:60px;
-        height:54px;
+        width:61px;
+        height:55px;
     }
 
     .judul{
@@ -871,7 +933,7 @@ body{
     .subjudul{
         font-size:8px;
 
-        letter-spacing:1.1px;
+        letter-spacing:1px;
     }
 
     .camera-card{
@@ -887,12 +949,12 @@ body{
 
     .qr-frame,
     #scanBerhasil{
-        width:210px;
-        height:210px;
+        width:215px;
+        height:215px;
     }
 
     #jumlah .angkaTotal{
-        font-size:56px;
+        font-size:57px;
     }
 
     #jumlah .teksBatang{
@@ -900,29 +962,34 @@ body{
     }
 
     #jumlahPengambilan{
-        font-size:42px;
+        font-size:43px;
     }
 
     #btnTumpuk,
     #btnHistory{
-        right:9px;
+        bottom:8px;
 
-        width:92px;
-        height:39px;
+        height:43px;
+
+        font-size:11px;
     }
 
     #btnTumpuk{
-        bottom:58px;
+        left:8px;
+
+        width:calc(50% - 12px);
     }
 
     #btnHistory{
-        bottom:9px;
+        right:8px;
+
+        width:calc(50% - 12px);
     }
 }
 
-/* =========================================================
+/* =========================
    HP KECIL
-========================================================= */
+========================= */
 
 @media(max-width:380px){
 
@@ -955,7 +1022,7 @@ body{
     }
 
     #jumlah .angkaTotal{
-        font-size:50px;
+        font-size:51px;
     }
 
     #jumlah .teksBatang{
@@ -965,9 +1032,14 @@ body{
     #jumlahPengambilan{
         font-size:39px;
     }
+
+    #btnTumpuk,
+    #btnHistory{
+        font-size:10px;
+    }
 }
 </style>
-    
+   
 </head>
 
 <body>
