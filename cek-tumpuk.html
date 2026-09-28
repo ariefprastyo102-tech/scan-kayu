@@ -2146,289 +2146,61 @@ function cariTumpukDenganNomor(
     nomor
 ){
 
-    const callbackName =
-        "callbackList_" +
-        Date.now();
+    nomor =
+        String(nomor).trim();
 
+    if(!nomor){
+        return;
+    }
 
-    let timeoutId =
-        null;
+    currentTumpuk =
+        nomor;
 
+    /*
+     * TPK sudah diketahui dari pilihan/scan sebelumnya.
+     * Jadi tidak perlu lagi:
+     * getTumpukList
+     * atau sisaList
+     */
 
-    let script =
-        null;
+    if(nomor === "29"){
 
+        currentTPK = "";
 
-    window[callbackName] =
-        function(response){
+        currentStackId =
+            "TUMPUK|29";
 
-            try{
+    }
+    else{
 
-                const berhasil =
-                    response &&
-                    (
-                        response.ok === "success" ||
-                        response.ok === true ||
-                        response.status === "success" ||
-                        response.success === true
-                    );
-
-
-                if(!berhasil){
-
-    hideLoading();
-
-    showError(
-                        response &&
-                        (
-                            response.message ||
-                            response.error
-                        )
-                        ?
-                        (
-                            response.message ||
-                            response.error
-                        )
-                        :
-                        "Data TUMPUK tidak ditemukan."
-                    );
-
-
-                    sedangProses =
-                        false;
-
-
-                    return;
-
-                }
-
-
-                const data =
-                    Array.isArray(
-                        response.data
-                    )
-                    ?
-                    response.data
-                    :
-                    [];
-
-
-                const target =
-                    data.find(
-                        function(item){
-
-                            return String(
-                                item.tumpuk
-                            ) ===
-                            String(
-                                nomor
-                            );
-
-                        }
-                    );
-
-
-                if(!target){
-
-    hideLoading();
-
-    showError(
-                        "TUMPUK " +
-                        nomor +
-                        " tidak ditemukan."
-                    );
-
-
-                    sedangProses =
-                        false;
-
-
-                    return;
-
-                }
-
-
-                currentTumpuk =
-                    String(
-                        nomor
-                    );
-
-
-                if(
-                    String(nomor) === "29"
-                ){
-
-                    currentTPK =
-                        "";
-
-                    currentStackId =
-                        "TUMPUK|29";
-
-                }
-                else{
-
-                    const tpkText =
-                        target.tpk !== undefined
-                        ?
-                        String(target.tpk)
-                        :
-                        "";
-
-
-                    currentTPK =
-                        tpkText
-                        .split(",")[0]
-                        .trim();
-
-
-                    currentStackId =
-                        currentTPK +
-                        "|" +
-                        currentTumpuk;
-
-                }
-
-      
-                ambilDataTumpuk(false);
-
-            }
-            catch(error){
-
-                console.error(error);
-
-
-                showError(
-                    "Terjadi kesalahan saat mencari TUMPUK."
-                );
-
-
-                sedangProses =
-                    false;
-
-            }
-
-
-            if(timeoutId){
-
-                clearTimeout(
-                    timeoutId
-                );
-
-            }
-
-
-            cleanupJSONP(
-                callbackName,
-                script
-            );
-
-        };
-
-
-   const url =
-    API_URL +
-    "?action=" +
-    (
-        bulanSisaAktif
-        ?
-        "sisaList"
-        :
-        "getTumpukList"
-    ) +
-    (
-        bulanSisaAktif
-        ?
-        "&bulan=" +
-        encodeURIComponent(
-            bulanSisaAktif
-        )
-        :
-        ""
-    ) +
-    "&callback=" +
-    callbackName +
-    "&_=" +
-    Date.now();
-
-
-    script =
-        document.createElement(
-            "script"
-        );
-
-
-    script.src =
-        url;
-
-
-    script.onerror =
-        function(){
-
-            if(timeoutId){
-
-                clearTimeout(
-                    timeoutId
-                );
-
-            }
-
+        if(!currentTPK){
 
             showError(
-                "Gagal menghubungi backend CEK TUMPUK."
+                "TPK belum dipilih."
             );
-
 
             sedangProses =
                 false;
 
+            return;
+        }
 
-            cleanupJSONP(
-                callbackName,
-                script
-            );
+        currentStackId =
+            currentTPK +
+            "|" +
+            currentTumpuk;
+    }
 
-        };
+    console.log(
+        "CARI TUMPUK LANGSUNG:",
+        currentTPK,
+        currentTumpuk,
+        currentStackId
+    );
 
-
-    document
-        .body
-        .appendChild(
-            script
-        );
-
-
-    timeoutId =
-        setTimeout(
-            function(){
-
-                if(
-                    document.body.contains(
-                        script
-                    )
-                ){
-
-                    cleanupJSONP(
-                        callbackName,
-                        script
-                    );
-
-
-                    showError(
-                        "Waktu koneksi habis. Coba lagi."
-                    );
-
-
-                    sedangProses =
-                        false;
-
-                }
-
-            },
-            15000
-        );
+    ambilDataTumpuk(false);
 
 }
-
 
 /* =====================================================
    PROSES KODE TUMPUK
