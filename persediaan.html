@@ -3908,125 +3908,190 @@ function tampilkanMutasi(){
 
 
     function buatTabelBulan(
-        namaBulan,
-        pasokan,
-        olah,
-        sisa
-    ){
+    namaBulan,
+    pasokan,
+    olah,
+    sisa
+){
 
-        let isi = "";
+    let isi = "";
+
+    const bulanUrut = [
+        "JANUARI",
+        "FEBRUARI",
+        "MARET",
+        "APRIL",
+        "MEI",
+        "JUNI",
+        "JULI",
+        "AGUSTUS",
+        "SEPTEMBER",
+        "OKTOBER",
+        "NOVEMBER",
+        "DESEMBER"
+    ];
+
+    const indexBulan =
+        bulanUrut.indexOf(
+            String(namaBulan || "")
+                .trim()
+                .toUpperCase()
+        );
 
 
-        if(adaIsi(pasokan)){
+    /*
+     * =================================================
+     * SISA BULAN LALU
+     * =================================================
+     *
+     * Contoh:
+     *
+     * APRIL
+     * → ambil SISA MARET
+     *
+     * FEBRUARI
+     * → ambil SISA JANUARI
+     *
+     * JANUARI
+     * → belum ada bulan sebelumnya
+     */
 
-            isi += buatBaris(
-                "PASOKAN",
-                pasokan
+    if(indexBulan > 0){
+
+        const bulanSebelumnya =
+            bulanUrut[indexBulan - 1];
+
+        const sisaBulanLalu =
+            ambilDataBulan(
+                DATA_MUTASI_SISA,
+                bulanSebelumnya
             );
 
-        }
-
-
         if(
-            olah &&
-            adaIsi(olah.OLAH25)
+            sisaBulanLalu &&
+            adaIsi(sisaBulanLalu.TOTAL)
         ){
 
             isi += buatBaris(
-                "PENGOLAHAN 2025",
-                olah.OLAH25
+                "SISA " + bulanSebelumnya,
+                sisaBulanLalu.TOTAL
             );
 
         }
-
-
-        if(
-            olah &&
-            adaIsi(olah.OLAH26)
-        ){
-
-            isi += buatBaris(
-                "PENGOLAHAN 2026",
-                olah.OLAH26
-            );
-
-        }
-
-
-        if(
-            sisa &&
-            adaIsi(sisa.SISA25)
-        ){
-
-            isi += buatBaris(
-                "SISA 2025",
-                sisa.SISA25
-            );
-
-        }
-
-
-        if(
-            sisa &&
-            adaIsi(sisa.SISA26)
-        ){
-
-            isi += buatBaris(
-                "SISA 2026",
-                sisa.SISA26
-            );
-
-        }
-
-
-        if(
-            sisa &&
-            adaIsi(sisa.TOTAL)
-        ){
-
-            isi += buatBaris(
-                "TOTAL SISA",
-                sisa.TOTAL
-            );
-
-        }
-
-
-        /*
-         * Kalau bulan benar-benar tidak punya
-         * isi, jangan tampilkan apa-apa.
-         */
-
-        if(!isi){
-
-            return "";
-
-        }
-
-
-        return `
-            <h3>
-                ${selamat(namaBulan)}
-            </h3>
-
-            <div class="rincian-table-wrap">
-
-                <table class="rincian-table">
-
-                    ${buatHeader()}
-
-                    <tbody>
-
-                        ${isi}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-        `;
 
     }
+
+
+    /*
+     * =================================================
+     * PASOKAN BULAN BERJALAN
+     * =================================================
+     */
+
+    if(
+        pasokan &&
+        adaIsi(pasokan)
+    ){
+
+        isi += buatBaris(
+            "PASOKAN",
+            pasokan
+        );
+
+    }
+
+
+    /*
+     * =================================================
+     * PENGOLAHAN 2025
+     * =================================================
+     */
+
+    if(
+        olah &&
+        adaIsi(olah.OLAH25)
+    ){
+
+        isi += buatBaris(
+            "PENGOLAHAN 2025",
+            olah.OLAH25
+        );
+
+    }
+
+
+    /*
+     * =================================================
+     * PENGOLAHAN 2026
+     * =================================================
+     */
+
+    if(
+        olah &&
+        adaIsi(olah.OLAH26)
+    ){
+
+        isi += buatBaris(
+            "PENGOLAHAN 2026",
+            olah.OLAH26
+        );
+
+    }
+
+
+    /*
+     * =================================================
+     * SISA AKHIR BULAN
+     * =================================================
+     */
+
+    if(
+        sisa &&
+        adaIsi(sisa.TOTAL)
+    ){
+
+        isi += buatBaris(
+            "SISA " + namaBulan,
+            sisa.TOTAL
+        );
+
+    }
+
+
+    /*
+     * Kalau bulan benar-benar tidak punya isi
+     */
+
+    if(!isi){
+
+        return "";
+
+    }
+
+
+    return `
+        <h3>
+            ${selamat(namaBulan)}
+        </h3>
+
+        <div class="rincian-table-wrap">
+
+            <table class="rincian-table">
+
+                ${buatHeader()}
+
+                <tbody>
+
+                    ${isi}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
+}
 
 
     let html = "";
