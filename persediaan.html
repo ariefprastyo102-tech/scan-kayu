@@ -3169,18 +3169,16 @@ tampilkanRingkasanFilterSisa(data);
 
     data.forEach(function(item){
 
-       const key =
-    String(item.sortimen || "") +
-    "|" +
-    String(item.mutu || "") +
-    "|" +
-    String(item.panjang || "") +
-    "|" +
-    String(item.diameter || "") +
-    "|" +
-    String(item.status || "") +
-    "|" +
-    String(item.tumpuk || "");
+        const key =
+            String(item.sortimen || "") +
+            "|" +
+            String(item.mutu || "") +
+            "|" +
+            String(item.panjang || "") +
+            "|" +
+            String(item.diameter || "") +
+            "|" +
+            String(item.status || "");
 
 
         if(!group[key]){
@@ -3201,8 +3199,6 @@ tampilkanRingkasanFilterSisa(data);
 
                 status:
                     item.status || "",
-                tumpuk:
-    item.tumpuk || "",
 
                 batang:0,
 
@@ -3257,8 +3253,8 @@ table.innerHTML =
             '<th>Diameter</th>' +
             '<th>Mutu</th>' +
             '<th>Status</th>' +
-            '<th>Tumpuk</th>' +
             '<th>Batang</th>' +
+            '<th>Volume</th>' +
         '</tr>' +
     '</thead>' +
 
@@ -3292,17 +3288,14 @@ table.innerHTML =
     item.mutu +
 '</td>' +
 
-          '<td>' +
-    item.status +
-'</td>' +
+            '<td>' +
+                item.status +
+            '</td>' +
 
-'<td>' +
-    item.tumpuk +
-'</td>' +
+            '<td>' +
+                item.batang +
+            '</td>' +
 
-'<td>' +
-    item.batang +
-'</td>' +
             '<td>' +
                 Number(
                     item.volume || 0
