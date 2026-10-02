@@ -3231,13 +3231,15 @@ function tampilkanRincianSisa(){
       </tr>
     `;
 
+    window.GROUP_SISA_DETAIL = [];
+
     return;
   }
 
 
-  /* =================================================
+  /* ================================
      FILTER
-  ================================================= */
+  ================================= */
 
   const panjangFilter =
     document.getElementById("filterPanjangSisa")?.value || "";
@@ -3263,134 +3265,79 @@ function tampilkanRincianSisa(){
     });
 
 
-  /* =================================================
-     KELOMPOKKAN
-  ================================================= */
-
-  const kelompok = {};
-
-  dataFilter.forEach(function(item){
-
-    const key =
-      String(item.sortimen || "") +
-      "|" +
-      String(item.mutu || "") +
-      "|" +
-      String(item.panjang || "") +
-      "|" +
-      String(item.diameter || "") +
-      "|" +
-      String(item.status || "");
-
-
-    if(!kelompok[key]){
-
-      kelompok[key] = {
-
-        sortimen:
-          item.sortimen,
-
-        panjang:
-          item.panjang,
-
-        diameter:
-          item.diameter,
-
-        mutu:
-          item.mutu,
-
-        status:
-          item.status,
-
-        batang:0,
-
-        volume:0,
-
-        detail:[]
-
-      };
-
-    }
-
-
-    kelompok[key].batang++;
-
-    kelompok[key].volume +=
-      Number(item.volume) || 0;
-
-
-    /* SIMPAN DATA ASLI */
-
-    kelompok[key].detail.push(item);
-
-  });
-
-
-  /* =================================================
-     URUTAN
-  ================================================= */
+  /* ================================
+     DATA SUDAH DIGROUP DARI BACKEND
+     TIDAK GROUPING ULANG
+  ================================= */
 
   const urutan = {
-
     "A I":1,
     "A II":2,
     "A III":3,
     "KBP":4
-
   };
 
 
   const daftar =
-    Object.values(kelompok)
-      .sort(function(a,b){
+    dataFilter.slice().sort(function(a,b){
 
-        const sa =
-          urutan[a.sortimen] || 99;
+      const sa =
+        urutan[a.sortimen] || 99;
 
-        const sb =
-          urutan[b.sortimen] || 99;
+      const sb =
+        urutan[b.sortimen] || 99;
 
-        if(sa !== sb)
-          return sa - sb;
-
-
-        const pa =
-          Number(a.panjang) || 0;
-
-        const pb =
-          Number(b.panjang) || 0;
-
-        if(pa !== pb)
-          return pa - pb;
+      if(sa !== sb)
+        return sa - sb;
 
 
-        const da =
-          Number(a.diameter) || 0;
+      const pa =
+        Number(a.panjang) || 0;
 
-        const db =
-          Number(b.diameter) || 0;
+      const pb =
+        Number(b.panjang) || 0;
 
-        if(da !== db)
-          return da - db;
-
-
-        return String(a.mutu || "")
-          .localeCompare(
-            String(b.mutu || ""),
-            "id"
-          );
-
-      });
+      if(pa !== pb)
+        return pa - pb;
 
 
-  /* =================================================
-     RENDER
-  ================================================= */
+      const da =
+        Number(a.diameter) || 0;
+
+      const db =
+        Number(b.diameter) || 0;
+
+      if(da !== db)
+        return da - db;
+
+
+      return String(a.mutu || "")
+        .localeCompare(
+          String(b.mutu || ""),
+          "id"
+        );
+
+    });
+
+
+  /*
+   * SIMPAN GRUP UNTUK TOGGLE
+   */
+  window.GROUP_SISA_DETAIL = daftar;
+
+
+  /* ================================
+     RENDER BARIS RINGKASAN SAJA
+  ================================= */
 
   daftar.forEach(function(item,index){
 
     const detailId =
-      "detail-sisa-" + index;
+      "detailSisa" + index;
+
+
+    const isiId =
+      "isiDetailSisa" + index;
 
 
     const tr =
@@ -3402,15 +3349,18 @@ function tampilkanRincianSisa(){
     tr.innerHTML = `
 
       <td>
-        <span style="
-          display:inline-block;
-          width:22px;
-          font-weight:bold;
-        ">
-          +
-        </span>
+
+        <span
+          id="plusSisa${index}"
+          style="
+            display:inline-block;
+            width:22px;
+            font-weight:bold;
+          "
+        >+</span>
 
         ${item.sortimen || "-"}
+
       </td>
 
       <td>${item.panjang ?? "-"}</td>
@@ -3421,7 +3371,7 @@ function tampilkanRincianSisa(){
 
       <td>${item.status || "-"}</td>
 
-      <td>${item.batang}</td>
+      <td>${item.batang || 0}</td>
 
       <td>
         ${Number(item.volume || 0).toFixed(3)}
@@ -3431,9 +3381,10 @@ function tampilkanRincianSisa(){
     `;
 
 
-    /* =================================================
-       BARIS DETAIL
-    ================================================= */
+    /* ================================
+       BARIS DETAIL KOSONG
+       BELUM ADA REGISTER DI SINI
+    ================================= */
 
     const detailTr =
       document.createElement("tr");
@@ -3453,141 +3404,27 @@ function tampilkanRincianSisa(){
             background:#f7f7f7;
           ">
 
-        <div style="
-          padding:10px 14px 12px 38px;
-          overflow-x:auto;
-        ">
-
-          <table style="
-            width:100%;
-            border-collapse:collapse;
-            font-size:13px;
-            background:white;
-          ">
-
-            <thead>
-
-              <tr>
-
-                <th style="padding:7px;text-align:left;">
-                  REGISTER
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  TUMPUK
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  TPK
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  PANJANG
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  DIAMETER
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  MUTU
-                </th>
-
-                <th style="padding:7px;text-align:left;">
-                  STATUS
-                </th>
-
-                <th style="padding:7px;text-align:right;">
-                  VOLUME
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              ${item.detail.map(function(d){
-
-                return `
-
-                  <tr>
-
-                    <td style="padding:7px;">
-                      ${d.register || "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.tumpuk || "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.tpk || "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.panjang ?? "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.diameter ?? "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.mutu || "-"}
-                    </td>
-
-                    <td style="padding:7px;">
-                      ${d.status || "-"}
-                    </td>
-
-                    <td style="padding:7px;text-align:right;">
-                      ${Number(d.volume || 0).toFixed(3)} m³
-                    </td>
-
-                  </tr>
-
-                `;
-
-              }).join("")}
-
-            </tbody>
-
-          </table>
-
-        </div>
+        <div
+          id="${isiId}"
+          style="
+            padding:10px 14px 12px 38px;
+          "
+        ></div>
 
       </td>
 
     `;
 
 
-    /* =================================================
-       KLIK BUKA / TUTUP
-    ================================================= */
+    /* ================================
+       KLIK
+    ================================= */
 
     tr.addEventListener(
       "click",
       function(){
 
-        const buka =
-          detailTr.style.display === "none";
-
-
-        detailTr.style.display =
-          buka ? "" : "none";
-
-
-        const icon =
-          tr.querySelector("td span");
-
-
-        if(icon){
-
-          icon.textContent =
-            buka ? "−" : "+";
-
-        }
+        toggleDetailSisa(index);
 
       }
     );
@@ -3598,6 +3435,207 @@ function tampilkanRincianSisa(){
     tbody.appendChild(detailTr);
 
   });
+
+}
+    
+async function toggleDetailSisa(index) {
+
+  const row =
+    document.getElementById("detailSisa" + index);
+
+  const plus =
+    document.getElementById("plusSisa" + index);
+
+  const container =
+    document.getElementById("isiDetailSisa" + index);
+
+  if(!row || !container) return;
+
+
+  /* TUTUP */
+  if(row.style.display !== "none"){
+
+    row.style.display = "none";
+
+    if(plus){
+      plus.textContent = "+";
+    }
+
+    return;
+  }
+
+
+  /* AMBIL DATA GRUP */
+  const group =
+    window.GROUP_SISA_DETAIL &&
+    window.GROUP_SISA_DETAIL[index];
+
+  if(!group) return;
+
+
+  /* KALAU SUDAH PERNAH DIBUKA */
+  if(container.dataset.loaded === "1"){
+
+    row.style.display = "table-row";
+
+    if(plus){
+      plus.textContent = "−";
+    }
+
+    return;
+  }
+
+
+  /* KEY CACHE */
+  const key = [
+    group.sortimen,
+    group.mutu,
+    group.panjang,
+    group.diameter,
+    group.status
+  ].join("|");
+
+
+  /* TAMPILKAN BARIS */
+  row.style.display = "table-row";
+
+  if(plus){
+    plus.textContent = "…";
+  }
+
+  container.innerHTML = `
+    <div style="
+      padding:12px;
+      text-align:center;
+      font-size:12px;
+    ">
+      Memuat detail...
+    </div>
+  `;
+
+
+  try{
+
+    const url =
+      API_URL +
+      "?action=sisaDetail&key=" +
+      encodeURIComponent(key);
+
+    const response =
+      await fetch(url);
+
+    const data =
+      await response.json();
+
+
+    if(!data.sukses){
+
+      container.innerHTML = `
+        <div style="
+          padding:12px;
+          text-align:center;
+        ">
+          Detail tidak ditemukan di cache.
+        </div>
+      `;
+
+      if(plus){
+        plus.textContent = "+";
+      }
+
+      return;
+    }
+
+
+    const detail =
+      data.detail || [];
+
+
+    let html = `
+      <div style="
+        padding:8px;
+        overflow-x:auto;
+      ">
+
+        <table style="
+          width:100%;
+          border-collapse:collapse;
+          font-size:12px;
+        ">
+
+          <thead>
+            <tr>
+              <th>REGISTER</th>
+              <th>TUMPUK</th>
+              <th>TPK</th>
+              <th>PANJANG</th>
+              <th>DIAMETER</th>
+              <th>MUTU</th>
+              <th>STATUS</th>
+              <th>VOLUME</th>
+            </tr>
+          </thead>
+
+          <tbody>
+    `;
+
+
+    detail.forEach(function(item){
+
+      html += `
+        <tr>
+          <td>${item.register || ""}</td>
+          <td>${item.tumpuk || ""}</td>
+          <td>${item.tpk || ""}</td>
+          <td>${item.panjang || ""}</td>
+          <td>${item.diameter || ""}</td>
+          <td>${item.mutu || ""}</td>
+          <td>${item.status || ""}</td>
+          <td>${Number(item.volume || 0).toFixed(6)}</td>
+        </tr>
+      `;
+
+    });
+
+
+    html += `
+          </tbody>
+        </table>
+
+      </div>
+    `;
+
+
+    container.innerHTML = html;
+
+    container.dataset.loaded = "1";
+
+    if(plus){
+      plus.textContent = "−";
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "ERROR DETAIL SISA:",
+      error
+    );
+
+    container.innerHTML = `
+      <div style="
+        padding:12px;
+        text-align:center;
+      ">
+        Gagal mengambil detail.
+      </div>
+    `;
+
+    if(plus){
+      plus.textContent = "+";
+    }
+
+  }
 
 }
     
