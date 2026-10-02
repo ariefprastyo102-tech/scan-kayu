@@ -3207,254 +3207,401 @@ function tampilkanRingkasanSisa(){
 
 function tampilkanRincianSisa(){
 
-    const box =
-        document.getElementById(
-            "rincianSisa"
-        );
+  const tbody =
+    document.getElementById("tbodyRincianSisa");
+
+  if(!tbody) return;
+
+  const data =
+    DATA_SISA &&
+    Array.isArray(DATA_SISA.rincian)
+      ? DATA_SISA.rincian
+      : [];
+
+  tbody.innerHTML = "";
+
+  if(!data.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7"
+            style="text-align:center;padding:20px;">
+          Tidak ada data SISA
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
 
 
-    box.innerHTML = "";
+  /* =================================================
+     FILTER
+  ================================================= */
+
+  const panjangFilter =
+    document.getElementById("filterPanjangSisa")?.value || "";
+
+  const diameterFilter =
+    document.getElementById("filterDiameterSisa")?.value || "";
 
 
-    if(!DATA_SISA){
+  const dataFilter =
+    data.filter(function(item){
 
-        box.innerHTML =
-            '<div class="kosong">' +
-            'DATA SISA BELUM DIMUAT.' +
-            '</div>';
+      return (
+        cocokFilterAngka(
+          item.panjang,
+          panjangFilter
+        ) &&
+        cocokFilterAngka(
+          item.diameter,
+          diameterFilter
+        )
+      );
 
-        return;
+    });
+
+
+  /* =================================================
+     KELOMPOKKAN
+  ================================================= */
+
+  const kelompok = {};
+
+  dataFilter.forEach(function(item){
+
+    const key =
+      String(item.sortimen || "") +
+      "|" +
+      String(item.mutu || "") +
+      "|" +
+      String(item.panjang || "") +
+      "|" +
+      String(item.diameter || "") +
+      "|" +
+      String(item.status || "");
+
+
+    if(!kelompok[key]){
+
+      kelompok[key] = {
+
+        sortimen:
+          item.sortimen,
+
+        panjang:
+          item.panjang,
+
+        diameter:
+          item.diameter,
+
+        mutu:
+          item.mutu,
+
+        status:
+          item.status,
+
+        batang:0,
+
+        volume:0,
+
+        detail:[]
+
+      };
 
     }
 
 
-    let data =
-        DATA_SISA.rincian || [];
+    kelompok[key].batang++;
+
+    kelompok[key].volume +=
+      Number(item.volume) || 0;
+
+
+    /* SIMPAN DATA ASLI */
+
+    kelompok[key].detail.push(item);
+
+  });
+
+
+  /* =================================================
+     URUTAN
+  ================================================= */
+
+  const urutan = {
+
+    "A I":1,
+    "A II":2,
+    "A III":3,
+    "KBP":4
+
+  };
+
+
+  const daftar =
+    Object.values(kelompok)
+      .sort(function(a,b){
+
+        const sa =
+          urutan[a.sortimen] || 99;
+
+        const sb =
+          urutan[b.sortimen] || 99;
+
+        if(sa !== sb)
+          return sa - sb;
+
+
+        const pa =
+          Number(a.panjang) || 0;
+
+        const pb =
+          Number(b.panjang) || 0;
+
+        if(pa !== pb)
+          return pa - pb;
+
+
+        const da =
+          Number(a.diameter) || 0;
+
+        const db =
+          Number(b.diameter) || 0;
+
+        if(da !== db)
+          return da - db;
+
+
+        return String(a.mutu || "")
+          .localeCompare(
+            String(b.mutu || ""),
+            "id"
+          );
+
+      });
+
+
+  /* =================================================
+     RENDER
+  ================================================= */
+
+  daftar.forEach(function(item,index){
+
+    const detailId =
+      "detail-sisa-" + index;
+
+
+    const tr =
+      document.createElement("tr");
+
+    tr.style.cursor = "pointer";
+
+
+    tr.innerHTML = `
+
+      <td>
+        <span style="
+          display:inline-block;
+          width:22px;
+          font-weight:bold;
+        ">
+          +
+        </span>
+
+        ${item.sortimen || "-"}
+      </td>
+
+      <td>${item.panjang ?? "-"}</td>
+
+      <td>${item.diameter ?? "-"}</td>
+
+      <td>${item.mutu || "-"}</td>
+
+      <td>${item.status || "-"}</td>
+
+      <td>${item.batang}</td>
+
+      <td>
+        ${Number(item.volume || 0).toFixed(3)}
+        m³
+      </td>
+
+    `;
 
 
     /* =================================================
-       FILTER PANJANG
-    ================================================== */
+       BARIS DETAIL
+    ================================================= */
 
-    const cariPanjang =
-        document.getElementById(
-            "cariPanjang"
-        ).value;
+    const detailTr =
+      document.createElement("tr");
+
+    detailTr.id =
+      detailId;
+
+    detailTr.style.display =
+      "none";
+
+
+    detailTr.innerHTML = `
+
+      <td colspan="7"
+          style="
+            padding:0;
+            background:#f7f7f7;
+          ">
+
+        <div style="
+          padding:10px 14px 12px 38px;
+          overflow-x:auto;
+        ">
+
+          <table style="
+            width:100%;
+            border-collapse:collapse;
+            font-size:13px;
+            background:white;
+          ">
+
+            <thead>
+
+              <tr>
+
+                <th style="padding:7px;text-align:left;">
+                  REGISTER
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  TUMPUK
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  TPK
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  PANJANG
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  DIAMETER
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  MUTU
+                </th>
+
+                <th style="padding:7px;text-align:left;">
+                  STATUS
+                </th>
+
+                <th style="padding:7px;text-align:right;">
+                  VOLUME
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${item.detail.map(function(d){
+
+                return `
+
+                  <tr>
+
+                    <td style="padding:7px;">
+                      ${d.register || "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.tumpuk || "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.tpk || "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.panjang ?? "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.diameter ?? "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.mutu || "-"}
+                    </td>
+
+                    <td style="padding:7px;">
+                      ${d.status || "-"}
+                    </td>
+
+                    <td style="padding:7px;text-align:right;">
+                      ${Number(d.volume || 0).toFixed(3)} m³
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </td>
+
+    `;
 
 
     /* =================================================
-       FILTER DIAMETER
-    ================================================== */
+       KLIK BUKA / TUTUP
+    ================================================= */
 
-    const cariDiameter =
-        document.getElementById(
-            "cariDiameter"
-        ).value;
+    tr.addEventListener(
+      "click",
+      function(){
 
-
-    if(
-        String(cariPanjang).trim() !== ""
-    ){
-
-        data =
-            data.filter(function(item){
-
-                return cocokFilterAngka(
-                    item.panjang,
-                    cariPanjang
-                );
-
-            });
-
-    }
+        const buka =
+          detailTr.style.display === "none";
 
 
-    if(
-        String(cariDiameter).trim() !== ""
-    ){
-
-        data =
-            data.filter(function(item){
-
-                return cocokFilterAngka(
-                    item.diameter,
-                    cariDiameter
-                );
-
-            });
-
-    }
-tampilkanRingkasanFilterSisa(data);
-    /* =================================================
-       KALAU DATA KOSONG
-    ================================================== */
-
-    if(!data.length){
-
-        box.innerHTML =
-            '<div class="kosong">' +
-            'DATA TIDAK DITEMUKAN.' +
-            '</div>';
-
-        return;
-
-    }
+        detailTr.style.display =
+          buka ? "" : "none";
 
 
-    /* =================================================
-       GROUPING RINCIAN
-    ================================================== */
-
-    const group = {};
+        const icon =
+          tr.querySelector("td span");
 
 
-    data.forEach(function(item){
+        if(icon){
 
-        const key =
-            String(item.sortimen || "") +
-            "|" +
-            String(item.mutu || "") +
-            "|" +
-            String(item.panjang || "") +
-            "|" +
-            String(item.diameter || "") +
-            "|" +
-            String(item.status || "");
-
-
-        if(!group[key]){
-
-            group[key] = {
-
-                sortimen:
-                    item.sortimen || "",
-
-                mutu:
-                    item.mutu || "",
-
-                panjang:
-                    item.panjang || "",
-
-                diameter:
-                    item.diameter || "",
-
-                status:
-                    item.status || "",
-
-                batang:0,
-
-                volume:0
-
-            };
+          icon.textContent =
+            buka ? "−" : "+";
 
         }
 
-
-        group[key].batang +=
-            Number(
-                item.batang || 0
-            );
+      }
+    );
 
 
-        group[key].volume +=
-            Number(
-                item.volume || 0
-            );
+    tbody.appendChild(tr);
 
-    });
+    tbody.appendChild(detailTr);
 
+  });
 
-    const hasil =
-        Object.values(group);
-
-
-    /* =================================================
-       TABEL RINCIAN
-    ================================================== */
-
-    const wrap =
-        document.createElement("div");
-
-    wrap.className =
-        "rincian-table-wrap";
-
-
-    const table =
-        document.createElement("table");
-
-    table.className =
-        "rincian-table";
-
-table.innerHTML =
-
-    '<thead>' +
-        '<tr>' +
-            '<th>Sortimen</th>' +
-            '<th>Panjang</th>' +
-            '<th>Diameter</th>' +
-            '<th>Mutu</th>' +
-            '<th>Status</th>' +
-            '<th>Batang</th>' +
-            '<th>Volume</th>' +
-        '</tr>' +
-    '</thead>' +
-
-    '<tbody></tbody>';
-
-    const tbody =
-        table.querySelector("tbody");
-
-
-    hasil.forEach(function(item){
-
-        const tr =
-            document.createElement("tr");
-
-
-        tr.innerHTML =
-
-            '<td>' +
-    item.sortimen +
-'</td>' +
-
-'<td>' +
-    item.panjang +
-'</td>' +
-
-'<td>' +
-    item.diameter +
-'</td>' +
-
-'<td>' +
-    item.mutu +
-'</td>' +
-
-            '<td>' +
-                item.status +
-            '</td>' +
-
-            '<td>' +
-                item.batang +
-            '</td>' +
-
-            '<td>' +
-                Number(
-                    item.volume || 0
-                ).toFixed(3) +
-                ' m³' +
-            '</td>';
-
-
-        tbody.appendChild(tr);
-
-    });
-
-
-    wrap.appendChild(table);
-
-    box.appendChild(wrap);
 }
-/* =====================================================
+    
+    /* =====================================================
    FILTER ANGKA
 ===================================================== */
 
