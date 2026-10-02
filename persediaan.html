@@ -2845,17 +2845,16 @@ function ambilSisa(){
             }
 
             DATA_SISA = data;
-            
-            SUDAH_LOAD_SISA = true;
 
-            status.style.display =
-                "none";
+SUDAH_LOAD_SISA = true;
 
+status.style.display = "none";
 
-            tampilkanRingkasanSisa();
+console.log("SISA API BERHASIL:", DATA_SISA);
 
-            tampilkanRincianSisa();
+tampilkanRingkasanSisa();
 
+tampilkanRincianSisa();
         })
 
         .catch(function(error){
