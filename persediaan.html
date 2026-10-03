@@ -2447,12 +2447,17 @@ function tampilkanOlah(data){
         "none";
 
 
-    if(
-        !data ||
-        !data.rincian ||
-        !data.rincian.length
-    ){
+    const sumber =
+    DASAR_OLAH === "MUTU"
+        ? data.ringkasanMutu
+        : data.ringkasanStatus;
 
+
+if(
+    !data ||
+    !sumber ||
+    !sumber.length
+){
         rincian.innerHTML =
             '<div class="kosong">' +
             'TIDAK ADA DATA OLAH.' +
@@ -2466,7 +2471,7 @@ function tampilkanOlah(data){
     const baris = [];
 
 
-    data.rincian.forEach(function(item){
+   sumber.forEach(function(item){
 
         if(!item){
             return;
