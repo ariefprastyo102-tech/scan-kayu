@@ -1341,13 +1341,34 @@ tbody tr:hover{
 
     </div>
 
-    <h3>
-        RINCIAN OLAH
-    </h3>
+   <h3>
+    RINCIAN OLAH
+</h3>
 
-    <div
-        id="rincianOlah"
-        class="rincian">
+<div class="filter">
+
+    <label for="dasarOlah">
+        DASAR
+    </label>
+
+    <select
+        id="dasarOlah"
+        onchange="ubahDasarOlah()">
+
+        <option value="STATUS">
+            STATUS
+        </option>
+
+        <option value="MUTU">
+            MUTU
+        </option>
+
+    </select>
+
+</div>
+<div
+    id="rincianOlah"
+    class="rincian">
 
         <div class="loading">
             MEMUAT RINCIAN...
@@ -2309,6 +2330,8 @@ function ambilOlah(){
 
             }
 
+            DATA_MUTASI_OLAH = data;
+
             isiJenisOlah(
                 data.jenisList || [],
                 jenis
@@ -2399,7 +2422,26 @@ function isiJenisOlah(
 
 }
 
+let DASAR_OLAH = "STATUS";
 
+
+function ubahDasarOlah(){
+
+    const select =
+        document.getElementById("dasarOlah");
+
+    if(!select){
+        return;
+    }
+
+    DASAR_OLAH =
+        select.value;
+
+    tampilkanOlah(
+        DATA_MUTASI_OLAH
+    );
+
+}
 /* =====================================================
    TAMPILKAN DATA OLAH
 
@@ -2494,6 +2536,13 @@ function tampilkanOlah(data){
             .trim();
 
 
+        const mutu =
+            String(
+                item.mutu || ""
+            )
+            .trim();
+
+
         const batang =
             Number(
                 item.batang || 0
@@ -2509,6 +2558,7 @@ function tampilkanOlah(data){
         if(
             !sortimen &&
             !statusData &&
+            !mutu &&
             !batang &&
             !volume
         ){
@@ -2525,6 +2575,9 @@ function tampilkanOlah(data){
 
             status:
                 statusData,
+
+            mutu:
+                mutu,
 
             batang:
                 batang,
@@ -2612,10 +2665,22 @@ function tampilkanOlah(data){
         }
 
 
+        const dasarA =
+            DASAR_OLAH === "MUTU"
+                ? a.mutu
+                : a.status;
+
+
+        const dasarB =
+            DASAR_OLAH === "MUTU"
+                ? b.mutu
+                : b.status;
+
+
         return String(
-            a.status
+            dasarA
         ).localeCompare(
-            String(b.status),
+            String(dasarB),
             "id"
         );
 
@@ -2651,7 +2716,9 @@ function tampilkanOlah(data){
 
         "<th>SORTIMEN</th>" +
 
-        "<th>STATUS</th>" +
+        "<th>" +
+        DASAR_OLAH +
+        "</th>" +
 
         "<th>BATANG</th>" +
 
@@ -2666,6 +2733,12 @@ function tampilkanOlah(data){
 
 
     baris.forEach(function(item){
+
+        const nilaiDasar =
+            DASAR_OLAH === "MUTU"
+                ? item.mutu
+                : item.status;
+
 
         html +=
             "<tr>";
@@ -2682,7 +2755,7 @@ function tampilkanOlah(data){
         html +=
             "<td>" +
             escapeHtml(
-                item.status
+                nilaiDasar
             ) +
             "</td>";
 
@@ -2748,8 +2821,6 @@ function tampilkanOlah(data){
         html;
 
 }
-
-
 /* =====================================================
    =====================================================
    SISA
