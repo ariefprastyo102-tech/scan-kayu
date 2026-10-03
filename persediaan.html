@@ -2644,24 +2644,49 @@ function tampilkanOlah(data){
         }
 
 
-        const dasarA =
-            DASAR_OLAH === "MUTU"
-                ? a.mutu
-                : a.status;
+      const urutanDasar =
+    DASAR_OLAH === "MUTU"
+        ? {
+            "D": 1,
+            "T": 2,
+            "M": 3
+        }
+        : {
+            "HARA": 1,
+            "IND": 2,
+            "LOKAL": 3
+        };
 
 
-        const dasarB =
-            DASAR_OLAH === "MUTU"
-                ? b.mutu
-                : b.status;
+const dasarA =
+    DASAR_OLAH === "MUTU"
+        ? String(a.mutu || "").trim().toUpperCase()
+        : String(a.status || "").trim().toUpperCase();
 
 
-        return String(
-            dasarA
-        ).localeCompare(
-            String(dasarB),
-            "id"
-        );
+const dasarB =
+    DASAR_OLAH === "MUTU"
+        ? String(b.mutu || "").trim().toUpperCase()
+        : String(b.status || "").trim().toUpperCase();
+
+
+const iaDasar =
+    urutanDasar[dasarA] || 99;
+
+
+const ibDasar =
+    urutanDasar[dasarB] || 99;
+
+
+if(iaDasar !== ibDasar){
+    return iaDasar - ibDasar;
+}
+
+
+return dasarA.localeCompare(
+    dasarB,
+    "id"
+);
 
     });
 
