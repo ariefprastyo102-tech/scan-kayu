@@ -1506,10 +1506,6 @@ tbody tr:hover{
             <option value="DESEMBER">DESEMBER</option>
 
         </select>
-        <script>
-    document.getElementById("bulanMutasi").value =
-        new Date().toLocaleString("id-ID", { month: "long" }).toUpperCase();
-</script>
 
     </div>
 
@@ -4265,6 +4261,11 @@ function buatFilterBulanMutasi(){
         "DESEMBER"
     ];
 
+    const bulanSekarang =
+        urutanBulan[
+            new Date().getMonth()
+        ];
+
     const bulanAda = new Set();
 
     const sumber = [
@@ -4320,8 +4321,14 @@ function buatFilterBulanMutasi(){
 
     });
 
+    // DEFAULT = BULAN BERJALAN
+    if(bulanAda.has(bulanSekarang)){
+
+        select.value = bulanSekarang;
+
+    }
+
 }
-    
 /* =====================================================
    TAMPILKAN MUTASI BBI
 ===================================================== */
