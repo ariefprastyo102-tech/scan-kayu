@@ -3300,161 +3300,201 @@ tampilkanRingkasanFilterSisa(data);
 
     }
 
-
     /* =================================================
-       GROUPING RINCIAN
-    ================================================== */
+   RINCIAN PER REGISTER
+================================================= */
 
-    const group = {};
+const hasil = data.slice();
 
+hasil.sort(function(a,b){
 
-    data.forEach(function(item){
+    const sa =
+        normalisasiSortimen(
+            a.sortimen || ""
+        );
 
-        const key =
-            String(item.sortimen || "") +
-            "|" +
-            String(item.mutu || "") +
-            "|" +
-            String(item.panjang || "") +
-            "|" +
-            String(item.diameter || "") +
-            "|" +
-            String(item.status || "");
+    const sb =
+        normalisasiSortimen(
+            b.sortimen || ""
+        );
 
+    const urutan = {
+        "A I":1,
+        "A II":2,
+        "A III":3,
+        "KBP":4
+    };
 
-        if(!group[key]){
+    const ia = urutan[sa] || 99;
+    const ib = urutan[sb] || 99;
 
-            group[key] = {
+    if(ia !== ib){
+        return ia - ib;
+    }
 
-                sortimen:
-                    item.sortimen || "",
+    const pa =
+        Number(a.panjang) || 0;
 
-                mutu:
-                    item.mutu || "",
+    const pb =
+        Number(b.panjang) || 0;
 
-                panjang:
-                    item.panjang || "",
+    if(pa !== pb){
+        return pa - pb;
+    }
 
-                diameter:
-                    item.diameter || "",
+    const da =
+        Number(a.diameter) || 0;
 
-                status:
-                    item.status || "",
+    const db =
+        Number(b.diameter) || 0;
 
-                batang:0,
+    if(da !== db){
+        return da - db;
+    }
 
-                volume:0
+    return String(
+        a.register || ""
+    ).localeCompare(
+        String(b.register || ""),
+        "id"
+    );
 
-            };
-
-        }
-
-
-        group[key].batang +=
-            Number(
-                item.batang || 0
-            );
-
-
-        group[key].volume +=
-            Number(
-                item.volume || 0
-            );
-
-    });
-
-
-    const hasil =
-        Object.values(group);
+});
 
 
-    /* =================================================
-       TABEL RINCIAN
-    ================================================== */
+/* =================================================
+   TABEL RINCIAN
+================================================= */
 
-    const wrap =
-        document.createElement("div");
+const wrap =
+    document.createElement("div");
 
-    wrap.className =
-        "rincian-table-wrap";
+wrap.className =
+    "rincian-table-wrap";
 
 
-    const table =
-        document.createElement("table");
+const table =
+    document.createElement("table");
 
-    table.className =
-        "rincian-table";
+table.className =
+    "rincian-table";
+
 
 table.innerHTML =
 
     '<thead>' +
         '<tr>' +
-            '<th>Sortimen</th>' +
-            '<th>Panjang</th>' +
-            '<th>Diameter</th>' +
-            '<th>Mutu</th>' +
-            '<th>Status</th>' +
-            '<th>Batang</th>' +
-            '<th>Volume</th>' +
+
+            '<th>REGISTER</th>' +
+
+            '<th>PANJANG</th>' +
+
+            '<th>DIAMETER</th>' +
+
+            '<th>TUMPUK</th>' +
+
+            '<th>TPK</th>' +
+
+            '<th>MUTU</th>' +
+
+            '<th>SORTIMEN</th>' +
+
+            '<th>STATUS</th>' +
+
+            '<th>BATANG</th>' +
+
+            '<th>VOLUME</th>' +
+
         '</tr>' +
     '</thead>' +
 
     '<tbody></tbody>';
 
-    const tbody =
-        table.querySelector("tbody");
+
+const tbody =
+    table.querySelector("tbody");
 
 
-    hasil.forEach(function(item){
+hasil.forEach(function(item){
 
-        const tr =
-            document.createElement("tr");
-
-
-        tr.innerHTML =
-
-            '<td>' +
-    item.sortimen +
-'</td>' +
-
-'<td>' +
-    item.panjang +
-'</td>' +
-
-'<td>' +
-    item.diameter +
-'</td>' +
-
-'<td>' +
-    item.mutu +
-'</td>' +
-
-            '<td>' +
-                item.status +
-            '</td>' +
-
-            '<td>' +
-                item.batang +
-            '</td>' +
-
-            '<td>' +
-                Number(
-                    item.volume || 0
-                ).toFixed(3) +
-                ' m³' +
-            '</td>';
+    const tr =
+        document.createElement("tr");
 
 
-        tbody.appendChild(tr);
+    tr.innerHTML =
 
-    });
+        '<td>' +
+            escapeHtml(
+                item.register || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.panjang ?? ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.diameter ?? ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.tumpuk || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.tpk || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.mutu || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.sortimen || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            escapeHtml(
+                item.status || ""
+            ) +
+        '</td>' +
+
+        '<td>' +
+            Number(
+                item.batang || 0
+            ) +
+        '</td>' +
+
+        '<td>' +
+            Number(
+                item.volume || 0
+            ).toFixed(3) +
+            ' m³' +
+        '</td>';
 
 
-    wrap.appendChild(table);
+    tbody.appendChild(tr);
 
-    box.appendChild(wrap);
-}
-/* =====================================================
+});
+
+
+wrap.appendChild(table);
+
+box.appendChild(wrap);
+
+   /* =====================================================
    FILTER ANGKA
 ===================================================== */
 
