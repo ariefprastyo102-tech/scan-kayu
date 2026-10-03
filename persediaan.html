@@ -1456,36 +1456,22 @@ tbody tr:hover{
          RINCIAN SISA
     ================================================== -->
 
-   <div
-    id="rincianSisa"
-    class="rincian">
+    <h3>
+        RINCIAN SISA
+    </h3>
 
-    <table>
-        <thead>
-            <tr>
-                <th>SORTIMEN</th>
-                <th>PANJANG</th>
-                <th>DIAMETER</th>
-                <th>MUTU</th>
-                <th>STATUS</th>
-                <th>BATANG</th>
-                <th>VOLUME</th>
-            </tr>
-        </thead>
+    <div
+        id="rincianSisa"
+        class="rincian">
 
-        <tbody id="tbodyRincianSisa">
+        <div class="loading">
+            MEMUAT RINCIAN...
+        </div>
 
-            <tr>
-                <td colspan="7"
-                    style="text-align:center;padding:20px;">
-                    MEMUAT RINCIAN...
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+    </div>
 
 </div>
+
 <!-- =====================================================
      MUTASI
 ===================================================== -->
@@ -2843,24 +2829,21 @@ function ambilSisa(){
                 );
 
             }
+            
+SUDAH_LOAD_OLAH = true;
 
             DATA_SISA = data;
+            
+            SUDAH_LOAD_SISA = true;
 
-SUDAH_LOAD_SISA = true;
+            status.style.display =
+                "none";
 
-status.style.display = "none";
 
-console.log("SISA API BERHASIL:", DATA_SISA);
+            tampilkanRingkasanSisa();
 
-console.log("SEBELUM RINGKASAN");
+            tampilkanRincianSisa();
 
-tampilkanRingkasanSisa();
-
-console.log("SESUDAH RINGKASAN");
-
-tampilkanRincianSisa();
-
-console.log("SESUDAH RINCIAN");
         })
 
         .catch(function(error){
@@ -3224,439 +3207,254 @@ function tampilkanRingkasanSisa(){
 
 function tampilkanRincianSisa(){
 
-  const tbody =
-    document.getElementById("tbodyRincianSisa");
-
-  if(!tbody) return;
-
-  const data =
-    DATA_SISA &&
-    Array.isArray(DATA_SISA.rincian)
-      ? DATA_SISA.rincian
-      : [];
-
-  tbody.innerHTML = "";
-
-  if(!data.length){
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7"
-            style="text-align:center;padding:20px;">
-          Tidak ada data SISA
-        </td>
-      </tr>
-    `;
-
-    window.GROUP_SISA_DETAIL = [];
-
-    return;
-  }
-
-
-  /* ================================
-     FILTER
-  ================================= */
-
-  const panjangFilter =
-    document.getElementById("filterPanjangSisa")?.value || "";
-
-  const diameterFilter =
-    document.getElementById("filterDiameterSisa")?.value || "";
-
-
-  const dataFilter =
-    data.filter(function(item){
-
-      return (
-        cocokFilterAngka(
-          item.panjang,
-          panjangFilter
-        ) &&
-        cocokFilterAngka(
-          item.diameter,
-          diameterFilter
-        )
-      );
-
-    });
-
-
-  /* ================================
-     DATA SUDAH DIGROUP DARI BACKEND
-     TIDAK GROUPING ULANG
-  ================================= */
-
-  const urutan = {
-    "A I":1,
-    "A II":2,
-    "A III":3,
-    "KBP":4
-  };
-
-
-  const daftar =
-    dataFilter.slice().sort(function(a,b){
-
-      const sa =
-        urutan[a.sortimen] || 99;
-
-      const sb =
-        urutan[b.sortimen] || 99;
-
-      if(sa !== sb)
-        return sa - sb;
-
-
-      const pa =
-        Number(a.panjang) || 0;
-
-      const pb =
-        Number(b.panjang) || 0;
-
-      if(pa !== pb)
-        return pa - pb;
-
-
-      const da =
-        Number(a.diameter) || 0;
-
-      const db =
-        Number(b.diameter) || 0;
-
-      if(da !== db)
-        return da - db;
-
-
-      return String(a.mutu || "")
-        .localeCompare(
-          String(b.mutu || ""),
-          "id"
+    const box =
+        document.getElementById(
+            "rincianSisa"
         );
 
-    });
 
+    box.innerHTML = "";
 
-  /*
-   * SIMPAN GRUP UNTUK TOGGLE
-   */
-  window.GROUP_SISA_DETAIL = daftar;
 
+    if(!DATA_SISA){
 
-  /* ================================
-     RENDER BARIS RINGKASAN SAJA
-  ================================= */
+        box.innerHTML =
+            '<div class="kosong">' +
+            'DATA SISA BELUM DIMUAT.' +
+            '</div>';
 
-  daftar.forEach(function(item,index){
+        return;
 
-    const detailId =
-      "detailSisa" + index;
-
-
-    const isiId =
-      "isiDetailSisa" + index;
-
-
-    const tr =
-      document.createElement("tr");
-
-    tr.style.cursor = "pointer";
-
-
-    tr.innerHTML = `
-
-      <td>
-
-        <span
-          id="plusSisa${index}"
-          style="
-            display:inline-block;
-            width:22px;
-            font-weight:bold;
-          "
-        >+</span>
-
-        ${item.sortimen || "-"}
-
-      </td>
-
-      <td>${item.panjang ?? "-"}</td>
-
-      <td>${item.diameter ?? "-"}</td>
-
-      <td>${item.mutu || "-"}</td>
-
-      <td>${item.status || "-"}</td>
-
-      <td>${item.batang || 0}</td>
-
-      <td>
-        ${Number(item.volume || 0).toFixed(3)}
-        m³
-      </td>
-
-    `;
-
-
-    /* ================================
-       BARIS DETAIL KOSONG
-       BELUM ADA REGISTER DI SINI
-    ================================= */
-
-    const detailTr =
-      document.createElement("tr");
-
-    detailTr.id =
-      detailId;
-
-    detailTr.style.display =
-      "none";
-
-
-    detailTr.innerHTML = `
-
-      <td colspan="7"
-          style="
-            padding:0;
-            background:#f7f7f7;
-          ">
-
-        <div
-          id="${isiId}"
-          style="
-            padding:10px 14px 12px 38px;
-          "
-        ></div>
-
-      </td>
-
-    `;
-
-
-    /* ================================
-       KLIK
-    ================================= */
-
-    tr.addEventListener(
-      "click",
-      function(){
-
-        toggleDetailSisa(index);
-
-      }
-    );
-
-
-    tbody.appendChild(tr);
-
-    tbody.appendChild(detailTr);
-
-  });
-
-}
-    
-async function toggleDetailSisa(index) {
-
-  const row =
-    document.getElementById("detailSisa" + index);
-
-  const plus =
-    document.getElementById("plusSisa" + index);
-
-  const container =
-    document.getElementById("isiDetailSisa" + index);
-
-  if(!row || !container) return;
-
-
-  /* TUTUP */
-  if(row.style.display !== "none"){
-
-    row.style.display = "none";
-
-    if(plus){
-      plus.textContent = "+";
-    }
-
-    return;
-  }
-
-
-  /* AMBIL DATA GRUP */
-  const group =
-    window.GROUP_SISA_DETAIL &&
-    window.GROUP_SISA_DETAIL[index];
-
-  if(!group) return;
-
-
-  /* KALAU SUDAH PERNAH DIBUKA */
-  if(container.dataset.loaded === "1"){
-
-    row.style.display = "table-row";
-
-    if(plus){
-      plus.textContent = "−";
-    }
-
-    return;
-  }
-
-
-  /* KEY CACHE */
-  const key = [
-    group.sortimen,
-    group.mutu,
-    group.panjang,
-    group.diameter,
-    group.status
-  ].join("|");
-
-
-  /* TAMPILKAN BARIS */
-  row.style.display = "table-row";
-
-  if(plus){
-    plus.textContent = "…";
-  }
-
-  container.innerHTML = `
-    <div style="
-      padding:12px;
-      text-align:center;
-      font-size:12px;
-    ">
-      Memuat detail...
-    </div>
-  `;
-
-
-  try{
-
-    const url =
-      API_URL +
-      "?action=sisaDetail&key=" +
-      encodeURIComponent(key);
-
-    const response =
-      await fetch(url);
-
-    const data =
-      await response.json();
-
-
-    if(!data.sukses){
-
-      container.innerHTML = `
-        <div style="
-          padding:12px;
-          text-align:center;
-        ">
-          Detail tidak ditemukan di cache.
-        </div>
-      `;
-
-      if(plus){
-        plus.textContent = "+";
-      }
-
-      return;
     }
 
 
-    const detail =
-      data.detail || [];
+    let data =
+        DATA_SISA.rincian || [];
 
 
-    let html = `
-      <div style="
-        padding:8px;
-        overflow-x:auto;
-      ">
+    /* =================================================
+       FILTER PANJANG
+    ================================================== */
 
-        <table style="
-          width:100%;
-          border-collapse:collapse;
-          font-size:12px;
-        ">
-
-          <thead>
-            <tr>
-              <th>REGISTER</th>
-              <th>TUMPUK</th>
-              <th>TPK</th>
-              <th>PANJANG</th>
-              <th>DIAMETER</th>
-              <th>MUTU</th>
-              <th>STATUS</th>
-              <th>VOLUME</th>
-            </tr>
-          </thead>
-
-          <tbody>
-    `;
+    const cariPanjang =
+        document.getElementById(
+            "cariPanjang"
+        ).value;
 
 
-    detail.forEach(function(item){
+    /* =================================================
+       FILTER DIAMETER
+    ================================================== */
 
-      html += `
-        <tr>
-          <td>${item.register || ""}</td>
-          <td>${item.tumpuk || ""}</td>
-          <td>${item.tpk || ""}</td>
-          <td>${item.panjang || ""}</td>
-          <td>${item.diameter || ""}</td>
-          <td>${item.mutu || ""}</td>
-          <td>${item.status || ""}</td>
-          <td>${Number(item.volume || 0).toFixed(6)}</td>
-        </tr>
-      `;
+    const cariDiameter =
+        document.getElementById(
+            "cariDiameter"
+        ).value;
+
+
+    if(
+        String(cariPanjang).trim() !== ""
+    ){
+
+        data =
+            data.filter(function(item){
+
+                return cocokFilterAngka(
+                    item.panjang,
+                    cariPanjang
+                );
+
+            });
+
+    }
+
+
+    if(
+        String(cariDiameter).trim() !== ""
+    ){
+
+        data =
+            data.filter(function(item){
+
+                return cocokFilterAngka(
+                    item.diameter,
+                    cariDiameter
+                );
+
+            });
+
+    }
+tampilkanRingkasanFilterSisa(data);
+    /* =================================================
+       KALAU DATA KOSONG
+    ================================================== */
+
+    if(!data.length){
+
+        box.innerHTML =
+            '<div class="kosong">' +
+            'DATA TIDAK DITEMUKAN.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    /* =================================================
+       GROUPING RINCIAN
+    ================================================== */
+
+    const group = {};
+
+
+    data.forEach(function(item){
+
+        const key =
+            String(item.sortimen || "") +
+            "|" +
+            String(item.mutu || "") +
+            "|" +
+            String(item.panjang || "") +
+            "|" +
+            String(item.diameter || "") +
+            "|" +
+            String(item.status || "");
+
+
+        if(!group[key]){
+
+            group[key] = {
+
+                sortimen:
+                    item.sortimen || "",
+
+                mutu:
+                    item.mutu || "",
+
+                panjang:
+                    item.panjang || "",
+
+                diameter:
+                    item.diameter || "",
+
+                status:
+                    item.status || "",
+
+                batang:0,
+
+                volume:0
+
+            };
+
+        }
+
+
+        group[key].batang +=
+            Number(
+                item.batang || 0
+            );
+
+
+        group[key].volume +=
+            Number(
+                item.volume || 0
+            );
 
     });
 
 
-    html += `
-          </tbody>
-        </table>
-
-      </div>
-    `;
+    const hasil =
+        Object.values(group);
 
 
-    container.innerHTML = html;
+    /* =================================================
+       TABEL RINCIAN
+    ================================================== */
 
-    container.dataset.loaded = "1";
+    const wrap =
+        document.createElement("div");
 
-    if(plus){
-      plus.textContent = "−";
-    }
+    wrap.className =
+        "rincian-table-wrap";
 
 
-  }catch(error){
+    const table =
+        document.createElement("table");
 
-    console.error(
-      "ERROR DETAIL SISA:",
-      error
-    );
+    table.className =
+        "rincian-table";
 
-    container.innerHTML = `
-      <div style="
-        padding:12px;
-        text-align:center;
-      ">
-        Gagal mengambil detail.
-      </div>
-    `;
+table.innerHTML =
 
-    if(plus){
-      plus.textContent = "+";
-    }
+    '<thead>' +
+        '<tr>' +
+            '<th>Sortimen</th>' +
+            '<th>Panjang</th>' +
+            '<th>Diameter</th>' +
+            '<th>Mutu</th>' +
+            '<th>Status</th>' +
+            '<th>Batang</th>' +
+            '<th>Volume</th>' +
+        '</tr>' +
+    '</thead>' +
 
-  }
+    '<tbody></tbody>';
 
+    const tbody =
+        table.querySelector("tbody");
+
+
+    hasil.forEach(function(item){
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML =
+
+            '<td>' +
+    item.sortimen +
+'</td>' +
+
+'<td>' +
+    item.panjang +
+'</td>' +
+
+'<td>' +
+    item.diameter +
+'</td>' +
+
+'<td>' +
+    item.mutu +
+'</td>' +
+
+            '<td>' +
+                item.status +
+            '</td>' +
+
+            '<td>' +
+                item.batang +
+            '</td>' +
+
+            '<td>' +
+                Number(
+                    item.volume || 0
+                ).toFixed(3) +
+                ' m³' +
+            '</td>';
+
+
+        tbody.appendChild(tr);
+
+    });
+
+
+    wrap.appendChild(table);
+
+    box.appendChild(wrap);
 }
-    
-    /* =====================================================
+/* =====================================================
    FILTER ANGKA
 ===================================================== */
 
