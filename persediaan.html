@@ -1345,27 +1345,6 @@ tbody tr:hover{
     RINCIAN OLAH
 </h3>
 
-<div class="filter">
-
-    <label for="dasarOlah">
-        DASAR
-    </label>
-
-    <select
-        id="dasarOlah"
-        onchange="ubahDasarOlah()">
-
-        <option value="STATUS">
-            STATUS
-        </option>
-
-        <option value="MUTU">
-            MUTU
-        </option>
-
-    </select>
-
-</div>
 <div
     id="rincianOlah"
     class="rincian">
@@ -2710,22 +2689,36 @@ function tampilkanOlah(data){
         "<table>";
 
 
-    html +=
-        "<thead>" +
-        "<tr>" +
+  html +=
+    "<thead>" +
+    "<tr>" +
 
-        "<th>SORTIMEN</th>" +
+    "<th>SORTIMEN</th>" +
 
-        "<th>" +
-        DASAR_OLAH +
-        "</th>" +
+    "<th>" +
+        "<select id='dasarOlah' onchange='ubahDasarOlah()'>" +
 
-        "<th>BATANG</th>" +
+            "<option value='STATUS'" +
+                (DASAR_OLAH === "STATUS" ? " selected" : "") +
+            ">" +
+                "STATUS" +
+            "</option>" +
 
-        "<th>VOLUME (M³)</th>" +
+            "<option value='MUTU'" +
+                (DASAR_OLAH === "MUTU" ? " selected" : "") +
+            ">" +
+                "MUTU" +
+            "</option>" +
 
-        "</tr>" +
-        "</thead>";
+        "</select>" +
+    "</th>" +
+
+    "<th>BATANG</th>" +
+
+    "<th>VOLUME (M³)</th>" +
+
+    "</tr>" +
+    "</thead>";
 
 
     html +=
