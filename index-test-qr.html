@@ -1624,6 +1624,28 @@ body{
 
 <script>
 
+function bukaMenuBawah(){
+
+    const menu =
+        document.getElementById("menuBawah");
+
+    if(menu){
+        menu.style.display = "flex";
+    }
+
+}
+
+function tutupMenuBawah(){
+
+    const menu =
+        document.getElementById("menuBawah");
+
+    if(menu){
+        menu.style.display = "none";
+    }
+
+} 
+    
 function ambilRegisterDariQR(teks){
 
     teks = String(teks || "").trim();
