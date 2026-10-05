@@ -747,6 +747,43 @@ body{
     cursor:pointer;
 }
 
+#btnMenuBawah{
+    position:fixed;
+
+    left:50%;
+    bottom:8px;
+
+    transform:translateX(-50%);
+
+    width:110px;
+    height:43px;
+
+    border:none;
+    border-radius:22px;
+
+    background:linear-gradient(
+        135deg,
+        #176b38,
+        #0d542c
+    );
+
+    color:white;
+
+    font-size:11px;
+    font-weight:900;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.20);
+
+    z-index:1000;
+
+    cursor:pointer;
+
+}
+
+    #menuBawah{
+    display:none;
+}
+    
 #btnTumpuk{
     left:10px;
     right:auto;
@@ -1515,21 +1552,33 @@ body{
 ============================== -->
 
 <button
-  id="btnHistory"
-  onclick="tampilkanHistory()"
-  title="History Scan"
+  id="btnMenuBawah"
+  onclick="bukaMenuBawah()"
 >
-  📋 HISTORY
+  ☰ MENU
 </button>
 
+<div id="menuBawah">
+
   <button
-  id="btnTumpuk"
-  onclick="tampilkanPerTumpuk()"
-  title="Cek Per Tumpuk"
->
-  📦 PER TUMPUK
-</button>
-<div id="historyPanel">
+    id="btnHistory"
+    onclick="tampilkanHistory(); tutupMenuBawah()"
+    title="History Scan"
+  >
+    📋 HISTORY
+  </button>
+
+  <button
+    id="btnTumpuk"
+    onclick="tampilkanPerTumpuk(); tutupMenuBawah()"
+    title="Cek Per Tumpuk"
+  >
+    📦 PER TUMPUK
+  </button>
+
+</div>
+    
+    <div id="historyPanel">
 
   <div class="historyHeader">
 
