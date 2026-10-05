@@ -530,6 +530,21 @@ body{
     cursor:not-allowed;
 }
 
+.button-row{
+    display:flex;
+    gap:8px;
+    width:100%;
+    max-width:540px;
+    margin:8px auto;
+}
+
+.button-row #btnScan,
+.button-row #btnScanBaru{
+    flex:1;
+    width:auto;
+    margin:0;
+}
+    
 /* =========================
    HASIL SCAN - MODERN
 ========================= */
@@ -1420,19 +1435,23 @@ body{
 
 </div>
 
-<button
-  id="btnScan"
-  onclick="mulaiKamera()"
->
-  📷 BUKA KAMERA
-</button>
+<div class="button-row">
 
-<button
-  id="btnScanBaru"
-  onclick="scanBaru()"
->
-  🔄 SCAN BARU
-</button>
+  <button
+    id="btnScan"
+    onclick="mulaiKamera()"
+  >
+    📷 BUKA KAMERA
+  </button>
+
+  <button
+    id="btnScanBaru"
+    onclick="scanBaru()"
+  >
+    🔄 SCAN BARU
+  </button>
+
+</div>
 
 <!-- ==============================
      TOTAL
