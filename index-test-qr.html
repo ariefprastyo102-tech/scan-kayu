@@ -1668,7 +1668,11 @@ function bukaMenuBawah(){
     const menu =
         document.getElementById("menuBawah");
 
-    if(menu){
+    if(!menu) return;
+
+    if(menu.style.display === "flex"){
+        menu.style.display = "none";
+    }else{
         menu.style.display = "flex";
     }
 
