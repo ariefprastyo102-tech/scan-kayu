@@ -324,6 +324,17 @@ body{
     background:#198754;
 }
 
+.labelTotal{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:2px;
+}
+
+#status{
+    display:none;
+}
+    
 #jumlah{
     margin:0;
 
@@ -441,7 +452,30 @@ body{
 ========================= */
 
 #btnScan,
-#btnScanBaru,
+#btnScanBaru{
+    display:inline-block;
+
+    width:calc(50% - 5px);
+
+    margin:8px 2px;
+
+    padding:14px 5px;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.12s ease;
+}
+
 #btnLanjut{
     display:block;
 
@@ -466,7 +500,6 @@ body{
 
     transition:.12s ease;
 }
-
 #btnScan{
     background:#1976d2;
 
@@ -1407,6 +1440,10 @@ body{
 
 <div class="status-card">
 
+  <div class="labelTotal">
+    TOTAL
+  </div>
+
   <div id="jumlah">
 
     <span class="angkaTotal">
@@ -1424,7 +1461,6 @@ body{
   </div>
 
 </div>
-
 <!-- ==============================
      PENGAMBILAN SAAT INI
 ============================== -->
