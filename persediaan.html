@@ -3137,64 +3137,89 @@ function tampilkanRingkasanSisa(){
     ];
 
 
-    baris.sort(function(a,b){
+   baris.sort(function(a,b){
 
-        const ia =
-            urutan.indexOf(
-                a.sortimen
+    const ia =
+        urutan.indexOf(a.sortimen);
+
+    const ib =
+        urutan.indexOf(b.sortimen);
+
+
+    /* SORTIMEN */
+
+    if(ia === -1 && ib === -1){
+
+        const s =
+            a.sortimen.localeCompare(
+                b.sortimen,
+                "id"
             );
 
-        const ib =
-            urutan.indexOf(
-                b.sortimen
-            );
-
-
-        if(ia === -1 && ib === -1){
-
-            const s =
-                a.sortimen.localeCompare(
-                    b.sortimen,
-                    "id"
-                );
-
-            if(s !== 0){
-                return s;
-            }
-
+        if(s !== 0){
+            return s;
         }
 
+    }
 
-        if(ia === -1){
-            return 1;
-        }
+    if(ia === -1){
+        return 1;
+    }
+
+    if(ib === -1){
+        return -1;
+    }
+
+    if(ia !== ib){
+        return ia - ib;
+    }
 
 
-        if(ib === -1){
-            return -1;
-        }
+    /* =============================================
+       MUTU : D → T → M → L
+    ============================================== */
+
+    if(DASAR_SISA === "MUTU"){
+
+        const urutanMutu = {
+            "D": 1,
+            "T": 2,
+            "M": 3,
+            "L": 4
+        };
 
 
-        if(ia !== ib){
-            return ia - ib;
-        }
+        const mutuA =
+            String(a.nilai || "")
+                .trim()
+                .toUpperCase();
+
+        const mutuB =
+            String(b.nilai || "")
+                .trim()
+                .toUpperCase();
 
 
-        if(DASAR_SISA === "MUTU"){
+        const iaMutu =
+            urutanMutu[mutuA] || 999;
 
-    const urutanMutu = [
-        "D",
-        "T",
-        "M",
-        "L"
-    ];
-}
+        const ibMutu =
+            urutanMutu[mutuB] || 999;
 
-return a.nilai.localeCompare(
-    b.nilai,
-    "id"
-);
-    });
+
+        return iaMutu - ibMutu;
+
+    }
+
+
+    /* STATUS */
+
+    return a.nilai.localeCompare(
+        b.nilai,
+        "id"
+    );
+
+});
 
 
     let totalBatang = 0;
