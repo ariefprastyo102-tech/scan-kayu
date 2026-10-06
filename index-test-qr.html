@@ -3212,31 +3212,27 @@ function prosesHasilScan(
 
   }
 
-  else if (
-    hasil.status ===
-    "duplicate"
-  ) {
+ else if (
+  hasil.status ===
+  "duplicate"
+) {
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
-      "❌ " +
-      hasil.message;
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "❌ " +
+    hasil.message;
 
+  setTimeout(
+    function() {
+      muatDataSesiAktif(
+        false
+      );
+    },
+    200
+  );
 
-    setTimeout(
-      function() {
-
-        muatDataSesiAktif(
-          false
-        );
-
-      },
-      200
-    );
-
-  }
-
+}
   else if (
     hasil.status ===
     "not_found"
