@@ -266,31 +266,38 @@ repeat(11,30mm);
 
     display:block;
 }
- .labelBarcode{
+.labelBarcode{
     position:absolute;
 
-    left:5.5mm;
+    left:10.5mm;
     top:1mm;
 
     width:28mm;
     height:28mm;
 
     border:none;
+
+    overflow:hidden;
 }
 
-.labelBarcode img{
+.labelBarcode img,
+.labelBarcode canvas{
     display:block;
 
     width:28mm !important;
     height:28mm !important;
+
+    max-width:28mm !important;
+    max-height:28mm !important;
 }
+
 .angkaCetak{
     position:absolute;
 
-    left:33.5mm;
+    left:41.5mm;
     top:2mm;
 
-    width:31mm;
+    width:20mm;
     height:26mm;
 
     display:flex;
