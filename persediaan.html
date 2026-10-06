@@ -2298,28 +2298,29 @@ function ambilOlah(){
 
         })
 
-        .then(function(data){
+       .then(function(data){
 
-            if(!data.sukses){
+    if(!data.sukses){
 
-                throw new Error(
-                    data.pesan ||
-                    "Gagal mengambil data OLAH."
-                );
+        throw new Error(
+            data.pesan ||
+            "Gagal mengambil data OLAH."
+        );
 
-            }
+    }
 
-            DATA_MUTASI_OLAH = data;
+    DATA_MUTASI_OLAH = data;
 
-            isiJenisOlah(
-                data.jenisList || [],
-                jenis
-            );
+    SUDAH_LOAD_OLAH = true;
 
-            tampilkanOlah(data);
+    isiJenisOlah(
+        data.jenisList || [],
+        jenis
+    );
 
-        })
+    tampilkanOlah(data);
 
+})
         .catch(function(error){
 
             status.innerHTML =
@@ -2416,6 +2417,14 @@ function ubahDasarOlah(){
     DASAR_OLAH =
         select.value;
 
+    if(!DATA_MUTASI_OLAH){
+
+        ambilOlah();
+
+        return;
+
+    }
+
     tampilkanOlah(
         DATA_MUTASI_OLAH
     );
@@ -2443,21 +2452,36 @@ function tampilkanOlah(data){
     const rincian =
         document.getElementById("rincianOlah");
 
+
+    if(!data){
+
+        status.style.display = "block";
+
+        status.textContent =
+            "MEMUAT DATA OLAH...";
+
+        rincian.innerHTML =
+            '<div class="loading">' +
+            'MEMUAT RINCIAN...' +
+            '</div>';
+
+        return;
+
+    }
+
+
     status.style.display =
         "none";
 
 
     const sumber =
-    DASAR_OLAH === "MUTU"
-        ? data.ringkasanMutu
-        : data.ringkasanStatus;
+        DASAR_OLAH === "MUTU"
+            ? (data.ringkasanMutu || [])
+            : (data.ringkasanStatus || []);
 
 
-if(
-    !data ||
-    !sumber ||
-    !sumber.length
-){
+    if(!sumber.length){
+
         rincian.innerHTML =
             '<div class="kosong">' +
             'TIDAK ADA DATA OLAH.' +
@@ -2466,7 +2490,6 @@ if(
         return;
 
     }
-
 
     const baris = [];
 
@@ -2923,8 +2946,6 @@ function ambilSisa(){
                 );
 
             }
-            
-SUDAH_LOAD_OLAH = true;
 
             DATA_SISA = data;
             
@@ -3159,11 +3180,22 @@ function tampilkanRingkasanSisa(){
         }
 
 
-        return a.nilai.localeCompare(
-            b.nilai,
-            "id"
-        );
+        if(DASAR_SISA === "MUTU"){
 
+    const urutanMutu = [
+        "D",
+        "T",
+        "M",
+        "L"
+    ];
+
+    ...
+}
+
+return a.nilai.localeCompare(
+    b.nilai,
+    "id"
+);
     });
 
 
@@ -3871,10 +3903,29 @@ function tampilkanRingkasanFilterSisa(data){
         }
 
 
-        return a.nilai.localeCompare(
-            b.nilai,
-            "id"
-        );
+      return a.nilai.localeCompare(
+    b.nilai,
+    "id"
+);  
+    }
+
+    if(iaMutu === -1){
+        return 1;
+    }
+
+    if(ibMutu === -1){
+        return -1;
+    }
+
+    return iaMutu - ibMutu;
+
+}
+
+
+return a.nilai.localeCompare(
+    b.nilai,
+    "id"
+);
 
     });
 
