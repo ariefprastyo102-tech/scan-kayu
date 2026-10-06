@@ -2853,13 +2853,13 @@ async function mulaiKamera() {
     }
 
 
-    const video =
-      document.getElementById(
-        "video"
-      );
+   const video =
+  document.getElementById(
+    "video"
+  );
 
 
-    const hints =
+const hints =
   new Map();
 
 hints.set(
@@ -2878,53 +2878,37 @@ hints.set(
 scannerReader =
   new ZXingBrowser
     .BrowserMultiFormatReader(
-      hints,
-      150
+      hints
     );
 
 
-    const constraints = {
+const constraints = {
 
-      audio: false,
+  audio: false,
 
-      video: {
+  video: {
 
-        facingMode: {
+    facingMode: {
+      ideal: "environment"
+    },
 
-          ideal:
-            "environment"
+    width: {
+      min: 640,
+      ideal: 1280,
+      max: 1920
+    },
 
-        },
+    height: {
+      min: 480,
+      ideal: 720,
+      max: 1080
+    },
 
-        width: {
-
-          min: 640,
-
-          ideal: 1280,
-
-          max: 1920
-
-        },
-
-        height: {
-
-          min: 480,
-
-          ideal: 720,
-
-          max: 1080
-
-        },
-
-        frameRate: {
-
-          min: 15,
-
-          ideal: 30,
-
-          max: 60
-
-        },
+    frameRate: {
+      min: 15,
+      ideal: 30,
+      max: 60
+    },
 
         focusMode: {
 
