@@ -254,62 +254,112 @@ repeat(11,30mm);
     width:70mm;
     height:30mm;
 
-    box-sizing:border-box;
-
-    border:0.25mm solid black;
-
-    background:white;
-
     position:relative;
-
     overflow:hidden;
 
     display:block;
+
+    background:#fff;
+
+    border:0.45mm solid #176b38;
+    border-radius:2.5mm;
+
+    box-sizing:border-box;
 }
+    
 .labelBarcode{
     position:absolute;
-    left:12mm;
-    top:2.5mm;
 
-    width:25mm;
-    height:25mm;
+    left:11mm;
+    top:3mm;
 
-    border:none;
+    width:23mm;
+    height:23mm;
+
+    padding:0.8mm;
+
+    box-sizing:border-box;
+
+    border:0.45mm solid #176b38;
+    border-radius:1.8mm;
+
     overflow:hidden;
+
+    background:#fff;
 }
 
 .labelBarcode img,
 .labelBarcode canvas{
     display:block;
 
-    width:25mm !important;
-    height:25mm !important;
+    width:21.4mm !important;
+    height:21.4mm !important;
 
-    max-width:25mm !important;
-    max-height:25mm !important;
+    max-width:21.4mm !important;
+    max-height:21.4mm !important;
+
+    margin:auto;
 }
-.angkaCetak{
+    
+    .angkaCetak{
     position:absolute;
 
-    left:43mm;
-    top:2mm;
+    left:38mm;
+    top:2.2mm;
 
-    width:20mm;
-    height:26mm;
+    width:28mm;
+    height:25.5mm;
 
     display:flex;
     flex-direction:column;
+
     align-items:flex-start;
     justify-content:center;
 
     font-family:Arial,sans-serif;
-    font-size:4mm;
-    font-weight:550;
-    line-height:1.2;
+
+    color:#123d28;
+
+    font-weight:800;
+
+    line-height:1;
 
     white-space:nowrap;
-    word-spacing:0;
+
+    border-left:0.55mm solid #176b38;
+
+    padding-left:2.5mm;
+
+    box-sizing:border-box;
 }
+
+.angkaCetak div{
+    margin:0;
+    padding:0;
+}
+
+.angkaCetak div:first-child{
+    font-size:6.2mm;
+    font-weight:900;
+
+    color:#10251b;
+
+    padding-bottom:1.2mm;
+
+    margin-bottom:1.2mm;
+
+    width:24mm;
+
+    border-bottom:0.45mm solid #176b38;
+}
+
+.angkaCetak div:not(:first-child){
+    font-size:4.35mm;
+    font-weight:800;
+
+    line-height:1.08;
+
+    margin-top:0.65mm;
 }
 
 /* =====================================================
