@@ -3188,8 +3188,6 @@ function tampilkanRingkasanSisa(){
         "M",
         "L"
     ];
-
-    ...
 }
 
 return a.nilai.localeCompare(
@@ -3862,73 +3860,118 @@ function tampilkanRingkasanFilterSisa(data){
 
     baris.sort(function(a,b){
 
-        const ia =
-            urutan.indexOf(
-                a.sortimen
+    const ia =
+        urutan.indexOf(
+            a.sortimen
+        );
+
+    const ib =
+        urutan.indexOf(
+            b.sortimen
+        );
+
+
+    if(
+        ia === -1 &&
+        ib === -1
+    ){
+
+        const s =
+            a.sortimen.localeCompare(
+                b.sortimen,
+                "id"
             );
 
-        const ib =
-            urutan.indexOf(
-                b.sortimen
+        if(s !== 0){
+            return s;
+        }
+
+    }
+
+
+    if(ia === -1){
+        return 1;
+    }
+
+
+    if(ib === -1){
+        return -1;
+    }
+
+
+    if(ia !== ib){
+        return ia - ib;
+    }
+
+
+    /* =============================================
+       URUTAN STATUS / MUTU
+    ============================================== */
+
+    if(DASAR_FILTER_SISA === "MUTU"){
+
+        const urutanMutu = [
+            "D",
+            "T",
+            "M",
+            "L"
+        ];
+
+
+        const iaMutu =
+            urutanMutu.indexOf(
+                String(
+                    a.nilai || ""
+                )
+                .trim()
+                .toUpperCase()
             );
 
 
-        if(ia === -1 && ib === -1){
+        const ibMutu =
+            urutanMutu.indexOf(
+                String(
+                    b.nilai || ""
+                )
+                .trim()
+                .toUpperCase()
+            );
 
-            const s =
-                a.sortimen.localeCompare(
-                    b.sortimen,
-                    "id"
-                );
 
-            if(s !== 0){
-                return s;
-            }
+        if(
+            iaMutu === -1 &&
+            ibMutu === -1
+        ){
+
+            return a.nilai.localeCompare(
+                b.nilai,
+                "id"
+            );
 
         }
 
 
-        if(ia === -1){
+        if(iaMutu === -1){
             return 1;
         }
 
 
-        if(ib === -1){
+        if(ibMutu === -1){
             return -1;
         }
 
 
-        if(ia !== ib){
-            return ia - ib;
-        }
+        return iaMutu - ibMutu;
 
-
-      return a.nilai.localeCompare(
-    b.nilai,
-    "id"
-);  
     }
 
-    if(iaMutu === -1){
-        return 1;
-    }
 
-    if(ibMutu === -1){
-        return -1;
-    }
+    return a.nilai.localeCompare(
+        b.nilai,
+        "id"
+    );
 
-    return iaMutu - ibMutu;
-
-}
-
-
-return a.nilai.localeCompare(
-    b.nilai,
-    "id"
-);
-
-    });
-
+});
 
     let totalBatang = 0;
 
