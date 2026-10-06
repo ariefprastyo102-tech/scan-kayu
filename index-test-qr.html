@@ -2853,62 +2853,62 @@ async function mulaiKamera() {
     }
 
 
-   const video =
-  document.getElementById(
-    "video"
-  );
+    const video =
+      document.getElementById(
+        "video"
+      );
 
 
-const hints =
-  new Map();
-
-hints.set(
-  ZXingBrowser.DecodeHintType.POSSIBLE_FORMATS,
-  [
-    ZXingBrowser.BarcodeFormat.QR_CODE,
-    ZXingBrowser.BarcodeFormat.CODE_128
-  ]
-);
-
-hints.set(
-  ZXingBrowser.DecodeHintType.TRY_HARDER,
-  true
-);
-
-scannerReader =
-  new ZXingBrowser
-    .BrowserMultiFormatReader(
-      hints
-    );
+    scannerReader =
+      new ZXingBrowser
+        .BrowserMultiFormatReader(
+          undefined,
+          80
+        );
 
 
-const constraints = {
+    const constraints = {
 
-  audio: false,
+      audio: false,
 
-  video: {
+      video: {
 
-    facingMode: {
-      ideal: "environment"
-    },
+        facingMode: {
 
-    width: {
-      min: 640,
-      ideal: 1280,
-      max: 1920
-    },
+          ideal:
+            "environment"
 
-    height: {
-      min: 480,
-      ideal: 720,
-      max: 1080
-    },
+        },
 
-    frameRate: {
-      min: 15,
-      ideal: 30,
-      max: 60
-    },
+        width: {
+
+          min: 640,
+
+          ideal: 1280,
+
+          max: 1920
+
+        },
+
+        height: {
+
+          min: 480,
+
+          ideal: 720,
+
+          max: 1080
+
+        },
+
+        frameRate: {
+
+          min: 15,
+
+          ideal: 30,
+
+          max: 60
+
+        },
 
         focusMode: {
 
