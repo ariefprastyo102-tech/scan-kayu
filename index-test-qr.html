@@ -2859,12 +2859,28 @@ async function mulaiKamera() {
       );
 
 
-    scannerReader =
-      new ZXingBrowser
-        .BrowserMultiFormatReader(
-          undefined,
-          80
-        );
+    const hints =
+  new Map();
+
+hints.set(
+  ZXingBrowser.DecodeHintType.POSSIBLE_FORMATS,
+  [
+    ZXingBrowser.BarcodeFormat.QR_CODE,
+    ZXingBrowser.BarcodeFormat.CODE_128
+  ]
+);
+
+hints.set(
+  ZXingBrowser.DecodeHintType.TRY_HARDER,
+  true
+);
+
+scannerReader =
+  new ZXingBrowser
+    .BrowserMultiFormatReader(
+      hints,
+      150
+    );
 
 
     const constraints = {
