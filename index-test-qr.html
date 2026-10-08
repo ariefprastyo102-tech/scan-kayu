@@ -3152,6 +3152,7 @@ function cekRegister(
 /* =====================================================
    PROSES HASIL SCAN
 ===================================================== */
+
 function prosesHasilScan(
   hasil,
   kode
@@ -3162,9 +3163,18 @@ function prosesHasilScan(
     "success"
   ) {
 
+    /*
+     * TAMBAHAN BARU:
+     * Setiap scan sukses menambah
+     * jumlah pengambilan saat ini.
+     *
+     * TOTAL SESI tetap dihitung dari server.
+     */
+
     jumlahPengambilan++;
 
     updateJumlahPengambilan();
+
 
     document.getElementById(
       "status"
@@ -3179,43 +3189,60 @@ function prosesHasilScan(
         kode
       );
 
-    tambahHasil(
-      hasil.data,
-      hasil.tanggalScan,
-      hasil.jamScan,
-      "success"
-    );
 
-    // BUNYI SETELAH CEK SELESAI
-    bunyiCekSelesai();
+    bunyiBerhasil();
 
     getarBerhasil();
 
-    sedangProses = false;
 
-    return;
+    setTimeout(
+      function() {
+
+        muatDataSesiAktif(
+          false
+        );
+
+      },
+      200
+    );
+
   }
 
-  else if (
-    hasil.status ===
+ else if (
+  hasil.status ===
+  "duplicate"
+) {
+
+  const dataDuplicate =
+    hasil.data &&
+    hasil.data[0]
+    ?
+    hasil.data
+    :
+    [kode];
+
+  tambahHasil(
+    dataDuplicate,
+    hasil.tanggalScan,
+    hasil.jamScan,
     "duplicate"
-  ) {
+  );
 
-    document.getElementById(
-      "status"
-    ).innerHTML =
-      "❌ " +
-      (
-        hasil.message ||
-        "REGISTER SUDAH PERNAH DISCAN"
-      );
+  document.getElementById(
+    "status"
+  ).innerHTML =
+    "❌ " +
+    (
+      hasil.message ||
+      "REGISTER SUDAH PERNAH DISCAN"
+    );
 
-    sedangProses = false;
+  sedangProses =
+    false;
 
-    return;
-  }
+  return;
 
-  else if (
+}  else if (
     hasil.status ===
     "not_found"
   ) {
@@ -3225,6 +3252,7 @@ function prosesHasilScan(
     ).innerHTML =
       "⚠️ " +
       hasil.message;
+
 
     tambahHasilTidakDitemukan(
       kode
@@ -3245,7 +3273,10 @@ function prosesHasilScan(
 
   }
 
-  sedangProses = false;
+
+  sedangProses =
+    false;
+
 }
 
 
