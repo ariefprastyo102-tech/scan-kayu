@@ -3217,23 +3217,36 @@ function prosesHasilScan(
   "duplicate"
 ) {
 
+  const dataDuplicate =
+    hasil.data &&
+    hasil.data[0]
+    ?
+    hasil.data
+    :
+    [kode];
+
+  tambahHasil(
+    dataDuplicate,
+    hasil.tanggalScan,
+    hasil.jamScan,
+    "duplicate"
+  );
+
   document.getElementById(
     "status"
   ).innerHTML =
     "❌ " +
-    hasil.message;
+    (
+      hasil.message ||
+      "REGISTER SUDAH PERNAH DISCAN"
+    );
 
-  setTimeout(
-    function() {
-      muatDataSesiAktif(
-        false
-      );
-    },
-    200
-  );
+  sedangProses =
+    false;
 
-}
-  else if (
+  return;
+
+}  else if (
     hasil.status ===
     "not_found"
   ) {
