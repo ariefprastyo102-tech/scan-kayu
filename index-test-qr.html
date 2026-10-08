@@ -2311,6 +2311,7 @@ function muatDataSesiAktif(
 
       tampilkanDataServer();
 
+    bunyiCekSelesai();
 
       bukaKembaliDetail();
 
@@ -2678,6 +2679,74 @@ function bunyiBerhasil() {
 
 }
 
+function bunyiCekSelesai() {
+
+  try {
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioContext)
+      return;
+
+    const audio =
+      new AudioContext();
+
+    const oscillator =
+      audio.createOscillator();
+
+    const gain =
+      audio.createGain();
+
+    oscillator.type =
+      "sine";
+
+    oscillator.frequency.setValueAtTime(
+      800,
+      audio.currentTime
+    );
+
+    gain.gain.setValueAtTime(
+      0.001,
+      audio.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.35,
+      audio.currentTime + 0.01
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audio.currentTime + 0.18
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillator.start();
+
+    oscillator.stop(
+      audio.currentTime + 0.19
+    );
+
+    setTimeout(
+      function() {
+        audio.close();
+      },
+      300
+    );
+
+  }
+
+  catch (e) {
+
+    console.log(e);
+
+  }
+
+}
 
 /* =====================================================
    GETAR
@@ -3193,7 +3262,6 @@ function prosesHasilScan(
     bunyiBerhasil();
 
     getarBerhasil();
-
 
     setTimeout(
       function() {
