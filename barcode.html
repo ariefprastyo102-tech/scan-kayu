@@ -331,23 +331,24 @@ repeat(11,30mm);
     font-weight:400;
 }
 
-.angkaCetak div:first-child{
-    font-size:12mm !important;
+.angkaCetak .registerUtama{
+    font-size:8mm !important;
     font-weight:900 !important;
     color:#176b38 !important;
+    line-height:1 !important;
 
-    padding-bottom:0.8mm;
-    margin-bottom:0.8mm;
+    padding-bottom:0.8mm !important;
+    margin-bottom:0.8mm !important;
 
     width:27mm;
     border-bottom:0.45mm solid #176b38;
 }
 
-.angkaCetak div:not(:first-child){
-    font-size:7.5mm;
-    font-weight:700;
-    line-height:1;
-    margin-top:0.4mm;
+.angkaCetak div:not(.registerUtama){
+    font-size:5mm !important;
+    font-weight:700 !important;
+    line-height:1 !important;
+    margin-top:0.4mm !important;
 }
     
 /* =====================================================
@@ -1378,18 +1379,12 @@ label.appendChild(barcodeBox);
                         data.tpk
                     );
 
-    angka.innerHTML =
-    data.register +
-    "<br>" +
-    data.panjang +
-    "/" +
-    data.diameter +
-    "<br>" +
-    data.m3 +
-    "<br>" +
-    "TP " + data.tumpuk +
-    "<br>" +
-    kode;
+angka.innerHTML =
+    '<div class="registerUtama">' + data.register + '</div>' +
+    '<div>' + data.panjang + '/' + data.diameter + '</div>' +
+    '<div>' + data.m3 + '</div>' +
+    '<div>TP ' + data.tumpuk + '</div>' +
+    '<div>' + kode + '</div>';
 
                 label.appendChild(
                     angka
