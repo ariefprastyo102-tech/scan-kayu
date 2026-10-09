@@ -1367,7 +1367,7 @@ label.appendChild(barcodeBox);
                     );
 
 angka.innerHTML =
-    '<div class="registerUtama">' + data.register + '</div>' +
+    '<div class="registerUtama">' + String(data.register).slice(0, 2) + '-' + parseInt(String(data.register).slice(2), 10) + '</div>' +
     '<div>' + data.panjang + '/' + data.diameter + '</div>' +
     '<div>' + data.m3 + '</div>' +
     '<div>TP ' + data.tumpuk + '</div>' +
