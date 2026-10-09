@@ -301,54 +301,41 @@ repeat(11,30mm);
     margin:auto;
 }
 
-.angkaCetak{
-    position:absolute;
-    left:41mm;
-    top:1.5mm;
+.angkaCetak {
+    position: absolute;
+    left: 41mm;
+    top: 1mm;
+    width: 27mm;
+    height: 28mm;
 
-    width:29mm;
-    height:27mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    justify-content:center;
+    border-left: 0.45mm solid #176b38;
+    padding-left: 1.5mm;
+    box-sizing: border-box;
 
-    font-family:Arial,sans-serif;
-    color:#123d28;
-    font-weight:400;
-    line-height:1;
-    white-space:nowrap;
-
-    border-left:0.55mm solid #176b38;
-    padding-left:2.5mm;
-    box-sizing:border-box;
+    overflow: hidden;
+    line-height: 1;
 }
 
-.angkaCetak div{
-    margin:0;
-    padding:0;
-    font-weight:400;
+.angkaCetak .registerUtama {
+    font-size: 6.5mm !important;
+    font-weight: 600 !important;
+    color: #176b38 !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+    margin-bottom: 1mm;
 }
 
-.angkaCetak .registerUtama{
-    font-size:8mm !important;
-    font-weight:900 !important;
-    color:#176b38 !important;
-    line-height:1 !important;
-
-    padding-bottom:0.8mm !important;
-    margin-bottom:0.8mm !important;
-
-    width:27mm;
-    border-bottom:0.45mm solid #176b38;
-}
-
-.angkaCetak div:not(.registerUtama){
-    font-size:5mm !important;
-    font-weight:700 !important;
-    line-height:1 !important;
-    margin-top:0.4mm !important;
+.angkaCetak div:not(.registerUtama) {
+    font-size: 3.5mm !important;
+    font-weight: 400 !important;
+    line-height: 1.15 !important;
+    margin-top: 0.3mm;
+    white-space: nowrap;
 }
     
 /* =====================================================
