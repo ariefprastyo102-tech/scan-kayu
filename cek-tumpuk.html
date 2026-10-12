@@ -3232,14 +3232,18 @@ getarBerhasil();
    FUNGSI SCAN TIDAK DIUBAH
 ===================================================== */
 
+
 function ambilDataTumpuk(
     tampilkanLoading = true,
     bulan = bulanSisaAktif
 ){
 
+    hideError();
+
     if(tampilkanLoading){
         showLoading();
     }
+
 
     const callbackName =
         "callbackTumpuk_" +
@@ -3317,13 +3321,15 @@ function ambilDataTumpuk(
                 }
 
 
-                /*
-                 * TETAP SAMA
-                 * HASIL REQUEST LANGSUNG KE FUNGSI LAMA
-                 */
-                tampilkanData(
-                    response.data
-                );
+                
+/*
+ * HILANGKAN ERROR SETELAH DATA BERHASIL DITERIMA
+ */
+hideError();
+
+tampilkanData(
+    response.data
+);
 
 
                 sedangProses =
@@ -3510,7 +3516,7 @@ function ambilDataTumpuk(
                     false;
 
             },
-            10000
+            30000
         );
 
 }
