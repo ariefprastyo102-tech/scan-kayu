@@ -1590,7 +1590,7 @@ body{
 >
     <select
         id="bulanSisa"
-        onchange="bulanSisaAktif = this.value; ambilDataTumpuk(true)"
+       onchange="bulanSisaAktif = this.value; ambilDataTumpuk(true); ambilRiwayatTumpukHabis()"
         style="
             width:100%;
             padding:10px;
@@ -1625,9 +1625,59 @@ body{
 >
     SISA SAAT INI : -
 </div>
-   
 </div>
-        <div class="summary-grid">
+
+<!-- RIWAYAT TUMPUK HABIS -->
+<div
+    id="riwayatTumpukBox"
+    style="
+        margin:10px 0;
+        border:1px solid #ddd;
+        border-radius:8px;
+        overflow:hidden;
+    "
+>
+    <button
+        type="button"
+        onclick="toggleRiwayatTumpuk()"
+        style="
+            width:100%;
+            padding:11px 12px;
+            border:none;
+            background:#f8fafc;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            text-align:left;
+            font-size:13px;
+            font-weight:600;
+            color:#334155;
+            cursor:pointer;
+        "
+    >
+        <span>
+            RIWAYAT TUMPUK HABIS
+            <span id="jumlahRiwayatHabis">(0)</span>
+        </span>
+        <span id="ikonRiwayatTumpuk">＋</span>
+    </button>
+
+    <div
+        id="isiRiwayatTumpuk"
+        style="
+            display:none;
+            padding:10px;
+            background:#fff;
+        "
+    >
+        <div id="daftarRiwayatTumpuk"
+             style="font-size:13px;color:#64748b;text-align:center;">
+            Pilih bulan untuk melihat riwayat.
+        </div>
+    </div>
+</div>
+
+<div class="summary-grid">
 
             <div class="summary-box jumlah-utama">
                 <div class="summary-label">
@@ -6136,6 +6186,168 @@ function cleanupJSONP(
 
 }
 
+
+function toggleRiwayatTumpuk(){
+
+    const isi = document.getElementById(
+        "isiRiwayatTumpuk"
+    );
+
+    const ikon = document.getElementById(
+        "ikonRiwayatTumpuk"
+    );
+
+    const terbuka = isi.style.display !== "none";
+
+    isi.style.display = terbuka ? "none" : "block";
+    ikon.textContent = terbuka ? "＋" : "−";
+
+}
+
+
+function ambilRiwayatTumpukHabis(){
+
+    const daftar = document.getElementById(
+        "daftarRiwayatTumpuk"
+    );
+
+    const jumlah = document.getElementById(
+        "jumlahRiwayatHabis"
+    );
+
+    const bulan = document.getElementById(
+        "bulanSisa"
+    ).value;
+
+    jumlah.textContent = "(...)";
+
+    if(!bulan){
+
+        jumlah.textContent = "(0)";
+        daftar.textContent =
+            "Pilih bulan untuk melihat riwayat tumpuk habis.";
+
+        return;
+    }
+
+    daftar.textContent = "Memuat riwayat...";
+
+    const callbackName =
+        "callbackRiwayatHabis_" + Date.now();
+
+    let script = document.createElement("script");
+    let selesai = false;
+
+    const timeoutId = setTimeout(function(){
+
+        if(selesai) return;
+
+        selesai = true;
+        cleanupJSONP(callbackName, script);
+
+        jumlah.textContent = "(0)";
+        daftar.textContent =
+            "Riwayat gagal dimuat. Coba pilih bulan lagi.";
+
+    }, 30000);
+
+
+    window[callbackName] = function(response){
+
+        if(selesai) return;
+
+        selesai = true;
+        clearTimeout(timeoutId);
+
+        try{
+
+            const berhasil =
+                response &&
+                (
+                    response.ok === "success" ||
+                    response.ok === true ||
+                    response.status === "success" ||
+                    response.success === true
+                );
+
+            if(!berhasil || !Array.isArray(response.data)){
+
+                jumlah.textContent = "(0)";
+                daftar.textContent =
+                    "Data riwayat tidak berhasil dibaca.";
+
+                return;
+            }
+
+            const data = response.data;
+
+            jumlah.textContent = "(" + data.length + ")";
+            daftar.innerHTML = "";
+
+            if(data.length === 0){
+
+                daftar.textContent =
+                    "Tidak ada tumpuk yang habis pada bulan " +
+                    bulan + ".";
+
+                return;
+            }
+
+            data.forEach(function(item){
+
+                const baris = document.createElement("div");
+
+                baris.style.cssText =
+                    "padding:9px 8px;" +
+                    "border-bottom:1px solid #eee;" +
+                    "color:#334155;";
+
+                baris.textContent = item.tpk
+                    ? "TPK " + item.tpk +
+                      " — TUMPUK " + item.tumpuk
+                    : "TUMPUK " + item.tumpuk +
+                      " — GABUNGAN SEMUA TPK";
+
+                daftar.appendChild(baris);
+
+            });
+
+        } finally {
+
+            cleanupJSONP(callbackName, script);
+
+        }
+
+    };
+
+
+    script.src =
+        API_URL +
+        "?action=riwayatTumpukHabis" +
+        "&bulan=" + encodeURIComponent(bulan) +
+        "&callback=" + callbackName +
+        "&_=" + Date.now();
+
+    script.onerror = function(){
+
+        if(selesai) return;
+
+        selesai = true;
+        clearTimeout(timeoutId);
+
+        cleanupJSONP(callbackName, script);
+
+        jumlah.textContent = "(0)";
+        daftar.textContent =
+            "Gagal menghubungi backend riwayat.";
+
+    };
+
+    script.async = true;
+    document.body.appendChild(script);
+
+}
+   
 </script>
 
 </body>
