@@ -734,6 +734,8 @@ button:hover{
                 🖨 CETAK YANG DIPILIH
             </button>
 
+            <button class="btn-all" onclick="cetakDaftarBlok()">CETAK BLOK A–E F4</button>
+
         </div>
 
 
@@ -1434,8 +1436,7 @@ function prosesCetak(dataCetak){
 
     }
 
-
-    const printArea=
+const printArea=
         document.getElementById(
             "printArea"
         );
@@ -1739,6 +1740,39 @@ function cetakBarcode(){
 
 
 /* =====================================================
+   CETAK BLOK A-E TERPISAH, SATU BLOK PER LEMBAR F4
+===================================================== */
+
+function cetakDaftarBlok(){
+    const jendela = window.open("", "_blank");
+    if(!jendela){ alert("Izinkan pop-up untuk mencetak Blok A–E."); return; }
+    jendela.document.open();
+    jendela.document.write(`<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><title>Blok A–E F4</title>
+<style>
+@page { size: 330.2mm 215.9mm; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+.sheet { width: 330.2mm; height: 215.9mm; display: flex; align-items: center; justify-content: center; page-break-after: always; break-after: page; }
+.sheet:last-child { page-break-after: auto; break-after: auto; }
+.frame { width: 322.2mm; height: 207.9mm; border: 2mm solid #111; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 3mm; position: relative; }
+.frame::before { content: ""; position: absolute; inset: 3mm; border: .5mm solid #777; pointer-events: none; }
+.content { transform: translateY(3mm); display: flex; flex-direction: column; align-items: center; }
+.heading { transform: none; font-size: 45mm; font-weight: 700; line-height: .82; letter-spacing: 1mm; }
+.rule { transform: none; width: 72%; height: 1.5mm; background: #111; margin: 0; }
+.letter { transform: none; font-size: 180mm; font-weight: 700; line-height: .82; }
+.caption { font-size: 0; font-weight: 700; letter-spacing: 0; margin-top: 0; }
+</style></head><body>
+<div class="sheet"><div class="frame"><div class="content"><div class="heading">BLOK</div><div class="letter">A</div></div></div></div>
+<div class="sheet"><div class="frame"><div class="content"><div class="heading">BLOK</div><div class="letter">B</div></div></div></div>
+<div class="sheet"><div class="frame"><div class="content"><div class="heading">BLOK</div><div class="letter">C</div></div></div></div>
+<div class="sheet"><div class="frame"><div class="content"><div class="heading">BLOK</div><div class="letter">D</div></div></div></div>
+<div class="sheet"><div class="frame"><div class="content"><div class="heading">BLOK</div><div class="letter">E</div></div></div></div>
+<script>window.onload = () => { window.print(); window.onafterprint = () => window.close(); };<\/script></body></html>`);
+    jendela.document.close();
+}
+
+/* =====================================================
    FILTER ENTER
 ===================================================== */
 
@@ -1785,3 +1819,5 @@ window.addEventListener(
 
 </body>
 </html>
+
+
