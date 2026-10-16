@@ -6441,6 +6441,7 @@ function downloadExcelSisa() {
       ],
       tanggal: true
     },
+
   ];
 
   // Tambahkan seluruh kolom lain yang dikirim backend.
@@ -6514,103 +6515,100 @@ function downloadExcelSisa() {
     );
     return total + (Number.isFinite(v) ? v : 0);
   }, 0);
- 
-  const excelXml = `<?xml version="1.0" encoding="UTF-8"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:html="http://www.w3.org/TR/REC-html40">
- <Styles>
-  <Style ss:ID="Title">
-   <Font ss:Bold="1" ss:Size="16" ss:Color="#166534"/>
-   <Alignment ss:Horizontal="Center"/>
-  </Style>
-  <Style ss:ID="Header">
-   <Font ss:Bold="1" ss:Color="#FFFFFF"/>
-   <Interior ss:Color="#166534" ss:Pattern="Solid"/>
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
-   </Borders>
-  </Style>
-  <Style ss:ID="Cell">
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
-   </Borders>
-  </Style>
- </Styles>
- <Worksheet ss:Name="Register Tersisa">
-  <Table>
-   <Column ss:Width="110" ss:Span="${Math.max(0, semuaKolom.length - 1)}"/>
-   <Row>
-    <Cell ss:MergeAcross="${Math.max(0, semuaKolom.length - 1)}" ss:StyleID="Title">
-     <Data ss:Type="String">LAPORAN REGISTER TERSISA</Data>
-    </Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">BULAN</Data></Cell>
-    <Cell><Data ss:Type="String">${aman(bulan)}</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">TPK</Data></Cell>
-    <Cell><Data ss:Type="String">${aman(tpk)}</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">TUMPUK</Data></Cell>
-    <Cell><Data ss:Type="String">${aman(tumpuk)}</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">TANGGAL CETAK</Data></Cell>
-    <Cell><Data ss:Type="String">${aman(tanggalCetak)}</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">JUMLAH REGISTER</Data></Cell>
-    <Cell><Data ss:Type="Number">${data.length}</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">TOTAL VOLUME (M3)</Data></Cell>
-    <Cell><Data ss:Type="Number">${totalVolume.toFixed(6)}</Data></Cell>
-   </Row>
-   <Row/>
-   <Row>
-    ${semuaKolom.map(k =>
-      `<Cell ss:StyleID="Header"><Data ss:Type="String">${aman(k.judul)}</Data></Cell>`
-    ).join("")}
-   </Row>
-   ${data.map((item, i) => `<Row>
-    ${semuaKolom.map(k => {
-      const v = nilaiKolom(item, k, i);
-      return `<Cell ss:StyleID="Cell"><Data ss:Type="String">${aman(v)}</Data></Cell>`;
-    }).join("")}
-   </Row>`).join("")}
-  </Table>
-  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <FreezePanes/>
-   <FrozenNoSplit/>
-   <SplitHorizontal>8</SplitHorizontal>
-   <TopRowBottomPane>8</TopRowBottomPane>
-   <ActivePane>2</ActivePane>
-  </WorksheetOptions>
- </Worksheet>
-</Workbook>`;
+
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        color: #222;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 5px;
+        color: #166534;
+      }
+      .subjudul {
+        text-align: center;
+        font-size: 12px;
+        margin-bottom: 18px;
+      }
+      .info {
+        margin-bottom: 12px;
+        font-size: 12px;
+      }
+      .info td {
+        padding: 5px 10px 5px 0;
+      }
+      table.data {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 10pt;
+      }
+      table.data th {
+        background: #166534;
+        color: white;
+        border: 1px solid #999;
+        padding: 8px 6px;
+        text-align: center;
+        font-weight: bold;
+      }
+      table.data td {
+        border: 1px solid #aaa;
+        padding: 6px;
+        vertical-align: top;
+      }
+      table.data tr:nth-child(even) {
+        background: #edf5ee;
+      }
+      .catatan {
+        margin-top: 12px;
+        font-size: 10px;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>LAPORAN REGISTER TERSISA</h2>
+    <div class="subjudul">CEK TUMPUK</div>
+
+    <table class="info">
+      <tr><td><b>BULAN</b></td><td>: ${aman(bulan)}</td></tr>
+      <tr><td><b>TPK</b></td><td>: ${aman(tpk)}</td></tr>
+      <tr><td><b>TUMPUK</b></td><td>: ${aman(tumpuk)}</td></tr>
+      <tr><td><b>TANGGAL CETAK</b></td><td>: ${aman(tanggalCetak)}</td></tr>
+      <tr><td><b>JUMLAH REGISTER</b></td><td>: ${data.length} register</td></tr>
+      <tr><td><b>TOTAL VOLUME</b></td><td>: ${totalVolume.toFixed(3)} m³</td></tr>
+    </table>
+
+    <table class="data">
+      <thead><tr>${header}</tr></thead>
+      <tbody>${baris}</tbody>
+    </table>
+
+    <div class="catatan">
+      Laporan ini memuat REGISTER TERSISA sesuai data yang tampil pada aplikasi.
+      Riwayat pengambilan tidak disertakan.
+    </div>
+  </body>
+  </html>`;
 
   const blob = new Blob(
-    ["\ufeff", excelXml],
+    ["\ufeff", html],
     { type: "application/vnd.ms-excel;charset=utf-8;" }
   );
 
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  const namaAman = String(tumpuk).replace(/[^a-zA-Z0-9_-]/g, "_");
-  const bulanAman = String(bulan).replace(/[^a-zA-Z0-9_-]/g, "_");
+
+  const namaAman = String(tumpuk)
+    .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+  const bulanAman = String(bulan)
+    .replace(/[^a-zA-Z0-9_-]/g, "_");
 
   link.href = url;
   link.download = `CEK_TUMPUK_${namaAman}_${bulanAman}.xls`;
@@ -6620,7 +6618,7 @@ function downloadExcelSisa() {
 
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-
+   
 </script>
 
 </body>
