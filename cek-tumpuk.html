@@ -6359,6 +6359,7 @@ function ambilRiwayatTumpukHabis(){
 
 
 
+
 function downloadExcelSisa() {
   const data = Array.isArray(currentRegisters) ? currentRegisters : [];
 
@@ -6368,7 +6369,7 @@ function downloadExcelSisa() {
   }
 
   if (typeof XLSX === "undefined") {
-    alert("Pustaka Excel belum termuat. Periksa koneksi internet lalu muat ulang aplikasi.");
+    alert("Pustaka Excel belum termuat. Muat ulang aplikasi.");
     return;
   }
 
@@ -6409,7 +6410,21 @@ function downloadExcelSisa() {
   function tanggal(v) {
     if (!v) return "-";
 
+    if (v instanceof Date && !Number.isNaN(v.getTime())) {
+      return [
+        String(v.getDate()).padStart(2, "0"),
+        String(v.getMonth() + 1).padStart(2, "0"),
+        v.getFullYear()
+      ].join("-");
+    }
+
     const s = String(v).trim();
+    const cocok = s.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+
+    if (cocok) {
+      return `${cocok[1].padStart(2, "0")}-${cocok[2].padStart(2, "0")}-${cocok[3]}`;
+    }
+
     const d = new Date(s);
 
     if (!Number.isNaN(d.getTime())) {
@@ -6423,6 +6438,23 @@ function downloadExcelSisa() {
     return s;
   }
 
+  function angka(v) {
+    if (typeof v === "number") return v;
+    if (v === null || v === undefined || v === "") return 0;
+
+    const s = String(v).trim();
+
+    // Angka desimal dengan koma, misalnya 0,330
+    if (/^-?\d+,\d+$/.test(s)) return Number(s.replace(",", "."));
+
+    // Angka format Indonesia, misalnya 1.234,560
+    if (/^-?\d{1,3}(\.\d{3})+,\d+$/.test(s)) {
+      return Number(s.replace(/\./g, "").replace(",", "."));
+    }
+
+    return Number(s) || 0;
+  }
+
   const kolomUtama = [
     { judul: "NO", ambil: (_, i) => i + 1 },
     { judul: "REGISTER", alias: ["register", "noRegister", "nomorRegister"] },
@@ -6433,10 +6465,7 @@ function downloadExcelSisa() {
     { judul: "MUTU", alias: ["mutu"] },
     { judul: "STATUS", alias: ["status"] },
     { judul: "VOLUME (M3)", alias: ["volume", "m3", "volumeM3"] },
-    {
-      judul: "STATUS OLAH",
-      alias: ["statusOlah", "status_olah", "STATUS OLAH"]
-    },
+    { judul: "STATUS OLAH", alias: ["statusOlah", "status_olah"] },
     {
       judul: "TANGGAL PENGOLAHAN",
       alias: [
@@ -6448,11 +6477,8 @@ function downloadExcelSisa() {
     }
   ];
 
-  // Kolom status cek tidak disertakan dalam laporan.
   const kolomTerlarang = new Set([
-    "checked",
-    "sudahcek",
-    "statuscek"
+    "checked", "sudahcek", "statuscek"
   ]);
 
   const namaKolomSudahAda = new Set(
@@ -6478,7 +6504,7 @@ function downloadExcelSisa() {
             .replace(/([a-z])([A-Z])/g, "$1 $2")
             .replace(/[_-]+/g, " ")
             .toUpperCase(),
-          key: key
+          key
         });
       }
     });
@@ -6496,204 +6522,312 @@ function downloadExcelSisa() {
 
     if (kolom.tanggal) return tanggal(nilai);
 
-    return nilai === "" || nilai === null || nilai === undefined
-      ? "-"
-      : nilai;
+    if (nilai === "" || nilai === null || nilai === undefined) return "-";
+
+    if (norm(kolom.judul) === "volume" ||
+        norm(kolom.judul) === "volumem3") {
+      return angka(nilai);
+    }
+
+    return nilai;
   }
 
   const totalVolume = data.reduce((total, item) => {
-    const v = Number(
-      String(ambil(item, ["volume", "m3", "volumeM3"]) || "0")
-        .replace(",", ".")
-    );
-
-    return total + (Number.isFinite(v) ? v : 0);
+    return total + angka(ambil(item, ["volume", "m3", "volumeM3"]));
   }, 0);
 
-  // Susun isi laporan Excel.
-  const isi = [
-    ["LAPORAN REGISTER TERSISA"],
-    ["BULAN", bulan],
-    ["TPK", tpk],
-    ["TUMPUK", tumpuk],
-    ["TANGGAL CETAK", tanggalCetak],
-    ["JUMLAH REGISTER", data.length],
-    ["TOTAL VOLUME (M3)", totalVolume],
-    [],
-    semuaKolom.map(k => k.judul)
+  // ==================================================
+  // SUSUN LAPORAN
+  // ==================================================
+
+  const isi = [];
+  const merges = [];
+
+  // Baris 1: judul laporan
+  isi.push(["LAPORAN REGISTER TERSISA"]);
+
+  // Tiga baris informasi, dibagi menjadi dua blok.
+  // Label dan nilai masing-masing akan digabungkan.
+  const batas = Math.floor(jumlahKolom / 2);
+  const labelKiriAkhir = 1;
+  const nilaiKiriAwal = 2;
+  const labelKananAwal = batas;
+  const labelKananAkhir = Math.min(batas + 1, jumlahKolom - 2);
+  const nilaiKananAwal = labelKananAkhir + 1;
+
+  const informasi = [
+    ["BULAN", bulan, "TPK", tpk],
+    ["TUMPUK", tumpuk, "TANGGAL CETAK", tanggalCetak],
+    ["JUMLAH REGISTER", data.length, "TOTAL VOLUME (M3)", totalVolume]
   ];
 
-  data.forEach((item, i) => {
-    isi.push(
-      semuaKolom.map(k => nilaiKolom(item, k, i))
+  informasi.forEach((info, i) => {
+    const baris = Array(jumlahKolom).fill("");
+    baris[0] = info[0];
+    baris[nilaiKiriAwal] = info[1];
+    baris[labelKananAwal] = info[2];
+    baris[nilaiKananAwal] = info[3];
+
+    isi.push(baris);
+
+    const r = i + 1;
+
+    merges.push(
+      { s: { r, c: 0 }, e: { r, c: labelKiriAkhir } },
+      { s: { r, c: nilaiKiriAwal }, e: { r, c: labelKananAwal - 1 } },
+      { s: { r, c: labelKananAwal }, e: { r, c: labelKananAkhir } },
+      { s: { r, c: nilaiKananAwal }, e: { r, c: jumlahKolom - 1 } }
     );
+  });
+
+  // Baris kosong sebagai jarak antara ringkasan dan tabel
+  isi.push(Array(jumlahKolom).fill(""));
+
+  // Header tabel
+  const barisHeader = isi.length;
+  isi.push(semuaKolom.map(k => k.judul));
+
+  // Isi data
+  data.forEach((item, i) => {
+    isi.push(semuaKolom.map(k => nilaiKolom(item, k, i)));
   });
 
   const ws = XLSX.utils.aoa_to_sheet(isi);
 
-  // Judul laporan melebar sepanjang tabel.
-  ws["!merges"] = [{
-    s: { r: 0, c: 0 },
-    e: { r: 0, c: jumlahKolom - 1 }
-  }];
-
-  // Lebar kolom otomatis berdasarkan judul.
-  ws["!cols"] = semuaKolom.map(k => ({
-    wch: Math.max(14, Math.min(k.judul.length + 3, 28))
-  }));
-
-  // Tinggi baris.
-  ws["!rows"] = [
-    { hpt: 30 },
-    { hpt: 21 },
-    { hpt: 21 },
-    { hpt: 21 },
-    { hpt: 21 },
-    { hpt: 21 },
-    { hpt: 21 },
-    { hpt: 8 },
-    { hpt: 32 }
+  ws["!merges"] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: jumlahKolom - 1 } },
+    ...merges
   ];
 
-  const hijau = "166534";
-  const putih = "FFFFFF";
-  const abu = "D9E2D9";
+  // ==================================================
+  // DESAIN DAN LEBAR KOLOM
+  // ==================================================
 
-  const border = {
-    top:    { style: "thin", color: { rgb: abu } },
-    bottom: { style: "thin", color: { rgb: abu } },
-    left:   { style: "thin", color: { rgb: abu } },
-    right:  { style: "thin", color: { rgb: abu } }
+  const hijauTua = "166534";
+  const hijau = "198754";
+  const hijauMuda = "EAF3EC";
+  const putih = "FFFFFF";
+  const garis = "C8D8CC";
+
+  const borderTipis = {
+    top: { style: "thin", color: { rgb: garis } },
+    bottom: { style: "thin", color: { rgb: garis } },
+    left: { style: "thin", color: { rgb: garis } },
+    right: { style: "thin", color: { rgb: garis } }
   };
 
-  // Format judul.
-  const selJudul = ws["A1"];
-  if (selJudul) {
-    selJudul.s = {
-      font: {
-        bold: true,
-        sz: 16,
-        color: { rgb: hijau }
+  const tengah = {
+    horizontal: "center",
+    vertical: "center",
+    wrapText: true
+  };
+
+  const lebarKhusus = {
+    "NO": 7,
+    "REGISTER": 15,
+    "TPK": 16,
+    "TUMPUK": 10,
+    "PANJANG": 12,
+    "DIAMETER": 12,
+    "MUTU": 9,
+    "STATUS": 15,
+    "VOLUME (M3)": 15,
+    "STATUS OLAH": 17,
+    "TANGGAL PENGOLAHAN": 21,
+    "TAHUN": 10,
+    "BULAN TERIMA": 16,
+    "BULAN OLAH": 16
+  };
+
+  ws["!cols"] = semuaKolom.map(k => ({
+    wch: lebarKhusus[k.judul] ||
+      Math.max(13, Math.min(k.judul.length + 4, 22))
+  }));
+
+  ws["!rows"] = [
+    { hpt: 34 },
+    { hpt: 27 },
+    { hpt: 27 },
+    { hpt: 31 },
+    { hpt: 10 },
+    { hpt: 34 },
+    ...data.map(() => ({ hpt: 23 }))
+  ];
+
+  // Judul utama
+  const judul = ws["A1"];
+  if (judul) {
+    judul.s = {
+      fill: {
+        patternType: "solid",
+        fgColor: { rgb: putih }
       },
-      alignment: {
-        horizontal: "center",
-        vertical: "center"
+      font: {
+        name: "Arial",
+        bold: true,
+        sz: 18,
+        color: { rgb: hijauTua }
+      },
+      alignment: tengah,
+      border: {
+        bottom: { style: "medium", color: { rgb: hijau } }
       }
     };
   }
 
-  // Format informasi laporan.
-  for (let r = 1; r <= 6; r++) {
-    const label = ws[XLSX.utils.encode_cell({ r, c: 0 })];
-    const nilai = ws[XLSX.utils.encode_cell({ r, c: 1 })];
+  // Ringkasan laporan: seluruh sel dalam blok diberi format
+  for (let r = 1; r <= 3; r++) {
+    for (let c = 0; c < jumlahKolom; c++) {
+      const alamat = XLSX.utils.encode_cell({ r, c });
+      if (!ws[alamat]) ws[alamat] = { t: "s", v: "" };
 
-    if (label) {
-      label.s = {
-        font: { bold: true, color: { rgb: hijau } },
-        alignment: { vertical: "center" }
-      };
-    }
+      const isLabel =
+        c <= labelKiriAkhir ||
+        (c >= labelKananAwal && c <= labelKananAkhir);
 
-    if (nilai) {
-      nilai.s = {
-        alignment: { vertical: "center" },
-        numFmt: r === 6 ? "0.000" : "General"
-      };
-    }
-  }
+      const isRingkasan =
+        r === 3 &&
+        ((c >= nilaiKiriAwal && c < labelKananAwal) ||
+         c >= nilaiKananAwal);
 
-  // Baris judul kolom ada di baris Excel ke-9.
-  const barisHeader = 8;
-
-  for (let c = 0; c < jumlahKolom; c++) {
-    const cell = ws[XLSX.utils.encode_cell({
-      r: barisHeader,
-      c
-    })];
-
-    if (cell) {
-      cell.s = {
+      ws[alamat].s = {
         fill: {
           patternType: "solid",
-          fgColor: { rgb: hijau }
+          fgColor: {
+            rgb: isLabel ? hijauTua : (isRingkasan ? hijauMuda : "F4F8F5")
+          }
         },
         font: {
+          name: "Arial",
           bold: true,
-          color: { rgb: putih }
+          sz: isLabel ? 10 : (isRingkasan ? 13 : 11),
+          color: {
+            rgb: isLabel ? putih : hijauTua
+          }
         },
-        alignment: {
-          horizontal: "center",
-          vertical: "center",
-          wrapText: true
-        },
-        border: border
+        alignment: tengah,
+        border: borderTipis
       };
     }
   }
 
-  // Format data dan garis tabel.
-  for (let r = 9; r < isi.length; r++) {
+  // Format angka ringkasan volume
+  const alamatVolume = XLSX.utils.encode_cell({
+    r: 3,
+    c: nilaiKananAwal
+  });
+
+  if (ws[alamatVolume]) {
+    ws[alamatVolume].z = "#,##0.000";
+  }
+
+  // Header tabel
+  for (let c = 0; c < jumlahKolom; c++) {
+    const alamat = XLSX.utils.encode_cell({
+      r: barisHeader,
+      c
+    });
+
+    if (!ws[alamat]) continue;
+
+    ws[alamat].s = {
+      fill: {
+        patternType: "solid",
+        fgColor: { rgb: hijauTua }
+      },
+      font: {
+        name: "Arial",
+        bold: true,
+        sz: 10,
+        color: { rgb: putih }
+      },
+      alignment: tengah,
+      border: {
+        top: { style: "medium", color: { rgb: hijauTua } },
+        bottom: { style: "medium", color: { rgb: hijauTua } },
+        left: { style: "thin", color: { rgb: putih } },
+        right: { style: "thin", color: { rgb: putih } }
+      }
+    };
+  }
+
+  // Seluruh isi tabel: rata tengah horizontal dan vertikal
+  for (let r = barisHeader + 1; r < isi.length; r++) {
     for (let c = 0; c < jumlahKolom; c++) {
-      const cell = ws[XLSX.utils.encode_cell({ r, c })];
+      const alamat = XLSX.utils.encode_cell({ r, c });
+      const cell = ws[alamat];
 
       if (!cell) continue;
 
       cell.s = {
-        border: border,
-        alignment: {
-          vertical: "center",
-          wrapText: true
+        font: {
+          name: "Arial",
+          sz: 10,
+          color: { rgb: "26372C" }
         },
-        ...(r % 2 === 1
+        alignment: tengah,
+        border: borderTipis,
+        ...(r % 2 === 0
           ? {
               fill: {
                 patternType: "solid",
-                fgColor: { rgb: "EDF5EE" }
+                fgColor: { rgb: hijauMuda }
               }
             }
           : {})
       };
 
-      // Format volume menjadi tiga angka desimal.
-      if (semuaKolom[c].judul === "VOLUME (M3)" &&
-          typeof cell.v === "number") {
-        cell.z = "0.000";
+      if (
+        semuaKolom[c].judul === "VOLUME (M3)" &&
+        typeof cell.v === "number"
+      ) {
+        cell.z = "#,##0.000";
       }
     }
   }
 
-  // Aktifkan filter pada tabel register.
-  if (data.length > 0) {
-    ws["!autofilter"] = {
-      ref: XLSX.utils.encode_range({
-        s: { r: barisHeader, c: 0 },
-        e: { r: barisHeader + data.length, c: jumlahKolom - 1 }
-      })
-    };
-  }
+  // Filter tabel
+  ws["!autofilter"] = {
+    ref: XLSX.utils.encode_range({
+      s: { r: barisHeader, c: 0 },
+      e: { r: barisHeader + data.length, c: jumlahKolom - 1 }
+    })
+  };
+
+  // Pengaturan cetak
+  ws["!pageSetup"] = {
+    orientation: "landscape",
+    fitToWidth: 1,
+    fitToHeight: 0,
+    paperSize: 9
+  };
+
+  ws["!sheetPr"] = {
+    pageSetUpPr: { fitToPage: true }
+  };
+
+  ws["!margins"] = {
+    left: 0.25,
+    right: 0.25,
+    top: 0.5,
+    bottom: 0.5,
+    header: 0.2,
+    footer: 0.2
+  };
 
   const wb = XLSX.utils.book_new();
 
-  XLSX.utils.book_append_sheet(
+  XLSX.utils.book_append_sheet(wb, ws, "Register Tersisa");
+
+  const namaAman = String(tumpuk).replace(/[^a-zA-Z0-9_-]/g, "_");
+  const bulanAman = String(bulan).replace(/[^a-zA-Z0-9_-]/g, "_");
+
+  XLSX.writeFile(
     wb,
-    ws,
-    "Register Tersisa"
+    `CEK_TUMPUK_${namaAman}_${bulanAman}.xlsx`,
+    { bookType: "xlsx", cellStyles: true }
   );
-
-  const namaAman = String(tumpuk)
-    .replace(/[^a-zA-Z0-9_-]/g, "_");
-
-  const bulanAman = String(bulan)
-    .replace(/[^a-zA-Z0-9_-]/g, "_");
-
-  const namaFile =
-    `CEK_TUMPUK_${namaAman}_${bulanAman}.xlsx`;
-
-  XLSX.writeFile(wb, namaFile, {
-    bookType: "xlsx",
-    cellStyles: true
-  });
-}   
+}
 </script>
 
 </body>
