@@ -1602,7 +1602,6 @@ body{
             font-size:15px;
         "
     >
-        <option value="">SAAT INI</option>
         <option value="JANUARI">JANUARI</option>
         <option value="FEBRUARI">FEBRUARI</option>
         <option value="MARET">MARET</option>
@@ -1872,9 +1871,13 @@ let currentTPK = "";
 let currentTumpuk = "";
 let currentStackId = "";
 let currentRegisters = [];
-let bulanSisaAktif = "";
-
-
+let bulanSisaAktif = [
+    "JANUARI", "FEBRUARI", "MARET", "APRIL",
+    "MEI", "JUNI", "JULI", "AGUSTUS",
+    "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"
+][new Date().getMonth()];
+document.getElementById("bulanSisa").value = bulanSisaAktif;
+   
 /* =====================================================
    LOAD
 ===================================================== */
