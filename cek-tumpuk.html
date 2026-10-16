@@ -1810,6 +1810,12 @@ class="summary-value jumlah-angka"
              BOTTOM BUTTON
         ================================================= -->
 
+       
+<button type="button" onclick="downloadExcelSisa()" style="display:block;width:100%;padding:13px;margin:12px 0;background:#166534;color:white;border:0;border-radius:6px;font-size:15px;font-weight:bold;cursor:pointer;">
+  ⬇️ DOWNLOAD EXCEL
+</button>
+
+       
         <div class="bottom-buttons">
 
             <button
@@ -6346,6 +6352,275 @@ function ambilRiwayatTumpukHabis(){
     script.async = true;
     document.body.appendChild(script);
 
+}
+
+
+function downloadExcelSisa() {
+  const data = Array.isArray(currentRegisters) ? currentRegisters : [];
+
+  if (!data.length) {
+    alert("Tidak ada REGISTER TERSISA untuk diunduh.");
+    return;
+  }
+
+  const bulanEl = document.getElementById("bulanSisa");
+  const bulan = bulanEl
+    ? (bulanEl.options[bulanEl.selectedIndex]?.text || bulanEl.value)
+    : (bulanSisaAktif || "SAAT INI");
+
+  const tpk = currentTPK || "-";
+  const tumpuk = currentTumpuk || "-";
+  const tanggalCetak = new Date().toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+
+  function norm(k) {
+    return String(k).toLowerCase().replace(/[^a-z0-9]/g, "");
+  }
+
+  function ambil(obj, aliases) {
+    const keys = Object.keys(obj || {});
+    for (const alias of aliases) {
+      const found = keys.find(k => norm(k) === norm(alias));
+      if (found !== undefined && obj[found] !== null && obj[found] !== "") {
+        return obj[found];
+      }
+    }
+    return "";
+  }
+
+  function aman(v) {
+    if (v === null || v === undefined) return "";
+    if (typeof v === "object") {
+      try { v = JSON.stringify(v); } catch (_) { v = String(v); }
+    }
+    return String(v)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function tanggal(v) {
+    if (!v) return "-";
+    const s = String(v).trim();
+    const d = new Date(s);
+    if (!Number.isNaN(d.getTime())) {
+      return [
+        String(d.getDate()).padStart(2, "0"),
+        String(d.getMonth() + 1).padStart(2, "0"),
+        d.getFullYear()
+      ].join("-");
+    }
+    return s;
+  }
+
+  const kolomUtama = [
+    { judul: "NO", ambil: (_, i) => i + 1 },
+    { judul: "REGISTER", alias: ["register", "noRegister", "nomorRegister"] },
+    { judul: "TPK", alias: ["tpk"] },
+    { judul: "TUMPUK", alias: ["tumpuk"] },
+    { judul: "PANJANG", alias: ["panjang"] },
+    { judul: "DIAMETER", alias: ["diameter"] },
+    { judul: "MUTU", alias: ["mutu"] },
+    { judul: "STATUS", alias: ["status"] },
+    { judul: "VOLUME (M3)", alias: ["volume", "m3", "volumeM3"] },
+    {
+      judul: "STATUS OLAH",
+      alias: ["statusOlah", "status_olah", "STATUS OLAH"]
+    },
+    {
+      judul: "TANGGAL PENGOLAHAN",
+      alias: [
+        "tglOlah", "tgl_olah", "tanggalOlah",
+        "tanggalPengolahan", "tglPengolahan",
+        "TGL PENGOLAHAN", "TGL OLAH"
+      ],
+      tanggal: true
+    },
+    {
+      judul: "STATUS CEK",
+      alias: ["checked", "sudahCek", "statusCek"],
+      cek: true
+    }
+  ];
+
+  // Tambahkan seluruh kolom lain yang dikirim backend.
+  // Data sumber hanya currentRegisters, bukan HISTORY PENGAMBILAN.
+  const kolomTambahan = [];
+  const namaKolomSudahAda = new Set(
+    kolomUtama.flatMap(k => [
+      norm(k.judul),
+      ...(k.alias || []).map(norm)
+    ])
+  );
+
+  data.forEach(item => {
+    Object.keys(item || {}).forEach(key => {
+      if (!namaKolomSudahAda.has(norm(key))) {
+        namaKolomSudahAda.add(norm(key));
+        kolomTambahan.push({
+          judul: key.replace(/([a-z])([A-Z])/g, "$1 $2")
+                    .replace(/[_-]+/g, " ")
+                    .toUpperCase(),
+          key: key
+        });
+      }
+    });
+  });
+
+  const semuaKolom = [...kolomUtama, ...kolomTambahan];
+
+  function nilaiKolom(item, kolom, index) {
+    if (kolom.ambil) return kolom.ambil(item, index);
+
+    let nilai;
+    if (kolom.key) {
+      nilai = item[kolom.key];
+    } else {
+      nilai = ambil(item, kolom.alias || []);
+    }
+
+    if (kolom.tanggal) return tanggal(nilai);
+
+    if (kolom.cek) {
+      return nilai === true ||
+             String(nilai).toLowerCase() === "true" ||
+             String(nilai) === "1"
+        ? "SUDAH DICEK"
+        : "BELUM DICEK";
+    }
+
+    return nilai === "" || nilai === null || nilai === undefined
+      ? "-"
+      : nilai;
+  }
+
+  const header = semuaKolom.map(k =>
+    `<th>${aman(k.judul)}</th>`
+  ).join("");
+
+  const baris = data.map((item, i) => {
+    const cells = semuaKolom.map(k => {
+      const v = nilaiKolom(item, k, i);
+      return `<td>${aman(v)}</td>`;
+    }).join("");
+
+    return `<tr>${cells}</tr>`;
+  }).join("");
+
+  const totalVolume = data.reduce((total, item) => {
+    const v = Number(
+      String(ambil(item, ["volume", "m3", "volumeM3"]) || "0")
+        .replace(",", ".")
+    );
+    return total + (Number.isFinite(v) ? v : 0);
+  }, 0);
+
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        color: #222;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 5px;
+        color: #166534;
+      }
+      .subjudul {
+        text-align: center;
+        font-size: 12px;
+        margin-bottom: 18px;
+      }
+      .info {
+        margin-bottom: 12px;
+        font-size: 12px;
+      }
+      .info td {
+        padding: 5px 10px 5px 0;
+      }
+      table.data {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 10pt;
+      }
+      table.data th {
+        background: #166534;
+        color: white;
+        border: 1px solid #999;
+        padding: 8px 6px;
+        text-align: center;
+        font-weight: bold;
+      }
+      table.data td {
+        border: 1px solid #aaa;
+        padding: 6px;
+        vertical-align: top;
+      }
+      table.data tr:nth-child(even) {
+        background: #edf5ee;
+      }
+      .catatan {
+        margin-top: 12px;
+        font-size: 10px;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>LAPORAN REGISTER TERSISA</h2>
+    <div class="subjudul">CEK TUMPUK</div>
+
+    <table class="info">
+      <tr><td><b>BULAN</b></td><td>: ${aman(bulan)}</td></tr>
+      <tr><td><b>TPK</b></td><td>: ${aman(tpk)}</td></tr>
+      <tr><td><b>TUMPUK</b></td><td>: ${aman(tumpuk)}</td></tr>
+      <tr><td><b>TANGGAL CETAK</b></td><td>: ${aman(tanggalCetak)}</td></tr>
+      <tr><td><b>JUMLAH REGISTER</b></td><td>: ${data.length} register</td></tr>
+      <tr><td><b>TOTAL VOLUME</b></td><td>: ${totalVolume.toFixed(3)} m³</td></tr>
+    </table>
+
+    <table class="data">
+      <thead><tr>${header}</tr></thead>
+      <tbody>${baris}</tbody>
+    </table>
+
+    <div class="catatan">
+      Laporan ini memuat REGISTER TERSISA sesuai data yang tampil pada aplikasi.
+      Riwayat pengambilan tidak disertakan.
+    </div>
+  </body>
+  </html>`;
+
+  const blob = new Blob(
+    ["\ufeff", html],
+    { type: "application/vnd.ms-excel;charset=utf-8;" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  const namaAman = String(tumpuk)
+    .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+  const bulanAman = String(bulan)
+    .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+  link.href = url;
+  link.download = `CEK_TUMPUK_${namaAman}_${bulanAman}.xls`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
    
 </script>
