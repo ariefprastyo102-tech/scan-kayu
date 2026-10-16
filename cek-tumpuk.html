@@ -1593,7 +1593,7 @@ body{
 >
     <select
         id="bulanSisa"
-       onchange="bulanSisaAktif = this.value; ambilDataTumpuk(true); ambilRiwayatTumpukHabis()"
+       onchange="bulanSisaAktif = this.value; ambilDataTumpuk(true); ambilDaftarTumpukTersedia()"
         style="
             width:100%;
             padding:10px;
@@ -6216,8 +6216,7 @@ function toggleRiwayatTumpuk(){
 
 }
 
-
-function ambilRiwayatTumpukHabis(){
+function ambilDaftarTumpukTersedia() {
 
     const daftar = document.getElementById(
         "daftarRiwayatTumpuk"
@@ -6227,51 +6226,40 @@ function ambilRiwayatTumpukHabis(){
         "jumlahRiwayatHabis"
     );
 
-    const bulan = document.getElementById(
-        "bulanSisa"
-    ).value;
+    const bulanEl = document.getElementById("bulanSisa");
+
+    const bulan = bulanEl ? bulanEl.value : "";
 
     jumlah.textContent = "(...)";
-
-    if(!bulan){
-
-        jumlah.textContent = "(0)";
-        daftar.textContent =
-            "Pilih bulan untuk melihat riwayat tumpuk habis.";
-
-        return;
-    }
-
-    daftar.textContent = "Memuat riwayat...";
+    daftar.textContent = "Memuat daftar tumpuk tersedia...";
 
     const callbackName =
-        "callbackRiwayatHabis_" + Date.now();
+        "callbackTumpukTersedia_" + Date.now();
 
-    let script = document.createElement("script");
+    const script = document.createElement("script");
     let selesai = false;
 
-    const timeoutId = setTimeout(function(){
+    const timeoutId = setTimeout(function() {
 
-        if(selesai) return;
+        if (selesai) return;
 
         selesai = true;
         cleanupJSONP(callbackName, script);
 
         jumlah.textContent = "(0)";
         daftar.textContent =
-            "Riwayat gagal dimuat. Coba pilih bulan lagi.";
+            "Daftar gagal dimuat. Coba muat ulang.";
 
     }, 30000);
 
+    window[callbackName] = function(response) {
 
-    window[callbackName] = function(response){
-
-        if(selesai) return;
+        if (selesai) return;
 
         selesai = true;
         clearTimeout(timeoutId);
 
-        try{
+        try {
 
             const berhasil =
                 response &&
@@ -6282,11 +6270,11 @@ function ambilRiwayatTumpukHabis(){
                     response.success === true
                 );
 
-            if(!berhasil || !Array.isArray(response.data)){
+            if (!berhasil || !Array.isArray(response.data)) {
 
                 jumlah.textContent = "(0)";
                 daftar.textContent =
-                    "Data riwayat tidak berhasil dibaca.";
+                    "Data tumpuk tersedia gagal dibaca.";
 
                 return;
             }
@@ -6296,16 +6284,16 @@ function ambilRiwayatTumpukHabis(){
             jumlah.textContent = "(" + data.length + ")";
             daftar.innerHTML = "";
 
-            if(data.length === 0){
+            if (data.length === 0) {
 
                 daftar.textContent =
-                    "Tidak ada tumpuk yang habis pada bulan " +
+                    "Tidak ada tumpuk yang masih tersedia pada bulan " +
                     bulan + ".";
 
                 return;
             }
 
-            data.forEach(function(item){
+            data.forEach(function(item) {
 
                 const baris = document.createElement("div");
 
@@ -6314,11 +6302,14 @@ function ambilRiwayatTumpukHabis(){
                     "border-bottom:1px solid #eee;" +
                     "color:#334155;";
 
-                baris.textContent = item.tpk
-                    ? "TPK " + item.tpk +
-                      " — TUMPUK " + item.tumpuk
-                    : "TUMPUK " + item.tumpuk +
-                      " — GABUNGAN SEMUA TPK";
+                baris.textContent =
+                    (item.tpk
+                        ? "TPK " + item.tpk + " — "
+                        : "") +
+                    "TUMPUK " + item.tumpuk +
+                    " — " +
+                    (item.jumlahBatang || 0) +
+                    " BATANG";
 
                 daftar.appendChild(baris);
 
@@ -6332,17 +6323,16 @@ function ambilRiwayatTumpukHabis(){
 
     };
 
-
     script.src =
         API_URL +
-        "?action=riwayatTumpukHabis" +
+        "?action=daftarTumpukTersedia" +
         "&bulan=" + encodeURIComponent(bulan) +
         "&callback=" + callbackName +
         "&_=" + Date.now();
 
-    script.onerror = function(){
+    script.onerror = function() {
 
-        if(selesai) return;
+        if (selesai) return;
 
         selesai = true;
         clearTimeout(timeoutId);
@@ -6351,7 +6341,7 @@ function ambilRiwayatTumpukHabis(){
 
         jumlah.textContent = "(0)";
         daftar.textContent =
-            "Gagal menghubungi backend riwayat.";
+            "Gagal menghubungi backend daftar tumpuk tersedia.";
 
     };
 
@@ -6359,8 +6349,6 @@ function ambilRiwayatTumpukHabis(){
     document.body.appendChild(script);
 
 }
-
-
 
 
 function downloadExcelSisa() {
