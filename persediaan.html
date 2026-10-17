@@ -1008,6 +1008,20 @@ tbody tr:hover{
     }
 }
 
+
+.btn-export-excel{
+    margin-left:auto;
+    padding:10px 16px;
+    border:0;
+    border-radius:8px;
+    background:#176b3a;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+.btn-export-excel:hover{background:#12572f;}
+@media(max-width:600px){.filter{flex-wrap:wrap}.btn-export-excel{margin-left:0}}
+
 </style>
 
 </head>
@@ -1142,6 +1156,10 @@ tbody tr:hover{
             </option>
 
         </select>
+
+        <button type="button" class="btn-export-excel" onclick="unduhBagianExcel('pasokan','Pasokan BBI')">
+            UNDUH EXCEL
+        </button>
 
     </div>
 
@@ -1331,6 +1349,10 @@ tbody tr:hover{
 
         </select>
 
+        <button type="button" class="btn-export-excel" onclick="unduhBagianExcel('olah','Olah BBI')">
+            UNDUH EXCEL
+        </button>
+
     </div>
 
     <div
@@ -1368,6 +1390,10 @@ tbody tr:hover{
     style="display:none;">
 
     <h2>SISA</h2>
+
+    <button type="button" class="btn-export-excel" onclick="unduhBagianExcel('sisa','Sisa BBI')">
+        UNDUH EXCEL
+    </button>
 
 <!-- =================================================
      STATUS SISA
@@ -1421,7 +1447,7 @@ tbody tr:hover{
             id="cariPanjang"
             class="filter-sisa-input"
             rows="2"
-            placeholder="200&#10;200-400&#10;200 UP"
+            placeholder="200&#10;200-400&#10;300 UP HARA&#10;300 T"
             oninput="tampilkanRincianSisa()"></textarea>
 
     </div>
@@ -1506,6 +1532,10 @@ tbody tr:hover{
             <option value="DESEMBER">DESEMBER</option>
 
         </select>
+
+        <button type="button" class="btn-export-excel" onclick="unduhBagianExcel('mutasi','Mutasi BBI')">
+            UNDUH EXCEL
+        </button>
 
     </div>
 
@@ -3401,20 +3431,18 @@ function tampilkanRincianSisa(){
         ).value;
 
 
-    if(
-        String(cariPanjang).trim() !== ""
-    ){
-
-        data =
-            data.filter(function(item){
-
-                return cocokFilterAngka(
-                    item.panjang,
-                    cariPanjang
-                );
-
-            });
-
+    const criterioSisa=separarCriteriosSisa(cariPanjang);
+    if(criterioSisa.longitudes.length){
+        data=data.filter(function(item){
+            return cocokFilterAngka(item.panjang,criterioSisa.longitudes.join("\n"));
+        });
+    }
+    if(criterioSisa.categorias.length){
+        data=data.filter(function(item){
+            const status=String(item.status||"").trim().toUpperCase();
+            const mutu=String(item.mutu||"").trim().toUpperCase();
+            return criterioSisa.categorias.some(function(valor){return valor===status||valor===mutu;});
+        });
     }
 
 
@@ -3533,30 +3561,18 @@ table.innerHTML =
 
     '<thead>' +
         '<tr>' +
-
             '<th>REGISTER</th>' +
-
-            '<th>PANJANG</th>' +
-
-            '<th>DIAMETER</th>' +
-
-            '<th>TUMPUK</th>' +
-
-            '<th>TPK</th>' +
-
-            '<th>MUTU</th>' +
-
             '<th>SORTIMEN</th>' +
-
+            '<th>PANJANG</th>' +
+            '<th>DIAMETER</th>' +
+            '<th>MUTU</th>' +
             '<th>STATUS</th>' +
-
+            '<th>TPK</th>' +
+            '<th>TUMPUK</th>' +
             '<th>BATANG</th>' +
-
             '<th>VOLUME</th>' +
-
         '</tr>' +
     '</thead>' +
-
     '<tbody></tbody>';
 
 
@@ -3571,68 +3587,16 @@ hasil.forEach(function(item){
 
 
     tr.innerHTML =
-
-        '<td>' +
-            escapeHtml(
-                item.register || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.panjang ?? ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.diameter ?? ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.tumpuk || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.tpk || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.mutu || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.sortimen || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            escapeHtml(
-                item.status || ""
-            ) +
-        '</td>' +
-
-        '<td>' +
-            Number(
-                item.batang || 0
-            ) +
-        '</td>' +
-
-        '<td>' +
-            Number(
-                item.volume || 0
-            ).toFixed(3) +
-            ' m³' +
-        '</td>';
-
+        '<td>' + escapeHtml(item.register || '') + '</td>' +
+        '<td>' + escapeHtml(item.sortimen || '') + '</td>' +
+        '<td>' + escapeHtml(item.panjang ?? '') + '</td>' +
+        '<td>' + escapeHtml(item.diameter ?? '') + '</td>' +
+        '<td>' + escapeHtml(item.mutu || '') + '</td>' +
+        '<td>' + escapeHtml(item.status || '') + '</td>' +
+        '<td>' + escapeHtml(item.tpk || '') + '</td>' +
+        '<td>' + escapeHtml(item.tumpuk || '') + '</td>' +
+        '<td>' + Number(item.batang || 0) + '</td>' +
+        '<td>' + Number(item.volume || 0).toFixed(3) + ' m³</td>';
 
     tbody.appendChild(tr);
 
@@ -3670,6 +3634,17 @@ function ambilFilterAngka(teks){
    CEK FILTER ANGKA
 ===================================================== */
 
+function separarCriteriosSisa(teks){
+    const longitudes=[],categorias=[];
+    const patron=/\d+(?:\.\d+)?(?:\s*-\s*\d+(?:\.\d+)?|\s*UP)?/gi;
+    String(teks||"").split(/\r?\n/).forEach(function(linea){
+        const coincidencias=linea.match(patron)||[];
+        coincidencias.forEach(function(valor){longitudes.push(valor.trim().replace(/\s+/g," "));});
+        const resto=linea.replace(patron," ").toUpperCase();
+        (resto.match(/[A-Z]+/g)||[]).forEach(function(valor){categorias.push(valor);});
+    });
+    return {longitudes:longitudes,categorias:categorias};
+}
 function cocokFilterAngka(
     nilai,
     teks
@@ -5115,6 +5090,232 @@ if(status){
 
 }    
 /* =====================================================
+   UNDUH DATA BAGIAN AKTIF KE EXCEL
+===================================================== */
+function muatExcelJS(){
+    if(window.ExcelJS) return Promise.resolve();
+    if(window.__excelJSPromise) return window.__excelJSPromise;
+    window.__excelJSPromise = new Promise(function(resolve,reject){
+        const script=document.createElement("script");
+        script.src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js";
+        script.onload=function(){ window.ExcelJS ? resolve() : reject(new Error("ExcelJS tidak tersedia")); };
+        script.onerror=function(){ reject(new Error("Gagal memuat pustaka Excel")); };
+        document.head.appendChild(script);
+    });
+    return window.__excelJSPromise;
+}
+
+function buatTabelPasokanExcel(source){
+    const headerRows=source.tHead?Array.from(source.tHead.rows):[];
+    if(headerRows.length<2) return source;
+    const occupied=[],baseHeaders=[],groups=[],units=[];
+    headerRows.forEach(function(row,rowIndex){
+        occupied[rowIndex]=occupied[rowIndex]||[];
+        let col=0;
+        Array.from(row.cells).forEach(function(cell){
+            while(occupied[rowIndex][col]) col++;
+            const colspan=Math.max(1,cell.colSpan||1),rowspan=Math.max(1,cell.rowSpan||1),text=cell.innerText.trim();
+            if(rowIndex===0){
+                if(rowspan>1){for(let c=col;c<col+colspan;c++)baseHeaders[c]=text;}
+                else if(colspan>1){for(let c=col;c<col+colspan;c++)groups[c]=text;}
+            }else{
+                units[col]=text;
+            }
+            for(let rr=rowIndex;rr<rowIndex+rowspan;rr++){
+                occupied[rr]=occupied[rr]||[];
+                for(let cc=col;cc<col+colspan;cc++)if(rr!==rowIndex||cc!==col)occupied[rr][cc]=true;
+            }
+            col+=colspan;
+        });
+    });
+    let width=Math.max(baseHeaders.length,groups.length,units.length);
+    const headers=Array.from({length:width},function(_,i){
+        if(baseHeaders[i])return baseHeaders[i];
+        return [groups[i]||"",units[i]||""].filter(Boolean).join(" ");
+    });
+    let totalStart=headers.findIndex(function(h){return /^TOTAL\s+BTG$/i.test(h);});
+    if(totalStart<0){
+        totalStart=width;
+        headers[totalStart]="TOTAL BTG";
+        headers[totalStart+1]="TOTAL M³";
+        width+=2;
+    }else{
+        headers[totalStart]="TOTAL BTG";
+        headers[totalStart+1]="TOTAL M³";
+    }
+    const detailColumns=[];
+    headers.slice(0,totalStart).forEach(function(header,index){
+        const upper=String(header).toUpperCase();
+        if(/\bBTG\b|BATANG/.test(upper))detailColumns.push({index:index,type:"batang"});
+        else if(/M³|M3/.test(upper))detailColumns.push({index:index,type:"volume"});
+    });
+    const result=document.createElement("table");
+    result.dataset.exportLabel="RINCIAN PASOKAN";
+    const thead=result.createTHead(),head=thead.insertRow();
+    headers.forEach(function(label){const th=document.createElement("th");th.textContent=label;head.appendChild(th);});
+    const tbody=result.createTBody();
+    function parseCount(value){const n=parseInt(String(value||"").replace(/[^0-9-]/g,""),10);return Number.isFinite(n)?n:0;}
+    function parseVolume(value){const text=String(value||"").replace(/\s/g,"").replace(/\./g,"").replace(",",".");const n=Number(text);return Number.isFinite(n)?n:0;}
+    Array.from(source.tBodies).flatMap(function(body){return Array.from(body.rows);}).forEach(function(tr){
+        const values=Array.from(tr.cells).map(function(cell){return cell.innerText.trim();});
+        let totalBatang=0,totalVolume=0;
+        detailColumns.forEach(function(col){
+            if(col.type==="batang")totalBatang+=parseCount(values[col.index]);
+            else totalVolume+=parseVolume(values[col.index]);
+        });
+        values[totalStart]=totalBatang;
+        values[totalStart+1]=Number(totalVolume.toFixed(3));
+        while(values.length<width)values.push("");
+        const row=tbody.insertRow();
+        const isTotal=tr.classList.contains("baris-total")||values.some(function(v){return String(v).trim().toUpperCase()==="TOTAL";});
+        if(isTotal)row.className="baris-total";
+        values.forEach(function(value){const cell=row.insertCell();cell.textContent=value;});
+    });
+    return result;
+}
+
+function unduhBagianExcel(sectionId, judul){
+    const section=document.getElementById(sectionId);
+    let tables=[];
+    if(sectionId==="sisa" && section){
+        const ringkasan=section.querySelector("#rincianRingkasanSisa table");
+        if(ringkasan) tables.push(ringkasan);
+        const rincian=section.querySelector("#rincianSisa table");
+        if(rincian) tables.push(rincian);
+    }else if(sectionId==="pasokan" && section){
+        tables=Array.from(section.querySelectorAll("table")).map(function(table){
+            return table.closest("#rincianPasokan")?buatTabelPasokanExcel(table):table;
+        });
+    }else if(section){
+        tables=Array.from(section.querySelectorAll("table"));
+    }
+    if(!tables.length){
+        alert("Belum ada tabel yang bisa diunduh. Pastikan data sudah dimuat.");
+        return;
+    }
+
+    muatExcelJS().then(async function(){
+        const workbook=new ExcelJS.Workbook();
+        workbook.creator="BBI IK Saradan";
+        workbook.created=new Date();
+        workbook.modified=new Date();
+        const worksheet=workbook.addWorksheet((judul.split(" ")[0]||"BBI").slice(0,31));
+
+        function cellText(cell){
+            const select=cell.querySelector("select");
+            if(select && select.selectedIndex>=0) return select.options[select.selectedIndex].text.trim();
+            return cell.innerText.trim();
+        }
+        function nearestHeading(table){
+            if(table.dataset && table.dataset.exportLabel) return table.dataset.exportLabel;
+            let node=table;
+            while(node && node!==section){
+                const previous=node.previousElementSibling;
+                if(previous && /^H[1-6]$/.test(previous.tagName)) return previous.innerText.trim();
+                node=node.parentElement;
+            }
+            return "RINCIAN";
+        }
+        function expandTable(table,startRow){
+            const htmlRows=Array.from(table.rows),occupied=[],rows=[],merges=[],headers=[];
+            htmlRows.forEach(function(tr,rowIndex){
+                const values=[];occupied[rowIndex]=occupied[rowIndex]||[];let col=0;
+                Array.from(tr.cells).forEach(function(cell){
+                    while(occupied[rowIndex][col]) col++;
+                    const colspan=Math.max(1,cell.colSpan||1),rowspan=Math.max(1,cell.rowSpan||1),value=cellText(cell);
+                    values[col]=value;
+                    if(cell.tagName==="TH") for(let cc=col;cc<col+colspan;cc++) headers[cc]=value;
+                    if(colspan>1||rowspan>1) merges.push({r1:startRow+rowIndex,c1:col+1,r2:startRow+rowIndex+rowspan-1,c2:col+colspan});
+                    for(let rr=rowIndex;rr<rowIndex+rowspan;rr++){
+                        occupied[rr]=occupied[rr]||[];
+                        for(let cc=col;cc<col+colspan;cc++) if(rr!==rowIndex||cc!==col) occupied[rr][cc]=true;
+                    }
+                    col+=colspan;
+                });
+                const total=tr.classList.contains("baris-total")||values.some(function(v){return String(v||"").trim().toUpperCase()==="TOTAL";});
+                rows.push({values:values,header:!!tr.querySelector("th"),total:total});
+            });
+            return {rows:rows,merges:merges,headers:headers,width:Math.max(1,...rows.map(function(r){return r.values.length;}))};
+        }
+        function angkaLokal(value){
+            const text=String(value==null?"":value).replace(/\s/g,"").replace(/m³/ig,"");
+            if(!/^-?(?:\d{1,3}(?:\.\d{3})*|\d+)(?:,\d+)?$/.test(text)) return 0;
+            const number=Number(text.replace(/\./g,"").replace(",","."));
+            return Number.isFinite(number)?number:0;
+        }
+
+
+        const parts=tables.map(function(table){return {label:nearestHeading(table),table:table};});
+        let maxCols=1,layouts=[],rowCursor=4;
+        parts.forEach(function(part){
+            let layout=expandTable(part.table,rowCursor+1);
+            maxCols=Math.max(maxCols,layout.width);
+            layouts.push({label:part.label,layout:layout,startRow:rowCursor+1});
+            rowCursor+=1+layout.rows.length+1;
+        });
+
+        worksheet.addRow([judul.toUpperCase()]);
+        if(maxCols>1) worksheet.mergeCells(1,1,1,maxCols);
+        worksheet.getCell(1,1).font={name:"Aptos Display",size:17,bold:true,color:{argb:"FFFFFFFF"}};
+        worksheet.getCell(1,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF145A32"}};
+        worksheet.getCell(1,1).alignment={horizontal:"center",vertical:"middle"};
+        worksheet.getRow(1).height=34;
+        worksheet.addRow(["BBI IK SARADAN  •  DIEKSPOR "+new Date().toLocaleString("id-ID")]);
+        if(maxCols>1) worksheet.mergeCells(2,1,2,maxCols);
+        worksheet.getCell(2,1).font={name:"Aptos",size:10,italic:true,color:{argb:"FF53665A"}};
+        worksheet.getCell(2,1).alignment={horizontal:"center",vertical:"middle"};
+        worksheet.addRow([]);
+
+        const border={top:{style:"thin",color:{argb:"FFD5E1D9"}},left:{style:"thin",color:{argb:"FFD5E1D9"}},bottom:{style:"thin",color:{argb:"FFD5E1D9"}},right:{style:"thin",color:{argb:"FFD5E1D9"}}};
+        let stripe=0;
+        layouts.forEach(function(part){
+            const labelRow=worksheet.addRow([part.label.toUpperCase()]);
+            if(part.layout.width>1) worksheet.mergeCells(labelRow.number,1,labelRow.number,part.layout.width);
+            labelRow.height=23;
+            labelRow.getCell(1).font={name:"Aptos",size:11,bold:true,color:{argb:"FF145A32"}};
+            labelRow.getCell(1).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFE7F2EA"}};
+            labelRow.getCell(1).alignment={horizontal:"center",vertical:"middle"};
+            labelRow.getCell(1).border=border;
+            part.layout.rows.forEach(function(r){
+                const values=r.values.map(function(value,index){
+                    if(r.header||!value) return value;
+                    const header=String(part.layout.headers[index]||"").toUpperCase();
+                    if(/REGISTER|SKSHH|TPK|STATUS|MUTU|SORTIMEN|TGL|TANGGAL|KETERANGAN/.test(header)) return value;
+                    const normalized=String(value).replace(/\s/g,"");
+                    if(!/^-?(?:\d{1,3}(?:\.\d{3})*|\d+)(?:,\d+)?$/.test(normalized)) return value;
+                    const number=Number(normalized.replace(/\./g,"").replace(",","."));
+                    return Number.isFinite(number)?number:value;
+                });
+                const row=worksheet.addRow(values);row.height=r.header?25:21;
+                row.eachCell({includeEmpty:true},function(cell,colNumber){
+                    cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border=border;
+                    if(r.total){cell.font={name:"Aptos",size:10,bold:true,color:{argb:"FF123F25"}};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFDCEFE2"}};}
+                    else if(r.header){cell.font={name:"Aptos",size:10,bold:true,color:{argb:"FFFFFFFF"}};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF176B3A"}};}
+                    else{cell.font={name:"Aptos",size:10,color:{argb:"FF26332B"}};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:(stripe++%2===0?"FFFFFFFF":"FFF3F8F5")}};}
+                    if(typeof cell.value==="number"){
+                        const header=String(part.layout.headers[colNumber-1]||"").toUpperCase();
+                        cell.numFmt=/M³|M3|VOLUME/.test(header)?(sectionId==="sisa"?"0.000;[Red]-0.000":"#,##0.000;[Red]-#,##0.000"):"#,##0;[Red]-#,##0";
+                    }
+                });
+            });
+            part.layout.merges.forEach(function(m){worksheet.mergeCells(m.r1,m.c1,m.r2,m.c2);});
+            worksheet.addRow([]);
+        });
+        worksheet.columns=Array.from({length:maxCols},function(_,index){
+            let longest=12;layouts.forEach(function(part){part.layout.rows.forEach(function(row){longest=Math.max(longest,String(row.values[index]||"").length);});});
+            return {width:Math.min(30,longest+3)};
+        });
+        worksheet.views=[{state:"frozen",ySplit:3}];
+        worksheet.pageSetup={orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
+        const buffer=await workbook.xlsx.writeBuffer();
+        const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+        const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;
+        link.download=judul.replace(/[^A-Za-z0-9_-]+/g,"_")+".xlsx";
+        document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    }).catch(function(error){console.error(error);alert("Gagal membuat file Excel. Pastikan perangkat terhubung ke internet lalu coba lagi.");});
+}
+
+/* =====================================================
    AMBIL DATA PASOKAN
    BAGIAN PASOKAN DIPERTAHANKAN
 ===================================================== */
@@ -5279,3 +5480,4 @@ document.addEventListener(
 </body>
 
 </html>
+
