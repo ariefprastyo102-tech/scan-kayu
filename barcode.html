@@ -791,17 +791,14 @@ item.appendChild(
     svg
 );
 
+
 new QRCode(
     item,
     {
-        text:
-            "https://ariefprastyo102-tech.github.io/scan-kayu/index-test-qr?register=" +
-            encodeURIComponent(data.register),
-
-        width:160,
-        height:160,
-        correctLevel:
-            QRCode.CorrectLevel.H
+        text: String(data.register).trim(),
+        width: 160,
+        height: 160,
+        correctLevel: QRCode.CorrectLevel.M
     }
 );
 
@@ -1336,19 +1333,17 @@ function cetakF4(){
 barcodeBox.className =
     "labelBarcode";
 
+
 new QRCode(
     barcodeBox,
     {
-        text:
-            "https://ariefprastyo102-tech.github.io/scan-kayu/index-test-qr?register=" +
-            encodeURIComponent(data.register),
-
-        width:160,
-        height:160,
-        correctLevel:
-            QRCode.CorrectLevel.L
+        text: String(data.register).trim(),
+        width: 160,
+        height: 160,
+        correctLevel: QRCode.CorrectLevel.M
     }
 );
+
                 
 label.appendChild(barcodeBox);
 
