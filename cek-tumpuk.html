@@ -4480,48 +4480,53 @@ buatBarisDetail(
 
 }
 
-function formatTanggalPengolahan(
-    item
-){
+function formatTanggalPengolahan(item) {
+    const fields = [
+        "tglOlah", "tgl_olah", "tanggalOlah",
+        "tanggalPengolahan", "tglPengolahan",
+        "TGL PENGOLAHAN", "TGL OLAH"
+    ];
 
-    const nilai =
-        item &&
-        item.tglOlah !== undefined
-        ?
-        item.tglOlah
-        :
-        "";
-
-    if(!nilai){
-        return "-";
+    let nilai = "";
+    for (const field of fields) {
+        if (item && item[field] !== undefined && item[field] !== null && item[field] !== "") {
+            nilai = item[field];
+            break;
+        }
     }
 
-    const tanggal =
-        new Date(nilai);
+    if (nilai === "") return "-";
 
-    if(
-        isNaN(
-            tanggal.getTime()
-        )
-    ){
-        return String(nilai);
+    const formatBagian = (hari, bulan, tahun) =>
+        `${String(hari).padStart(2, "0")}-${String(bulan).padStart(2, "0")}-${String(tahun).padStart(4, "0")}`;
+
+    if (nilai instanceof Date && !Number.isNaN(nilai.getTime())) {
+        return formatBagian(nilai.getDate(), nilai.getMonth() + 1, nilai.getFullYear());
     }
 
-    return (
-        String(
-            tanggal.getDate()
-        ).padStart(2,"0") +
-        "-" +
-        String(
-            tanggal.getMonth() + 1
-        ).padStart(2,"0") +
-        "-" +
-        tanggal.getFullYear()
-    );
+    const teks = String(nilai).trim();
 
-}
-   
-   /* =====================================================
+    // Pertahankan tanggal kalender pada nilai ISO, termasuk jika disertai jam/zona waktu.
+    let cocok = teks.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:$|[T\s])/);
+    if (cocok) return formatBagian(cocok[3], cocok[2], cocok[1]);
+
+    // Terima input tanggal Indonesia DD/MM/YYYY atau DD-MM-YYYY.
+    cocok = teks.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+    if (cocok) return formatBagian(cocok[1], cocok[2], cocok[3]);
+
+    // Tanggal serial Excel (basis tanggal Excel 1900).
+    if (typeof nilai === "number" && Number.isFinite(nilai) && nilai > 0) {
+        const tanggal = new Date(Date.UTC(1899, 11, 30) + Math.floor(nilai) * 86400000);
+        return formatBagian(tanggal.getUTCDate(), tanggal.getUTCMonth() + 1, tanggal.getUTCFullYear());
+    }
+
+    const tanggal = new Date(teks);
+    if (!Number.isNaN(tanggal.getTime())) {
+        return formatBagian(tanggal.getDate(), tanggal.getMonth() + 1, tanggal.getFullYear());
+    }
+
+    return teks;
+}/* =====================================================
    AMBIL FIELD DETAIL
 ===================================================== */
 
