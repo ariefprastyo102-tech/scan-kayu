@@ -574,8 +574,17 @@ function formatStatusMutu(status, mutu){
         return statusText;
     }
 
-    // Mutu lokal dicetak sesuai namanya saja, misalnya T M L.
-    if(/LOKAL|\bT\s*M\s*L\b/.test(mutuText)){
+    // Jika salah satu nilai menandai LOKAL, tampilkan mutu/status pasangannya saja.
+    if(/LOKAL/.test(statusText)){
+        return mutuText;
+    }
+
+    if(/LOKAL/.test(mutuText)){
+        return statusText;
+    }
+
+    // Kode mutu lokal seperti T M L dicetak sebagai mutu saja.
+    if(/\bT\s*M\s*L\b/.test(mutuText)){
         return mutuText;
     }
 
