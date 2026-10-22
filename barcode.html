@@ -588,7 +588,7 @@ function formatStatusMutu(status, mutu){
         return mutuText;
     }
 
-    return [statusText, mutuText].filter(Boolean).join(" ");
+    return [mutuText, statusText].filter(Boolean).join(" ");
 
 }
 
