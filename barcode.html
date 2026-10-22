@@ -565,6 +565,25 @@ function getKodeTPK(tpk){
    AMBIL DATABASE
 ===================================================== */
 
+function formatStatusMutu(status, mutu){
+
+    const statusText = String(status || "").trim().toUpperCase();
+    const mutuText = String(mutu || "").trim().toUpperCase();
+
+    if(!mutuText){
+        return statusText;
+    }
+
+    // Mutu lokal dicetak sesuai namanya saja, misalnya T M L.
+    if(/LOKAL|\bT\s*M\s*L\b/.test(mutuText)){
+        return mutuText;
+    }
+
+    return [statusText, mutuText].filter(Boolean).join(" ");
+
+}
+
+
 function ambilDatabase(){
 
     const status =
@@ -621,6 +640,12 @@ function ambilDatabase(){
                     String(
                         item.tumpuk || ""
                     ).trim();
+
+                const statusMutu =
+                    formatStatusMutu(
+                        item.status || item.STATUS || "",
+                        item.mutu || item.MUTU || item.kualitas || item.KUALITAS || ""
+                    );
                 
                 const m3 =
     String(
@@ -665,6 +690,8 @@ function ambilDatabase(){
     m3:m3,
 
     tumpuk:tumpuk,
+
+    statusMutu:statusMutu,
 
     tpk:kodeTPKItem,
 
@@ -1372,6 +1399,7 @@ angka.innerHTML =
     '<div class="registerUtama">' + String(data.register).slice(0, 2) + '-' + parseInt(String(data.register).slice(2), 10) + '</div>' +
     '<div class="ukuranCetak">' + data.panjang + '/' + data.diameter + '</div>' +
     '<div>' + data.m3 + '</div>' +
+    (data.statusMutu ? '<div>' + data.statusMutu + '</div>' : '') +
     '<div>TP ' + data.tumpuk + '</div>' +
     '<div>' + kode + '</div>';
 
