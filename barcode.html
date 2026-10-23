@@ -569,6 +569,7 @@ function formatStatusMutu(status, mutu){
 
     const statusText = String(status || "").trim().toUpperCase();
     const mutuText = String(mutu || "").trim().toUpperCase();
+    const statusDisplay = statusText === "HARA" ? "H" : statusText;
 
     if(!mutuText){
         return statusText;
@@ -588,7 +589,7 @@ function formatStatusMutu(status, mutu){
         return mutuText;
     }
 
-    return [mutuText, statusText].filter(Boolean).join(" ");
+    return [mutuText, statusDisplay].filter(Boolean).join(" ");
 
 }
 
