@@ -1817,6 +1817,25 @@ class="summary-value jumlah-angka"
   ⬇️ DOWNLOAD EXCEL
 </button>
 
+       <button
+  type="button"
+  onclick="cetakSisa()"
+  style="
+    display:block;
+    width:100%;
+    padding:13px;
+    margin:8px 0 12px;
+    background:#2563eb;
+    color:white;
+    border:0;
+    border-radius:6px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+  "
+>
+  🖨 CETAK LAPORAN
+</button>
        
         <div class="bottom-buttons">
 
@@ -6825,6 +6844,405 @@ function downloadExcelSisa() {
     { bookType: "xlsx", cellStyles: true }
   );
 }
+
+  
+function cetakSisa() {
+
+  const data = Array.isArray(currentRegisters)
+    ? currentRegisters
+    : [];
+
+  if (!data.length) {
+    alert("Tidak ada REGISTER TERSISA untuk dicetak.");
+    return;
+  }
+
+  const bulanEl = document.getElementById("bulanSisa");
+
+  const bulan = bulanEl
+    ? (bulanEl.options[bulanEl.selectedIndex]?.text || bulanEl.value)
+    : (bulanSisaAktif || "-");
+
+  const tpk = currentTPK || "-";
+  const tumpuk = currentTumpuk || "-";
+
+  const tanggalCetak = new Date().toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+
+  function norm(k) {
+    return String(k).toLowerCase().replace(/[^a-z0-9]/g, "");
+  }
+
+  function ambil(obj, aliases) {
+    const keys = Object.keys(obj || {});
+
+    for (const alias of aliases) {
+      const key = keys.find(k => norm(k) === norm(alias));
+
+      if (
+        key !== undefined &&
+        obj[key] !== null &&
+        obj[key] !== ""
+      ) {
+        return obj[key];
+      }
+    }
+
+    return "";
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "-").replace(/[&<>"']/g, c => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[c]);
+  }
+
+  function angka(v) {
+    if (typeof v === "number") return v;
+    if (!v) return 0;
+
+    const s = String(v).trim();
+
+    if (/^-?\d+,\d+$/.test(s)) {
+      return Number(s.replace(",", "."));
+    }
+
+    if (/^-?\d{1,3}(\.\d{3})+,\d+$/.test(s)) {
+      return Number(s.replace(/\./g, "").replace(",", "."));
+    }
+
+    return Number(s) || 0;
+  }
+
+  function formatTanggal(v) {
+    if (!v) return "-";
+
+    if (v instanceof Date && !isNaN(v.getTime())) {
+      return [
+        String(v.getDate()).padStart(2, "0"),
+        String(v.getMonth() + 1).padStart(2, "0"),
+        v.getFullYear()
+      ].join("-");
+    }
+
+    const s = String(v).trim();
+
+    const cocok = s.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+
+    if (cocok) {
+      return `${cocok[1].padStart(2, "0")}-${cocok[2].padStart(2, "0")}-${cocok[3]}`;
+    }
+
+    return s;
+  }
+
+  function formatVolume(v) {
+    return angka(v).toLocaleString("id-ID", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
+    });
+  }
+
+  const totalVolume = data.reduce((total, item) => {
+    return total + angka(
+      ambil(item, ["volume", "m3", "volumeM3"])
+    );
+  }, 0);
+
+  const kolom = [
+    {
+      judul: "NO",
+      nilai: (_, i) => i + 1
+    },
+    {
+      judul: "REGISTER",
+      alias: ["register", "noRegister", "nomorRegister"]
+    },
+    {
+      judul: "TPK",
+      alias: ["tpk"]
+    },
+    {
+      judul: "PANJANG",
+      alias: ["panjang"]
+    },
+    {
+      judul: "DIAMETER",
+      alias: ["diameter"]
+    },
+    {
+      judul: "MUTU",
+      alias: ["mutu"]
+    },
+    {
+      judul: "STATUS",
+      alias: ["status"]
+    },
+    {
+      judul: "VOLUME (M3)",
+      alias: ["volume", "m3", "volumeM3"],
+      volume: true
+    },
+    {
+      judul: "STATUS OLAH",
+      alias: ["statusOlah", "status_olah"]
+    },
+    {
+      judul: "TGL OLAH",
+      alias: [
+        "tglOlah",
+        "tgl_olah",
+        "tanggalOlah",
+        "tanggalPengolahan",
+        "tglPengolahan",
+        "TGL PENGOLAHAN",
+        "TGL OLAH"
+      ],
+      tanggal: true
+    }
+  ];
+
+  const baris = data.map((item, i) => {
+
+    const sel = kolom.map(k => {
+
+      let nilai = k.nilai
+        ? k.nilai(item, i)
+        : ambil(item, k.alias || []);
+
+      if (k.volume) {
+        nilai = formatVolume(nilai);
+      } else if (k.tanggal) {
+        nilai = formatTanggal(nilai);
+      } else if (
+        nilai === "" ||
+        nilai === null ||
+        nilai === undefined
+      ) {
+        nilai = "-";
+      }
+
+      return `<td>${escapeHTML(nilai)}</td>`;
+    });
+
+    return `<tr>${sel.join("")}</tr>`;
+
+  }).join("");
+
+  const popup = window.open("", "_blank");
+
+  if (!popup) {
+    alert("Jendela cetak diblokir browser. Izinkan pop-up untuk aplikasi ini.");
+    return;
+  }
+
+  const html = `
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+
+<title>CEK TUMPUK ${escapeHTML(tumpuk)}</title>
+
+<style>
+
+@page {
+  size: 210mm 330mm;
+  margin: 8mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #17221c;
+  margin: 0;
+  font-size: 9px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* RINGKASAN */
+
+.summary {
+  margin-bottom: 9px;
+}
+
+.summary td {
+  border: 1px solid #bfcfc4;
+  padding: 6px 5px;
+  height: 27px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.summary .label {
+  background: #176b3a;
+  color: white;
+  width: 16%;
+}
+
+.summary .value {
+  background: #f1f5f2;
+  color: #176b3a;
+  width: 34%;
+  font-size: 11px;
+}
+
+.summary tr:last-child .value {
+  background: #e8f1ea;
+  font-size: 12px;
+}
+
+/* TABEL DATA */
+
+.data-table th {
+  background: #176b3a;
+  color: white;
+  border: 1px solid white;
+  padding: 6px 3px;
+  font-size: 8px;
+  height: 27px;
+}
+
+.data-table td {
+  border: 1px solid #c8d8cc;
+  padding: 4px 3px;
+  height: 23px;
+  text-align: center;
+  font-size: 8px;
+  overflow-wrap: anywhere;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #eaf3ec;
+}
+
+.data-table thead {
+  display: table-header-group;
+}
+
+.data-table tr {
+  page-break-inside: avoid;
+}
+
+/* TAMPILAN LAYAR */
+
+@media screen {
+  body {
+    padding: 15px;
+  }
+}
+
+/* PENGATURAN CETAK */
+
+@media print {
+  body {
+    padding: 0;
+  }
+
+  .data-table thead {
+    display: table-header-group;
+  }
+
+  .data-table tr {
+    page-break-inside: avoid;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<table class="summary">
+
+  <tr>
+    <td class="label">BULAN</td>
+    <td class="value">${escapeHTML(bulan)}</td>
+
+    <td class="label">TPK</td>
+    <td class="value">${escapeHTML(tpk)}</td>
+  </tr>
+
+  <tr>
+    <td class="label">TUMPUK</td>
+    <td class="value">${escapeHTML(tumpuk)}</td>
+
+    <td class="label">TANGGAL CETAK</td>
+    <td class="value">${escapeHTML(tanggalCetak)}</td>
+  </tr>
+
+  <tr>
+    <td class="label">JUMLAH REGISTER</td>
+    <td class="value">${data.length.toLocaleString("id-ID")}</td>
+
+    <td class="label">TOTAL VOLUME (M3)</td>
+    <td class="value">${formatVolume(totalVolume)}</td>
+  </tr>
+
+</table>
+
+<table class="data-table">
+
+  <colgroup>
+    <col style="width:4%">
+    <col style="width:11%">
+    <col style="width:12%">
+    <col style="width:9%">
+    <col style="width:9%">
+    <col style="width:7%">
+    <col style="width:12%">
+    <col style="width:9%">
+    <col style="width:12%">
+    <col style="width:15%">
+  </colgroup>
+
+  <thead>
+    <tr>
+      ${kolom.map(k => `<th>${k.judul}</th>`).join("")}
+    </tr>
+  </thead>
+
+  <tbody>
+    ${baris}
+  </tbody>
+
+</table>
+
+<script>
+window.onload = function() {
+  window.focus();
+
+  setTimeout(function() {
+    window.print();
+  }, 500);
+};
+<\/script>
+
+</body>
+</html>`;
+
+  popup.document.open();
+  popup.document.write(html);
+  popup.document.close();
+
+} 
+   
 </script>
 
 </body>
