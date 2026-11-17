@@ -1615,6 +1615,26 @@ body{
         <option value="NOVEMBER">NOVEMBER</option>
         <option value="DESEMBER">DESEMBER</option>
     </select>
+
+<button
+    type="button"
+    onclick="downloadSemuaPHHBBI()"
+    style="
+        width:100%;
+        margin-top:10px;
+        padding:12px;
+        border:0;
+        border-radius:8px;
+        background:#166534;
+        color:white;
+        font-size:15px;
+        font-weight:bold;
+        cursor:pointer;
+    "
+>
+    DOWNLOAD SEMUA PHH BBI
+</button>
+   
 <div
     id="infoSisaBulan"
     style="
@@ -7245,6 +7265,96 @@ window.onload = function() {
    
 </script>
 
+
+<script>
+
+function downloadSemuaPHHBBI() {
+  const bulanEl = document.getElementById("bulanSisa");
+  const bulan = bulanEl ? bulanEl.value : (bulanSisaAktif || "");
+
+  if (!bulan) {
+    alert("Pilih bulan filter terlebih dahulu.");
+    return;
+  }
+
+  const tombol = Array.from(document.querySelectorAll("button"))
+    .find(b => b.getAttribute("onclick") === "downloadSemuaPHHBBI()");
+
+  const teksAwal = tombol ? tombol.textContent : "";
+
+  if (tombol) {
+    tombol.disabled = true;
+    tombol.textContent = "⏳ MENYIAPKAN SEMUA PHH...";
+    tombol.style.opacity = "0.7";
+  }
+
+  const callbackName = "callbackExportPHH_" + Date.now();
+  const script = document.createElement("script");
+  let selesai = false;
+
+  const timeoutId = setTimeout(function() {
+    if (selesai) return;
+    selesai = true;
+    cleanupJSONP(callbackName, script);
+
+    if (tombol) {
+      tombol.disabled = false;
+      tombol.textContent = teksAwal;
+      tombol.style.opacity = "1";
+    }
+
+    alert("Waktu pembuatan PHH terlalu lama. Coba lagi.");
+  }, 120000);
+
+  window[callbackName] = function(response) {
+    if (selesai) return;
+    selesai = true;
+    clearTimeout(timeoutId);
+    cleanupJSONP(callbackName, script);
+
+    if (tombol) {
+      tombol.disabled = false;
+      tombol.textContent = teksAwal;
+      tombol.style.opacity = "1";
+    }
+
+    if (!response || response.success !== true || !response.url) {
+      alert("PHH BBI gagal dibuat: " +
+        ((response && response.message) || "Respons backend tidak valid."));
+      return;
+    }
+
+    alert("Berhasil membuat " + response.jumlahTumpuk +
+      " lembar PHH untuk bulan " + response.bulan +
+      ". File Excel akan dibuka.");
+
+    window.open(response.url, "_blank");
+  };
+
+  script.onerror = function() {
+    if (selesai) return;
+    selesai = true;
+    clearTimeout(timeoutId);
+    cleanupJSONP(callbackName, script);
+
+    if (tombol) {
+      tombol.disabled = false;
+      tombol.textContent = teksAwal;
+      tombol.style.opacity = "1";
+    }
+
+    alert("Tidak dapat menghubungi backend PHH BBI.");
+  };
+
+  script.src = API_URL + "?action=exportSemuaPHH" +
+    "&bulan=" + encodeURIComponent(bulan) +
+    "&callback=" + callbackName + "&_=" + Date.now();
+
+  script.async = true;
+  document.body.appendChild(script);
+}
+</script>
+   
 </body>
 
 </html>
