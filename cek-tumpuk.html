@@ -1615,25 +1615,6 @@ body{
         <option value="NOVEMBER">NOVEMBER</option>
         <option value="DESEMBER">DESEMBER</option>
     </select>
-
-<button
-    type="button"
-    onclick="downloadSemuaPHHBBI()"
-    style="
-        width:100%;
-        margin-top:10px;
-        padding:12px;
-        border:0;
-        border-radius:8px;
-        background:#166534;
-        color:white;
-        font-size:15px;
-        font-weight:bold;
-        cursor:pointer;
-    "
->
-    DOWNLOAD SEMUA PHH BBI
-</button>
    
 <div
     id="infoSisaBulan"
@@ -1857,25 +1838,25 @@ class="summary-value jumlah-angka"
   🖨 CETAK LAPORAN
 </button>
        
-        <div class="bottom-buttons">
-
-            <button
-                class="btn btn-refresh"
-                type="button"
-                onclick="refreshData()"
-            >
-                🔄 REFRESH
-            </button>
-
-            <button
-                class="btn btn-back"
-                type="button"
-                onclick="kembaliScan()"
-            >
-                ← KEMBALI SCAN
-            </button>
-
-        </div>
+        <button
+    type="button"
+    onclick="downloadSemuaPHHBBI()"
+    style="
+        display:block;
+        width:100%;
+        padding:13px;
+        margin:8px 0 12px;
+        background:#166534;
+        color:white;
+        border:0;
+        border-radius:6px;
+        font-size:15px;
+        font-weight:bold;
+        cursor:pointer;
+    "
+>
+    DOWNLOAD SEMUA PHH BBI
+</button>
 
     </div>
 
