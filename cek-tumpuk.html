@@ -7249,6 +7249,7 @@ window.onload = function() {
 
 <script>
 
+
 function downloadSemuaPHHBBI() {
   const bulanEl = document.getElementById("bulanSisa");
   const bulan = bulanEl ? bulanEl.value : (bulanSisaAktif || "");
@@ -7257,6 +7258,10 @@ function downloadSemuaPHHBBI() {
     alert("Pilih bulan filter terlebih dahulu.");
     return;
   }
+
+  // Buka tab kosong langsung dari klik pengguna.
+  // Ini membantu mencegah blokir popup di browser HP.
+  const jendelaDownload = window.open("about:blank", "_blank");
 
   const tombol = Array.from(document.querySelectorAll("button"))
     .find(b => b.getAttribute("onclick") === "downloadSemuaPHHBBI()");
@@ -7273,16 +7278,27 @@ function downloadSemuaPHHBBI() {
   const script = document.createElement("script");
   let selesai = false;
 
-  const timeoutId = setTimeout(function() {
-    if (selesai) return;
-    selesai = true;
-    cleanupJSONP(callbackName, script);
-
+  function pulihkanTombol() {
     if (tombol) {
       tombol.disabled = false;
       tombol.textContent = teksAwal;
       tombol.style.opacity = "1";
     }
+  }
+
+  function tutupTabKosong() {
+    if (jendelaDownload && !jendelaDownload.closed) {
+      jendelaDownload.close();
+    }
+  }
+
+  const timeoutId = setTimeout(function() {
+    if (selesai) return;
+    selesai = true;
+
+    cleanupJSONP(callbackName, script);
+    pulihkanTombol();
+    tutupTabKosong();
 
     alert("Waktu pembuatan PHH terlalu lama. Coba lagi.");
   }, 120000);
@@ -7290,39 +7306,38 @@ function downloadSemuaPHHBBI() {
   window[callbackName] = function(response) {
     if (selesai) return;
     selesai = true;
+
     clearTimeout(timeoutId);
     cleanupJSONP(callbackName, script);
-
-    if (tombol) {
-      tombol.disabled = false;
-      tombol.textContent = teksAwal;
-      tombol.style.opacity = "1";
-    }
+    pulihkanTombol();
 
     if (!response || response.success !== true || !response.url) {
+      tutupTabKosong();
+
       alert("PHH BBI gagal dibuat: " +
         ((response && response.message) || "Respons backend tidak valid."));
       return;
     }
 
     alert("Berhasil membuat " + response.jumlahTumpuk +
-      " lembar PHH untuk bulan " + response.bulan +
-      ". File Excel akan dibuka.");
+      " lembar PHH bulan " + response.bulan +
+      ". Unduhan Excel akan dimulai.");
 
-    window.open(response.url, "_blank");
+    if (jendelaDownload && !jendelaDownload.closed) {
+      jendelaDownload.location.href = response.url;
+    } else {
+      window.location.href = response.url;
+    }
   };
 
   script.onerror = function() {
     if (selesai) return;
     selesai = true;
+
     clearTimeout(timeoutId);
     cleanupJSONP(callbackName, script);
-
-    if (tombol) {
-      tombol.disabled = false;
-      tombol.textContent = teksAwal;
-      tombol.style.opacity = "1";
-    }
+    pulihkanTombol();
+    tutupTabKosong();
 
     alert("Tidak dapat menghubungi backend PHH BBI.");
   };
@@ -7334,6 +7349,7 @@ function downloadSemuaPHHBBI() {
   script.async = true;
   document.body.appendChild(script);
 }
+
 </script>
    
 </body>
