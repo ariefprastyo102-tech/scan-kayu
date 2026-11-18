@@ -2457,12 +2457,15 @@ function tampilkanData() {
 
 
   /*
-   * TOTAL VOLUME
+   * TOTAL VOLUME DIOLAH
+   *
+   * Data yang dicentang berstatus SISA,
+   * sehingga volumenya tidak boleh masuk
+   * ke total volume yang akan diolah.
    */
 
   const volumeTotal =
-    volumeBaru +
-    volumeSisa;
+    volumeBaru;
 
 
   document.getElementById(
@@ -2489,7 +2492,7 @@ function tampilkanData() {
     "volumeOlah"
   ).innerHTML =
 
-    "TOTAL VOLUME: " +
+    "TOTAL VOLUME DIOLAH: " +
     formatVolume(volumeTotal) +
     " M³";
 
@@ -3852,4 +3855,3 @@ muatData();
 </body>
 
 </html>
-
