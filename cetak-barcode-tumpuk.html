@@ -235,6 +235,28 @@ button:hover{
 
 
 /* =====================================================
+   POSISI CETAK
+===================================================== */
+
+.posisi-cetak-label{
+    display:flex;
+    align-items:center;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.posisi-cetak-select{
+    min-height:42px;
+    padding:8px 10px;
+    border:2px solid #777;
+    border-radius:8px;
+    background:#fff;
+    color:#111;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* =====================================================
    PRINT
 ===================================================== */
 
@@ -728,6 +750,12 @@ button:hover{
                 onclick="batalSemua()">
                 BATAL SEMUA
             </button>
+
+            <label for="posisiCetak" class="posisi-cetak-label">POSISI CETAK:</label>
+            <select id="posisiCetak" class="posisi-cetak-select">
+                <option value="KIRI">KIRI (NORMAL)</option>
+                <option value="KANAN">KANAN (KERTAS POTONGAN)</option>
+            </select>
 
             <button
                 onclick="cetakBarcode()">
@@ -1421,7 +1449,7 @@ function batalSemua(){
    BUAT PRINT
 ===================================================== */
 
-function prosesCetak(dataCetak){
+function prosesCetak(dataCetak, posisiCetak="KIRI"){
 
     if(
         !Array.isArray(dataCetak) ||
@@ -1444,11 +1472,16 @@ const printArea=
 
     printArea.innerHTML="";
 
+    // KANAN = kertas potongan sisi kanan: gunakan slot KIRI-BAWAH
+    // (posisi tepat di bawah slot KIRI-ATAS pada preview F4).
+    // Setelah slot bawah terpakai, halaman berikutnya kembali normal.
+    const offsetAwal = posisiCetak === "KANAN" ? 2 : 0;
+    const jumlahHalaman = Math.ceil((dataCetak.length + offsetAwal) / 4);
 
     for(
-        let i=0;
-        i<dataCetak.length;
-        i+=4
+        let nomorHalaman=0;
+        nomorHalaman<jumlahHalaman;
+        nomorHalaman++
     ){
 
         const page=
@@ -1465,13 +1498,13 @@ const printArea=
             j++
         ){
 
-            const index=i+j;
+            const index=nomorHalaman*4+j-offsetAwal;
 
 
             /* KOTAK KOSONG */
 
             if(
-                index>=dataCetak.length
+                index<0 || index>=dataCetak.length
             ){
 
                 const empty=
@@ -1735,7 +1768,10 @@ function cetakBarcode(){
     }
 
 
-    prosesCetak(dataCetak);
+    const posisiCetak =
+        document.getElementById("posisiCetak").value;
+
+    prosesCetak(dataCetak, posisiCetak);
 }
 
 
@@ -1819,5 +1855,3 @@ window.addEventListener(
 
 </body>
 </html>
-
-
