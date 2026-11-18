@@ -753,8 +753,8 @@ button:hover{
 
             <label for="posisiCetak" class="posisi-cetak-label">POSISI CETAK:</label>
             <select id="posisiCetak" class="posisi-cetak-select">
-                <option value="KIRI">KIRI (NORMAL)</option>
-                <option value="KANAN">KANAN (KERTAS POTONGAN)</option>
+                <option value="KIRI">NORMAL</option>
+                <option value="KANAN">POTONGAN</option>
             </select>
 
             <button
@@ -1472,11 +1472,14 @@ const printArea=
 
     printArea.innerHTML="";
 
-    // KANAN = kertas potongan sisi kanan: gunakan slot KIRI-BAWAH
-    // (posisi tepat di bawah slot KIRI-ATAS pada preview F4).
-    // Setelah slot bawah terpakai, halaman berikutnya kembali normal.
-    const offsetAwal = posisiCetak === "KANAN" ? 2 : 0;
-    const jumlahHalaman = Math.ceil((dataCetak.length + offsetAwal) / 4);
+    // NORMAL: urutan kiri atas, kanan atas, kiri bawah, kanan bawah.
+    // POTONGAN: jika hanya 1 label, letakkan di kiri bawah.
+    // Jika 2 label atau lebih, susun kiri atas lalu kiri bawah (atas-bawah),
+    // kemudian isi kanan atas dan kanan bawah.
+    const urutanSlot = posisiCetak === "KANAN"
+        ? (dataCetak.length === 1 ? [2] : [0, 2, 1, 3])
+        : [0, 1, 2, 3];
+    const jumlahHalaman = Math.ceil(dataCetak.length / 4);
 
     for(
         let nomorHalaman=0;
@@ -1498,13 +1501,15 @@ const printArea=
             j++
         ){
 
-            const index=nomorHalaman*4+j-offsetAwal;
+            // Tentukan urutan data untuk setiap posisi kotak pada grid.
+            const urutanData = nomorHalaman * 4 + urutanSlot.indexOf(j);
+            const index = urutanData;
 
 
             /* KOTAK KOSONG */
 
             if(
-                index<0 || index>=dataCetak.length
+                urutanSlot.indexOf(j) === -1 || index>=dataCetak.length
             ){
 
                 const empty=
