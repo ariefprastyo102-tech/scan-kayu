@@ -1857,7 +1857,7 @@ class="summary-value jumlah-angka"
 >
     DOWNLOAD SEMUA PHH BBI
 </button>
-
+onclick="downloadSemuaPHHBBI()"   
     </div>
 
 </div>
@@ -7319,14 +7319,30 @@ function downloadSemuaPHHBBI() {
       return;
     }
 
-    alert("Berhasil membuat " + response.jumlahTumpuk +
-      " lembar PHH bulan " + response.bulan +
-      ". Unduhan Excel akan dimulai.");
+    const area = document.getElementById("areaDownloadPHH");
 
-    if (jendelaDownload && !jendelaDownload.closed) {
-      jendelaDownload.location.href = response.url;
-    } else {
-      window.location.href = response.url;
+if (area) {
+  area.innerHTML = "";
+
+  const tombolDownload = document.createElement("button");
+  tombolDownload.type = "button";
+  tombolDownload.textContent = "⬇️ DOWNLOAD FILE EXCEL PHH BBI";
+
+  tombolDownload.style.cssText =
+    "width:100%;padding:14px;margin:10px 0;" +
+    "background:#166534;color:white;border:0;" +
+    "border-radius:8px;font-size:16px;font-weight:bold;";
+
+  tombolDownload.onclick = function() {
+    window.location.href = response.url;
+  };
+
+  area.appendChild(tombolDownload);
+  area.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+alert("PHH bulan " + response.bulan +
+  " sudah siap. Total " + response.jumlahTumpuk + " lembar.");
     }
   };
 
