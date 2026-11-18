@@ -1857,7 +1857,7 @@ class="summary-value jumlah-angka"
 >
     DOWNLOAD SEMUA PHH BBI
 </button>
-<div id="areaDownloadPHH"></div>  
+ 
     </div>
 
 </div>
@@ -7295,52 +7295,80 @@ function downloadSemuaPHHBBI() {
     alert("Waktu pembuatan PHH terlalu lama. Coba lagi.");
   }, 180000);
 
-  window[callbackName] = function(response) {
-    if (selesai) return;
-    selesai = true;
+window[callbackName] = function(response) {
+  if (selesai) return;
+  selesai = true;
 
-    clearTimeout(timeoutId);
-    cleanupJSONP(callbackName, script);
-    pulihkanTombol();
+  clearTimeout(timeoutId);
+  cleanupJSONP(callbackName, script);
+  pulihkanTombol();
 
-    if (!response || response.success !== true || !response.url) {
-      alert("PHH BBI gagal dibuat: " +
-        ((response && response.message) || "Respons backend tidak valid."));
-      return;
-    }
+  if (!response || response.success !== true || !response.url) {
+    alert("PHH BBI gagal dibuat: " +
+      ((response && response.message) || "Respons backend tidak valid."));
+    return;
+  }
 
-    const areaDownload = document.getElementById("areaDownloadPHH");
+  const pesan = document.createElement("div");
 
-    if (!areaDownload) {
-      alert("Area tombol download tidak ditemukan.");
-      return;
-    }
+  pesan.style.cssText =
+    "position:fixed;inset:0;z-index:99999;" +
+    "background:rgba(0,0,0,.5);" +
+    "display:flex;align-items:center;justify-content:center;" +
+    "padding:20px;";
 
-    const tombolDownload = document.createElement("button");
-    tombolDownload.type = "button";
-    tombolDownload.textContent = "⬇️ DOWNLOAD FILE EXCEL PHH BBI";
+  const kotak = document.createElement("div");
 
-    tombolDownload.style.cssText =
-      "display:block;width:100%;padding:14px;margin:10px 0;" +
-      "background:#166534;color:white;border:0;" +
-      "border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;";
+  kotak.style.cssText =
+    "background:white;width:100%;max-width:360px;" +
+    "padding:22px;border-radius:12px;" +
+    "box-shadow:0 5px 25px rgba(0,0,0,.25);" +
+    "text-align:center;color:#334155;";
 
-    tombolDownload.onclick = function() {
-      window.location.href = response.url;
-    };
+  const judul = document.createElement("div");
+  judul.textContent = "✅ PHH BBI SUDAH SIAP";
+  judul.style.cssText =
+    "font-size:18px;font-weight:bold;margin-bottom:14px;";
 
-    areaDownload.innerHTML = "";
-    areaDownload.appendChild(tombolDownload);
+  const keterangan = document.createElement("div");
+  keterangan.textContent =
+    "PHH bulan " + response.bulan +
+    " sudah siap. Total " + response.jumlahTumpuk + " lembar.";
+  keterangan.style.cssText =
+    "font-size:15px;line-height:1.6;margin-bottom:20px;";
 
-    areaDownload.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
+  const tombolUnduh = document.createElement("button");
+  tombolUnduh.type = "button";
+  tombolUnduh.textContent = "⬇️ DOWNLOAD EXCEL";
+  tombolUnduh.style.cssText =
+    "width:100%;padding:13px;background:#166534;" +
+    "color:white;border:0;border-radius:7px;" +
+    "font-size:15px;font-weight:bold;margin-bottom:10px;";
 
-    alert("PHH bulan " + response.bulan +
-      " sudah siap. Total " + response.jumlahTumpuk + " lembar.");
+  const tombolOke = document.createElement("button");
+  tombolOke.type = "button";
+  tombolOke.textContent = "OKE";
+  tombolOke.style.cssText =
+    "width:100%;padding:12px;background:#e2e8f0;" +
+    "color:#334155;border:0;border-radius:7px;" +
+    "font-size:15px;font-weight:bold;";
+
+  tombolUnduh.onclick = function() {
+    window.location.href = response.url;
+    pesan.remove();
   };
 
+  tombolOke.onclick = function() {
+    pesan.remove();
+  };
+
+  kotak.appendChild(judul);
+  kotak.appendChild(keterangan);
+  kotak.appendChild(tombolUnduh);
+  kotak.appendChild(tombolOke);
+  pesan.appendChild(kotak);
+  document.body.appendChild(pesan);
+};
   script.onerror = function() {
     if (selesai) return;
     selesai = true;
