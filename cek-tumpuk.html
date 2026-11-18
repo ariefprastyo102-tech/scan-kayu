@@ -7259,14 +7259,13 @@ function downloadSemuaPHHBBI() {
     return;
   }
 
-  // Buka tab kosong langsung dari klik pengguna.
-  // Ini membantu mencegah blokir popup di browser HP.
-  const jendelaDownload = window.open("about:blank", "_blank");
-
   const tombol = Array.from(document.querySelectorAll("button"))
     .find(b => b.getAttribute("onclick") === "downloadSemuaPHHBBI()");
 
   const teksAwal = tombol ? tombol.textContent : "";
+
+  const area = document.getElementById("areaDownloadPHH");
+  if (area) area.innerHTML = "";
 
   if (tombol) {
     tombol.disabled = true;
@@ -7286,22 +7285,15 @@ function downloadSemuaPHHBBI() {
     }
   }
 
-  function tutupTabKosong() {
-    if (jendelaDownload && !jendelaDownload.closed) {
-      jendelaDownload.close();
-    }
-  }
-
   const timeoutId = setTimeout(function() {
     if (selesai) return;
     selesai = true;
 
     cleanupJSONP(callbackName, script);
     pulihkanTombol();
-    tutupTabKosong();
 
     alert("Waktu pembuatan PHH terlalu lama. Coba lagi.");
-  }, 120000);
+  }, 180000);
 
   window[callbackName] = function(response) {
     if (selesai) return;
@@ -7312,38 +7304,41 @@ function downloadSemuaPHHBBI() {
     pulihkanTombol();
 
     if (!response || response.success !== true || !response.url) {
-      tutupTabKosong();
-
       alert("PHH BBI gagal dibuat: " +
         ((response && response.message) || "Respons backend tidak valid."));
       return;
     }
 
-    const area = document.getElementById("areaDownloadPHH");
+    const areaDownload = document.getElementById("areaDownloadPHH");
 
-if (area) {
-  area.innerHTML = "";
-
-  const tombolDownload = document.createElement("button");
-  tombolDownload.type = "button";
-  tombolDownload.textContent = "⬇️ DOWNLOAD FILE EXCEL PHH BBI";
-
-  tombolDownload.style.cssText =
-    "width:100%;padding:14px;margin:10px 0;" +
-    "background:#166534;color:white;border:0;" +
-    "border-radius:8px;font-size:16px;font-weight:bold;";
-
-  tombolDownload.onclick = function() {
-    window.location.href = response.url;
-  };
-
-  area.appendChild(tombolDownload);
-  area.scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
-alert("PHH bulan " + response.bulan +
-  " sudah siap. Total " + response.jumlahTumpuk + " lembar.");
+    if (!areaDownload) {
+      alert("Area tombol download tidak ditemukan.");
+      return;
     }
+
+    const tombolDownload = document.createElement("button");
+    tombolDownload.type = "button";
+    tombolDownload.textContent = "⬇️ DOWNLOAD FILE EXCEL PHH BBI";
+
+    tombolDownload.style.cssText =
+      "display:block;width:100%;padding:14px;margin:10px 0;" +
+      "background:#166534;color:white;border:0;" +
+      "border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;";
+
+    tombolDownload.onclick = function() {
+      window.location.href = response.url;
+    };
+
+    areaDownload.innerHTML = "";
+    areaDownload.appendChild(tombolDownload);
+
+    areaDownload.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    alert("PHH bulan " + response.bulan +
+      " sudah siap. Total " + response.jumlahTumpuk + " lembar.");
   };
 
   script.onerror = function() {
@@ -7353,7 +7348,6 @@ alert("PHH bulan " + response.bulan +
     clearTimeout(timeoutId);
     cleanupJSONP(callbackName, script);
     pulihkanTombol();
-    tutupTabKosong();
 
     alert("Tidak dapat menghubungi backend PHH BBI.");
   };
